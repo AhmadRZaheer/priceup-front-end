@@ -78,7 +78,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
   };
 
   const handleEditItem = (id) => {
-    navigate(`/invoices/edit?item_id=${id}`);
+    navigate(`/preview/edit?item_id=${id}`);
   };
 
   const singleListData = (data) => {
@@ -188,6 +188,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                         key={index}
                         sx={{
                           "&:last-child td, &:last-child th": { border: 0 },
+                          '.MuiTableCell-root':{height:'37px'}
                         }}
                       >
                         <TableCell>{data.noOfEstimate}</TableCell>
@@ -218,7 +219,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                               sx={{ width: 20, height: 20 }}
                               onClick={() =>
                                 window.open(
-                                  `/invoices/${row?._id}/customer-preview`,
+                                  `/preview/${row?._id}/customer-preview`,
                                   "_blank"
                                 )
                               }

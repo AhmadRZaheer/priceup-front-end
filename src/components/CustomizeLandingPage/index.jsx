@@ -1646,6 +1646,7 @@ const CustomizeLandingPage = ({
         refetchData={refetchData}
         estimatePdfs={estimatePdfs}
         acceptTerms={acceptTerms}
+        totalSum={totalSum}
       />
       <Box sx={{ bgcolor: "#000000", width: "100%" }}>
         <Box

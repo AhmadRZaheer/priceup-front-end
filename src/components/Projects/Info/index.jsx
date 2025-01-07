@@ -419,7 +419,7 @@ const ProjectInfoComponent = ({
                 variant="contained"
                 onClick={() =>
                   navigate(
-                    `/invoices/create?customer_id=${selectedCustomer?._id}&project_id=${projectData?._id}`
+                    `/preview/create?customer_id=${selectedCustomer?._id}&project_id=${projectData?._id}`
                   )
                 }
                 startIcon={<Add />}

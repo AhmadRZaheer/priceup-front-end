@@ -1,4 +1,8 @@
-import { EstimateCategory, logActions } from "@/utilities/constants";
+import {
+  EstimateCategory,
+  logActions,
+  quoteState,
+} from "@/utilities/constants";
 import {
   Box,
   Divider,
@@ -44,18 +48,29 @@ const ShowerSummary = ({
   UpgradeOPtions,
   reCalculateTotal,
 }) => {
-  const { id } = useParams();
   console.log(data, "datadatadata123");
+  const { id } = useParams();
+  const userProfitPercentage =
+    data?.category === EstimateCategory.MIRRORS
+      ? data?.config?.config?.modifiedProfitPercentage
+      : data?.config?.config?.userProfitPercentage;
+  const [totalCost, setTotalCost] = useState(data?.pricing?.cost);
   const newDate = new Date();
   const formattedDateTime = newDate.toLocaleString("en-US", {
-    weekday: "long", // Full weekday name
-    month: "long",   // Full month name
-    day: "numeric",  // Numeric day
-    year: "numeric", // Full year
-    hour: "numeric", // Hour
-    minute: "2-digit", // Minute
-    hour12: true,    // 12-hour format
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
   });
+  const discountValue = data?.config?.config?.discount?.value ?? 0;
+  const discountUnit = data?.config?.config?.discount?.unit ?? "%";
+  const laborPrice =
+    data?.category === EstimateCategory.WINECELLARS
+      ? data?.pricing?.laborPrice + (data?.pricing?.doorLaborPrice ?? 0)
+      : data?.pricing?.laborPrice;
   // const hardwaresList = useSelector(getListData);
   const { mutate: customerDecision, isLoading, isSuccess } = useEditDocument();
   const { mutate: activityLog } = useCreateDocument();
@@ -71,6 +86,7 @@ const ShowerSummary = ({
     notch: 0,
     outages: 0,
   });
+  console.log(selectedHardware, "selectedHardwareselectedHardware");
   const factorPrice =
     data?.category === EstimateCategory.MIRRORS
       ? locationSettings?.pricingFactorStatus
@@ -134,9 +150,26 @@ const ShowerSummary = ({
           )
           ?.find((option) => option)?.cost || 0;
 
-      const totalDiference =
+      let totalDiference =
         itemPrice -
         (selectedHardware?.sqftArea * costDifference ?? 0) * factorPrice;
+
+      const currentItemCost =
+        totalCost -
+        selectedHardware?.sqftArea * costDifference +
+        selectedHardware?.sqftArea * price;
+      let singleItemCost = currentItemCost * factorPrice + laborPrice;
+
+      if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+        singleItemCost =
+          ((currentItemCost * 100) / (userProfitPercentage - 100)) * -1;
+      }
+      const itemDifference = singleItemCost - totalPrice;
+      const singleGlassCost =
+        discountValue > 0 && discountUnit === "%"
+          ? itemDifference - (itemDifference * Number(discountValue)) / 100
+          : itemDifference;
+
       return {
         ...item,
         description: (
@@ -146,9 +179,9 @@ const ShowerSummary = ({
             ) : (
               <>
                 {item?.name} cost{" "}
-                <b style={{ color: totalDiference > 0 ? "#28A745" : "red" }}>
-                  {totalDiference > 0 ? "+" : "-"} $
-                  {Math.abs(totalDiference ?? 0).toFixed(2)}
+                <b style={{ color: singleGlassCost > 0 ? "#28A745" : "red" }}>
+                  {singleGlassCost > 0 ? "+" : "-"} $
+                  {Math.abs(singleGlassCost ?? 0).toFixed(2)}
                 </b>
               </>
             )}
@@ -209,10 +242,21 @@ const ShowerSummary = ({
           ?.filter((cost) => cost !== null) ?? [];
       const priceToDiffer = costDifference?.reduce((acc, arr) => acc + arr, 0);
 
-      const itemPrice =
-        (selectedHardware?.sqftArea *
-          (item?.slug !== "no-treatment" ? price : priceToDiffer * -1) ?? 0) *
-        factorPrice;
+      let totalItemPrice =
+        selectedHardware?.sqftArea *
+          (item?.slug !== "no-treatment" ? price : priceToDiffer * -1) ?? 0;
+      let itemPrice = totalItemPrice * factorPrice;
+
+      if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+        itemPrice =
+          ((totalItemPrice * 100) / (userProfitPercentage - 100)) * -1;
+      }
+
+      const singleGlassAddonCost =
+        discountValue > 0 && discountUnit === "%"
+          ? itemPrice - (itemPrice * Number(discountValue)) / 100
+          : itemPrice;
+
       return {
         ...item,
         description: (
@@ -224,9 +268,13 @@ const ShowerSummary = ({
             ) : (
               <>
                 {item?.name} cost{" "}
-                <b style={{ color: itemPrice > 0 ? "#28A745" : "red" }}>
-                  {itemPrice > 0 ? "+" : "-"} $
-                  {Math.abs(itemPrice ?? 0).toFixed(2)}
+                <b
+                  style={{
+                    color: singleGlassAddonCost > 0 ? "#28A745" : "red",
+                  }}
+                >
+                  {singleGlassAddonCost > 0 ? "+" : "-"} $
+                  {Math.abs(singleGlassAddonCost ?? 0).toFixed(2)}
                 </b>
               </>
             )}
@@ -303,6 +351,7 @@ const ShowerSummary = ({
         },
         selectedHardware?.glassType?.thickness
       );
+
       const calc =
         (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1) -
         oldGlassPrice * data?.sqftArea;
@@ -312,8 +361,21 @@ const ShowerSummary = ({
               (pricingFactorStatus ? pricingFactor : 1) +
             laborPrice
           : 0;
+
+      const costOfItem =
+        totalCost -
+        oldGlassPrice * data?.sqftArea +
+        data?.sqftArea * newGlassPrice;
+      let costOfItems =
+        costOfItem * (pricingFactorStatus ? pricingFactor : 1) + laborPrice ??
+        0;
+
+      if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+        costOfItems = ((costOfItem * 100) / (userProfitPercentage - 100)) * -1;
+      }
       reCalculateTotal(totalPrice, glassPricing);
-      setTotalPrice(glassPricing);
+      setTotalPrice(costOfItems);
+      setTotalCost(costOfItem);
       setSelectedHardware((prev) => ({
         ...prev,
         glassType: {
@@ -334,8 +396,18 @@ const ShowerSummary = ({
         const newGeneratedTotal =
           remainingCost * (pricingFactorStatus ? pricingFactor : 1) +
           laborPrice;
+
+        const remainingCost11 = totalCost - priceToRemove;
+        let newGeneratedTotal11 =
+          remainingCost11 * (pricingFactorStatus ? pricingFactor : 1) +
+          laborPrice;
+        if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+          newGeneratedTotal11 =
+            ((remainingCost11 * 100) / (userProfitPercentage - 100)) * -1;
+        }
         reCalculateTotal(totalPrice, newGeneratedTotal);
-        setTotalPrice(newGeneratedTotal);
+        setTotalPrice(newGeneratedTotal11);
+        setTotalCost(remainingCost11);
         setSelectedHardware((prev) => ({
           ...prev,
           glassAddons: [{ type: itemFound?._id, name: itemFound?.name }],
@@ -363,8 +435,20 @@ const ShowerSummary = ({
             const newGeneratedTotal =
               remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
               laborPrice;
+
+            const remainingCost21 = totalCost - priceToRemove;
+            const remainingCost22 = remainingCost21 + priceToAdd;
+            let newGeneratedTotal11 =
+              remainingCost22 * (pricingFactorStatus ? pricingFactor : 1) +
+              laborPrice;
+            if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+              newGeneratedTotal11 =
+                ((remainingCost22 * 100) / (userProfitPercentage - 100)) * -1;
+            }
+
             reCalculateTotal(totalPrice, newGeneratedTotal);
-            setTotalPrice(newGeneratedTotal);
+            setTotalCost(remainingCost22);
+            setTotalPrice(newGeneratedTotal11);
             setSelectedHardware((prev) => ({
               ...prev,
               glassAddons: arrayFilter,
@@ -379,8 +463,19 @@ const ShowerSummary = ({
               const newGeneratedTotal =
                 remainingCost * (pricingFactorStatus ? pricingFactor : 1) +
                 laborPrice;
+
+              const remainingCost22 = totalCost - priceToRemove;
+              let newGeneratedTotal21 =
+                remainingCost22 * (pricingFactorStatus ? pricingFactor : 1) +
+                laborPrice;
+              if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+                newGeneratedTotal21 =
+                  ((remainingCost22 * 100) / (userProfitPercentage - 100)) * -1;
+              }
+
               reCalculateTotal(totalPrice, newGeneratedTotal);
-              setTotalPrice(newGeneratedTotal);
+              setTotalPrice(newGeneratedTotal21);
+              setTotalCost(remainingCost22);
               setSelectedHardware((prev) => ({
                 ...prev,
                 glassAddons: [
@@ -406,8 +501,20 @@ const ShowerSummary = ({
           const newGeneratedTotal =
             remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
             laborPrice;
+
+          const remainingCost23 = totalCost - priceToRemove;
+          const remainingCost24 = remainingCost23 + priceToAdd;
+          let newGeneratedTotal22 =
+            remainingCost24 * (pricingFactorStatus ? pricingFactor : 1) +
+            laborPrice;
+          if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+            newGeneratedTotal22 =
+              ((remainingCost24 * 100) / (userProfitPercentage - 100)) * -1;
+          }
+
           reCalculateTotal(totalPrice, newGeneratedTotal);
-          setTotalPrice(newGeneratedTotal);
+          setTotalPrice(newGeneratedTotal22);
+          setTotalCost(remainingCost24);
           setSelectedHardware((prev) => ({
             ...prev,
             glassAddons: arrayOld,
@@ -431,6 +538,9 @@ const ShowerSummary = ({
       const fabricationPriceToRemove = getFabricationsCost(fabricationsCount);
       const remainingCost =
         actualCost - (addonsPriceToRemove + fabricationPriceToRemove);
+
+      const remainingTotalCost =
+        totalCost - (addonsPriceToRemove + fabricationPriceToRemove);
       if (itemExistIndex !== -1) {
         if (value.counter > 0) {
           const array = selectedHardware?.hardwareAddons;
@@ -449,8 +559,20 @@ const ShowerSummary = ({
           const newGeneratedTotal =
             remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
             laborPrice;
+
+          const remainingTotalCost2 =
+            remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
+          let newGeneratedTotal2 =
+            remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+            laborPrice;
+          if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+            newGeneratedTotal2 =
+              ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
+          }
+
           reCalculateTotal(totalPrice, newGeneratedTotal);
-          setTotalPrice(newGeneratedTotal);
+          setTotalPrice(newGeneratedTotal2);
+          setTotalCost(remainingTotalCost2);
           setFabricationsCount(hardwareFabrication);
           setSelectedHardware((prev) => ({
             ...prev,
@@ -477,8 +599,20 @@ const ShowerSummary = ({
           const newGeneratedTotal =
             remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
             laborPrice;
+
+          const remainingTotalCost2 =
+            remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
+          let newGeneratedTotal2 =
+            remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+            laborPrice;
+          if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+            newGeneratedTotal2 =
+              ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
+          }
+
           reCalculateTotal(totalPrice, newGeneratedTotal);
-          setTotalPrice(newGeneratedTotal);
+          setTotalPrice(newGeneratedTotal2);
+          setTotalCost(remainingTotalCost2);
           setFabricationsCount(hardwareFabrication);
           setSelectedHardware((prev) => ({
             ...prev,
@@ -505,8 +639,20 @@ const ShowerSummary = ({
         const newGeneratedTotal =
           remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
           laborPrice;
+
+        const remainingTotalCost2 =
+          remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
+        let newGeneratedTotal2 =
+          remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+          laborPrice;
+        if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+          newGeneratedTotal2 =
+            ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
+        }
+
         reCalculateTotal(totalPrice, newGeneratedTotal);
-        setTotalPrice(newGeneratedTotal);
+        setTotalPrice(newGeneratedTotal2);
+        setTotalCost(remainingTotalCost2);
         setFabricationsCount(hardwareFabrication);
         setSelectedHardware((prev) => ({
           ...prev,
@@ -629,7 +775,19 @@ const ShowerSummary = ({
         selectedHardwareAddons.push({ type: item.type, count: item.count })
       );
       Estimatedata.config.config.hardwareAddons = selectedHardwareAddons;
+      Estimatedata.config.config.oneInchHoles = fabricationsCount.oneInchHoles;
+      Estimatedata.config.config.hingeCut = fabricationsCount.hingeCut;
+      Estimatedata.config.config.clampCut = fabricationsCount.clampCut;
+      Estimatedata.config.config.notch = fabricationsCount.notch;
+      Estimatedata.config.config.outages = fabricationsCount.outages;
+
+      Estimatedata.oneInchHoles = fabricationsCount.oneInchHoles;
+      Estimatedata.hingeCut = fabricationsCount.hingeCut;
+      Estimatedata.clampCut = fabricationsCount.clampCut;
+      Estimatedata.notch = fabricationsCount.notch;
+      Estimatedata.outages = fabricationsCount.outages;
     }
+    
 
     customerDecision({
       data: {
@@ -639,7 +797,7 @@ const ShowerSummary = ({
     });
 
     const logData = {
-      title: `${data?.customer?.name} downloaded the PDF on ${formattedDateTime}.`,
+      title: `${data?.customerData?.name} approved the project on ${formattedDateTime}.`,
       performer_id: data?.customerData?._id,
       performer_name: data?.customerData?.name,
       action: logActions.APPROVEESTIMATE,
@@ -700,25 +858,32 @@ const ShowerSummary = ({
         fabricationsCount = item?.fabrication;
       }
       const fabricationPrice = getFabricationsCost(fabricationsCount);
-      const itemPrice = (price + fabricationPrice) * factorPrice;
+      let itemPrice = (price + fabricationPrice) * factorPrice;
 
+      if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+        itemPrice =
+          (((price + fabricationPrice) * 100) / (userProfitPercentage - 100)) *
+          -1;
+      }
+
+      const singleGlassAddonCost =
+        discountValue > 0 && discountUnit === "%"
+          ? itemPrice - (itemPrice * Number(discountValue)) / 100
+          : itemPrice;
       return {
         ...item,
         description: (
           <span>
             {item?.name} cost{" "}
             <b style={{ color: "#28A745" }}>
-              {"+"} ${Math.abs(itemPrice ?? 0).toFixed(2)}
+              {"+"} ${Math.abs(singleGlassAddonCost ?? 0).toFixed(2)}
             </b>
           </span>
         ),
       };
     });
     return glassAddonsData;
-  }, [selectedHardware, hardwaresList?.glassAddons]);
-
-  const discountValue = data?.config?.config?.discount?.value ?? 0;
-
+  }, [selectedHardware, hardwaresList?.hardwareAddons]);
   return (
     <>
       <Box

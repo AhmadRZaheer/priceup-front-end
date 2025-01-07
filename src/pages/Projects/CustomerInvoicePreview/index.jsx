@@ -64,23 +64,19 @@ const CustomerInvoicePreview = () => {
   // const selectedImages = useSelector(getSelectedImages);
   const { mutateAsync: generatePage, isLoading, isSuccess } = useEditDocument();
 
-  const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() + 15);
+  // const currentDate = new Date();
+  // currentDate.setDate(currentDate.getDate() + 15);
   const options = { year: "numeric", month: "long", day: "numeric" };
-  const futureDate = currentDate.toLocaleDateString(undefined, options);
+  const expiresAt = selectedData?.customerPreview?.expiresAt;
+  const futureDate = expiresAt
+    ? new Date(expiresAt).toLocaleDateString(undefined, options)
+    : null;
 
   const handleClick = async () => {
     const projectId = decodedToken?.company_id;
-    // Aaj ki date lein
-    const currentDate = new Date();
-    // 15 din add karein
-    currentDate.setDate(currentDate.getDate() + 15);
-    // ISO format mein convert karein
-    const formattedDate = currentDate.toISOString();
-
     const customerPayLoad = {
-      ...selectedData?.customerPreview ,
-      link: `${frontendURL}/customer-landing-page-preview/${id}`           
+      ...selectedData?.customerPreview,
+      link: `${frontendURL}/customer-landing-page-preview/${id}`,
     };
 
     try {
@@ -95,17 +91,16 @@ const CustomerInvoicePreview = () => {
       console.error(error);
     }
   };
-  useEffect(() => {
-    if (isSuccess) {
-      navigate(`/invoices/${id}`);
-    }
-  }, [isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     navigate(`/invoices/${id}`);
+  //   }
+  // }, [isSuccess]);
 
   useEffect(() => {
     refetchData();
   }, []);
-
-  console.log(selectedData,'selectedDataselectedDataselectedDataselectedDataselectedDataselectedData')
+  
   return (
     // <CommonLayout>
     <Box className="econtent-wrapper">
@@ -154,7 +149,7 @@ const CustomerInvoicePreview = () => {
             </NavLink>
             <Box
               sx={{
-                color:  "black",
+                color: "black",
                 fontSize: { xs: "20px", sm: "20px" },
                 textAlign: { xs: "start", sm: "center" },
                 fontWeight: 600,

@@ -64,7 +64,7 @@ import Invoices from "@/pages/Invoices";
 import ProjectInvoiceCreate from "@/pages/Invoices/Create";
 import ProjectInvoiceDetail from "@/pages/Invoices/Detail";
 import CreateNewInvoice from "@/pages/Invoices/CreateNewInvoice";
-import CreateLandingInvoice from "../ProjectInvoices/CreateLandingInvoice";
+import CreateLandingInvoice from "../ProjectInvoices/CreateInvoice";
 import EditQuoteInvoice from "../ProjectInvoices/CreateEditInvoice/EditQuotePage";
 import ProjectInvoiceEdit from "@/pages/Invoices/Edit";
 
@@ -115,15 +115,18 @@ const AppRoutes = () => {
             <Route path="review" element={<EstimateReview />} />
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
-          <Route path="/invoices/">
+          <Route path="/preview/">
             <Route index element={<Invoices />} />
             <Route path="create" element={<ProjectInvoiceCreate />} />
             <Route path="edit" element={<ProjectInvoiceEdit />} />
-            <Route path="new-invoice" element={<CreateNewInvoice />} />
             <Route
               path=":id/customer-preview"
               element={<CustomerInvoicePreview />}
             />
+          </Route>
+          <Route path="/invoices/">
+            <Route index element={<Invoices />} />
+            <Route path="create" element={<CreateNewInvoice />} />
             <Route path=":id" element={<ProjectInvoiceDetail />} />
           </Route>
           <Route path="/customers/">
@@ -195,7 +198,7 @@ const AppRoutes = () => {
             <Route path="review" element={<EstimateReview />} />
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
-          <Route path="/invoices/">
+          <Route path="/preview/">
             <Route index element={<Invoices />} />
             <Route path="create" element={<ProjectInvoiceCreate />} />
             <Route path="edit" element={<ProjectInvoiceEdit />} />
@@ -244,10 +247,6 @@ const AppRoutes = () => {
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />
-      <Route
-        path="/custom-landing-invoice"
-        element={<CreateLandingInvoice islanding={true} />}
-      />
     </Routes>
   );
 };

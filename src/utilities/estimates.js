@@ -1315,6 +1315,7 @@ const generateInvoiceItemForMirrors = async (
   hardwaresList,
   companySettings
 ) => {
+  console.log(estimate,'estimateestimatewwddd')
   let summaryObject = {};
   let hardwarePrice = 0;
   let glassPrice = 0;
@@ -1478,10 +1479,10 @@ const generateInvoiceItemForMirrors = async (
     );
   }
   if (
-    estimate.config?.userProfitPercentage > 0 &&
-    estimate.config?.userProfitPercentage < 100
+    estimate.config?.modifiedProfitPercentage > 0 &&
+    estimate.config?.modifiedProfitPercentage < 100
   ) {
-    totalPrice = ((cost * 100) / (estimate.config.userProfitPercentage - 100)) * -1;
+    totalPrice = ((cost * 100) / (estimate.config.modifiedProfitPercentage - 100)) * -1;
   }
   summaryObject.pricing = {
     hardwarePrice,

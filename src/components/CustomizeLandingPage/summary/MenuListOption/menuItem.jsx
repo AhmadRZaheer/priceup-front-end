@@ -17,17 +17,17 @@ const MenuItem = ({
   handleChange,
   locationSettings,
 }) => {
-
-  const thicknessPrice = useMemo(()=>{
+  console.log(selectedContent, "selectedContentselectedContent");
+  const thicknessPrice = useMemo(() => {
     const price = item?.options?.find(
       (option) => option.thickness === thickness
     )?.cost;
     return price;
-  },[item])  
-  
+  }, [item]);
+
   const activeFinishOrThickness =
     type === hardwareTypes.GLASSTYPE
-      ? selectedContent?.glassType?.thickness 
+      ? selectedContent?.glassType?.thickness
       : type === hardwareTypes.GLASSADDONS
       ? null
       : selectedContent?.hardwareFinishes;
@@ -88,6 +88,13 @@ const MenuItem = ({
       : ["glassType"].includes(type)
       ? item?._id === selectedItem?.type
       : item === selectedItem;
+  // const selectedCount = useMemo(() => {
+  //   const value =  selectedContent?.hardwareAddons?.find(
+  //     (row) => row?.type === item?._id
+  //   )?.count;
+  //   return value;
+  // }, [selectedContent]);
+
   return (
     <Tooltip
       title={
@@ -131,15 +138,13 @@ const MenuItem = ({
             alignItems: "center",
             width: { sm: "100%", xs: "95%" },
             justifyContent: "space-between",
-            backgroundColor: 
-            // status ? 
-              isSelected
-                ? "rgba(249, 85, 0, 0.06)"
-                : "white",
-              // : "#f3f5f6",
-            color: 
-            // status ?
-             (isSelected ? "black" : "#5D6164") 
+            backgroundColor:
+              // status ?
+              isSelected ? "rgba(249, 85, 0, 0.06)" : "white",
+            // : "#f3f5f6",
+            color:
+              // status ?
+              isSelected ? "black" : "#5D6164",
             //  : "#BABABA",
           }}
         >
@@ -151,7 +156,7 @@ const MenuItem = ({
               alt="Selected"
             /> */}
             <Typography>
-              {item?.description ?? item?.name }
+              {item?.description ?? item?.name}
               {/* has price of $
               {(selectedContent?.sqftArea * thicknessPrice ?? 0) *
                 (locationSettings?.miscPricing?.pricingFactorStatus
@@ -169,7 +174,7 @@ const MenuItem = ({
                 counter={
                   selectedContent?.hardwareAddons?.find(
                     (row) => row?.type === item?._id
-                  )?.count
+                  )?.count ?? 0
                 }
                 handleChange={handleChange}
                 isSelected={isSelected}

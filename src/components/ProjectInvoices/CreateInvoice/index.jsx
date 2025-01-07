@@ -22,7 +22,6 @@ import {
 } from "@/utilities/ApiHooks/common";
 import { backendURL, frontendURL, getDecryptedToken } from "@/utilities/common";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import ShowerEstimatesList from "./EstimatesList/showers";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
@@ -35,11 +34,10 @@ import { getListData } from "@/redux/estimateCalculations";
 import dayjs from "dayjs";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import { Close } from "@mui/icons-material";
-import CustomerSelect from "./CustomerSelect";
-import ProjectSelect from "./ProjectSelect";
+import CustomerSelect from "../CreateEditInvoice/CustomerSelect";
+import ProjectSelect from "../CreateEditInvoice/ProjectSelect";
 import { EstimateCategory } from "@/utilities/constants";
-import DefaultIcon from "@/Assets/columns.svg";
-import EstimateDataList from "./EstimateTable";
+import PreviewSelect from "../CreateEditInvoice/PreviewSelect";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -47,10 +45,7 @@ const validationSchema = yup.object({
   dueDate: yup.string().required("Due Date is required"),
 });
 
-const ProjectInvoiceComponent = ({
-  projectState = "create",
-  projectData = null,
-}) => {
+const CraeteInvoice = ({ projectState = "create", projectData = null }) => {
   const [searchParams] = useSearchParams();
   const customerID = searchParams.get("customer_id");
   const projectID = searchParams.get("project_id");
@@ -63,6 +58,7 @@ const ProjectInvoiceComponent = ({
   const ShowerHardwareList = useSelector(getListData);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedPreview, setSelectedPreview] = useState(null);
   const [selectedEstimateRows, setSelectedEstimateRows] = useState([]);
   const [copyLink, setCopyLink] = useState(false);
   const navigate = useNavigate();
@@ -150,7 +146,10 @@ const ProjectInvoiceComponent = ({
     }
   }, [selectedEstimateRows]);
 
-  console.log(EstimateListData,'EstimateListDataEstimateListDataEstimateListData')
+  console.log(
+    EstimateListData,
+    "EstimateListDataEstimateListDataEstimateListData"
+  );
 
   useEffect(() => {
     refetch();
@@ -187,12 +186,12 @@ const ProjectInvoiceComponent = ({
     };
 
     const currentDate = values.dueDate;
-    // const updatedDate = currentDate.add(15, "day");
+    const updatedDate = currentDate.add(15, "day");
     // ISO format mein convert karein
     // const formattedDate = currentDate.toISOString();
     const customerPayLoad = {
       link: "",
-      expiresAt: currentDate,
+      expiresAt: updatedDate,
     };
     const compantDetail = {
       name: companySettings?.name,
@@ -209,20 +208,20 @@ const ProjectInvoiceComponent = ({
       estimates: EstimateListData?.length > 0 ? EstimateListData : [],
       company: compantDetail,
       content: {},
-      additionalUpgrades:values.additionalUpgrades
+      additionalUpgrades: values.additionalUpgrades,
       // subTotal: totalSum,
       // grandTotal: totalSum,
     };
-    try {
-      const response = await createInvoice({
-        data,
-        apiRoute: `${backendURL}/projects/landing-page-preview`,
-      });
-      console.log(response);
-      navigate(`/preview/edit/?item_id=${response?._id}`);
-    } catch (error) {
-      console.log(error);
-    }
+  //   try {
+  //     const response = await createInvoice({
+  //       data,
+  //       apiRoute: `${backendURL}/projects/landing-page-preview`,
+  //     });
+  //     console.log(response);
+  //     navigate(`/invoices/edit/?item_id=${response?._id}`);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
   };
 
   useEffect(() => {
@@ -258,6 +257,7 @@ const ProjectInvoiceComponent = ({
     setSelectedCustomer(null);
     formik.setFieldValue("customer", "");
     setSelectedProject(null);
+    setSelectedPreview(null);
     formik.setFieldValue("address", "");
   };
 
@@ -265,23 +265,37 @@ const ProjectInvoiceComponent = ({
     console.log(customer);
     setSelectedCustomer(customer);
     setSelectedProject(null);
+    setSelectedPreview(null);
     formik.setFieldValue("address", "");
     setOpenCustomerSelectModal(false);
   };
 
   const [openProjectSelectModal, setOpenProjectSelectModal] = useState(false);
+  const [openPreviewSelectModal, setOpenPreviewSelectModal] = useState(false);
 
   const handleProjectChange = (address) => {
     setSelectedProject(address);
     setOpenProjectSelectModal(false);
+  };
+  const handlePreviewChange = (address) => {
+    setSelectedPreview(address);
+    setOpenPreviewSelectModal(false);
   };
   const handleProjectUnSelect = (event) => {
     event.stopPropagation();
     setSelectedProject(null);
     formik.setFieldValue("project", "");
   };
+  const handlePreviewUnSelect = (event) => {
+    event.stopPropagation();
+    setSelectedPreview(null);
+    formik.setFieldValue("project", "");
+  };
   const handleProjectSelect = () => {
     setOpenProjectSelectModal(true);
+  };
+  const handlePreviewSelect = () => {
+    setOpenPreviewSelectModal(true);
   };
 
   const showerGlassTypes = useMemo(() => {
@@ -450,7 +464,7 @@ const ProjectInvoiceComponent = ({
                       gap: 1,
                     }}
                   >
-                    Create Quote Page
+                    Create Invoice
                   </Typography>
                   <Typography
                     sx={{
@@ -461,7 +475,7 @@ const ProjectInvoiceComponent = ({
                       opacity: "70%",
                     }}
                   >
-                    Create new quote.
+                    Create new invoice.
                   </Typography>
                 </Box>
                 {projectState !== "create" ? (
@@ -568,19 +582,19 @@ const ProjectInvoiceComponent = ({
                     }}
                     disabled={
                       formik.values.customer === "" ||
-                      formik.values.project === "" ||
-                      formik.values.dueDate === null ||
-                      selectedEstimateRows.length < 1 ||
-                      isLoading
-                        ? true
-                        : false
+                      formik.values.project === ""  
+                      // formik.values.dueDate === null ||
+                      // selectedEstimateRows.length < 1 ||
+                      // isLoading
+                      //   ? true
+                      //   : false
                     }
                     variant="contained"
                   >
                     {isLoading ? (
                       <CircularProgress sx={{ color: "#8477da" }} size={24} />
                     ) : projectState === "create" ? (
-                      "Save Quote Page"
+                      "Save Invoice"
                     ) : (
                       "Save Changes"
                     )}
@@ -641,47 +655,7 @@ const ProjectInvoiceComponent = ({
                           Customer:{" "}
                         </label>
                       </Box>
-                      {/* <FormControl
-                      size="small"
-                      className="custom-textfield"
-                      fullWidth
-                    >
-                      <Select
-                        name="customer"
-                        labelId="demo-select-small-label"
-                        id="demo-select-small"
-                        size="small"
-                        sx={{ height: "40px" }}
-                        value={formik.values?.customer}
-                        onChange={formik.handleChange}
-                        fullWidth
-                      >
-                        {isFetched &&
-                          customerList?.map((customer) => (
-                            <MenuItem
-                              key={customer._id}
-                              value={customer._id}
-                              sx={{ textTransform: "capitalize" }}
-                            >
-                              {customer.name}
-                            </MenuItem>
-                          ))}
-                        {isFetching && (
-                          <Box sx={{ textAlign: "center" }}>
-                            <CircularProgress
-                              size={24}
-                              sx={{ color: "#8477DA" }}
-                            />
-                          </Box>
-                        )}
-                      </Select>
-                    </FormControl> */}
-
-                      <Typography>{selectedCustomer?.name}</Typography>
-                      <Typography>{selectedCustomer?.email}</Typography>
-                      <Typography>{selectedCustomer?.address}</Typography>
-
-                      {/* <CustomInputField
+                      <CustomInputField
                         id="customer"
                         name="customer"
                         // label="Select a Customer"
@@ -715,7 +689,10 @@ const ProjectInvoiceComponent = ({
                         }}
                         value={formik.values?.customer}
                         onChange={() => {}}
-                      /> */}
+                      />
+                      <Typography>{selectedCustomer?.name}</Typography>
+                      <Typography>{selectedCustomer?.email}</Typography>
+                      <Typography>{selectedCustomer?.address}</Typography>
                     </Box>
                   </Box>
                   <Box
@@ -737,56 +714,10 @@ const ProjectInvoiceComponent = ({
                           Project:{" "}
                         </label>
                       </Box>
-                      {/* <FormControl
-                      size="small"
-                      className="custom-textfield"
-                      fullWidth
-                      disabled={formik.values.customer === "" ? true : false}
-                    >
-                      <Select
-                        name="project"
-                        labelId="demo-select-small-label"
-                        id="demo-select-small"
-                        size="small"
-                        sx={{ height: "40px" }}
-                        value={formik.values.project}
-                        onChange={formik.handleChange}
-                        fullWidth
-                      >
-                        {projectsListFetched &&
-                        projectsList?.projects?.length > 0 ? (
-                          projectsList?.projects?.map((project) => (
-                            <MenuItem
-                              key={project._id}
-                              value={project._id}
-                              sx={{ textTransform: "capitalize" }}
-                            >
-                              {project.name}
-                            </MenuItem>
-                          ))
-                        ) : (
-                          <Typography sx={{ textAlign: "center" }}>
-                            No Project Found!
-                          </Typography>
-                        )}
-                        {projectsListFetching && (
-                          <Box sx={{ textAlign: "center" }}>
-                            <CircularProgress
-                              size={24}
-                              sx={{ color: "#8477DA" }}
-                            />
-                          </Box>
-                        )}
-                      </Select>
-                    </FormControl> */}
-
-                      <Typography>{selectedProject?.name}</Typography>
-
-                      {/* <CustomInputField
+                      <CustomInputField
                         disabled={!selectedCustomer}
                         id="address"
                         name="address"
-                        // label="Select an Address"
                         size="small"
                         variant="outlined"
                         onClick={handleProjectSelect}
@@ -816,7 +747,8 @@ const ProjectInvoiceComponent = ({
                           width: "100%",
                         }}
                         value={formik.values.project}
-                      /> */}
+                      />
+                      <Typography>{selectedProject?.name}</Typography>
                     </Box>
                   </Box>
                   <Box
@@ -827,7 +759,7 @@ const ProjectInvoiceComponent = ({
                       width: { sm: "25%", xs: "100%" },
                     }}
                   >
-                    <Box
+                    {/* <Box
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -870,6 +802,53 @@ const ProjectInvoiceComponent = ({
                           )}
                         />
                       </Box>
+                    </Box> */}
+                     <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Box paddingBottom={0.6}>
+                        <label className="label-text" htmlFor="status">
+                         Preview :{" "}
+                        </label>
+                      </Box>
+                      <CustomInputField
+                        disabled={!selectedCustomer}
+                        id="address"
+                        name="address"
+                        size="small"
+                        variant="outlined"
+                        onClick={handlePreviewSelect}
+                        InputProps={{
+                          endAdornment: selectedPreview ? (
+                            <InputAdornment
+                              position="end"
+                              sx={{ cursor: "pointer" }}
+                              onClick={(event) => {
+                                handlePreviewUnSelect(event);
+                              }}
+                            >
+                              <Close sx={{}} />
+                            </InputAdornment>
+                          ) : (
+                            ""
+                          ),
+                          readOnly: true,
+                          style: {
+                            color: "black",
+                            borderRadius: 4,
+                            backgroundColor: "white",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        value={formik.values.project}
+                      />
+                      {/* <Typography>{selectedProject?.name}</Typography> */}
                     </Box>
                   </Box>
                 </Box>
@@ -880,7 +859,8 @@ const ProjectInvoiceComponent = ({
                     gap: 2,
                     aligItems: "baseline",
                     width: "100%",
-                    padding: "16px",
+                    px: "16px",
+                    pb:2
                   }}
                 >
                   <Box sx={{ width: { sm: "51.1%", xs: "100%" } }}>
@@ -907,7 +887,6 @@ const ProjectInvoiceComponent = ({
                           }}
                           className="custom-textfield"
                           color="neutral"
-                          // cols={isMobile ? 38 : 50}
                           minRows={5}
                           maxRows={19}
                           id="notes"
@@ -923,380 +902,7 @@ const ProjectInvoiceComponent = ({
                     </Box>
                   </Box>
                 </Box>
-                {/** Estimate Table */}
-                <Box sx={{ py: 3, px: "16px" }}>
-                  <EstimateDataList
-                    projectId={selectedProject?._id}
-                    setSelectedEstimateRows={setSelectedEstimateRows}
-                    selectedEstimateRows={selectedEstimateRows}
-                  />
-                </Box>
-                <Box sx={{ py: 3, px: "16px" }}>
-                  <Typography sx={{fontSize: 21, fontWeight: "bold", pb: 1}}>Choose upgrades for each category</Typography>
-                  <Box sx={{display:'flex',width:'100%',gap:2}}>
-                  <Box sx={{width:'33.3%'}}>
-                    <Typography sx={{fontWeight: "bold"}}>Shower</Typography>
-                    <Box sx={{pt: 1}}>
-                      <Autocomplete
-                        multiple
-                        options={ShowerHardwareList?.glassType ?? []}
-                        getOptionLabel={(glassType) => glassType.name}
-                        value={ShowerHardwareList?.glassType?.filter(
-                          (glassType) =>
-                            formik.values.additionalUpgrades.shower.glassTypes?.includes(
-                              glassType._id
-                            )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.shower.glassTypes",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.shower.glassTypes
-                                ?.length > 0
-                                ? ""
-                                : "Select Glass Type"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={ShowerHardwareList?.glassAddons.filter((item)=> item?.slug !== 'no-treatment') ?? []}
-                        getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={ShowerHardwareList?.glassAddons?.filter(
-                          (glassAddon) =>
-                            formik.values.additionalUpgrades.shower.glassAddons?.includes(
-                              glassAddon._id
-                            )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.shower.glassAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.shower
-                                .glassAddons?.length > 0
-                                ? ""
-                                : "Select Glass Addon"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={ShowerHardwareList?.hardwareAddons ?? []}
-                        getOptionLabel={(hardwareAddon) => hardwareAddon.name}
-                        value={ShowerHardwareList?.hardwareAddons?.filter(
-                          (hardwareAddon) =>
-                            formik.values.additionalUpgrades.shower.hardwareAddons?.includes(
-                              hardwareAddon._id
-                            )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.shower.hardwareAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.shower
-                                .hardwareAddons?.length > 0
-                                ? ""
-                                : "Select Hardware Addon"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                  </Box>
-                  <Box sx={{width:'33.3%'}}>
-                    <Typography sx={{fontWeight: "bold"}}>Mirror</Typography>
-                    <Box sx={{pt: 1}}>
-                      <Autocomplete
-                        multiple
-                        options={MirrorsHardwareList?.glassTypes ?? []}
-                        getOptionLabel={(glassType) => glassType.name}
-                        value={MirrorsHardwareList?.glassTypes?.filter(
-                          (glassType) =>
-                            formik.values.additionalUpgrades.mirror.glassTypes?.includes(
-                              glassType._id
-                            )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.mirror.glassTypes",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.mirror.glassTypes
-                                ?.length > 0
-                                ? ""
-                                : "Select Glass Type"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={MirrorsHardwareList?.glassAddons ?? []}
-                        getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={MirrorsHardwareList?.glassAddons?.filter(
-                          (glassAddon) =>
-                            formik.values.additionalUpgrades.mirror.glassAddons?.includes(
-                              glassAddon._id
-                            )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.mirror.glassAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.mirror
-                                .glassAddons?.length > 0
-                                ? ""
-                                : "Select Glass Addon"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                  </Box>
-                  <Box sx={{width:'33.3%'}}>
-                    <Typography sx={{fontWeight: "bold"}}>WineCaller</Typography>
-                    <Box sx={{pt: 1}}>
-                      <Autocomplete
-                        multiple
-                        options={WinelistData?.glassType ?? []}
-                        getOptionLabel={(glassType) => glassType.name}
-                        value={WinelistData?.glassType?.filter((glassType) =>
-                          formik.values.additionalUpgrades.wineCellar.glassTypes?.includes(
-                            glassType._id
-                          )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.wineCellar.glassTypes",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.wineCellar
-                                .glassTypes?.length > 0
-                                ? ""
-                                : "Select Glass Type"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={WinelistData?.glassAddons.filter((item)=> item?.slug !== 'no-treatment') ?? []}
-                        getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={WinelistData?.glassAddons?.filter((glassAddon) =>
-                          formik.values.additionalUpgrades.wineCellar.glassAddons?.includes(
-                            glassAddon._id
-                          )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.wineCellar.glassAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.wineCellar
-                                .glassAddons?.length > 0
-                                ? ""
-                                : "Select Glass Addon"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={WinelistData?.hardwareAddons ?? []}
-                        getOptionLabel={(hardwareAddon) => hardwareAddon.name}
-                        value={WinelistData?.hardwareAddons?.filter(
-                          (hardwareAddon) =>
-                            formik.values.additionalUpgrades.wineCellar.hardwareAddons?.includes(
-                              hardwareAddon._id
-                            )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.wineCellar.hardwareAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.wineCellar
-                                .hardwareAddons?.length > 0
-                                ? ""
-                                : "Select Hardware Addon"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                  </Box>
-                  </Box>
-                </Box>
               </Box>
-
               {/** Section 2 */}
               {/* <Box
                 sx={{
@@ -1356,7 +962,14 @@ const ProjectInvoiceComponent = ({
         setSelectedProject={handleProjectChange}
         selectedCustomer={selectedCustomer}
       />
+      <PreviewSelect
+        open={openPreviewSelectModal}
+        handleClose={() => setOpenPreviewSelectModal(false)}
+        selectedAddress={selectedProject}
+        setSelectedProject={handlePreviewChange}
+        selectedCustomer={selectedCustomer}
+      />
     </Box>
   );
 };
-export default ProjectInvoiceComponent;
+export default CraeteInvoice;

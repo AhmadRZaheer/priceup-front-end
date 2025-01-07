@@ -223,7 +223,7 @@ function InvoiceDetails() {
           ) : (
             ""
           )}
-          {data?.customerPreview?.link ? (
+          {/* {data?.customerPreview?.link ? (
             <Button
               onClick={() => navigate(`customer-preview`)}
               variant="text"
@@ -241,7 +241,7 @@ function InvoiceDetails() {
             >
               Generate Quoted Landing Page
             </Button>
-          )}
+          )} */}
         </div>
       </Box>
       {/* <hr style={{ border: "1px solid rgb(209, 212, 219)" }} /> */}

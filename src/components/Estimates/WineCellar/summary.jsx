@@ -941,11 +941,12 @@ const Summary = ({ setStep }) => {
                           display: "flex",
                           alignItems: "center",
                           gap: 1,
-                          width: "93px",
+                          // width: "93px",
                           padddingY: 4,
                         }}
                       >
                         <TextField
+                          fullWidth
                           className="custom-textfield-purple"
                           sx={{
                             "& input": {

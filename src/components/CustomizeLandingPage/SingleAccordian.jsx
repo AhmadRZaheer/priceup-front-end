@@ -33,8 +33,8 @@ const SingleAccordian = ({
   // wineCellarHardwaresList,
   category,
 }) => {
-  console.log(data, "sdfgqwfgqwfwqvd");
   const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
+  console.log(data, "sdfgqwfgqwfwqvd",totalPrice);
   const chipColor = data?.status
     ? data?.status === "pending"
       ? "#F95500"

@@ -42,7 +42,7 @@ const pdfLocationData = {
   website: "www.gcs.glass",
 };
 
-const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
+const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms,totalSum }) => {
   const newDate = new Date();
   const formattedDateTime = newDate.toLocaleString("en-US", {
     weekday: "long", // Full weekday name
@@ -132,6 +132,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
             quote: estimatePdfs,
             location: pdfLocationData,
             estimateData: data,
+            totalSum:totalSum
           }}
           key={`pdfFile${1}`}
         />
@@ -140,7 +141,6 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
       blobPdf.updateContainer(doc);
       const result = await blobPdf.toBlob();
       saveAs(result, "Priceup");
-
       const logData = {
         title: `${data?.customer?.name} downloaded the PDF on ${formattedDateTime}.`,
         performer_id: data?.customer_id,

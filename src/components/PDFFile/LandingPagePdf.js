@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
     backgroundColor: "#fff",
-    padding: "10px 20px",
+    padding: "10px 20px 30px 20px",
     gap: 5,
   },
   section_top: {
@@ -155,9 +155,9 @@ const LandingPDFFile = ({ controls, data }) => {
                     <Text style={{fontSize:'14px'}}>WineCaller Estimates:</Text>
                     <Text style={{fontSize:'12px'}}>{noOfEstimate?.totalWineCellar.length ?? 0}</Text>
                    </View>}
-                   {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                   {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',borderBottom:'1px sloid #ccc',paddingBottom:'5px',marginBottom:'5px'}}>
                     <Text style={{fontSize:'14px'}}>Total Price:</Text>
-                    <Text style={{fontSize:'12px'}}>${noOfEstimate?.totalPrice?.toFixed(2) || 0}</Text>
+                    <Text style={{fontSize:'12px'}}>${data?.totalSum?.toFixed(2) || 0}</Text>
                    </View>}
                 </View>
               </View>
@@ -166,7 +166,9 @@ const LandingPDFFile = ({ controls, data }) => {
             return (
              <>
               {/** Section 3 */}
-              <View style={{borderTop: index === 0 ? '1px sloid #ccc': 'none'}}>
+              <View
+              //  style={{borderTop: index === 0 ? '1px sloid #ccc': 'none'}}
+               >
               <View wrap={false}>
               <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'100%',textAlign:'center',marginBottom:'10px'}}>Shower Estimate - {item?.settings?.name ? item?.settings?.name : item?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'}</Text>
                <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>

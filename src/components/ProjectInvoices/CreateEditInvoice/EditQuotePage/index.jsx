@@ -482,7 +482,7 @@ const EditQuoteInvoice = () => {
                   variant="contained"
                   onClick={() =>
                     window.open(
-                      `/invoices/${selectedItemId}/customer-preview`,
+                      `/preview/${selectedItemId}/customer-preview`,
                       "_blank"
                     )
                   }
@@ -673,7 +673,7 @@ const EditQuoteInvoice = () => {
                             maxRows={4}
                             id="notes"
                             name="notes"
-                            placeholder="Enter Additional Notes"
+                            placeholder="Enter Description"
                             size="large"
                             variant="outlined"
                             sx={{ padding: "10px" }}
