@@ -536,6 +536,22 @@ const CampanySetting = () => {
             >
               High Level Settings
             </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 5 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(5)}
+            >
+              Customer Preview Settings
+            </Button>
           </Box>
           {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
             "& .MuiTab-root.Mui-selected": {
@@ -2578,6 +2594,92 @@ const CampanySetting = () => {
               flexDirection: "column",
               gap: 3,
               width: "70%",
+              pt: 2,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography>Location Reference</Typography>
+              <Box sx={{ width: "450px", display: "flex", gap: 1 }}>
+                <CustomInputField
+                  fullWidth
+                  type="text"
+                  name="highlevelSettings.locationReference"
+                  value={
+                    formik.values?.highlevelSettings?.locationReference ?? ""
+                  }
+                  placeholder={"Enter Location Reference"}
+                  onChange={formik.handleChange}
+                />
+                <Button
+                  onClick={() =>
+                    handleCopy(
+                      formik.values?.highlevelSettings?.locationReference ?? ""
+                    )
+                  }
+                  sx={{
+                    background: "#8477DA",
+                    color: "white",
+                    p: "6px 8px !important",
+                    minWidth: "40px",
+                    ":hover": {
+                      background: "#8477DA",
+                    },
+                  }}
+                >
+                  <ContentCopyIcon />
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography>API Key</Typography>
+              <Box sx={{ width: "450px", display: "flex", gap: 1 }}>
+                <CustomInputField
+                  fullWidth
+                  type="text"
+                  name="highlevelSettings.apiKey"
+                  value={formik.values?.highlevelSettings?.apiKey ?? ""}
+                  placeholder={"Enter API Key"}
+                  onChange={formik.handleChange}
+                />
+                <Button
+                  onClick={() =>
+                    handleCopy(formik.values?.highlevelSettings?.apiKey ?? "")
+                  }
+                  sx={{
+                    background: "#8477DA",
+                    color: "white",
+                    p: "4px !important",
+                    minWidth: "40px",
+                    ":hover": {
+                      background: "#8477DA",
+                    },
+                  }}
+                >
+                  <ContentCopyIcon />
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={5}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              width: "100%",
               pt: 2,
             }}
           >
