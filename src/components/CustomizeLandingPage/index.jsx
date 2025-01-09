@@ -28,6 +28,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { PDFViewer } from "@react-pdf/renderer";
 import PDFFile from "../PDFFile";
+import Bulb from "../../Assets/CustomerLandingImages/blubImg.png";
 import {
   backendURL,
   calculateAreaAndPerimeter,
@@ -90,6 +91,7 @@ import LandingPDFFile from "../PDFFile/LandingPagePdf";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 import SingleAccordian from "./SingleAccordian";
+import CustomSwiper from "../CustomSwiper";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const controls = {
@@ -1168,6 +1170,13 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
+                {selectedData?.content?.section2?.shower?.images &&
+                  selectedData?.content?.section2?.shower?.images?.length >
+                    0 && (
+                    <CustomSwiper
+                      gallery={selectedData?.content?.section2?.shower?.images}
+                    />
+                  )}
               </>
             )}
             {estimateTotal?.totalMirrors?.length > 0 && (
@@ -1222,6 +1231,13 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
+                {selectedData?.content?.section2?.mirror?.images &&
+                  selectedData?.content?.section2?.mirror?.images?.length >
+                    0 && (
+                    <CustomSwiper
+                      gallery={selectedData?.content?.section2?.mirror?.images}
+                    />
+                  )}
               </>
             )}
             {estimateTotal?.totalWineCellar?.length > 0 && (
@@ -1274,6 +1290,13 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
+                {selectedData?.content?.section2?.wineCellar?.images &&
+                  selectedData?.content?.section2?.wineCellar?.images?.length >
+                    0 && (
+                    <CustomSwiper
+                      gallery={selectedData?.content?.section2?.wineCellar?.images}
+                    />
+                  )}
               </>
             )}
 

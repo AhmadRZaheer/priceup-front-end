@@ -406,6 +406,29 @@ const MirrorsGlassAddonComponent = () => {
                 </Box>
               </MenuItem>
               <MenuItem
+                className="mirror-meun-item"
+                onClick={() => handleStatusChange(params.row)}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt">Show in Upgrade</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      rowStatus[params.row._id] !== undefined
+                        ? rowStatus[params.row._id]
+                        : params?.row?.options[0]?.status
+                    }
+                    // onChange={() => handleStatusChange(params.row)}
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
+              </MenuItem>
+              <MenuItem
                 onClick={() => {
                   setItemToModify(params?.row);
                   handleOpenDeleteModal();
