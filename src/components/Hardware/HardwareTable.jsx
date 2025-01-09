@@ -11,13 +11,15 @@ import { useDeleteHardwares, useEditFullHardware } from '@/utilities/ApiHooks/ha
 import AddEditModelHardware from '../Modal/AddEditModelHardware'
 import DefaultImage from '../ui-components/defaultImage'
 import { inputLength, inputMaxValue } from '@/utilities/constants'
+import { CustomSmallSwtich } from '../common/CustomSmallSwitch'
 
 const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [finishes, setFinishes] = useState(data.finishes);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);  
+  const [upgradeOption, setUpgradeOption] = useState({});
 
   const open = Boolean(anchorEl);
   const { mutate: editFinish, isSuccess: hardwareEditSuccess } = useEditFullHardware();
@@ -91,6 +93,19 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
     },
     []
   );
+
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.upgradeOption,
+    });
+    const selectedData = {
+      id: data._id,
+      showInUpgrades: !row.upgradeOption,
+    };
+    editFinish({ DataFinishes: selectedData });
+    // setUpdateRefetch(true);
+  }
 
   const actionColumns = useMemo(
     () => [
@@ -232,7 +247,7 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
                     boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
                     border: '1px solid #D0D5DD',
                     p: 0,
-                    width: '171px',
+                    width: '174px',
                     '& .MuiList-padding': {
                       p: 0,
                     },
@@ -255,6 +270,30 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
                   <EditOutlined sx={{ color: '#5D6164', height: '20px', width: '20px' }} />
                 </Box>
               </MenuItem>
+              
+               <MenuItem
+                  // className="mirror-meun-item"
+                              onClick={() => handleUpgradeStatusChange(data)}
+                              sx={{p:'12px'}}
+                            >
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  width: "100%",
+                                }}
+                              >
+                                <Typography className="dropTxt" sx={{pr:'4px'}}>Show in Upgrade</Typography>
+                                <CustomSmallSwtich
+                                  checked={
+                                    upgradeOption[data?._id] !== undefined
+                                      ? upgradeOption[data?._id]
+                                      : data?.upgradeOption
+                                  }
+                                  inputProps={{ "aria-label": "ant design" }}
+                                />
+                              </Box>
+               </MenuItem>
               <MenuItem onClick={() => handleOpenDeleteModal(data._id)} sx={{ p: '12px', ':hover': { background: '#EDEBFA' } }}>
                 <Box
                   sx={{

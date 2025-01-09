@@ -1170,13 +1170,11 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
-                {selectedData?.content?.section2?.shower?.images &&
-                  selectedData?.content?.section2?.shower?.images?.length >
-                    0 && (
-                    <CustomSwiper
-                      gallery={selectedData?.content?.section2?.shower?.images}
-                    />
-                  )}
+                {selectedData?.content?.section2?.shower && (
+                  <CustomSwiper
+                    data={selectedData?.content?.section2?.shower}
+                  />
+                )}
               </>
             )}
             {estimateTotal?.totalMirrors?.length > 0 && (
@@ -1231,13 +1229,11 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
-                {selectedData?.content?.section2?.mirror?.images &&
-                  selectedData?.content?.section2?.mirror?.images?.length >
-                    0 && (
-                    <CustomSwiper
-                      gallery={selectedData?.content?.section2?.mirror?.images}
-                    />
-                  )}
+                {selectedData?.content?.section2?.mirror && (
+                  <CustomSwiper
+                    data={selectedData?.content?.section2?.mirror}
+                  />
+                )}
               </>
             )}
             {estimateTotal?.totalWineCellar?.length > 0 && (
@@ -1290,13 +1286,11 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
-                {selectedData?.content?.section2?.wineCellar?.images &&
-                  selectedData?.content?.section2?.wineCellar?.images?.length >
-                    0 && (
-                    <CustomSwiper
-                      gallery={selectedData?.content?.section2?.wineCellar?.images}
-                    />
-                  )}
+                {selectedData?.content?.section2?.wineCellar && (
+                  <CustomSwiper
+                    data={selectedData?.content?.section2?.wineCellar}
+                  />
+                )}
               </>
             )}
 

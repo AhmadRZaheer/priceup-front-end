@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { CircularProgress, IconButton } from "@mui/material";
+import { CircularProgress, IconButton, TextField } from "@mui/material";
 import {
   useCreateGlassAddon,
   useEditGlassAddon,
@@ -73,6 +73,7 @@ export default function AddEditGlassAddon({
       ? {
           name: data?.name,
           image: data?.image,
+          description: data?.description ?? "",
           id: data?._id,
         }
       : {
@@ -116,7 +117,8 @@ export default function AddEditGlassAddon({
           backgroundColor: "rgba(5, 0, 35, 0.1)",
           ".MuiModal-backdrop": {
             backgroundColor: "rgba(5, 0, 35, 0.1)",
-          },}}
+          },
+        }}
       >
         <Box sx={style}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -162,7 +164,7 @@ export default function AddEditGlassAddon({
               borderRadius: "12px",
             }}
           >
-             <Typography
+            <Typography
               sx={{
                 color: "#000000",
                 lineHeight: "16.39px",
@@ -248,7 +250,7 @@ export default function AddEditGlassAddon({
                 <Typography color="error">{formik.errors.image}</Typography>
               )} */}
             </Box>
-            <Box className='model-field'>
+            <Box className="model-field">
               <Typography className="input-label-text">Addons Label</Typography>
               <CustomInputField
                 placeholder="Enter Addons Label"
@@ -261,6 +263,32 @@ export default function AddEditGlassAddon({
                 variant="outlined"
                 fullWidth
               />
+            </Box>
+            <Box sx={{ width: "100%", pt: 1 }} className="model-field">
+              <Typography className="input-label-text">Description</Typography>
+              <TextField
+                size="small"
+                placeholder={`Enter Description`}
+                name="name"
+                className="custom-textfield"
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                sx={{ ".MuiOutlinedInput-input": { p: "10px !important" } }}
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={2}
+              />
+              {formik.touched.description && formik.errors.description && (
+                <Typography
+                  variant="caption"
+                  color="error"
+                  sx={{ paddingLeft: "5px" }}
+                >
+                  {formik.errors.description}
+                </Typography>
+              )}
             </Box>
           </Box>
           <Box

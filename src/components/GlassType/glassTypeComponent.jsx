@@ -60,6 +60,7 @@ const GlassTypeComponent = ({ type }) => {
   const [rowStatus, setRowStatus] = useState({});
   const [editGlassTypeLoading, setEditGlassTypeLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [upgradeOption, setUpgradeOption] = useState({});
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -133,6 +134,18 @@ const GlassTypeComponent = ({ type }) => {
     }));
     // Perform the mutation to update the server
     editGlassType({ optionsData: updatedOptions, id: row._id });
+    setUpdateRefetch(true);
+  };
+
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.upgradeOption,
+    });
+    editGlassType({
+      optionsData: { showInUpgrades: !row.upgradeOption },
+      id: row._id,
+    });
     setUpdateRefetch(true);
   };
 
@@ -451,7 +464,28 @@ const GlassTypeComponent = ({ type }) => {
                   }
                 />
               </MenuItem>
-
+              <MenuItem
+                className="mirror-meun-item"
+                onClick={() => handleUpgradeStatusChange(params.row)}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt">Show in Upgrade</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[params.row._id] !== undefined
+                        ? upgradeOption[params.row._id]
+                        : params?.row?.upgradeOption
+                    }
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
+              </MenuItem>
               <MenuItem
                 onClick={() => {
                   setDeleteModalOpen(true); // Trigger delete

@@ -109,10 +109,12 @@ export default function AddEditModelHardware({
                 notch: data?.notch,
                 outages: data?.outages,
                 image: data?.image,
+                description: data?.description,
             }
             : {
                 name: "",
                 image: "",
+                description: '',
                 oneInchHoles: 0,
                 hingeCut: 0,
                 clampCut: 0,
@@ -393,6 +395,33 @@ export default function AddEditModelHardware({
                                 fullWidth
                             />
                         </Box>
+                              {categorySlug === 'add-ons' && 
+                              <Box sx={{ width: "100%", pt: 1 }} className="model-field">
+            <Typography className="input-label-text">Description</Typography>
+            <TextField
+            size="small"
+            placeholder={`Enter Description`}
+            name="name"
+            className="custom-textfield"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            sx={{ ".MuiOutlinedInput-input": { p: "10px !important" } }}
+            variant="outlined"
+            fullWidth
+            multiline
+            rows={2}
+            />
+            {formik.touched.description && formik.errors.description && (
+            <Typography
+                variant="caption"
+                color="error"
+                sx={{ paddingLeft: "5px" }}
+            >
+                {formik.errors.description}
+            </Typography>
+            )}
+                              </Box>}
                         <Box sx={{ width: "100%", }} className='model-field'>
                             <Typography className="input-label-text">Fabrication </Typography>
                             <Accordion

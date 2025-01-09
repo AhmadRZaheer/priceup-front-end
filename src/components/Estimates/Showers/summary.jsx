@@ -148,7 +148,7 @@ const Summary = ({ setStep }) => {
   // }, [estimateDiscount, estimateDiscountUnit, totalPrice]);
 
   //drawerHandleClick
-  const drawerHandleClick = () => {   
+  const drawerHandleClick = () => {
     const item = generateObjectForPDFRuntime(
       {
         estimateState,
@@ -1144,19 +1144,42 @@ const Summary = ({ setStep }) => {
                   //   (totalPrice - laborPrice) /
                   //     showersLocationSettings?.miscPricing?.pricingFactor -
                   //   glassPrice;
-                  // const glassPricing = sqftArea !== 0 ?
-                  //   (calc + sqftArea * glass.price) *
-                  //     (showersLocationSettings?.miscPricing?.pricingFactorStatus
-                  //       ? showersLocationSettings?.miscPricing?.pricingFactor
-                  //       : 1) +
-                  //   laborPrice : 0;
+                  // const glassPricing =
+                  //   sqftArea !== 0
+                  //     ? (calc + sqftArea * glass.price) *
+                  //         (showersLocationSettings?.miscPricing
+                  //           ?.pricingFactorStatus
+                  //           ? showersLocationSettings?.miscPricing
+                  //               ?.pricingFactor
+                  //           : 1) +
+                  //       laborPrice
+                  //     : 0;  
+                  // const price =
+                  //   (sqftArea * glass.price - glassPrice) *
+                  //   (showersLocationSettings?.miscPricing?.pricingFactorStatus
+                  //     ? showersLocationSettings?.miscPricing?.pricingFactor
+                  //     : 1);
 
-                  const price =
-                    (sqftArea * glass.price - glassPrice) *
-                    (showersLocationSettings?.miscPricing?.pricingFactorStatus
-                      ? showersLocationSettings?.miscPricing?.pricingFactor
-                      : 1);
-                  const priceStatus = price >= 0 ? true : false;
+                  const itemCost =
+                    actualCost - glassPrice + sqftArea * glass.price;
+                  let singleItemCost =
+                    itemCost *
+                      (showersLocationSettings?.miscPricing?.pricingFactorStatus
+                        ? showersLocationSettings?.miscPricing?.pricingFactor
+                        : 1) +
+                    laborPrice;
+                  if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+                    singleItemCost =
+                      ((itemCost * 100) / (userProfitPercentage - 100)) *
+                      -1;
+                  }
+                  const itemDifference = singleItemCost - totalPrice;                 
+                  const singleGlassCost =
+                  estimateDiscount > 0 && estimateDiscountUnit === "%"
+                      ? itemDifference -
+                        (itemDifference * Number(estimateDiscount)) / 100
+                      : itemDifference;
+                  const priceStatus = singleGlassCost >= 0 ? true : false;
 
                   return (
                     glass.status && (
@@ -1175,7 +1198,7 @@ const Summary = ({ setStep }) => {
                           }}
                         >
                           {priceStatus ? "+" : "-"}$
-                          {Math.abs(price?.toFixed(2)) || 0}
+                          {Math.abs(singleGlassCost?.toFixed(2)) || 0}
                         </Box>{" "}
                         {"=>"} Want to
                         {/* '${(sqftArea*glass.price)?.toFixed(2) || 0}' */}

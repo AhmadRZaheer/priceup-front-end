@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,  
+  Button,
   IconButton,
   Menu,
   MenuItem,
@@ -15,7 +15,10 @@ import HardwareEditModal from "@/components/common/HardwareEditModal";
 import HardwareCreateModal from "@/components/common/HardwareCreateModal";
 import { useDispatch } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
-import { WineMirrorsGlassAddon, WineMirrorsGlassType } from "@/utilities/DataGridColumns";
+import {
+  WineMirrorsGlassAddon,
+  WineMirrorsGlassType,
+} from "@/utilities/DataGridColumns";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -68,6 +71,7 @@ const WineGlassAddonComponent = () => {
   const [rowStatus, setRowStatus] = useState({});
   const [editGlassType, setEditGlassType] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [upgradeOption, setUpgradeOption] = useState({});
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -126,7 +130,7 @@ const WineGlassAddonComponent = () => {
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
-    setActiveRow(row); 
+    setActiveRow(row);
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -161,6 +165,17 @@ const WineGlassAddonComponent = () => {
     }));
     editWineGlassAddon({
       data: { options: updatedOptions },
+      apiRoute: `${routePrefix}/${row._id}`,
+    });
+    setUpdateRefetch(true);
+  };
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.upgradeOption,
+    });
+    editWineGlassAddon({
+      data: { showInUpgrades: !row.upgradeOption },
       apiRoute: `${routePrefix}/${row._id}`,
     });
     setUpdateRefetch(true);
@@ -212,34 +227,34 @@ const WineGlassAddonComponent = () => {
       renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 1.5,
       sortable: false,
-      renderCell: (params) => (     
-         <Box sx={{ width: "101px" }}>
-         <CustomInputField
-           disabled={params.row.slug === "no-treatment"}
-           size="small"
-           variant="outlined"
-           type="number"
-           inputProps={{
-             min: 0,
-             max: inputMaxValue,
-           }}
-           name="cost"
-           placeholder="Cost"
-           value={
-             rowCosts[params.row._id] !== undefined
-               ? rowCosts[params.row._id]
-               : params.row.options[0]?.cost
-           }
-           onChange={(e) => {
-             if (e.target.value.length <= inputLength) {
-               setRowCosts({
-                 ...rowCosts,
-                 [params.row._id]: e.target.value,
-               });
-             }
-           }}
-         />
-       </Box>
+      renderCell: (params) => (
+        <Box sx={{ width: "101px" }}>
+          <CustomInputField
+            disabled={params.row.slug === "no-treatment"}
+            size="small"
+            variant="outlined"
+            type="number"
+            inputProps={{
+              min: 0,
+              max: inputMaxValue,
+            }}
+            name="cost"
+            placeholder="Cost"
+            value={
+              rowCosts[params.row._id] !== undefined
+                ? rowCosts[params.row._id]
+                : params.row.options[0]?.cost
+            }
+            onChange={(e) => {
+              if (e.target.value.length <= inputLength) {
+                setRowCosts({
+                  ...rowCosts,
+                  [params.row._id]: e.target.value,
+                });
+              }
+            }}
+          />
+        </Box>
       ),
     },
     {
@@ -274,16 +289,18 @@ const WineGlassAddonComponent = () => {
         return (
           <>
             <IconButton
-             disabled={params.row.slug === "no-treatment"}
+              disabled={params.row.slug === "no-treatment"}
               aria-haspopup="true"
               onClick={(event) => {
                 handleClickAction(event, data);
                 setItemToModify(data);
               }}
             >
-              <ArrowForward sx={{
+              <ArrowForward
+                sx={{
                   color: params.row.slug === "no-treatment" ? "" : "#8477DA",
-                }} />
+                }}
+              />
             </IconButton>
             <Menu
               // id={params.row._id}
@@ -346,9 +363,9 @@ const WineGlassAddonComponent = () => {
                   />
                 </Box>
               </MenuItem>
-              
+
               <MenuItem
-              className="mirror-meun-item"
+                className="mirror-meun-item"
                 sx={{
                   padding: "12px",
                   m: 0,
@@ -377,6 +394,29 @@ const WineGlassAddonComponent = () => {
                   text={""}
                 />
                 {/* </Box> */}
+              </MenuItem>
+              <MenuItem
+                className="mirror-meun-item"
+                onClick={() => handleUpgradeStatusChange(params.row)}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt">Show in Upgrade</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[params.row._id] !== undefined
+                        ? upgradeOption[params.row._id]
+                        : params?.row?.upgradeOption
+                    }
+                    // onChange={() => handleStatusChange(params.row)}
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
               </MenuItem>
 
               <MenuItem
@@ -419,7 +459,7 @@ const WineGlassAddonComponent = () => {
     "Status",
     "Actions",
   ]);
-  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4,5,6,7,8]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8]);
 
   return (
     <>
@@ -537,7 +577,7 @@ const WineGlassAddonComponent = () => {
           }}
           isLoading={deleteGlassAddonLoading}
           handleDelete={handleHardwareDelete}
-          text={"Glass Addons"}
+          text={"Glass Addon"}
         />
         <HardwareEditModal
           open={updateModalOpen}
@@ -547,7 +587,7 @@ const WineGlassAddonComponent = () => {
           data={itemToModify}
           isLoading={editGlassAddonLoading}
           handleEdit={handleUpdateItem}
-          hardwareType={"Glass Addons"}
+          hardwareType={"Glass Addon"}
         />
         <HardwareCreateModal
           open={createModalOpen}
@@ -556,7 +596,7 @@ const WineGlassAddonComponent = () => {
           }}
           isLoading={createWineGlassAddonLoading}
           handleCreate={handleCreateItem}
-          hardwareType={"Glass Addons"}
+          hardwareType={"Glass Addon"}
         />
       </Box>
     </>

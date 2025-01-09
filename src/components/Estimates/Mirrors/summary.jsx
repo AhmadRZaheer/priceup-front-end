@@ -838,12 +838,32 @@ const Summary = ({ setStep }) => {
                   // const price = sqftArea !== 0 ?
                   //   actualPrice * (mirrorsLocationSettings?.pricingFactorStatus ? mirrorsLocationSettings?.pricingFactor : 1) +
                   //   pricing.labor : 0;
-                  const price =
-                    (sqftArea * glass.price - pricing.glass) *
-                    (mirrorsLocationSettings?.pricingFactorStatus
-                      ? mirrorsLocationSettings?.pricingFactor
-                      : 1);
-                  const priceStatus = price >= 0 ? true : false;
+                  // const price =
+                  //   (sqftArea * glass.price - pricing.glass) *
+                  //   (mirrorsLocationSettings?.pricingFactorStatus
+                  //     ? mirrorsLocationSettings?.pricingFactor
+                  //     : 1);
+                  // const priceStatus = price >= 0 ? true : false;
+
+                  const itemCost =
+                    pricing.cost - pricing.glass + sqftArea * glass.price;
+                  let singleItemCost =
+                    itemCost *
+                      (mirrorsLocationSettings?.pricingFactorStatus
+                        ? mirrorsLocationSettings?.pricingFactor
+                        : 1) +
+                    pricing.labor;
+                  if (modifiedProfitPercentage > 0 && modifiedProfitPercentage < 100) {
+                    singleItemCost =
+                      ((itemCost * 100) / (modifiedProfitPercentage - 100)) * -1;
+                  }
+                  const itemDifference = singleItemCost - pricing.total;
+                  const singleGlassCost =
+                    estimateDiscount > 0 && estimateDiscountUnit === "%"
+                      ? itemDifference -
+                        (itemDifference * Number(estimateDiscount)) / 100
+                      : itemDifference;
+                  const priceStatus = singleGlassCost >= 0 ? true : false;
 
                   return (
                     glass.status && (
@@ -861,7 +881,7 @@ const Summary = ({ setStep }) => {
                           }}
                         >
                           {priceStatus ? "+" : "-"}$
-                          {Math.abs(price?.toFixed(2)) || "0.00"}
+                          {Math.abs(singleGlassCost?.toFixed(2)) || "0.00"}
                         </Box>{" "}
                         {"=>"} Want to
                         <Box
