@@ -73,12 +73,13 @@ export default function AddEditGlassAddon({
       ? {
           name: data?.name,
           image: data?.image,
-          description: data?.description ?? "",
+          description: data?.description,
           id: data?._id,
         }
       : {
           name: "",
           image: "",
+          description: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -269,7 +270,7 @@ export default function AddEditGlassAddon({
               <TextField
                 size="small"
                 placeholder={`Enter Description`}
-                name="name"
+                name="description"
                 className="custom-textfield"
                 value={formik.values.description}
                 onChange={formik.handleChange}

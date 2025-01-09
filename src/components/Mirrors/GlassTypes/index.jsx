@@ -114,6 +114,9 @@ const MirrorsGlassTypeComponent = () => {
       if (props?.options) {
         formData.append("options", props.options);
       }
+      if (props?.description) {
+        formData.append("description", props.description);
+      }
       console.log(formData, "form data");
       editGlassType({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
       setUpdateRefetch(true);
@@ -124,10 +127,10 @@ const MirrorsGlassTypeComponent = () => {
   const handleUpgradeStatusChange = (row) => {
     setUpgradeOption({
       ...upgradeOption,
-      [row._id]: !row.upgradeOption,
+      [row._id]: !row.showInUpgrades,
     });
     editGlassType({
-      data: { showInUpgrades: !row.upgradeOption },
+      data: { showInUpgrades: !row.showInUpgrades },
       apiRoute: `${routePrefix}/${row._id}`,
     });
     setUpdateRefetch(true);
@@ -144,6 +147,7 @@ const MirrorsGlassTypeComponent = () => {
       formData.append("image", props.image);
     }
     formData.append("name", props.name);
+    formData.append("description", props.description);
     formData.append("company_id", decodedToken?.company_id);
     formData.append("slug", slug);
     createGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
@@ -518,7 +522,7 @@ const MirrorsGlassTypeComponent = () => {
                     checked={
                       upgradeOption[params.row._id] !== undefined
                         ? upgradeOption[params.row._id]
-                        : params?.row?.upgradeOption
+                        : params?.row?.showInUpgrades
                     }
                     inputProps={{ "aria-label": "ant design" }}
                   />

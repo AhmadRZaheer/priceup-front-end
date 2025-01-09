@@ -110,6 +110,9 @@ const MirrorsGlassAddonComponent = () => {
       if (props?.options) {
         formData.append("options", props.options);
       }
+      if (props?.description) {
+        formData.append("description", props.description);
+      }
       console.log(formData, "form data");
       editGlassAddon({
         data: formData,
@@ -133,6 +136,7 @@ const MirrorsGlassAddonComponent = () => {
     formData.append("name", props.name);
     formData.append("company_id", decodedToken?.company_id);
     formData.append("slug", slug);
+    formData.append("description", props.description);
     createGlassAddon({ data: formData, apiRoute: `${routePrefix}/save` });
   };
   const miniTab = useMediaQuery("(max-width: 1280px)");
@@ -183,10 +187,10 @@ const MirrorsGlassAddonComponent = () => {
   const handleUpgradeStatusChange = (row) => {
     setUpgradeOption({
       ...upgradeOption,
-      [row._id]: !row.upgradeOption,
+      [row._id]: !row.showInUpgrades,
     });
     editGlassAddon({
-      data: { showInUpgrades: !row.upgradeOption },
+      data: { showInUpgrades: !row.showInUpgrades },
       apiRoute: `${routePrefix}/${row._id}`,
     });
     setUpdateRefetch(true);
@@ -433,7 +437,7 @@ const MirrorsGlassAddonComponent = () => {
                     checked={
                       upgradeOption[params.row._id] !== undefined
                         ? upgradeOption[params.row._id]
-                        : params?.row?.upgradeOption
+                        : params?.row?.showInUpgrades
                     }
                     // onChange={() => handleStatusChange(params.row)}
                     inputProps={{ "aria-label": "ant design" }}

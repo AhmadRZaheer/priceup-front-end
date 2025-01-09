@@ -332,7 +332,7 @@ export default function HardwareEditModal({
                   <TextField
                     size="small"
                     placeholder={`Enter Description`}
-                    name="name"
+                    name="description"
                     className="custom-textfield"
                     value={formik.values.description}
                     onChange={formik.handleChange}

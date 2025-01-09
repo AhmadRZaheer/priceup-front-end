@@ -113,6 +113,7 @@ export const useCreateGlassType = () => {
       formData.append("image", props.image);
     }
     formData.append("name", props.name);
+    formData.append("description", props.description);
     formData.append("company_id", decodedToken?.company_id);
     formData.append("slug", slug);
 
@@ -168,6 +169,7 @@ export const useEditGlassType = () => {
 
       if (props.glassTypeData) {
         formData.append("name", props.glassTypeData.name);
+        formData.append("description", props.glassTypeData.description);
         // formData.append("slug", slug);
       }
       const response = await axios.put(
