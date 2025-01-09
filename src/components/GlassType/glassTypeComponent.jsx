@@ -32,6 +32,8 @@ import DeleteModal from "../Modal/deleteModal";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 import { inputLength, inputMaxValue } from "@/utilities/constants";
+import { useEditDocument } from "@/utilities/ApiHooks/common";
+import { backendURL } from "@/utilities/common";
 
 const GlassTypeComponent = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -43,7 +45,7 @@ const GlassTypeComponent = ({ type }) => {
     isFetched,
   } = useFetchDataGlassType(type);
   const { mutate: editGlassType, isSuccess: GlassTypeEditSuccess } =
-    useEditFullGlassType();
+    useEditDocument();
   const {
     mutate: deleteGlassType,
     isSuccess: deleteSuccess,
@@ -97,7 +99,10 @@ const GlassTypeComponent = ({ type }) => {
         : option.cost,
     }));
     setUpdateRefetch(false);
-    editGlassType({ optionsData: updatedOptions, id: data._id });
+    editGlassType({
+      data: { options: updatedOptions },
+      apiRoute: `${backendURL}/glassTypes/${data._id}`,
+    });
   };
 
   // Handle status change for specific thickness index
@@ -133,18 +138,21 @@ const GlassTypeComponent = ({ type }) => {
       },
     }));
     // Perform the mutation to update the server
-    editGlassType({ optionsData: updatedOptions, id: row._id });
+    editGlassType({
+      data: { options: updatedOptions },
+      apiRoute: `${backendURL}/glassTypes/${row._id}`,
+    });
     setUpdateRefetch(true);
   };
 
   const handleUpgradeStatusChange = (row) => {
     setUpgradeOption({
       ...upgradeOption,
-      [row._id]: !row.upgradeOption,
+      [row._id]: !row.showInUpgrades,
     });
     editGlassType({
-      optionsData: { showInUpgrades: !row.upgradeOption },
-      id: row._id,
+      data:{ showInUpgrades: !row.showInUpgrades },
+      apiRoute: `${backendURL}/glassTypes/${row._id}`,
     });
     setUpdateRefetch(true);
   };
@@ -465,8 +473,9 @@ const GlassTypeComponent = ({ type }) => {
                 />
               </MenuItem>
               <MenuItem
-                className="mirror-meun-item"
+                // className="mirror-meun-item"
                 onClick={() => handleUpgradeStatusChange(params.row)}
+                sx={{ borderTop: "1px solid #D0D5DD", p: "12px" }}
               >
                 <Box
                   sx={{
@@ -480,7 +489,7 @@ const GlassTypeComponent = ({ type }) => {
                     checked={
                       upgradeOption[params.row._id] !== undefined
                         ? upgradeOption[params.row._id]
-                        : params?.row?.upgradeOption
+                        : params?.row?.showInUpgrades
                     }
                     inputProps={{ "aria-label": "ant design" }}
                   />

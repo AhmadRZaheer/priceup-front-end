@@ -122,6 +122,7 @@ export const useCreateGlassAddon = () => {
       formData.append("image", props.image);
     }
     formData.append("name", props.name);
+    formData.append("description", props.description);
     formData.append("company_id", decodedToken?.company_id);
     formData.append("slug", slug);
 
@@ -272,6 +273,7 @@ export const useEditGlassAddon = () => {
 
       if (props.glassAddonData) {
         formData.append("name", props.glassAddonData.name);
+        formData.append("description", props.glassAddonData.description);
         // formData.append("slug", slug);
 
         if (props.glassAddonData.image) {

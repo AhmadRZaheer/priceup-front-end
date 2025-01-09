@@ -103,6 +103,9 @@ const WineGlassAddonComponent = () => {
       if (props?.options) {
         formData.append("options", props.options);
       }
+      if (props?.description) {
+        formData.append("description", props.description);
+      }
       editWineGlassAddon({
         data: formData,
         apiRoute: `${routePrefix}/${props.id}`,
@@ -123,6 +126,7 @@ const WineGlassAddonComponent = () => {
       formData.append("image", props.image);
     }
     formData.append("name", props.name);
+    formData.append("description", props.description);
     formData.append("company_id", decodedToken?.company_id);
     formData.append("slug", slug);
     createWineGlassAddon({ data: formData, apiRoute: `${routePrefix}/save` });
@@ -172,10 +176,10 @@ const WineGlassAddonComponent = () => {
   const handleUpgradeStatusChange = (row) => {
     setUpgradeOption({
       ...upgradeOption,
-      [row._id]: !row.upgradeOption,
+      [row._id]: !row.showInUpgrades,
     });
     editWineGlassAddon({
-      data: { showInUpgrades: !row.upgradeOption },
+      data: { showInUpgrades: !row.showInUpgrades },
       apiRoute: `${routePrefix}/${row._id}`,
     });
     setUpdateRefetch(true);
@@ -411,7 +415,7 @@ const WineGlassAddonComponent = () => {
                     checked={
                       upgradeOption[params.row._id] !== undefined
                         ? upgradeOption[params.row._id]
-                        : params?.row?.upgradeOption
+                        : params?.row?.showInUpgrades
                     }
                     // onChange={() => handleStatusChange(params.row)}
                     inputProps={{ "aria-label": "ant design" }}

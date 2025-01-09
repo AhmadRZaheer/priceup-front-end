@@ -4,13 +4,7 @@ import {
   EditOutlined,
   KeyboardArrowDown,
 } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState, useCallback } from "react";
 
@@ -27,6 +21,7 @@ import { backendURL } from "@/utilities/common";
 import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
 import { useDispatch } from "react-redux";
 import { inputLength, inputMaxValue } from "@/utilities/constants";
+import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
 
 const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   const routePrefix = `${backendURL}/wineCellars/hardwares`;
@@ -35,6 +30,8 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [upgradeOption, setUpgradeOption] = useState({});
+
   const open = Boolean(anchorEl);
   const { mutate: editHardware, isSuccess: hardwareEditSuccess } =
     useEditDocument();
@@ -55,10 +52,10 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
       dispatch(setWineCellarsHardwareRefetch());
       setDeleteModalOpen(false);
     }
-    if(hardwareEditSuccess){
+    if (hardwareEditSuccess) {
       dispatch(setWineCellarsHardwareRefetch());
     }
-  }, [deleteSuccess,hardwareEditSuccess]);
+  }, [deleteSuccess, hardwareEditSuccess]);
   const handleClick = useCallback((event) => {
     setAnchorEl(event.currentTarget);
   }, []);
@@ -67,7 +64,6 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   }, []);
   const handleHardwareDelete = () => {
     deleteHardwareFinish({ apiRoute: `${routePrefix}/${deleteRecord}` });
-    
   };
   const handleOpenDeleteModal = useCallback((id) => {
     setDeleteRecord(id);
@@ -79,7 +75,13 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
     const finishData = finishes ? { finishes: finishes } : {};
     editHardware({ data: finishData, apiRoute: `${routePrefix}/${data._id}` });
   }, [data._id, finishes, editHardware]);
-
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.showInUpgrades,
+    });
+    editHardware({ data: { showInUpgrades : !row.showInUpgrades }, apiRoute: `${routePrefix}/${data._id}` });
+  }
   const handleStatusChange = useCallback((id) => {
     setFinishes((prevFinishes) =>
       prevFinishes.map((item) =>
@@ -105,7 +107,6 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
         )
       );
     }
-    
   }, []);
   const actionColumns = [
     {
@@ -121,7 +122,7 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
             size="small"
             variant="outlined"
             type="number"
-            inputProps={{ min: 0 ,max: inputMaxValue}}
+            inputProps={{ min: 0, max: inputMaxValue }}
             name="cost"
             placeholder="Cost"
             value={params?.row?.cost}
@@ -269,6 +270,30 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
                   <Typography className="dropTxt">Edit</Typography>
                   <EditOutlined
                     sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                  />
+                </Box>
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleUpgradeStatusChange(data)}
+                sx={{ p: "12px" }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt" sx={{ pr: "4px" }}>
+                    Show in Upgrade
+                  </Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[data?._id] !== undefined
+                        ? upgradeOption[data?._id]
+                        : data?.showInUpgrades
+                    }
+                    inputProps={{ "aria-label": "ant design" }}
                   />
                 </Box>
               </MenuItem>

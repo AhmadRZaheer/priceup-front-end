@@ -136,6 +136,7 @@ export const useCreateHardware = () => {
     }
 
     formData.append("name", props.name);
+    formData.append("description", props.description);
     formData.append("slug", slug);
     formData.append("hardware_category_slug", props.hardware_category_slug);
     formData.append("clampCut", props.clampCut);
@@ -283,6 +284,7 @@ export const useEditHardware = () => {
     try {
       const formData = new FormData();
       formData.append("name", props.hardwareData.name);
+      formData.append("description", props.hardwareData.description);
       // formData.append("slug", slug);
       formData.append("clampCut", props.hardwareData.clampCut);
       formData.append("hingeCut", props.hardwareData.hingeCut);
