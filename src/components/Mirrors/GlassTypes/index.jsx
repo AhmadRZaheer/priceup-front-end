@@ -76,6 +76,7 @@ const MirrorsGlassTypeComponent = () => {
   const [rowStatus, setRowStatus] = useState({});
   const [editGlassTypeLoad, setEditGlassTypeLoad] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [upgradeOption, setUpgradeOption] = useState({});
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -119,6 +120,18 @@ const MirrorsGlassTypeComponent = () => {
     }
     localStorage.setItem("scrollToIndex", props.id);
   };
+  
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.upgradeOption,
+    });
+    editGlassType({
+      data: { showInUpgrades: !row.upgradeOption },
+      apiRoute: `${routePrefix}/${row._id}`,
+    });
+    setUpdateRefetch(true);
+  }
 
   const handleOpenCreateModal = () => {
     setCreateModalOpen(true);
@@ -239,22 +252,21 @@ const MirrorsGlassTypeComponent = () => {
             size="small"
             variant="outlined"
             type="number"
-            inputProps={{ min: 0 ,max: inputMaxValue,}}
+            inputProps={{ min: 0, max: inputMaxValue }}
             name={`cost-${params.row._id}-1/4`}
             placeholder="Cost"
             value={
               rowCosts[`${params.row._id}-1/4`] ??
               params.row.options.find((o) => o.thickness === "1/4")?.cost
             }
-            onChange={(e) =>{
+            onChange={(e) => {
               if (e.target.value.length <= inputLength) {
                 setRowCosts({
                   ...rowCosts,
                   [`${params.row._id}-1/4`]: e.target.value,
-                })
+                });
               }
-            }           
-            }
+            }}
           />
         </Box>
       ),
@@ -272,22 +284,21 @@ const MirrorsGlassTypeComponent = () => {
             size="small"
             variant="outlined"
             type="number"
-            inputProps={{ min: 0 ,max: inputMaxValue,}}
+            inputProps={{ min: 0, max: inputMaxValue }}
             name={`cost-${params.row._id}-1/8`}
             placeholder="Cost"
             value={
               rowCosts[`${params.row._id}-1/8`] ??
               params.row.options.find((o) => o.thickness === "1/8")?.cost
             }
-            onChange={(e) =>{
+            onChange={(e) => {
               if (e.target.value.length <= inputLength) {
                 setRowCosts({
                   ...rowCosts,
                   [`${params.row._id}-1/8`]: e.target.value,
-                })
+                });
               }
-            }              
-            }
+            }}
           />
         </Box>
       ),
@@ -491,7 +502,28 @@ const MirrorsGlassTypeComponent = () => {
                   </Box>
                 </MenuItem>
               ))}
-
+              <MenuItem
+                className="mirror-meun-item"
+                onClick={() => handleUpgradeStatusChange(params.row)}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt">Show in Upgrade</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[params.row._id] !== undefined
+                        ? upgradeOption[params.row._id]
+                        : params?.row?.upgradeOption
+                    }
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
+              </MenuItem>
               <MenuItem
                 onClick={() => {
                   setItemToModify(params?.row);

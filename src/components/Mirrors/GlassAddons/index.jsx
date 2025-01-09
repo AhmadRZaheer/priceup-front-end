@@ -75,6 +75,7 @@ const MirrorsGlassAddonComponent = () => {
   const [activeRow, setActiveRow] = useState(null);
   const [rowCosts, setRowCosts] = useState({});
   const [rowStatus, setRowStatus] = useState({});
+  const [upgradeOption, setUpgradeOption] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenDeleteModal = () => {
@@ -179,6 +180,17 @@ const MirrorsGlassAddonComponent = () => {
     });
     setUpdateRefetch(true);
   };
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.upgradeOption,
+    });
+    editGlassAddon({
+      data: { showInUpgrades: !row.upgradeOption },
+      apiRoute: `${routePrefix}/${row._id}`,
+    });
+    setUpdateRefetch(true);
+  }
 
   useEffect(() => {
     refetchGlassAddonsList();
@@ -407,7 +419,7 @@ const MirrorsGlassAddonComponent = () => {
               </MenuItem>
               <MenuItem
                 className="mirror-meun-item"
-                onClick={() => handleStatusChange(params.row)}
+                onClick={() => handleUpgradeStatusChange(params.row)}
               >
                 <Box
                   sx={{
@@ -419,9 +431,9 @@ const MirrorsGlassAddonComponent = () => {
                   <Typography className="dropTxt">Show in Upgrade</Typography>
                   <CustomSmallSwtich
                     checked={
-                      rowStatus[params.row._id] !== undefined
-                        ? rowStatus[params.row._id]
-                        : params?.row?.options[0]?.status
+                      upgradeOption[params.row._id] !== undefined
+                        ? upgradeOption[params.row._id]
+                        : params?.row?.upgradeOption
                     }
                     // onChange={() => handleStatusChange(params.row)}
                     inputProps={{ "aria-label": "ant design" }}

@@ -59,6 +59,7 @@ const GlassAddonGrid = ({ type }) => {
   const [rowStatus, setRowStatus] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [updateRefetch, setUpdateRefetch] = useState(false);
+  const [upgradeOption, setUpgradeOption] = useState({});
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -113,6 +114,18 @@ const GlassAddonGrid = ({ type }) => {
     editGlassAddon({ optionsData: updatedOptions, id: row._id });
     setUpdateRefetch(true);
   };
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.upgradeOption,
+    });
+    editGlassAddon({
+      optionsData: { showInUpgrades: !row.upgradeOption },
+      id: row._id,
+    });
+    setUpdateRefetch(true);
+  };
+
   const actionColumn = [
     {
       field: "cost",
@@ -300,6 +313,29 @@ const GlassAddonGrid = ({ type }) => {
                   text={""}
                 />
                 {/* </Box> */}
+              </MenuItem>
+
+              <MenuItem
+                className="mirror-meun-item"
+                onClick={() => handleUpgradeStatusChange(params.row)}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt">Show in Upgrade</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[params.row._id] !== undefined
+                        ? upgradeOption[params.row._id]
+                        : params?.row?.upgradeOption
+                    }
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
               </MenuItem>
 
               <MenuItem
