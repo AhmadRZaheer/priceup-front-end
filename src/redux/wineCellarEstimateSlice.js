@@ -6,6 +6,7 @@ import {
     quoteState,
     thicknessTypes,
   } from "@/utilities/constants";
+import { generateContentForWineCellarEdit } from "@/utilities/generateEstimateCalculationContent";
 import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
   // import { getWineHardwareSpecificFabrication } from "@/utilities/hardwarefabrication";
   const { createSlice } = require("@reduxjs/toolkit");
@@ -1131,222 +1132,18 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
       initializeStateForEditQuote: (state, action) => {
         const { estimateData, quotesId, hardwaresList } = action.payload;
         state.quoteId = quotesId;
-  
-        let hardwareFinishes = null;
-        hardwareFinishes = hardwaresList?.hardwareFinishes?.find(
-          (item) => item._id === estimateData?.config?.hardwareFinishes
-        );
-        let handleType = null;
-        handleType = hardwaresList?.handles?.find(
-          (item) => item._id === estimateData?.config?.handles?.type
-        );
-        let doorLockType = null;
-        doorLockType = hardwaresList?.doorLocks?.find(
-          (item) => item._id === estimateData?.config?.doorLock?.type
-        );
-        let hingesType = null;
-        hingesType = hardwaresList?.hinges?.find(
-          (item) => item._id === estimateData?.config?.hinges?.type
-        );
-
-        let slidingDoorSystemType = null;
-        slidingDoorSystemType = hardwaresList?.slidingDoorSystem?.find(
-          (item) => item._id === estimateData?.config?.slidingDoorSystem?.type
-        );
-  
-        let headerType = null;
-        headerType = hardwaresList?.header?.find(
-          (item) => item._id === estimateData?.config?.header?.type
-        );
-
-        let glassTypee = null;
-        glassTypee = hardwaresList?.glassType?.find(
-          (item) => item._id === estimateData?.config?.glassType?.type
-        );
-  
-          let glassAddons = [];
-      glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-        const record = hardwaresList?.glassAddons.find(
-          (addon) => addon._id === item
-        );
-        return record;
-      });
-
-      let wallClampArray,
-      sleeveOverArray,
-      glassToGlassArray,
-      cornerWallClampArray,
-      cornerSleeveOverArray,
-      cornerGlassToGlassArray,
-      channelItem;
-    wallClampArray =
-      sleeveOverArray =
-      glassToGlassArray =
-      cornerWallClampArray =
-      cornerSleeveOverArray =
-      cornerGlassToGlassArray =
-        [];
-    channelItem = null;
-    if (
-      ![
-        layoutVariants.DOOR,
-        layoutVariants.DOUBLEDOOR,
-        layoutVariants.DOUBLEBARN,
-      ].includes(estimateData?.settings?.variant)
-    ) {
-      wallClampArray = estimateData?.config?.mountingClamps?.wallClamp?.map(
-        (row) => {
-          const record = hardwaresList?.wallClamp?.find(
-            (clamp) => clamp._id === row?.type
-          );
-          return { item: record, count: row.count };
-        }
-      );
-      sleeveOverArray = estimateData?.config?.mountingClamps?.sleeveOver?.map(
-        (row) => {
-          const record = hardwaresList?.sleeveOver?.find(
-            (clamp) => clamp._id === row?.type
-          );
-          return { item: record, count: row.count };
-        }
-      );
-      glassToGlassArray =
-        estimateData?.config?.mountingClamps?.glassToGlass?.map((row) => {
-          const record = hardwaresList?.glassToGlass?.find(
-            (clamp) => clamp._id === row?.type
-          );
-          return { item: record, count: row.count };
-        });
-
-      cornerWallClampArray =
-        estimateData?.config?.cornerClamps?.wallClamp?.map((row) => {
-          const record = hardwaresList?.cornerWallClamp?.find(
-            (clamp) => clamp._id === row?.type
-          );
-          return { item: record, count: row.count };
-        });
-
-      cornerSleeveOverArray =
-        estimateData?.config?.cornerClamps?.sleeveOver?.map((row) => {
-          const record = hardwaresList?.cornerSleeveOver?.find(
-            (clamp) => clamp._id === row?.type
-          );
-          return { item: record, count: row.count };
-        });
-
-      cornerGlassToGlassArray =
-        estimateData?.config?.cornerClamps?.glassToGlass?.map((row) => {
-          const record = hardwaresList?.cornerGlassToGlass?.find(
-            (clamp) => clamp._id === row?.type
-          );
-          return { item: record, count: row.count };
-        });
-
-      channelItem = hardwaresList?.mountingChannel?.find(
-        (item) => item._id === estimateData?.config?.mountingChannel
-      );
-    }
-    let hardwareAddons = [];
-    hardwareAddons = estimateData?.config?.hardwareAddons?.map((row) => {
-      const found = hardwaresList?.hardwareAddons?.find(
-        (item) => item?._id === row.type
-      );
-      return { item: found, count: row.count };
-    });
-        const noGlassAddon = hardwaresList?.glassAddons?.find(
-          (item) => item.slug === "no-treatment"
-        );
-
-        // let channelItem = null;
-        // channelItem = hardwaresList?.mountingChannel?.find(
-        //     (item) => item._id === estimateData?.config?.mountingChannel
-        // );
-
-        // Generate Channel calculate warning if channel is selected 
-        if(channelItem){
-          state.notifications.calculateChannelWarning = {
-            status: true,
-            variant:  notificationsVariant.WARNING ,
-            message: 'Current channel price is being calculated according to 1 channel stick',
-          }
-        }
-        
-        state.content = {
-          ...state.content,
-          hardwareFinishes: hardwareFinishes,
-          handles: {
-            ...state.handles,
-            item: handleType,
-            count: estimateData?.config?.handles?.count,
-          },
-          doorLock: {
-            ...state.doorLock,
-            item: doorLockType,
-            count: estimateData?.config?.doorLock?.count,
-          },
-          hinges: {
-            ...state.hinges,
-            item: hingesType,
-            count: estimateData?.config?.hinges?.count,
-          },
-          header: {
-            item: headerType,
-            count: estimateData?.config?.header?.count,
-          },
-          slidingDoorSystem: {
-            item: slidingDoorSystemType,
-            count: estimateData?.config?.slidingDoorSystem?.count,
-          },
-          glassType: {
-            item: glassTypee,
-            thickness: estimateData?.config?.glassType?.thickness,
-          },
-          mountingClamps: {
-            wallClamp: wallClampArray ? [...wallClampArray] : [],
-            sleeveOver: sleeveOverArray ? [...sleeveOverArray] :[],
-            glassToGlass: glassToGlassArray? [...glassToGlassArray] :[],
-          },
-          cornerClamps: {
-            cornerWallClamp: cornerWallClampArray ? [...cornerWallClampArray] : [],
-            cornerSleeveOver: cornerSleeveOverArray? [...cornerSleeveOverArray]: [],
-            cornerGlassToGlass: cornerGlassToGlassArray?  [...cornerGlassToGlassArray] : [],
-          },
-          mountingChannel: {
-            item: channelItem || null,
-            count: channelItem ? 1 : 0,
-          },
-          mountingState:
-          wallClampArray?.length ||
-          sleeveOverArray?.length ||
-          glassToGlassArray?.length
-            ? "clamps"
-            : "channel",
-          hingeCut: estimateData?.config?.hingeCut,
-          people: estimateData?.config?.people,
-          hours: estimateData?.config?.hours,
-          laborHoursForDoor:  estimateData?.config?.laborHoursForDoor ?? 0,
-          glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
-          oneInchHoles: estimateData?.config?.oneInchHoles,
-          clampCut: estimateData?.config?.clampCut,
-          notch: estimateData?.config?.notch,
-          outages: estimateData?.config?.outages,
-          mitre: estimateData?.config?.mitre,
-          polish: estimateData?.config?.polish,
-          hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
-          userProfitPercentage: estimateData?.config?.userProfitPercentage,
-          discount : {
-            value:estimateData?.config?.discount?.value ?? 0,
-            unit:estimateData?.config?.discount?.unit ?? '%',
-          },
-          additionalFields: estimateData?.config?.additionalFields,
-        };
         state.quoteState = quoteState.EDIT;
+        const resp = generateContentForWineCellarEdit(hardwaresList,estimateData);
         // state.measurements = measurements;
-        state.perimeter = estimateData?.config?.perimeter;
-        state.sqftArea = estimateData?.config?.sqftArea;
+        state.content ={
+          ...state.content,
+          ...resp.content
+        }
+        state.perimeter = resp.perimeter;
+        state.sqftArea = resp.sqftArea;
         // state.selectedItem = estimateData;
-        state.doorWidth = estimateData?.config?.doorWidth || 0;
-        state.doorQuantity = estimateData?.config?.doorQuantity || 1;
+        state.doorWidth = resp.doorWidth || 0;
+        state.doorQuantity = resp.doorQuantity || 1;
       },
   
       setInputContent: (state, action) => {

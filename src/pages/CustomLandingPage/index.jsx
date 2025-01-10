@@ -19,6 +19,7 @@ import React, { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+import { initializeState } from "@/redux/customerEstimateCalculation";
 
 const CustomLandingPage = () => {
   const { id } = useParams();
@@ -30,10 +31,8 @@ const CustomLandingPage = () => {
     isFetched,
   } = useFetchSingleDocument(`${backendURL}/landing-page-preview/${id}`);
   const {
-    data:hardwareData,
-    refetch: refetchhardwareData,
-    isFetching: fetchingHardwareData,
-    isFetched: fetchedHardwareData,
+    data: hardwareData,
+    refetch: refetchHardwareData,
   } = useFetchSingleDocument(
     `${backendURL}/landing-page-preview-additional-hardware/${data?.company_id}`
   );
@@ -42,30 +41,54 @@ const CustomLandingPage = () => {
     if (id) {
       refetchData();
     }
-  }, [id]);
+  }, [id, refetchData]);
+
   useEffect(() => {
     if (data) {
-      refetchhardwareData();
+      refetchHardwareData();
     }
-  }, [data]);
+  }, [data, refetchHardwareData]);
 
-  const hardwareAndSettings = useMemo(() => {
-    return {
-      showerHardware: hardwareData?.showersHardware,
-      mirrorHardware: hardwareData?.mirrorsHardware ?? {},
-      wineCellarHardware: hardwareData?.wineCellarsHardware ?? {},
-      wineCallerSetting: hardwareData?.locationSettings?.wineCellars ?? {},
-      mirrorSetting: hardwareData?.locationSettings?.mirrors ?? {},
-      showerSetting: hardwareData?.locationSettings?.showers ?? {},
-      pdfSetting: hardwareData?.locationSettings?.pdfSettings ?? {},
-    };
-  }, [hardwareData]);
+  useEffect(() => {
+    if (hardwareData) {
+      // Abstract repeated dispatch logic into a helper function
+      const initializeHardware = () => {
+        if (data?.estimateDetailArray?.length) {
+          dispatch(
+            initializeState({
+              estimates: data.estimateDetailArray,
+              showerHardwaresList: hardwareData.showersHardware,
+              mirrorHardwaresList: hardwareData.mirrorsHardware,
+              wineCellarHardwaresList: hardwareData.wineCellarsHardware
+            })
+          );
+        }
+        dispatch(setListData(hardwareData.showersHardware ?? {}));
+        dispatch(setMirrorsHardware(hardwareData.mirrorsHardware ?? {}));
+        dispatch(setWineCellarsHardware(hardwareData.wineCellarsHardware ?? {}));
+        dispatch(setLocationInfo(hardwareData.locationSettings ?? {}));
+      };
+      initializeHardware();
+    }
+  }, [hardwareData, data, dispatch]);
 
-  console.log(
-    data,
-    "datadatadatadatadatadatadatadatadatadatadata",
-    hardwareData
-  );
+  // const hardwareAndSettings = useMemo(() => {
+  //   return {
+  //     showerHardware: hardwareData?.showersHardware,
+  //     mirrorHardware: hardwareData?.mirrorsHardware ?? {},
+  //     wineCellarHardware: hardwareData?.wineCellarsHardware ?? {},
+  //     wineCallerSetting: hardwareData?.locationSettings?.wineCellars ?? {},
+  //     mirrorSetting: hardwareData?.locationSettings?.mirrors ?? {},
+  //     showerSetting: hardwareData?.locationSettings?.showers ?? {},
+  //     pdfSetting: hardwareData?.locationSettings?.pdfSettings ?? {},
+  //   };
+  // }, [hardwareData]);
+
+  // console.log(
+  //   data,
+  //   "datadatadatadatadatadatadatadatadatadatadata",
+  //   hardwareData
+  // );
   // useEffect(() => {
   //   if (data?.location) {
   //     dispatch(setLocationInfo(data?.location));
@@ -159,13 +182,13 @@ const CustomLandingPage = () => {
         refetchData={refetchData}
         isFetched={isFetched}
         isFetching={isFetching}
-        showerHardwaresList={hardwareAndSettings?.showerHardware}
-        mirrorHardwaresList={hardwareAndSettings?.mirrorHardware}
-        wineCellarHardwaresList={hardwareAndSettings?.wineCellarHardware}
-        wineCellarLocationSettings={hardwareAndSettings?.wineCallerSetting}
-        mirrorsLocationSettings={hardwareAndSettings?.mirrorSetting}
-        showersLocationSettings={hardwareAndSettings?.showerSetting}
-        pdfSettings={hardwareAndSettings?.pdfSetting}
+      // showerHardwaresList={hardwareAndSettings?.showerHardware}
+      // mirrorHardwaresList={hardwareAndSettings?.mirrorHardware}
+      // wineCellarHardwaresList={hardwareAndSettings?.wineCellarHardware}
+      // wineCellarLocationSettings={hardwareAndSettings?.wineCallerSetting}
+      // mirrorsLocationSettings={hardwareAndSettings?.mirrorSetting}
+      // showersLocationSettings={hardwareAndSettings?.showerSetting}
+      // pdfSettings={hardwareAndSettings?.pdfSetting}
       />
     </Box>
   );

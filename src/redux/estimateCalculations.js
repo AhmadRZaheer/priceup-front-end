@@ -14,6 +14,7 @@ import {
   getHardwareSpecificFabrication,
 } from "../utilities/hardwarefabrication";
 import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
+import { generateContentForShowerEdit } from "@/utilities/generateEstimateCalculationContent";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getAdditionalFields = (state) =>
   state.estimateCalculations.content.additionalFields;
@@ -1584,218 +1585,221 @@ const estimateCalcSlice = createSlice({
     initializeStateForEditQuote: (state, action) => {
       const { estimateData, quotesId } = action.payload;
       state.quoteId = quotesId;
-
-      let hardwareFinishes = null;
-      hardwareFinishes = state.listData?.hardwareFinishes?.find(
-        (item) => item._id === estimateData?.config?.hardwareFinishes
-      );
-      let handleType = null;
-      handleType = state.listData?.handles?.find(
-        (item) => item._id === estimateData?.config?.handles?.type
-      );
-      let hingesType = null;
-      hingesType = state.listData?.hinges?.find(
-        (item) => item._id === estimateData?.config?.hinges?.type
-      );
-      let slidingDoorSystemType = null;
-      slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
-        (item) => item._id === estimateData?.config?.slidingDoorSystem?.type
-      );
-
-      let headerType = null;
-      headerType = state.listData?.header?.find(
-        (item) => item._id === estimateData?.config?.header?.type
-      );
-
-      let glassTypee = null;
-      glassTypee = state.listData?.glassType?.find(
-        (item) => item._id === estimateData?.config?.glassType?.type
-      );
-
-      let glassAddons = [];
-      glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-        const record = state.listData?.glassAddons.find(
-          (addon) => addon._id === item
-        );
-        return record;
-      });
-
-      let wallClampArray,
-        sleeveOverArray,
-        glassToGlassArray,
-        cornerWallClampArray,
-        cornerSleeveOverArray,
-        cornerGlassToGlassArray,
-        channelItem;
-      wallClampArray =
-        sleeveOverArray =
-        glassToGlassArray =
-        cornerWallClampArray =
-        cornerSleeveOverArray =
-        cornerGlassToGlassArray =
-          [];
-      channelItem = null;
-      // do not calculate if a layout does not have mounting channel or clamp
-      if (
-        ![
-          layoutVariants.DOOR,
-          layoutVariants.DOUBLEDOOR,
-          layoutVariants.DOUBLEBARN,
-        ].includes(estimateData?.settings?.variant)
-      ) {
-        wallClampArray = estimateData?.config?.mountingClamps?.wallClamp?.map(
-          (row) => {
-            const record = state.listData?.wallClamp?.find(
-              (clamp) => clamp._id === row?.type
-            );
-            return { item: record, count: row.count };
-          }
-        );
-        sleeveOverArray = estimateData?.config?.mountingClamps?.sleeveOver?.map(
-          (row) => {
-            const record = state.listData?.sleeveOver?.find(
-              (clamp) => clamp._id === row?.type
-            );
-            return { item: record, count: row.count };
-          }
-        );
-        glassToGlassArray =
-          estimateData?.config?.mountingClamps?.glassToGlass?.map((row) => {
-            const record = state.listData?.glassToGlass?.find(
-              (clamp) => clamp._id === row?.type
-            );
-            return { item: record, count: row.count };
-          });
-
-        cornerWallClampArray =
-          estimateData?.config?.cornerClamps?.wallClamp?.map((row) => {
-            const record = state.listData?.cornerWallClamp?.find(
-              (clamp) => clamp._id === row?.type
-            );
-            return { item: record, count: row.count };
-          });
-
-        cornerSleeveOverArray =
-          estimateData?.config?.cornerClamps?.sleeveOver?.map((row) => {
-            const record = state.listData?.cornerSleeveOver?.find(
-              (clamp) => clamp._id === row?.type
-            );
-            return { item: record, count: row.count };
-          });
-
-        cornerGlassToGlassArray =
-          estimateData?.config?.cornerClamps?.glassToGlass?.map((row) => {
-            const record = state.listData?.cornerGlassToGlass?.find(
-              (clamp) => clamp._id === row?.type
-            );
-            return { item: record, count: row.count };
-          });
-
-        channelItem = state.listData?.mountingChannel?.find(
-          (item) => item._id === estimateData?.config?.mountingChannel
-        );
-      }
-      let hardwareAddons = [];
-      hardwareAddons = estimateData?.config?.hardwareAddons?.map((row) => {
-        const found = state.listData?.hardwareAddons?.find(
-          (item) => item?._id === row.type
-        );
-        return { item: found, count: row.count };
-      });
-      const noGlassAddon = state.listData?.glassAddons?.find(
-        (item) => item.slug === "no-treatment"
-      );
-      // const measurements = estimateData.config.measurements.map(
-      //   ({ _id, ...rest }) => rest
+      state.quoteState = quoteState.EDIT
+      const resp = generateContentForShowerEdit(state.listData,estimateData);
+      // let hardwareFinishes = null;
+      // hardwareFinishes = state.listData?.hardwareFinishes?.find(
+      //   (item) => item._id === estimateData?.config?.hardwareFinishes
+      // );
+      // let handleType = null;
+      // handleType = state.listData?.handles?.find(
+      //   (item) => item._id === estimateData?.config?.handles?.type
+      // );
+      // let hingesType = null;
+      // hingesType = state.listData?.hinges?.find(
+      //   (item) => item._id === estimateData?.config?.hinges?.type
+      // );
+      // let slidingDoorSystemType = null;
+      // slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
+      //   (item) => item._id === estimateData?.config?.slidingDoorSystem?.type
       // );
 
-      // Generate Channel calculate warning if channel is selected
-      if (channelItem) {
-        state.notifications.calculateChannelWarning = {
-          status: true,
-          variant: notificationsVariant.WARNING,
-          message:
-            "Current channel price is being calculated according to 1 channel stick",
-        };
-      }
+      // let headerType = null;
+      // headerType = state.listData?.header?.find(
+      //   (item) => item._id === estimateData?.config?.header?.type
+      // );
+
+      // let glassTypee = null;
+      // glassTypee = state.listData?.glassType?.find(
+      //   (item) => item._id === estimateData?.config?.glassType?.type
+      // );
+
+      // let glassAddons = [];
+      // glassAddons = estimateData?.config?.glassAddons?.map((item) => {
+      //   const record = state.listData?.glassAddons.find(
+      //     (addon) => addon._id === item
+      //   );
+      //   return record;
+      // });
+
+      // let wallClampArray,
+      //   sleeveOverArray,
+      //   glassToGlassArray,
+      //   cornerWallClampArray,
+      //   cornerSleeveOverArray,
+      //   cornerGlassToGlassArray,
+      //   channelItem;
+      // wallClampArray =
+      //   sleeveOverArray =
+      //   glassToGlassArray =
+      //   cornerWallClampArray =
+      //   cornerSleeveOverArray =
+      //   cornerGlassToGlassArray =
+      //     [];
+      // channelItem = null;
+      // // do not calculate if a layout does not have mounting channel or clamp
+      // if (
+      //   ![
+      //     layoutVariants.DOOR,
+      //     layoutVariants.DOUBLEDOOR,
+      //     layoutVariants.DOUBLEBARN,
+      //   ].includes(estimateData?.settings?.variant)
+      // ) {
+      //   wallClampArray = estimateData?.config?.mountingClamps?.wallClamp?.map(
+      //     (row) => {
+      //       const record = state.listData?.wallClamp?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     }
+      //   );
+      //   sleeveOverArray = estimateData?.config?.mountingClamps?.sleeveOver?.map(
+      //     (row) => {
+      //       const record = state.listData?.sleeveOver?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     }
+      //   );
+      //   glassToGlassArray =
+      //     estimateData?.config?.mountingClamps?.glassToGlass?.map((row) => {
+      //       const record = state.listData?.glassToGlass?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     });
+
+      //   cornerWallClampArray =
+      //     estimateData?.config?.cornerClamps?.wallClamp?.map((row) => {
+      //       const record = state.listData?.cornerWallClamp?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     });
+
+      //   cornerSleeveOverArray =
+      //     estimateData?.config?.cornerClamps?.sleeveOver?.map((row) => {
+      //       const record = state.listData?.cornerSleeveOver?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     });
+
+      //   cornerGlassToGlassArray =
+      //     estimateData?.config?.cornerClamps?.glassToGlass?.map((row) => {
+      //       const record = state.listData?.cornerGlassToGlass?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     });
+
+      //   channelItem = state.listData?.mountingChannel?.find(
+      //     (item) => item._id === estimateData?.config?.mountingChannel
+      //   );
+      // }
+      // let hardwareAddons = [];
+      // hardwareAddons = estimateData?.config?.hardwareAddons?.map((row) => {
+      //   const found = state.listData?.hardwareAddons?.find(
+      //     (item) => item?._id === row.type
+      //   );
+      //   return { item: found, count: row.count };
+      // });
+      // const noGlassAddon = state.listData?.glassAddons?.find(
+      //   (item) => item.slug === "no-treatment"
+      // );
+      // // const measurements = estimateData.config.measurements.map(
+      // //   ({ _id, ...rest }) => rest
+      // // );
+
+      // // Generate Channel calculate warning if channel is selected
+      // if (channelItem) {
+      //   state.notifications.calculateChannelWarning = {
+      //     status: true,
+      //     variant: notificationsVariant.WARNING,
+      //     message:
+      //       "Current channel price is being calculated according to 1 channel stick",
+      //   };
+      // }
       state.content = {
         ...state.content,
-        hardwareFinishes: hardwareFinishes,
-        handles: {
-          ...state.handles,
-          item: handleType,
-          count: estimateData?.config?.handles?.count,
-        },
-        hinges: {
-          ...state.hinges,
-          item: hingesType,
-          count: estimateData?.config?.hinges?.count,
-        },
-        header: {
-          item: headerType,
-          count: estimateData?.config?.header?.count,
-        },
-        slidingDoorSystem: {
-          item: slidingDoorSystemType,
-          count: estimateData?.config?.slidingDoorSystem?.count,
-        },
-        glassType: {
-          item: glassTypee,
-          thickness: estimateData?.config?.glassType?.thickness,
-        },
+        ...resp.content
+        // hardwareFinishes: hardwareFinishes,
+        // handles: {
+        //   ...state.handles,
+        //   item: handleType,
+        //   count: estimateData?.config?.handles?.count,
+        // },
+        // hinges: {
+        //   ...state.hinges,
+        //   item: hingesType,
+        //   count: estimateData?.config?.hinges?.count,
+        // },
+        // header: {
+        //   item: headerType,
+        //   count: estimateData?.config?.header?.count,
+        // },
+        // slidingDoorSystem: {
+        //   item: slidingDoorSystemType,
+        //   count: estimateData?.config?.slidingDoorSystem?.count,
+        // },
+        // glassType: {
+        //   item: glassTypee,
+        //   thickness: estimateData?.config?.glassType?.thickness,
+        // },
 
-        mountingClamps: {
-          wallClamp: wallClampArray ? [...wallClampArray] : [],
-          sleeveOver: sleeveOverArray ? [...sleeveOverArray] : [],
-          glassToGlass: glassToGlassArray ? [...glassToGlassArray] : [],
-        },
-        cornerClamps: {
-          cornerWallClamp: cornerWallClampArray
-            ? [...cornerWallClampArray]
-            : [],
-          cornerSleeveOver: cornerSleeveOverArray
-            ? [...cornerSleeveOverArray]
-            : [],
-          cornerGlassToGlass: cornerGlassToGlassArray
-            ? [...cornerGlassToGlassArray]
-            : [],
-        },
-        mountingChannel: {
-          item: channelItem || null,
-          count: channelItem ? 1 : 0,
-        },
-        mountingState:
-          wallClampArray?.length ||
-          sleeveOverArray?.length ||
-          glassToGlassArray?.length
-            ? "clamps"
-            : "channel",
-        hingeCut: estimateData?.config?.hingeCut,
-        people: estimateData?.config?.people,
-        hours: estimateData?.config?.hours,
-        glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
-        oneInchHoles: estimateData?.config?.oneInchHoles,
-        clampCut: estimateData?.config?.clampCut,
-        notch: estimateData?.config?.notch,
-        outages: estimateData?.config?.outages,
-        mitre: estimateData?.config?.mitre,
-        polish: estimateData?.config?.polish,
-        // sleeveOverCount: estimateData?.sleeveOverCount,
-        // towelBarsCount: estimateData?.towelBarsCount,
-        hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
-        userProfitPercentage: estimateData?.config?.userProfitPercentage,
-        discount : {
-          value:estimateData?.config?.discount?.value ?? 0,
-          unit:estimateData?.config?.discount?.unit ?? '%',
-        },
-        additionalFields: estimateData?.config?.additionalFields,
+        // mountingClamps: {
+        //   wallClamp: wallClampArray ? [...wallClampArray] : [],
+        //   sleeveOver: sleeveOverArray ? [...sleeveOverArray] : [],
+        //   glassToGlass: glassToGlassArray ? [...glassToGlassArray] : [],
+        // },
+        // cornerClamps: {
+        //   cornerWallClamp: cornerWallClampArray
+        //     ? [...cornerWallClampArray]
+        //     : [],
+        //   cornerSleeveOver: cornerSleeveOverArray
+        //     ? [...cornerSleeveOverArray]
+        //     : [],
+        //   cornerGlassToGlass: cornerGlassToGlassArray
+        //     ? [...cornerGlassToGlassArray]
+        //     : [],
+        // },
+        // mountingChannel: {
+        //   item: channelItem || null,
+        //   count: channelItem ? 1 : 0,
+        // },
+        // mountingState:
+        //   wallClampArray?.length ||
+        //   sleeveOverArray?.length ||
+        //   glassToGlassArray?.length
+        //     ? "clamps"
+        //     : "channel",
+        // hingeCut: estimateData?.config?.hingeCut,
+        // people: estimateData?.config?.people,
+        // hours: estimateData?.config?.hours,
+        // glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
+        // oneInchHoles: estimateData?.config?.oneInchHoles,
+        // clampCut: estimateData?.config?.clampCut,
+        // notch: estimateData?.config?.notch,
+        // outages: estimateData?.config?.outages,
+        // mitre: estimateData?.config?.mitre,
+        // polish: estimateData?.config?.polish,
+        // // sleeveOverCount: estimateData?.sleeveOverCount,
+        // // towelBarsCount: estimateData?.towelBarsCount,
+        // hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
+        // userProfitPercentage: estimateData?.config?.userProfitPercentage,
+        // discount : {
+        //   value:estimateData?.config?.discount?.value ?? 0,
+        //   unit:estimateData?.config?.discount?.unit ?? '%',
+        // },
+        // additionalFields: estimateData?.config?.additionalFields,
       };
-      state.quoteState = quoteState.EDIT;
+      // state.quoteState = quoteState.EDIT;
       // state.measurements = measurements;
-      state.perimeter = estimateData?.config?.perimeter;
-      state.sqftArea = estimateData?.config?.sqftArea;
+      state.perimeter = resp.perimeter;
+      state.sqftArea = resp.sqftArea;
       // state.selectedItem = estimateData;
-      state.doorWidth = estimateData?.config?.doorWidth || 0;
+      state.doorWidth = resp.doorWidth || 0;
+      state.notifications.calculateChannelWarning  = resp.calculateChannelWarning;
     },
   },
 });

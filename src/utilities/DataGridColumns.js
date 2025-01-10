@@ -14,7 +14,8 @@ import { EstimateCategory } from "./constants";
 export const EstimatesColumns = (
   handleDeleteEstimate,
   handleIconButtonClick,
-  handlePDFPreviewClick
+  handlePDFPreviewClick,
+  showActions = true
 ) => {
   return [
     {
@@ -357,7 +358,7 @@ export const EstimatesColumns = (
         );
       },
     },
-    {
+    ...( showActions ? [{
       field: "Action",
       headerClassName: "customHeaderClass",
       sortable: false,
@@ -372,7 +373,7 @@ export const EstimatesColumns = (
           />
         );
       },
-    },
+    }] : []),
   ];
 };
 

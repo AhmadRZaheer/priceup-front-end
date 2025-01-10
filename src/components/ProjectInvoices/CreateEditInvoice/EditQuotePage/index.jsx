@@ -776,7 +776,7 @@ const EditQuoteInvoice = () => {
                 <EditEstimateTable
                   projectId={singleItemData?.project_id}
                   selectedEstimateRows={[]}
-                  selectedEstimates={singleItemData?.estimates}
+                  selectedEstimates={singleItemData?.estimateDetailArray}
                 />
               </Box>
 

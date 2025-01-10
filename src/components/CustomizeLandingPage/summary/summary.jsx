@@ -1,5 +1,6 @@
 import {
   EstimateCategory,
+  hardwareTypes,
   logActions,
   quoteState,
 } from "@/utilities/constants";
@@ -22,10 +23,10 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import MultipleImageUpload from "../MultipleImageUpload";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getContent, getListData } from "@/redux/estimateCalculations";
 import MenuList from "./MenuListOption";
-import { backendURL, calculateDiscount } from "@/utilities/common";
+import { backendURL, calculateDiscount, calculateTotal as calculateTotalForShower } from "@/utilities/common";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { getHardwareSpecificFabrication as getShowersHardwareSpecificFabrication } from "@/utilities/hardwarefabrication";
 import { getHardwareSpecificFabrication as getWineCellarHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
@@ -35,6 +36,9 @@ import {
 } from "@/utilities/ApiHooks/common";
 import { useParams } from "react-router-dom";
 import "../style.scss";
+import { renderMeasurementSides as renderShowerMeasurementSides } from "@/utilities/estimates";
+import { calculateTotal as calculateTotalForMirror, renderMeasurementSides as renderMirrorMeasurementSides } from "@/utilities/mirrorEstimates";
+import { setContent, setCounter, setEstimateTotal } from "@/redux/customerEstimateCalculation";
 
 const arr = [1, 2];
 
@@ -50,11 +54,12 @@ const ShowerSummary = ({
 }) => {
   console.log(data, "datadatadata123");
   const { id } = useParams();
+  const dispatch = useDispatch();
   const userProfitPercentage =
     data?.category === EstimateCategory.MIRRORS
-      ? data?.config?.config?.modifiedProfitPercentage
-      : data?.config?.config?.userProfitPercentage;
-  const [totalCost, setTotalCost] = useState(data?.pricing?.cost);
+      ? data?.content?.modifiedProfitPercentage
+      : data?.content?.userProfitPercentage;
+  const [totalCost, setTotalCost] = useState(data?.totalPrice ?? 0);
   const newDate = new Date();
   const formattedDateTime = newDate.toLocaleString("en-US", {
     weekday: "long",
@@ -65,8 +70,8 @@ const ShowerSummary = ({
     minute: "2-digit",
     hour12: true,
   });
-  const discountValue = data?.config?.config?.discount?.value ?? 0;
-  const discountUnit = data?.config?.config?.discount?.unit ?? "%";
+  const discountValue = data?.content?.discount?.value ?? 0;
+  const discountUnit = data?.content?.discount?.unit ?? "%";
   const laborPrice =
     data?.category === EstimateCategory.WINECELLARS
       ? data?.pricing?.laborPrice + (data?.pricing?.doorLaborPrice ?? 0)
@@ -76,7 +81,7 @@ const ShowerSummary = ({
   const { mutate: activityLog } = useCreateDocument();
   const [images, setImages] = useState([]);
   const imageData =
-    data?.image !== null ? `${backendURL}/${data?.image}` : null;
+    data?.selectedItem?.settings?.image !== null ? `${backendURL}/${data?.selectedItem?.settings?.image}` : null;
 
   const [selectedHardware, setSelectedHardware] = useState(null);
   const [fabricationsCount, setFabricationsCount] = useState({
@@ -93,24 +98,24 @@ const ShowerSummary = ({
         ? locationSettings?.pricingFactor
         : 1
       : locationSettings?.miscPricing?.pricingFactorStatus
-      ? locationSettings?.miscPricing?.pricingFactor
-      : 1;
+        ? locationSettings?.miscPricing?.pricingFactor
+        : 1;
 
-  useEffect(() => {
-    if (data) {
-      if (data?.category === EstimateCategory.MIRRORS) {
-        setSelectedHardware({
-          ...data,
-          glassType: {
-            ...data.glassType,
-            thickness: data?.glassType?.thickness ?? "1/4",
-          },
-        });
-      } else {
-        setSelectedHardware(data);
-      }
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     if (data?.category === EstimateCategory.MIRRORS) {
+  //       setSelectedHardware({
+  //         ...data,
+  //         glassType: {
+  //           ...data.glassType,
+  //           thickness: data?.glassType?.thickness ?? "1/4",
+  //         },
+  //       });
+  //     } else {
+  //       setSelectedHardware(data);
+  //     }
+  //   }
+  // }, [data]);
 
   const glasstypeList = useMemo(() => {
     const upgradeGlassList =
@@ -119,16 +124,16 @@ const ShowerSummary = ({
         ?.filter((obj) =>
           obj.options.some(
             (option) =>
-              option.thickness === selectedHardware?.glassType?.thickness &&
+              option.thickness === data?.content?.glassType?.thickness &&
               option.status === true
           )
         ) ?? [];
     if (
       upgradeGlassList?.length === 0 ||
-      !upgradeGlassList?.some((glass) => glass._id === data?.glassType?.type)
+      !upgradeGlassList?.some((glass) => glass._id === data?.content?.glassType?.item?._id)
     ) {
       const item = hardwaresList?.glassType?.find(
-        (item) => item._id === data?.glassType?.type
+        (item) => item._id === data?.content?.glassType?.item?._id
       );
       if (item) {
         upgradeGlassList.push(item);
@@ -136,28 +141,28 @@ const ShowerSummary = ({
     }
     const glassTypedata = upgradeGlassList?.map((item) => {
       const price = item?.options?.find(
-        (option) => option.thickness === selectedHardware?.glassType?.thickness
+        (option) => option.thickness === data?.content?.glassType?.thickness
       )?.cost;
-      const itemPrice = (selectedHardware?.sqftArea * price ?? 0) * factorPrice;
+      const itemPrice = (data?.sqftArea * price ?? 0) * factorPrice;
       const costDifference =
         upgradeGlassList
-          ?.filter((item) => item._id === selectedHardware?.glassType?.type)
+          ?.filter((item) => item._id === data?.content?.glassType?.item?._id)
           ?.map((item) =>
             item?.options?.find(
               (option) =>
-                option.thickness === selectedHardware?.glassType?.thickness
+                option.thickness === data?.content?.glassType?.thickness
             )
           )
           ?.find((option) => option)?.cost || 0;
 
-      let totalDiference =
-        itemPrice -
-        (selectedHardware?.sqftArea * costDifference ?? 0) * factorPrice;
+      // let totalDiference =
+      //   itemPrice -
+      //   (selectedHardware?.sqftArea * costDifference ?? 0) * factorPrice;
 
       const currentItemCost =
         totalCost -
-        selectedHardware?.sqftArea * costDifference +
-        selectedHardware?.sqftArea * price;
+        data?.sqftArea * costDifference +
+        data?.sqftArea * price;
       let singleItemCost = currentItemCost * factorPrice + laborPrice;
 
       if (userProfitPercentage > 0 && userProfitPercentage < 100) {
@@ -174,7 +179,7 @@ const ShowerSummary = ({
         ...item,
         description: (
           <span>
-            {item?._id === selectedHardware?.glassType?.type ? (
+            {item?._id === data?.content?.glassType?.item?._id ? (
               item?.name
             ) : (
               <>
@@ -190,7 +195,7 @@ const ShowerSummary = ({
       };
     });
     return glassTypedata ?? [];
-  }, [selectedHardware, hardwaresList?.glassType, UpgradeOPtions]);
+  }, [data?.content?.glassType, hardwaresList?.glassType, UpgradeOPtions]);
 
   const glassAddonsList = useMemo(() => {
     const upgradeGlassAddonsList =
@@ -212,13 +217,13 @@ const ShowerSummary = ({
       }
     }
 
-    data?.glassAddons?.forEach((data) => {
+    data?.content?.glassAddons?.forEach((glassAddon) => {
       if (
         upgradeGlassAddonsList?.length === 0 ||
-        !upgradeGlassAddonsList.some((addon) => addon._id === data?.type)
+        !upgradeGlassAddonsList.some((addon) => addon._id === glassAddon?._id)
       ) {
         const item = hardwaresList?.glassAddons?.find(
-          (item) => item._id === data?.type
+          (item) => item._id === glassAddon?._id
         );
         if (item) {
           upgradeGlassAddonsList.push(item);
@@ -229,10 +234,10 @@ const ShowerSummary = ({
     const glassAddonsData = upgradeGlassAddonsList?.map((item) => {
       const price = item?.options?.[0]?.cost;
       const costDifference =
-        selectedHardware?.glassAddons
+        data?.content?.glassAddons
           .map((item) => {
             const matchedItem = upgradeGlassAddonsList.find(
-              (firstItem) => firstItem._id === item.type
+              (firstItem) => firstItem._id === item._id
             );
             if (matchedItem && matchedItem.options?.length > 0) {
               return matchedItem.options[0].cost;
@@ -243,8 +248,8 @@ const ShowerSummary = ({
       const priceToDiffer = costDifference?.reduce((acc, arr) => acc + arr, 0);
 
       let totalItemPrice =
-        selectedHardware?.sqftArea *
-          (item?.slug !== "no-treatment" ? price : priceToDiffer * -1) ?? 0;
+        data?.sqftArea *
+        (item?.slug !== "no-treatment" ? price : priceToDiffer * -1) ?? 0;
       let itemPrice = totalItemPrice * factorPrice;
 
       if (userProfitPercentage > 0 && userProfitPercentage < 100) {
@@ -261,7 +266,7 @@ const ShowerSummary = ({
         ...item,
         description: (
           <span>
-            {selectedHardware?.glassAddons?.some(
+            {data?.content?.glassAddons?.some(
               (hardware) => hardware.type === item._id
             ) ? (
               item?.name
@@ -283,384 +288,384 @@ const ShowerSummary = ({
       };
     });
     return glassAddonsData;
-  }, [selectedHardware, hardwaresList?.glassAddons, UpgradeOPtions]);
+  }, [data?.content?.glassAddons, hardwaresList?.glassAddons, UpgradeOPtions]);
 
-  useEffect(() => {
-    if (data) {
-      let fabrication = {
-        oneInchHoles: 0,
-        hingeCut: 0,
-        clampCut: 0,
-        notch: 0,
-        outages: 0,
-      };
-      data?.hardwareAddons?.forEach((item) => {
-        const record = hardwaresList?.hardwareAddons?.find(
-          (_item) => _item._id === item.type
-        );
-        if (record && record._id === item.type) {
-          if (data?.category === EstimateCategory.SHOWERS) {
-            fabrication.oneInchHoles +=
-              record.oneInchHoles * (item.count ?? 0) ?? 0;
-            fabrication.hingeCut += record.hingeCut * (item.count ?? 0) ?? 0;
-            fabrication.clampCut += record.clampCut * (item.count ?? 0) ?? 0;
-            fabrication.notch += record.notch * (item.count ?? 0) ?? 0;
-            fabrication.outages += record.outages ?? 0;
-          } else if (data?.category === EstimateCategory.WINECELLARS) {
-            fabrication.oneInchHoles +=
-              record?.fabrication?.oneInchHoles * (item.count ?? 0) ?? 0;
-            fabrication.hingeCut +=
-              record?.fabrication?.hingeCut * (item.count ?? 0) ?? 0;
-            fabrication.clampCut +=
-              record?.fabrication?.clampCut * (item.count ?? 0) ?? 0;
-            fabrication.notch +=
-              record?.fabrication?.notch * (item.count ?? 0) ?? 0;
-            fabrication.outages +=
-              record?.fabrication?.outages * (item.count ?? 0) ?? 0;
-          }
-        }
-      });
-      setFabricationsCount(fabrication);
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     let fabrication = {
+  //       oneInchHoles: 0,
+  //       hingeCut: 0,
+  //       clampCut: 0,
+  //       notch: 0,
+  //       outages: 0,
+  //     };
+  //     data?.hardwareAddons?.forEach((item) => {
+  //       const record = hardwaresList?.hardwareAddons?.find(
+  //         (_item) => _item._id === item.type
+  //       );
+  //       if (record && record._id === item.type) {
+  //         if (data?.category === EstimateCategory.SHOWERS) {
+  //           fabrication.oneInchHoles +=
+  //             record.oneInchHoles * (item.count ?? 0) ?? 0;
+  //           fabrication.hingeCut += record.hingeCut * (item.count ?? 0) ?? 0;
+  //           fabrication.clampCut += record.clampCut * (item.count ?? 0) ?? 0;
+  //           fabrication.notch += record.notch * (item.count ?? 0) ?? 0;
+  //           fabrication.outages += record.outages ?? 0;
+  //         } else if (data?.category === EstimateCategory.WINECELLARS) {
+  //           fabrication.oneInchHoles +=
+  //             record?.fabrication?.oneInchHoles * (item.count ?? 0) ?? 0;
+  //           fabrication.hingeCut +=
+  //             record?.fabrication?.hingeCut * (item.count ?? 0) ?? 0;
+  //           fabrication.clampCut +=
+  //             record?.fabrication?.clampCut * (item.count ?? 0) ?? 0;
+  //           fabrication.notch +=
+  //             record?.fabrication?.notch * (item.count ?? 0) ?? 0;
+  //           fabrication.outages +=
+  //             record?.fabrication?.outages * (item.count ?? 0) ?? 0;
+  //         }
+  //       }
+  //     });
+  //     setFabricationsCount(fabrication);
+  //   }
+  // }, [data]);
   // const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
 
-  const handleChangeHardware = (type, value) => {
-    const pricingFactor =
-      data?.category === EstimateCategory.MIRRORS
-        ? locationSettings?.pricingFactor
-        : locationSettings?.miscPricing?.pricingFactor;
-    const pricingFactorStatus =
-      data?.category === EstimateCategory.MIRRORS
-        ? locationSettings?.pricingFactorStatus
-        : locationSettings?.miscPricing?.pricingFactorStatus;
-    const laborPrice =
-      data?.category === EstimateCategory.WINECELLARS
-        ? data?.pricing?.laborPrice + (data?.pricing?.doorLaborPrice ?? 0)
-        : data?.pricing?.laborPrice;
-    if (type === "glassType") {
-      const oldGlassPrice = getCostByThickness(
-        selectedHardware?.glassType,
-        selectedHardware?.glassType?.thickness
-      );
-      const newGlassPrice = getCostByThickness(
-        {
-          type: value?._id,
-          name: value?.name,
-          thickness: selectedHardware?.glassType?.thickness,
-        },
-        selectedHardware?.glassType?.thickness
-      );
+  // const handleChangeHardware = (type, value) => {
+  //   const pricingFactor =
+  //     data?.category === EstimateCategory.MIRRORS
+  //       ? locationSettings?.pricingFactor
+  //       : locationSettings?.miscPricing?.pricingFactor;
+  //   const pricingFactorStatus =
+  //     data?.category === EstimateCategory.MIRRORS
+  //       ? locationSettings?.pricingFactorStatus
+  //       : locationSettings?.miscPricing?.pricingFactorStatus;
+  //   const laborPrice =
+  //     data?.category === EstimateCategory.WINECELLARS
+  //       ? data?.pricing?.laborPrice + (data?.pricing?.doorLaborPrice ?? 0)
+  //       : data?.pricing?.laborPrice;
+  //   if (type === "glassType") {
+  //     const oldGlassPrice = getCostByThickness(
+  //       selectedHardware?.glassType,
+  //       selectedHardware?.glassType?.thickness
+  //     );
+  //     const newGlassPrice = getCostByThickness(
+  //       {
+  //         type: value?._id,
+  //         name: value?.name,
+  //         thickness: selectedHardware?.glassType?.thickness,
+  //       },
+  //       selectedHardware?.glassType?.thickness
+  //     );
 
-      const calc =
-        (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1) -
-        oldGlassPrice * data?.sqftArea;
-      const glassPricing =
-        data?.sqftArea !== 0
-          ? (calc + data?.sqftArea * newGlassPrice) *
-              (pricingFactorStatus ? pricingFactor : 1) +
-            laborPrice
-          : 0;
+  //     const calc =
+  //       (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1) -
+  //       oldGlassPrice * data?.sqftArea;
+  //     const glassPricing =
+  //       data?.sqftArea !== 0
+  //         ? (calc + data?.sqftArea * newGlassPrice) *
+  //             (pricingFactorStatus ? pricingFactor : 1) +
+  //           laborPrice
+  //         : 0;
 
-      const costOfItem =
-        totalCost -
-        oldGlassPrice * data?.sqftArea +
-        data?.sqftArea * newGlassPrice;
-      let costOfItems =
-        costOfItem * (pricingFactorStatus ? pricingFactor : 1) + laborPrice ??
-        0;
+  //     const costOfItem =
+  //       totalCost -
+  //       oldGlassPrice * data?.sqftArea +
+  //       data?.sqftArea * newGlassPrice;
+  //     let costOfItems =
+  //       costOfItem * (pricingFactorStatus ? pricingFactor : 1) + laborPrice ??
+  //       0;
 
-      if (userProfitPercentage > 0 && userProfitPercentage < 100) {
-        costOfItems = ((costOfItem * 100) / (userProfitPercentage - 100)) * -1;
-      }
-      reCalculateTotal(totalPrice, glassPricing);
-      setTotalPrice(costOfItems);
-      setTotalCost(costOfItem);
-      setSelectedHardware((prev) => ({
-        ...prev,
-        glassType: {
-          type: value?._id,
-          name: value?.name,
-          thickness: selectedHardware?.glassType?.thickness,
-        },
-      }));
-    } else if (type === "glassAddons") {
-      const itemFound = hardwaresList.glassAddons?.find(
-        (item) => item._id === value?._id
-      );
-      const actualCost =
-        (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1);
-      if (itemFound?.slug === "no-treatment") {
-        const priceToRemove = getGlassAddonsCost(selectedHardware?.glassAddons);
-        const remainingCost = actualCost - priceToRemove;
-        const newGeneratedTotal =
-          remainingCost * (pricingFactorStatus ? pricingFactor : 1) +
-          laborPrice;
+  //     if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+  //       costOfItems = ((costOfItem * 100) / (userProfitPercentage - 100)) * -1;
+  //     }
+  //     reCalculateTotal(totalPrice, glassPricing);
+  //     setTotalPrice(costOfItems);
+  //     setTotalCost(costOfItem);
+  //     setSelectedHardware((prev) => ({
+  //       ...prev,
+  //       glassType: {
+  //         type: value?._id,
+  //         name: value?.name,
+  //         thickness: selectedHardware?.glassType?.thickness,
+  //       },
+  //     }));
+  //   } else if (type === "glassAddons") {
+  //     const itemFound = hardwaresList.glassAddons?.find(
+  //       (item) => item._id === value?._id
+  //     );
+  //     const actualCost =
+  //       (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1);
+  //     if (itemFound?.slug === "no-treatment") {
+  //       const priceToRemove = getGlassAddonsCost(selectedHardware?.glassAddons);
+  //       const remainingCost = actualCost - priceToRemove;
+  //       const newGeneratedTotal =
+  //         remainingCost * (pricingFactorStatus ? pricingFactor : 1) +
+  //         laborPrice;
 
-        const remainingCost11 = totalCost - priceToRemove;
-        let newGeneratedTotal11 =
-          remainingCost11 * (pricingFactorStatus ? pricingFactor : 1) +
-          laborPrice;
-        if (userProfitPercentage > 0 && userProfitPercentage < 100) {
-          newGeneratedTotal11 =
-            ((remainingCost11 * 100) / (userProfitPercentage - 100)) * -1;
-        }
-        reCalculateTotal(totalPrice, newGeneratedTotal);
-        setTotalPrice(newGeneratedTotal11);
-        setTotalCost(remainingCost11);
-        setSelectedHardware((prev) => ({
-          ...prev,
-          glassAddons: [{ type: itemFound?._id, name: itemFound?.name }],
-        }));
-      } else {
-        if (
-          itemFound &&
-          selectedHardware?.glassAddons?.some(
-            (item) => item.type === itemFound?._id
-          )
-        ) {
-          const arrayFilter = selectedHardware?.glassAddons?.filter(
-            (item) => item.type !== itemFound?._id
-          );
-          const priceToRemove = getGlassAddonsCost(
-            selectedHardware?.glassAddons
-          );
-          if (
-            arrayFilter?.length > 0 ||
-            data?.category === EstimateCategory.MIRRORS
-          ) {
-            const remainingCost = actualCost - priceToRemove;
-            const priceToAdd = getGlassAddonsCost(arrayFilter);
-            const remainingCost2 = remainingCost + priceToAdd;
-            const newGeneratedTotal =
-              remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
-              laborPrice;
+  //       const remainingCost11 = totalCost - priceToRemove;
+  //       let newGeneratedTotal11 =
+  //         remainingCost11 * (pricingFactorStatus ? pricingFactor : 1) +
+  //         laborPrice;
+  //       if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+  //         newGeneratedTotal11 =
+  //           ((remainingCost11 * 100) / (userProfitPercentage - 100)) * -1;
+  //       }
+  //       reCalculateTotal(totalPrice, newGeneratedTotal);
+  //       setTotalPrice(newGeneratedTotal11);
+  //       setTotalCost(remainingCost11);
+  //       setSelectedHardware((prev) => ({
+  //         ...prev,
+  //         glassAddons: [{ type: itemFound?._id, name: itemFound?.name }],
+  //       }));
+  //     } else {
+  //       if (
+  //         itemFound &&
+  //         selectedHardware?.glassAddons?.some(
+  //           (item) => item.type === itemFound?._id
+  //         )
+  //       ) {
+  //         const arrayFilter = selectedHardware?.glassAddons?.filter(
+  //           (item) => item.type !== itemFound?._id
+  //         );
+  //         const priceToRemove = getGlassAddonsCost(
+  //           selectedHardware?.glassAddons
+  //         );
+  //         if (
+  //           arrayFilter?.length > 0 ||
+  //           data?.category === EstimateCategory.MIRRORS
+  //         ) {
+  //           const remainingCost = actualCost - priceToRemove;
+  //           const priceToAdd = getGlassAddonsCost(arrayFilter);
+  //           const remainingCost2 = remainingCost + priceToAdd;
+  //           const newGeneratedTotal =
+  //             remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+  //             laborPrice;
 
-            const remainingCost21 = totalCost - priceToRemove;
-            const remainingCost22 = remainingCost21 + priceToAdd;
-            let newGeneratedTotal11 =
-              remainingCost22 * (pricingFactorStatus ? pricingFactor : 1) +
-              laborPrice;
-            if (userProfitPercentage > 0 && userProfitPercentage < 100) {
-              newGeneratedTotal11 =
-                ((remainingCost22 * 100) / (userProfitPercentage - 100)) * -1;
-            }
+  //           const remainingCost21 = totalCost - priceToRemove;
+  //           const remainingCost22 = remainingCost21 + priceToAdd;
+  //           let newGeneratedTotal11 =
+  //             remainingCost22 * (pricingFactorStatus ? pricingFactor : 1) +
+  //             laborPrice;
+  //           if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+  //             newGeneratedTotal11 =
+  //               ((remainingCost22 * 100) / (userProfitPercentage - 100)) * -1;
+  //           }
 
-            reCalculateTotal(totalPrice, newGeneratedTotal);
-            setTotalCost(remainingCost22);
-            setTotalPrice(newGeneratedTotal11);
-            setSelectedHardware((prev) => ({
-              ...prev,
-              glassAddons: arrayFilter,
-            }));
-          } else {
-            // set no-treatment
-            const noTreatment = hardwaresList?.glassAddons?.find(
-              (row) => row.slug === "no-treatment"
-            );
-            if (noTreatment) {
-              const remainingCost = actualCost - priceToRemove;
-              const newGeneratedTotal =
-                remainingCost * (pricingFactorStatus ? pricingFactor : 1) +
-                laborPrice;
+  //           reCalculateTotal(totalPrice, newGeneratedTotal);
+  //           setTotalCost(remainingCost22);
+  //           setTotalPrice(newGeneratedTotal11);
+  //           setSelectedHardware((prev) => ({
+  //             ...prev,
+  //             glassAddons: arrayFilter,
+  //           }));
+  //         } else {
+  //           // set no-treatment
+  //           const noTreatment = hardwaresList?.glassAddons?.find(
+  //             (row) => row.slug === "no-treatment"
+  //           );
+  //           if (noTreatment) {
+  //             const remainingCost = actualCost - priceToRemove;
+  //             const newGeneratedTotal =
+  //               remainingCost * (pricingFactorStatus ? pricingFactor : 1) +
+  //               laborPrice;
 
-              const remainingCost22 = totalCost - priceToRemove;
-              let newGeneratedTotal21 =
-                remainingCost22 * (pricingFactorStatus ? pricingFactor : 1) +
-                laborPrice;
-              if (userProfitPercentage > 0 && userProfitPercentage < 100) {
-                newGeneratedTotal21 =
-                  ((remainingCost22 * 100) / (userProfitPercentage - 100)) * -1;
-              }
+  //             const remainingCost22 = totalCost - priceToRemove;
+  //             let newGeneratedTotal21 =
+  //               remainingCost22 * (pricingFactorStatus ? pricingFactor : 1) +
+  //               laborPrice;
+  //             if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+  //               newGeneratedTotal21 =
+  //                 ((remainingCost22 * 100) / (userProfitPercentage - 100)) * -1;
+  //             }
 
-              reCalculateTotal(totalPrice, newGeneratedTotal);
-              setTotalPrice(newGeneratedTotal21);
-              setTotalCost(remainingCost22);
-              setSelectedHardware((prev) => ({
-                ...prev,
-                glassAddons: [
-                  { type: noTreatment?._id, name: noTreatment?.name },
-                ],
-              }));
-            }
-          }
-        } else {
-          const noTreatment = hardwaresList?.glassAddons?.find(
-            (row) => row.slug === "no-treatment"
-          );
-          const arrayOld = selectedHardware?.glassAddons?.filter(
-            (item) => item.type !== noTreatment?._id
-          );
-          arrayOld.push({ type: value?._id, name: value?.name });
-          const priceToRemove = getGlassAddonsCost(
-            selectedHardware?.glassAddons
-          );
-          const remainingCost = actualCost - priceToRemove;
-          const priceToAdd = getGlassAddonsCost(arrayOld);
-          const remainingCost2 = remainingCost + priceToAdd;
-          const newGeneratedTotal =
-            remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
-            laborPrice;
+  //             reCalculateTotal(totalPrice, newGeneratedTotal);
+  //             setTotalPrice(newGeneratedTotal21);
+  //             setTotalCost(remainingCost22);
+  //             setSelectedHardware((prev) => ({
+  //               ...prev,
+  //               glassAddons: [
+  //                 { type: noTreatment?._id, name: noTreatment?.name },
+  //               ],
+  //             }));
+  //           }
+  //         }
+  //       } else {
+  //         const noTreatment = hardwaresList?.glassAddons?.find(
+  //           (row) => row.slug === "no-treatment"
+  //         );
+  //         const arrayOld = selectedHardware?.glassAddons?.filter(
+  //           (item) => item.type !== noTreatment?._id
+  //         );
+  //         arrayOld.push({ type: value?._id, name: value?.name });
+  //         const priceToRemove = getGlassAddonsCost(
+  //           selectedHardware?.glassAddons
+  //         );
+  //         const remainingCost = actualCost - priceToRemove;
+  //         const priceToAdd = getGlassAddonsCost(arrayOld);
+  //         const remainingCost2 = remainingCost + priceToAdd;
+  //         const newGeneratedTotal =
+  //           remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+  //           laborPrice;
 
-          const remainingCost23 = totalCost - priceToRemove;
-          const remainingCost24 = remainingCost23 + priceToAdd;
-          let newGeneratedTotal22 =
-            remainingCost24 * (pricingFactorStatus ? pricingFactor : 1) +
-            laborPrice;
-          if (userProfitPercentage > 0 && userProfitPercentage < 100) {
-            newGeneratedTotal22 =
-              ((remainingCost24 * 100) / (userProfitPercentage - 100)) * -1;
-          }
+  //         const remainingCost23 = totalCost - priceToRemove;
+  //         const remainingCost24 = remainingCost23 + priceToAdd;
+  //         let newGeneratedTotal22 =
+  //           remainingCost24 * (pricingFactorStatus ? pricingFactor : 1) +
+  //           laborPrice;
+  //         if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+  //           newGeneratedTotal22 =
+  //             ((remainingCost24 * 100) / (userProfitPercentage - 100)) * -1;
+  //         }
 
-          reCalculateTotal(totalPrice, newGeneratedTotal);
-          setTotalPrice(newGeneratedTotal22);
-          setTotalCost(remainingCost24);
-          setSelectedHardware((prev) => ({
-            ...prev,
-            glassAddons: arrayOld,
-          }));
-        }
-      }
-    } else if (type === "hardwareAddons") {
-      const fabricationCounter =
-        data?.category === EstimateCategory.SHOWERS
-          ? getShowersHardwareSpecificFabrication
-          : getWineCellarHardwareSpecificFabrication;
+  //         reCalculateTotal(totalPrice, newGeneratedTotal);
+  //         setTotalPrice(newGeneratedTotal22);
+  //         setTotalCost(remainingCost24);
+  //         setSelectedHardware((prev) => ({
+  //           ...prev,
+  //           glassAddons: arrayOld,
+  //         }));
+  //       }
+  //     }
+  //   } else if (type === "hardwareAddons") {
+  //     const fabricationCounter =
+  //       data?.category === EstimateCategory.SHOWERS
+  //         ? getShowersHardwareSpecificFabrication
+  //         : getWineCellarHardwareSpecificFabrication;
 
-      const itemExistIndex = selectedHardware?.hardwareAddons?.findIndex(
-        (item) => item.type === value?.item?._id
-      );
-      const actualCost =
-        (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1);
-      const addonsPriceToRemove = getHardwareAddonsCost(
-        selectedHardware?.hardwareAddons
-      );
-      const fabricationPriceToRemove = getFabricationsCost(fabricationsCount);
-      const remainingCost =
-        actualCost - (addonsPriceToRemove + fabricationPriceToRemove);
+  //     const itemExistIndex = selectedHardware?.hardwareAddons?.findIndex(
+  //       (item) => item.type === value?.item?._id
+  //     );
+  //     const actualCost =
+  //       (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1);
+  //     const addonsPriceToRemove = getHardwareAddonsCost(
+  //       selectedHardware?.hardwareAddons
+  //     );
+  //     const fabricationPriceToRemove = getFabricationsCost(fabricationsCount);
+  //     const remainingCost =
+  //       actualCost - (addonsPriceToRemove + fabricationPriceToRemove);
 
-      const remainingTotalCost =
-        totalCost - (addonsPriceToRemove + fabricationPriceToRemove);
-      if (itemExistIndex !== -1) {
-        if (value.counter > 0) {
-          const array = selectedHardware?.hardwareAddons;
-          const hardwareFabrication = fabricationCounter(
-            type,
-            fabricationsCount,
-            { item: value?.item, count: array[itemExistIndex].count },
-            { item: value?.item, count: value.counter }
-          );
-          array[itemExistIndex].count = value.counter;
-          const addonsPriceToAdd = getHardwareAddonsCost(array);
-          const fabricationPriceToAdd =
-            getFabricationsCost(hardwareFabrication);
-          const remainingCost2 =
-            remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
-          const newGeneratedTotal =
-            remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
-            laborPrice;
+  //     const remainingTotalCost =
+  //       totalCost - (addonsPriceToRemove + fabricationPriceToRemove);
+  //     if (itemExistIndex !== -1) {
+  //       if (value.counter > 0) {
+  //         const array = selectedHardware?.hardwareAddons;
+  //         const hardwareFabrication = fabricationCounter(
+  //           type,
+  //           fabricationsCount,
+  //           { item: value?.item, count: array[itemExistIndex].count },
+  //           { item: value?.item, count: value.counter }
+  //         );
+  //         array[itemExistIndex].count = value.counter;
+  //         const addonsPriceToAdd = getHardwareAddonsCost(array);
+  //         const fabricationPriceToAdd =
+  //           getFabricationsCost(hardwareFabrication);
+  //         const remainingCost2 =
+  //           remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
+  //         const newGeneratedTotal =
+  //           remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+  //           laborPrice;
 
-          const remainingTotalCost2 =
-            remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
-          let newGeneratedTotal2 =
-            remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
-            laborPrice;
-          if (userProfitPercentage > 0 && userProfitPercentage < 100) {
-            newGeneratedTotal2 =
-              ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
-          }
+  //         const remainingTotalCost2 =
+  //           remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
+  //         let newGeneratedTotal2 =
+  //           remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+  //           laborPrice;
+  //         if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+  //           newGeneratedTotal2 =
+  //             ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
+  //         }
 
-          reCalculateTotal(totalPrice, newGeneratedTotal);
-          setTotalPrice(newGeneratedTotal2);
-          setTotalCost(remainingTotalCost2);
-          setFabricationsCount(hardwareFabrication);
-          setSelectedHardware((prev) => ({
-            ...prev,
-            hardwareAddons: array,
-          }));
-        } else {
-          const hardwareFabrication = fabricationCounter(
-            type,
-            fabricationsCount,
-            {
-              item: value?.item,
-              count: selectedHardware?.hardwareAddons[itemExistIndex].count,
-            },
-            null
-          );
-          const array = selectedHardware?.hardwareAddons?.filter(
-            (_item) => _item.type !== value?.item?._id
-          );
-          const addonsPriceToAdd = getHardwareAddonsCost(array);
-          const fabricationPriceToAdd =
-            getFabricationsCost(hardwareFabrication);
-          const remainingCost2 =
-            remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
-          const newGeneratedTotal =
-            remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
-            laborPrice;
+  //         reCalculateTotal(totalPrice, newGeneratedTotal);
+  //         setTotalPrice(newGeneratedTotal2);
+  //         setTotalCost(remainingTotalCost2);
+  //         setFabricationsCount(hardwareFabrication);
+  //         setSelectedHardware((prev) => ({
+  //           ...prev,
+  //           hardwareAddons: array,
+  //         }));
+  //       } else {
+  //         const hardwareFabrication = fabricationCounter(
+  //           type,
+  //           fabricationsCount,
+  //           {
+  //             item: value?.item,
+  //             count: selectedHardware?.hardwareAddons[itemExistIndex].count,
+  //           },
+  //           null
+  //         );
+  //         const array = selectedHardware?.hardwareAddons?.filter(
+  //           (_item) => _item.type !== value?.item?._id
+  //         );
+  //         const addonsPriceToAdd = getHardwareAddonsCost(array);
+  //         const fabricationPriceToAdd =
+  //           getFabricationsCost(hardwareFabrication);
+  //         const remainingCost2 =
+  //           remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
+  //         const newGeneratedTotal =
+  //           remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+  //           laborPrice;
 
-          const remainingTotalCost2 =
-            remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
-          let newGeneratedTotal2 =
-            remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
-            laborPrice;
-          if (userProfitPercentage > 0 && userProfitPercentage < 100) {
-            newGeneratedTotal2 =
-              ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
-          }
+  //         const remainingTotalCost2 =
+  //           remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
+  //         let newGeneratedTotal2 =
+  //           remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+  //           laborPrice;
+  //         if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+  //           newGeneratedTotal2 =
+  //             ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
+  //         }
 
-          reCalculateTotal(totalPrice, newGeneratedTotal);
-          setTotalPrice(newGeneratedTotal2);
-          setTotalCost(remainingTotalCost2);
-          setFabricationsCount(hardwareFabrication);
-          setSelectedHardware((prev) => ({
-            ...prev,
-            hardwareAddons: array,
-          }));
-        }
-      } else {
-        const hardwareFabrication = fabricationCounter(
-          type,
-          fabricationsCount,
-          null,
-          { item: value?.item, count: value.counter }
-        );
-        const array = selectedHardware?.hardwareAddons;
-        array.push({
-          type: value?.item?._id,
-          name: value?.item?.name,
-          count: value.counter,
-        });
-        const addonsPriceToAdd = getHardwareAddonsCost(array);
-        const fabricationPriceToAdd = getFabricationsCost(hardwareFabrication);
-        const remainingCost2 =
-          remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
-        const newGeneratedTotal =
-          remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
-          laborPrice;
+  //         reCalculateTotal(totalPrice, newGeneratedTotal);
+  //         setTotalPrice(newGeneratedTotal2);
+  //         setTotalCost(remainingTotalCost2);
+  //         setFabricationsCount(hardwareFabrication);
+  //         setSelectedHardware((prev) => ({
+  //           ...prev,
+  //           hardwareAddons: array,
+  //         }));
+  //       }
+  //     } else {
+  //       const hardwareFabrication = fabricationCounter(
+  //         type,
+  //         fabricationsCount,
+  //         null,
+  //         { item: value?.item, count: value.counter }
+  //       );
+  //       const array = selectedHardware?.hardwareAddons;
+  //       array.push({
+  //         type: value?.item?._id,
+  //         name: value?.item?.name,
+  //         count: value.counter,
+  //       });
+  //       const addonsPriceToAdd = getHardwareAddonsCost(array);
+  //       const fabricationPriceToAdd = getFabricationsCost(hardwareFabrication);
+  //       const remainingCost2 =
+  //         remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
+  //       const newGeneratedTotal =
+  //         remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+  //         laborPrice;
 
-        const remainingTotalCost2 =
-          remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
-        let newGeneratedTotal2 =
-          remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
-          laborPrice;
-        if (userProfitPercentage > 0 && userProfitPercentage < 100) {
-          newGeneratedTotal2 =
-            ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
-        }
+  //       const remainingTotalCost2 =
+  //         remainingTotalCost + (addonsPriceToAdd + fabricationPriceToAdd);
+  //       let newGeneratedTotal2 =
+  //         remainingTotalCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+  //         laborPrice;
+  //       if (userProfitPercentage > 0 && userProfitPercentage < 100) {
+  //         newGeneratedTotal2 =
+  //           ((remainingTotalCost2 * 100) / (userProfitPercentage - 100)) * -1;
+  //       }
 
-        reCalculateTotal(totalPrice, newGeneratedTotal);
-        setTotalPrice(newGeneratedTotal2);
-        setTotalCost(remainingTotalCost2);
-        setFabricationsCount(hardwareFabrication);
-        setSelectedHardware((prev) => ({
-          ...prev,
-          hardwareAddons: array,
-        }));
-      }
-    }
-  };
+  //       reCalculateTotal(totalPrice, newGeneratedTotal);
+  //       setTotalPrice(newGeneratedTotal2);
+  //       setTotalCost(remainingTotalCost2);
+  //       setFabricationsCount(hardwareFabrication);
+  //       setSelectedHardware((prev) => ({
+  //         ...prev,
+  //         hardwareAddons: array,
+  //       }));
+  //     }
+  //   }
+  // };
   const getCostByThickness = (item) => {
     const glassType = hardwaresList?.glassType.find(
       (_item) => _item?._id === item.type
@@ -711,45 +716,51 @@ const ShowerSummary = ({
     if (selectedHardware?.glassType?.thickness === "1/2") {
       fabricationPrice =
         Number(selectedFabrication?.oneInchHoles ?? 0) *
-          (locationSettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ??
-            0) +
+        (locationSettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ??
+          0) +
         Number(selectedFabrication?.hingeCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
         Number(selectedFabrication?.clampCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
         Number(selectedFabrication?.notch ?? 0) *
-          (locationSettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
         Number(selectedFabrication?.outages ?? 0) *
-          (locationSettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
         Number(selectedFabrication?.mitre ?? 0) *
-          (locationSettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
         Number(selectedFabrication?.polish ?? 0) *
-          (locationSettings?.fabricatingPricing?.polishPricePerOneByTwoInch ??
-            0);
+        (locationSettings?.fabricatingPricing?.polishPricePerOneByTwoInch ??
+          0);
     } else if (selectedHardware?.glassType?.thickness === "3/8") {
       fabricationPrice =
         Number(selectedFabrication?.oneInchHoles ?? 0) *
-          (locationSettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
-            0) +
+        (locationSettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
+          0) +
         Number(selectedFabrication?.hingeCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
-            0) +
+        (locationSettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
+          0) +
         Number(selectedFabrication?.clampCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
-            0) +
+        (locationSettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
+          0) +
         Number(selectedFabrication?.notch ?? 0) *
-          (locationSettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
         Number(selectedFabrication?.outages ?? 0) *
-          (locationSettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
         Number(selectedFabrication?.mitre ?? 0) *
-          (locationSettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
         Number(selectedFabrication?.polish ?? 0) *
-          (locationSettings?.fabricatingPricing
-            ?.polishPricePerThreeByEightInch ?? 0);
+        (locationSettings?.fabricatingPricing
+          ?.polishPricePerThreeByEightInch ?? 0);
     }
     return fabricationPrice;
   };
-
+  const handleChangeHardware = (type, value) => {
+    if (type === hardwareTypes.HARDWAREADDONS) {
+      dispatch(setCounter({ type, item: value.item, counter: value.counter, estimateId: data?._id }));
+    } else {
+      dispatch(setContent({ type, item: value, hardwaresList, estimateId: data?._id }));
+    }
+  }
   const handleApprove = () => {
     let Estimatedata = {
       ...selectedHardware,
@@ -787,7 +798,6 @@ const ShowerSummary = ({
       Estimatedata.notch = fabricationsCount.notch;
       Estimatedata.outages = fabricationsCount.outages;
     }
-    
 
     customerDecision({
       data: {
@@ -816,6 +826,25 @@ const ShowerSummary = ({
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (data && data?.category === EstimateCategory.SHOWERS || data?.category === EstimateCategory.WINECELLARS) {
+      const prices = calculateTotalForShower(
+        data?.content,
+        data?.sqftArea,
+        locationSettings
+      );
+      dispatch(setEstimateTotal({ prices, estimateId: data?._id, category: data?.category }));
+    } else if (data && data?.category === EstimateCategory.MIRRORS) {
+      const prices = calculateTotalForMirror(
+        data?.content,
+        data?.sqftArea,
+        locationSettings,
+        data?.measurements
+      );
+      dispatch(setEstimateTotal({ prices, estimateId: data?._id, category: data?.category }));
+    }
+  }, [data?.content])
+
   const hardwareAddonsList = useMemo(() => {
     const upgradeHardwareAddonList =
       hardwaresList?.hardwareAddons
@@ -823,18 +852,18 @@ const ShowerSummary = ({
         ?.filter((obj) =>
           obj.finishes.some(
             (option) =>
-              option.finish_id === selectedHardware?.hardwareFinish?.type &&
+              option.finish_id === data?.content?.hardwareFinishes?._id &&
               option.status === true
           )
         ) ?? [];
-    data?.hardwareAddons?.forEach((data) => {
+    data?.content?.hardwareAddons?.forEach((data) => {
       // Check if upgradeHardwareAddonList is empty
       if (
         upgradeHardwareAddonList?.length === 0 ||
-        !upgradeHardwareAddonList.some((addon) => addon._id === data?.type)
+        !upgradeHardwareAddonList.some((addon) => addon._id === data?.item?._id)
       ) {
         const item = hardwaresList?.hardwareAddons?.find(
-          (item) => item._id === data?.type
+          (item) => item._id === data?.item?._id
         );
         if (item) {
           upgradeHardwareAddonList.push(item);
@@ -844,7 +873,7 @@ const ShowerSummary = ({
 
     const glassAddonsData = upgradeHardwareAddonList?.map((item) => {
       const price = item?.finishes?.find(
-        (option) => option.finish_id === selectedHardware?.hardwareFinish?.type
+        (option) => option.finish_id === data?.content?.hardwareFinishes?._id
       )?.cost;
 
       let fabricationsCount = {};
@@ -883,7 +912,8 @@ const ShowerSummary = ({
       };
     });
     return glassAddonsData;
-  }, [selectedHardware, hardwaresList?.hardwareAddons]);
+  }, [data?.content?.hardwareAddons, hardwaresList?.hardwareAddons]);
+  const renderDimensions = data?.category === EstimateCategory.SHOWERS || data?.category === EstimateCategory.WINECELLARS ? renderShowerMeasurementSides : data?.category === EstimateCategory.MIRRORS ? renderMirrorMeasurementSides : () => { };
   return (
     <>
       <Box
@@ -955,7 +985,7 @@ const ShowerSummary = ({
                     Dimensions
                   </Typography>
                   <Typography className="text-xs-ragular">
-                    {data?.measurements}
+                    {renderDimensions(quoteState.EDIT, data?.measurements, data?.selectedItem?.config?.layout_id)}
                   </Typography>
                 </Box>
 
@@ -964,7 +994,7 @@ const ShowerSummary = ({
                     Layout:
                   </Typography>
                   <Typography className="text-xs-ragular">
-                    {data?.layout}
+                    {data?.selectedItem?.settings?.name ?? 'Custom'}
                   </Typography>
                 </Box>
                 {data?.doorWidth ? (
@@ -1037,9 +1067,9 @@ const ShowerSummary = ({
                         Discount:
                       </Typography>
                       <Typography className="text-xs-ragular">
-                        {data?.config?.config?.discount?.unit === "$" && "$"}{" "}
+                        {data?.content?.discount?.unit === "$" && "$"}{" "}
                         {discountValue}{" "}
-                        {data?.config?.config?.discount?.unit === "%" && "%"}
+                        {data?.content?.discount?.unit === "%" && "%"}
                       </Typography>
                     </Box>
                   </>
@@ -1058,12 +1088,12 @@ const ShowerSummary = ({
                       Total Price:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      $
-                      {calculateDiscount(
+                      ${(data?.totalPrice ?? 0).toFixed(2)}
+                      {/* {calculateDiscount(
                         totalPrice,
                         discountValue,
-                        data?.config?.config?.discount?.unit
-                      ).toFixed(2)}
+                        data?.content?.discount?.unit
+                      ).toFixed(2)} */}
                     </Typography>
                   </Box>
                 </Box>
@@ -1189,14 +1219,14 @@ const ShowerSummary = ({
                       Dimensions
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      {data?.measurements}
+                      {renderDimensions(quoteState.EDIT, data?.measurements, data?.selectedItem?.config?.layout_id)}
                     </Typography>
                     <Box>
                       <Typography className="text-xs-ragular-bold">
                         Layout:
                       </Typography>
                       <Typography className="text-xs-ragular">
-                        {data?.layout}
+                        {data?.selectedItem?.settings?.name ?? 'Custom'}
                       </Typography>
                     </Box>
                     {data?.doorWidth ? (
@@ -1273,7 +1303,7 @@ const ShowerSummary = ({
                               discountValue > 0 ? "line-through" : "auto",
                           }}
                         >
-                          $ {(totalPrice ?? 0)?.toFixed(2)}
+                          $ {(data?.totalPrice ?? 0)?.toFixed(2)}
                         </Typography>
                         {discountValue > 0 && (
                           <Typography
@@ -1306,70 +1336,65 @@ const ShowerSummary = ({
                     >
                       Summary
                     </Typography>
-                    {data?.hardwareFinish && (
+                    {data?.content?.hardwareFinishes && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Finish:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.hardwareFinish?.name}
+                          {data?.content?.hardwareFinishes?.name}
                         </Typography>
                       </Box>
                     )}
-                    {data?.handle?.type && (
+                    {data?.content?.handles?.item && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Handles:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.handle?.name} ({data?.handle?.count})
+                          {data?.content?.handles?.item?.name} ({data?.content?.handles?.count})
                         </Typography>
                       </Box>
                     )}
-                    {data?.hinge?.type && (
+                    {data?.content?.hinges?.item && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Hinges:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.hinge?.name} ({data?.hinge?.count})
+                          {data?.content?.hinges?.item?.name} ({data?.content?.hinges?.count})
                         </Typography>
                       </Box>
                     )}
-                    {data?.doorLock?.type && (
+                    {data?.content?.doorLock?.item && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Door Lock:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.doorLock?.name} ({data?.doorLock?.count})
+                          {data?.content?.doorLock?.item?.name} ({data?.content?.doorLock?.count})
                         </Typography>
                       </Box>
                     )}
 
-                    {data?.mountingChannel !== "" &&
-                    data?.mountingChannel !== null ? (
-                      <>
-                        {data?.mountingChannel && (
-                          <Box>
-                            <Typography className="text-xs-ragular-bold">
-                              Channel:
-                            </Typography>
-                            <Typography className="text-xs-ragular">
-                              {data?.mountingChannel?.name}
-                            </Typography>
-                          </Box>
-                        )}{" "}
-                      </>
+                    {["channel"].includes(data?.content?.mountingState) && data?.content?.mountingChannel?.item ? (
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Channel:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {data?.content?.mountingChannel?.item?.name}
+                        </Typography>
+                      </Box>
                     ) : (
                       <>
                         {" "}
-                        {data?.mountingClamps?.wallClamp?.length ? (
+                        {data?.content?.mountingClamps?.wallClamp?.length ? (
                           <Box>
                             <Typography className="text-xs-ragular-bold">
                               WallClamps:{" "}
                             </Typography>
-                            {data?.mountingClamps?.wallClamp?.map((row) => (
+                            {data?.content?.mountingClamps?.wallClamp?.map((row) => (
                               <Typography className="text-xs-ragular">
                                 {row.name} ({row.count}){" "}
                               </Typography>
@@ -1378,12 +1403,12 @@ const ShowerSummary = ({
                         ) : (
                           ""
                         )}
-                        {data?.mountingClamps?.sleeveOver?.length ? (
+                        {data?.content?.mountingClamps?.sleeveOver?.length ? (
                           <Box>
                             <Typography className="text-xs-ragular-bold">
                               Sleeve Over:{" "}
                             </Typography>
-                            {data?.mountingClamps?.sleeveOver?.map((row) => (
+                            {data?.content?.mountingClamps?.sleeveOver?.map((row) => (
                               <Typography className="text-xs-ragular">
                                 {row.name} ({row.count}){" "}
                               </Typography>
@@ -1392,12 +1417,12 @@ const ShowerSummary = ({
                         ) : (
                           ""
                         )}
-                        {data?.mountingClamps?.glassToGlass?.length ? (
+                        {data?.content?.mountingClamps?.glassToGlass?.length ? (
                           <Box>
                             <Typography className="text-xs-ragular-bold">
                               Glass To Glass:{" "}
                             </Typography>
-                            {data?.mountingClamps?.glassToGlass?.map((row) => (
+                            {data?.content?.mountingClamps?.glassToGlass?.map((row) => (
                               <Typography className="text-xs-ragular">
                                 {row.name} ({row.count}){" "}
                               </Typography>
@@ -1408,12 +1433,12 @@ const ShowerSummary = ({
                         )}{" "}
                       </>
                     )}
-                    {data?.cornerClamps?.wallClamp?.length ? (
+                    {data?.content?.cornerClamps?.wallClamp?.length ? (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Corner WallClamp:{" "}
                         </Typography>
-                        {data?.cornerClamps?.wallClamp?.map((row) => (
+                        {data?.content?.cornerClamps?.wallClamp?.map((row) => (
                           <Typography className="text-xs-ragular">
                             {row.name} ({row.count}){" "}
                           </Typography>
@@ -1422,12 +1447,12 @@ const ShowerSummary = ({
                     ) : (
                       ""
                     )}
-                    {data?.cornerClamps?.sleeveOver?.length ? (
+                    {data?.content?.cornerClamps?.sleeveOver?.length ? (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Corner Sleeve Over:{" "}
                         </Typography>
-                        {data?.cornerClamps?.sleeveOver?.map((row) => (
+                        {data?.content?.cornerClamps?.sleeveOver?.map((row) => (
                           <Typography className="text-xs-ragular">
                             {row.name} ({row.count}){" "}
                           </Typography>
@@ -1436,12 +1461,12 @@ const ShowerSummary = ({
                     ) : (
                       ""
                     )}
-                    {data?.cornerClamps?.glassToGlass?.length ? (
+                    {data?.content?.cornerClamps?.glassToGlass?.length ? (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Corner Glass To Glass:{" "}
                         </Typography>
-                        {data?.cornerClamps?.glassToGlass?.map((row) => (
+                        {data?.content?.cornerClamps?.glassToGlass?.map((row) => (
                           <Typography className="text-xs-ragular">
                             {row.name} ({row.count}){" "}
                           </Typography>
@@ -1450,39 +1475,39 @@ const ShowerSummary = ({
                     ) : (
                       ""
                     )}
-                    {selectedHardware?.glassType?.type && (
+                    {data?.content?.glassType?.item && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Glass Type:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {selectedHardware?.glassType?.name} (
-                          {selectedHardware?.glassType?.thickness})
+                          {data?.content?.glassType?.item?.name} (
+                          {data?.content?.glassType?.thickness})
                         </Typography>
                       </Box>
                     )}
-                    {data?.edgeWork?.type && (
+                    {data?.content?.edgeWork?.item && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Edge Work:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.edgeWork?.name} ({data?.edgeWork?.thickness})
+                          {data?.content?.edgeWork?.item?.name} ({data?.content?.edgeWork?.thickness})
                         </Typography>
                       </Box>
                     )}
-                    {data?.slidingDoorSystem?.type && (
+                    {data?.content?.slidingDoorSystem?.item && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Sliding Door System:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.slidingDoorSystem?.name} (
-                          {data?.slidingDoorSystem?.count})
+                          {data?.content?.slidingDoorSystem?.item?.name} (
+                          {data?.content?.slidingDoorSystem?.count})
                         </Typography>
                       </Box>
                     )}
-                    {data?.transom && (
+                    {data?.content?.transom && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Transom:{" "}
@@ -1490,22 +1515,22 @@ const ShowerSummary = ({
                         <Typography className="text-xs-ragular"></Typography>
                       </Box>
                     )}
-                    {data?.header?.type && (
+                    {data?.content?.header?.item && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Header:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.header?.name} ({data?.header?.count})
+                          {data?.content?.header?.item?.name} ({data?.content?.header?.count})
                         </Typography>
                       </Box>
                     )}
-                    {selectedHardware?.glassAddons?.length > 0 ? (
+                    {data?.content?.glassAddons?.length > 0 ? (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Glass Addons:
                         </Typography>
-                        {selectedHardware?.glassAddons?.map((item, index) => (
+                        {data?.content?.glassAddons?.map((item, index) => (
                           <Typography key={index} className="text-xs-ragular">
                             {item?.name},
                           </Typography>
@@ -1514,7 +1539,7 @@ const ShowerSummary = ({
                     ) : (
                       ""
                     )}
-                    {selectedHardware?.hardwareAddons?.length > 0 && (
+                    {data?.content?.hardwareAddons?.length > 0 && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           {data?.category === EstimateCategory?.MIRRORS
@@ -1522,8 +1547,8 @@ const ShowerSummary = ({
                             : "Add ons:"}
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {selectedHardware?.hardwareAddons?.map(
-                            (row) => ` ${row?.name} (${row?.count}),`
+                          {data?.content?.hardwareAddons?.map(
+                            (row) => ` ${row?.item?.name} (${row?.count}),`
                           )}{" "}
                         </Typography>
                       </Box>
@@ -1539,7 +1564,7 @@ const ShowerSummary = ({
                         People:{" "}
                       </Typography>
                       <Typography className="text-xs-ragular">
-                        {data?.people}
+                        {data?.content?.people}
                       </Typography>
                     </Box>
                     <Box
@@ -1556,7 +1581,7 @@ const ShowerSummary = ({
                         :{" "}
                       </Typography>
                       <Typography className="text-xs-ragular">
-                        {data?.hours}
+                        {data?.content?.hours}
                       </Typography>
                     </Box>
                     {data?.category === EstimateCategory.WINECELLARS && (
@@ -1571,7 +1596,7 @@ const ShowerSummary = ({
                           Hours for door:{" "}
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.laborHoursForDoor}
+                          {data?.content?.laborHoursForDoor}
                         </Typography>
                       </Box>
                     )}
@@ -1686,53 +1711,53 @@ const ShowerSummary = ({
             (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) ||
             hardwareAddonsList?.length > 0 ||
             glasstypeList?.length > 0) && (
-            <Typography
-              sx={{
-                fontFamily: '"Poppins" !important',
-                fontSize: "32px",
-                fontWeight: 600,
-                lineHeight: "35px",
-                width: "80%",
-              }}
-            >
-              {/* <Box component="span" sx={{ color: "#F95500" }}>
+              <Typography
+                sx={{
+                  fontFamily: '"Poppins" !important',
+                  fontSize: "32px",
+                  fontWeight: 600,
+                  lineHeight: "35px",
+                  width: "80%",
+                }}
+              >
+                {/* <Box component="span" sx={{ color: "#F95500" }}>
               Recommended
             </Box>{" "} */}
-              Available Upgrades:
-            </Typography>
-          )}
+                Available Upgrades:
+              </Typography>
+            )}
 
           <Box sx={{ pt: 1 }}>
             {glassAddonsList?.length >
               (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) && (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  py: "6px",
-                }}
-              >
                 <Box
                   sx={{
-                    width: "80%",
-                    background: "white",
-                    borderRadius: "11px",
-                    pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
-                    opacity: data?.status === "approve" ? 0.5 : 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    py: "6px",
                   }}
                 >
-                  <MenuList
-                    menuOptions={glassAddonsList ?? []}
-                    title={"Glass Addons"}
-                    type={"glassAddons"}
-                    selectedContent={selectedHardware}
-                    handleChange={handleChangeHardware}
+                  <Box
+                    sx={{
+                      width: "80%",
+                      background: "white",
+                      borderRadius: "11px",
+                      pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
+                      opacity: data?.status === "approve" ? 0.5 : 1,
+                    }}
+                  >
+                    <MenuList
+                      menuOptions={glassAddonsList ?? []}
+                      title={"Glass Addons"}
+                      type={"glassAddons"}
+                      selectedContent={data?.content}
+                      handleChange={handleChangeHardware}
                     // selectedContent={}
-                  />
+                    />
+                  </Box>
                 </Box>
-              </Box>
-            )}
+              )}
             {[EstimateCategory.SHOWERS, EstimateCategory.WINECELLARS].includes(
               data?.category
             ) &&
@@ -1759,7 +1784,7 @@ const ShowerSummary = ({
                       menuOptions={hardwareAddonsList ?? []}
                       title={"Hardware Addons"}
                       type={"hardwareAddons"}
-                      selectedContent={selectedHardware}
+                      selectedContent={data?.content}
                       handleChange={handleChangeHardware}
                     />
                   </Box>
@@ -1787,9 +1812,9 @@ const ShowerSummary = ({
                     menuOptions={glasstypeList ?? []}
                     title={"Glass type"}
                     type={"glassType"}
-                    thickness={selectedHardware?.glassType?.thickness}
-                    currentItem={selectedHardware?.glassType}
-                    selectedContent={selectedHardware}
+                    thickness={data?.content?.glassType?.thickness}
+                    currentItem={data?.content?.glassType?.item}
+                    selectedContent={data?.content}
                     locationSettings={locationSettings}
                     handleChange={handleChangeHardware}
                   />

@@ -54,10 +54,10 @@ const MenuItem = ({
   };
   const isSelected =
     type === "hardwareAddons"
-      ? selectedContent?.hardwareAddons.some((row) => row?.type === item?._id)
+      ? selectedContent?.hardwareAddons.some((row) => row?.item?._id === item?._id)
       : type === "glassAddons"
       ? selectedContent?.glassAddons.some(
-          (selectedItem) => selectedItem?.type === item?._id
+          (selectedItem) => selectedItem?._id === item?._id
         )
       : type === "wallClamp"
       ? selectedContent?.mountingClamps?.wallClamp.some(
@@ -83,11 +83,8 @@ const MenuItem = ({
       ? selectedContent?.cornerClamps?.cornerGlassToGlass.some(
           (selectedItem) => selectedItem?.item?._id === item?._id
         )
-      : ["handles", "hinges", "slidingDoorSystem", "header"].includes(type)
-      ? item === selectedItem
-      : ["glassType"].includes(type)
-      ? item?._id === selectedItem?.type
-      : item === selectedItem;
+      : item?._id === selectedItem?._id;
+       console.log(isSelected,type,item?._id === selectedItem?._id);
   // const selectedCount = useMemo(() => {
   //   const value =  selectedContent?.hardwareAddons?.find(
   //     (row) => row?.type === item?._id
@@ -173,7 +170,7 @@ const MenuItem = ({
                 type={type}
                 counter={
                   selectedContent?.hardwareAddons?.find(
-                    (row) => row?.type === item?._id
+                    (row) => row?.item?._id === item?._id
                   )?.count ?? 0
                 }
                 handleChange={handleChange}

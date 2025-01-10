@@ -82,9 +82,9 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
   };
 
   const singleListData = (data) => {
-    const noOfEstimate = data?.estimates?.length;
-    const totalAmount = data?.estimates?.reduce((accumulator, currentItem) => {
-      return accumulator + currentItem.pricing.totalPrice;
+    const noOfEstimate = data?.estimateDetailArray?.length;
+    const totalAmount = data?.estimateDetailArray?.reduce((accumulator, currentItem) => {
+      return accumulator + currentItem.cost;
     }, 0);
     return {
       noOfEstimate,
@@ -173,7 +173,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                 <TableHead sx={{ backgroundColor: "#F3F5F6" }}>
                   <TableRow>
                     <TableCell>No. of Estimates</TableCell>
-                    <TableCell align="center">Total Amount</TableCell>
+                    {/* <TableCell align="center">Total Amount</TableCell> */}
                     <TableCell align="center">Date Added</TableCell>
                     <TableCell align="center">Expiry Date</TableCell>
                     <TableCell align="center">Status</TableCell>
@@ -182,7 +182,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                 </TableHead>
                 <TableBody>
                   {listExistingData?.map((row, index) => {
-                    const data = singleListData(row);
+                    // const data = singleListData(row);
                     return (
                       <TableRow
                         key={index}
@@ -191,10 +191,10 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                           '.MuiTableCell-root':{height:'37px'}
                         }}
                       >
-                        <TableCell>{data.noOfEstimate}</TableCell>
-                        <TableCell align="center">
+                        <TableCell>{row?.estimates?.length}</TableCell>
+                        {/* <TableCell align="center">
                           ${data.totalAmount.toFixed(2)}
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell align="center">
                           {new Date(row?.createdAt).toDateString()}
                         </TableCell>

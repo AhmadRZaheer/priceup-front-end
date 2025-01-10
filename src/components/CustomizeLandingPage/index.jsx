@@ -90,6 +90,7 @@ import LandingPDFFile from "../PDFFile/LandingPagePdf";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 import SingleAccordian from "./SingleAccordian";
+import { getEstimatesList } from "@/redux/customerEstimateCalculation";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const controls = {
@@ -114,13 +115,13 @@ const CustomizeLandingPage = ({
   refetchData,
   isFetched,
   isFetching,
-  showerHardwaresList,
-  mirrorHardwaresList,
-  wineCellarHardwaresList,
-  wineCellarLocationSettings,
-  mirrorsLocationSettings,
-  showersLocationSettings,
-  pdfSettings,
+  // showerHardwaresList,
+  // mirrorHardwaresList,
+  // wineCellarHardwaresList,
+  // wineCellarLocationSettings,
+  // mirrorsLocationSettings,
+  // showersLocationSettings,
+  // pdfSettings,
 }) => {
   const { id } = useParams();
   const [acceptTerms, setAcceptTerms] = useState(false);
@@ -129,9 +130,14 @@ const CustomizeLandingPage = ({
   const [signatureURL, setSignatureURL] = useState(null);
   const [isPadOpen, setIsPadOpen] = useState(false);
   const [images, setImages] = useState([]);
-  // const showerHardwaresList = useSelector(getListData);
-  // const mirrorHardwaresList = useSelector(getMirrorsHardware);
-  // const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
+  const estimatesList = useSelector(getEstimatesList);
+  const showerHardwaresList = useSelector(getListData);
+  const mirrorHardwaresList = useSelector(getMirrorsHardware);
+  const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
+  const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  const showersLocationSettings = useSelector(getLocationShowerSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const handleAddSignature = () => {
     // Get the trimmed canvas URL
     const url = signaturePadRef.current
@@ -264,8 +270,8 @@ const CustomizeLandingPage = ({
 
   useEffect(() => {
     const generatedPdfs = [];
-    if (isFetched) {
-      selectedData?.estimates?.forEach((data, index) => {
+    if (isFetched && selectedData?.estimateDetailArray) {
+      selectedData?.estimateDetailArray?.forEach((data, index) => {
         const singleEstimatePdf = generatePDF(data?.config);
         if (singleEstimatePdf) {
           generatedPdfs.push(singleEstimatePdf);
@@ -348,6 +354,7 @@ const CustomizeLandingPage = ({
         "pk_test_51PbsdGRujwjTz5jAngiBVuLGHvo6F3ALHulFXgBb9VCl2sY9oX6mQSLYv7ryU8nCqwo2XUCKBGoN2DnKBE7nFhOZ0047xQUUoC"
       )
     );
+
   }, []);
 
   const [expanded, setExpanded] = useState("panel1");
@@ -357,34 +364,35 @@ const CustomizeLandingPage = ({
   };
 
   const estimateTotal = useMemo(() => {
-    const totalShowers = selectedData?.estimates?.filter(
-      (data, index) => data?.category === EstimateCategory.SHOWERS
-    );
-    const totalMirrors = selectedData?.estimates?.filter(
-      (data, index) => data?.category === EstimateCategory.MIRRORS
-    );
-    const totalWineCellar = selectedData?.estimates?.filter(
-      (data, index) => data?.category === EstimateCategory.WINECELLARS
-    );
-    const total = selectedData?.estimates?.length;
+    let totalShowers = [], totalMirrors = [], totalWineCellar = [];
+    estimatesList?.forEach((item) => {
+      if (item?.category === EstimateCategory.SHOWERS)
+        totalShowers.push(item);
+      else if (item?.category === EstimateCategory.MIRRORS)
+        totalMirrors.push(item);
+      else if (item?.category === EstimateCategory.WINECELLARS)
+        totalWineCellar.push(item);
+    });
+    const total = estimatesList?.length;
     return {
       totalShowers: totalShowers ?? [],
       totalMirrors: totalMirrors ?? [],
       totalWineCellar: totalWineCellar ?? [],
       total: total ?? 0,
     };
-  }, [selectedData?.estimates]);
+  }, [estimatesList]);
 
   useEffect(() => {
-    if (selectedData) {
-      const sum = selectedData?.estimates?.reduce(
+    if (estimatesList) {
+      console.log(estimatesList,'list')
+      const sum = estimatesList?.reduce(
         (accumulator, currentItem) => {
           return (
             accumulator +
             calculateDiscount(
-              currentItem.pricing.totalPrice,
-              currentItem?.config?.config?.discount?.value,
-              currentItem?.config?.config?.discount?.unit
+              currentItem.totalPrice,
+              currentItem?.content?.discount?.value,
+              currentItem?.content?.discount?.unit
             )
           );
         },
@@ -392,7 +400,7 @@ const CustomizeLandingPage = ({
       );
       SetTotalSum(sum);
     }
-  }, [selectedData]);
+  }, [estimatesList]);
   console.log(selectedData?.estimates, "selectedData?.estimates");
 
   const reCalculateTotal = (priceToMinus, priceToAdd) => {
@@ -449,11 +457,10 @@ const CustomizeLandingPage = ({
             // width: { md: "89%", xs: "90%" },
             // m: "auto",
             backgroundImage: {
-              md: `url(${
-                selectedData?.content?.section1?.backgroundImage
-                  ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
-                  : bgHeaderImage
-              })`,
+              md: `url(${selectedData?.content?.section1?.backgroundImage
+                ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
+                : bgHeaderImage
+                })`,
               xs: "none",
             },
             backgroundRepeat: "no-repeat",

@@ -27,6 +27,7 @@ import {
   getLocationShowerSettings,
   getLocationWineCellarSettings,
 } from "@/redux/locationSlice";
+import { initializeState } from "@/redux/customerEstimateCalculation";
 
 const CustomerInvoicePreview = () => {
   const { id } = useParams();
@@ -34,10 +35,11 @@ const CustomerInvoicePreview = () => {
   const showerHardwaresList = useSelector(getListData);
   const mirrorHardwaresList = useSelector(getMirrorsHardware);
   const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
-  const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
-  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
-  const showersLocationSettings = useSelector(getLocationShowerSettings);
-  const pdfSettings = useSelector(getLocationPdfSettings);
+  const dispatch = useDispatch();
+  // const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  // const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  // const showersLocationSettings = useSelector(getLocationShowerSettings);
+  // const pdfSettings = useSelector(getLocationPdfSettings);
 
   // const location = useLocation();
   // const queryParams = new URLSearchParams(location.search);
@@ -100,7 +102,27 @@ const CustomerInvoicePreview = () => {
   useEffect(() => {
     refetchData();
   }, []);
-  
+
+  useEffect(() => {
+    if (selectedData && showerHardwaresList && mirrorHardwaresList && wineCellarHardwaresList) {
+      // Abstract repeated dispatch logic into a helper function
+      const initializeHardware = () => {
+        if (selectedData?.estimateDetailArray?.length) {
+          console.log(wineCellarHardwaresList,'sssssss')
+          dispatch(
+            initializeState({
+              estimates:selectedData.estimateDetailArray,
+              showerHardwaresList,
+              mirrorHardwaresList,
+              wineCellarHardwaresList
+        })
+          );
+        }
+      };
+      initializeHardware();
+    }
+  }, [selectedData, dispatch,showerHardwaresList, mirrorHardwaresList, wineCellarHardwaresList]);
+
   return (
     // <CommonLayout>
     <Box className="econtent-wrapper">
@@ -214,13 +236,13 @@ const CustomerInvoicePreview = () => {
             refetchData={refetchData}
             isFetched={isFetched}
             isFetching={isFetching}
-            showerHardwaresList={showerHardwaresList}
-            mirrorHardwaresList={mirrorHardwaresList}
-            wineCellarHardwaresList={wineCellarHardwaresList}
-            wineCellarLocationSettings={wineCellarLocationSettings}
-            mirrorsLocationSettings={mirrorsLocationSettings}
-            showersLocationSettings={showersLocationSettings}
-            pdfSettings={pdfSettings}
+          // showerHardwaresList={showerHardwaresList}
+          // mirrorHardwaresList={mirrorHardwaresList}
+          // wineCellarHardwaresList={wineCellarHardwaresList}
+          // wineCellarLocationSettings={wineCellarLocationSettings}
+          // mirrorsLocationSettings={mirrorsLocationSettings}
+          // showersLocationSettings={showersLocationSettings}
+          // pdfSettings={pdfSettings}
           />
         ) : (
           <Box

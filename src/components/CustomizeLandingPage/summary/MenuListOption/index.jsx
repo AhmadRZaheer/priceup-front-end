@@ -58,7 +58,7 @@ const MenuList = ({
     handleChange(type,item);
     // dispatch(setContent({ type: type, item: item }));
     // setSelectedGlassType(item); // Call the function only if it's valid    
-    setSelectedItem({type:item?._id,name:item?.name,thickness:item?.thickness});
+    setSelectedItem(item);
   };
   const handleCountSet = (value) => {
     if (value >= 0 && value <= 100) {
@@ -178,56 +178,6 @@ const MenuList = ({
             />
           </Box>
         )}
-        {/* {["glassType"].includes(type) && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              color: { sm: "#000000  ", xs: "white" },
-              alignSelf: "flex-end",
-            }}
-          >
-            <Select
-              select
-              size="small"
-              variant="outlined"
-              className="custom-textfield"
-              InputProps={{
-                style: {
-                  borderRadius: "4px",
-                  // paddingTop: "10.5px",
-                  // paddingBottom: " 10.5px",
-                  height: "38px",
-                },
-                inputProps: { min: 0, max: 50 },
-              }}
-              sx={{
-                border: { sm: "none", xs: "2px solid #423f57" },
-                // borderRadius: { sm: 0, xs: 2 },
-                color: { sm: "#000000", xs: "white" },
-                fontSize: "12px",
-                fontFamily: '"Roboto", sans-serif !important',
-                lineHeight: "14.06px",
-                width: "63px",
-                mb: 1,
-                ".MuiOutlinedInput-input": {
-                  display: "flex",
-                  alignItems: "end",
-                },
-              }}
-              value={thicknessVal}
-              onChange={(event) => handleThicknessSet(event.target.value)}
-            >
-              <MuiMenuItem key="1/2" value="1/2">
-                1/2
-              </MuiMenuItem>
-              <MuiMenuItem key="3/8" value="3/8">
-                3/8
-              </MuiMenuItem>
-            </Select>
-          </Box>
-        )} */}
       </Box>
       {anchorEl ? (
         <Box

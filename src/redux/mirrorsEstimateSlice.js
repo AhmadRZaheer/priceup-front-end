@@ -2,6 +2,7 @@ import {
   mirrorHardwareTypes,
   notificationsVariant,
 } from "@/utilities/constants";
+import { generateContentForMirrorEdit } from "@/utilities/generateEstimateCalculationContent";
 import { createSlice } from "@reduxjs/toolkit";
 export const getEstimateMeasurements = (state) =>
   state.mirrorsEstimate.measurements;
@@ -245,70 +246,13 @@ const mirrorsEstimateSlice = createSlice({
     },
     initializeStateForEditQuote: (state, action) => {
       const { estimateData, hardwaresList } = action.payload;
-      let glassTypee = null;
-      glassTypee = hardwaresList?.glassTypes?.find(
-        (item) => item?._id === estimateData?.config?.glassType?.type
-      );
-
-      let edgeWork = null;
-      edgeWork = hardwaresList?.edgeWorks?.find(
-        (item) => item?._id === estimateData?.config?.edgeWork?.type
-      );
-
-      let glassAddons = [];
-      glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-        const record = hardwaresList?.glassAddons?.find(
-          (addon) => addon?._id === item
-        );
-        return record;
-      });
-      let hardwares = [];
-      hardwares = estimateData?.config?.hardwares?.map((row) => {
-        const found = hardwaresList?.hardwares?.find(
-          (item) => item?._id === row.type
-        );
-        return { item: found, count: row.count };
-      });
-
       state.estimateId = estimateData?._id;
-      state.sqftArea = estimateData?.config?.sqftArea;
+      const resp = generateContentForMirrorEdit(hardwaresList,estimateData);
       state.content = {
         ...state.content,
-        glassType: {
-          item: glassTypee,
-          thickness: estimateData?.config?.glassType?.thickness,
-        },
-        edgeWork: {
-          item: edgeWork,
-          thickness: estimateData?.config?.edgeWork?.thickness,
-        },
-        glassAddons: glassAddons ? [...glassAddons] : [],
-        hardwares: hardwares ? [...hardwares] : [],
-        modifiedProfitPercentage:
-          estimateData?.config?.modifiedProfitPercentage,
-          discount : {
-            value:estimateData?.config?.discount?.value ?? 0,
-            unit:estimateData?.config?.discount?.unit ?? '%',
-          },  
-        additionalFields: estimateData?.config?.additionalFields,
-        // floatingSize: estimateData?.config?.floatingSize ?? null,
-        // sandBlasting: estimateData?.config?.sandBlasting,
-        // bevelStrip: estimateData?.config?.bevelStrip, // true, false
-        // safetyBacking: estimateData?.config?.safetyBacking, //true, false
-        simpleHoles: estimateData?.config?.simpleHoles,
-        // outlets: estimateData?.config?.outlets,
-        lightHoles: estimateData?.config?.lightHoles,
-        notch: estimateData?.config?.notch,
-        singleOutletCutout: estimateData?.config?.singleOutletCutout,
-        doubleOutletCutout: estimateData?.config?.doubleOutletCutout,
-        tripleOutletCutout: estimateData?.config?.tripleOutletCutout,
-        quadOutletCutout: estimateData?.config?.quadOutletCutout,
-        // singleDuplex: estimateData?.config?.singleDuplex,
-        // doubleDuplex: estimateData?.config?.doubleDuplex,
-        // tripleDuplex: estimateData?.config?.tripleDuplex,
-        people: estimateData?.config?.people,
-        hours: estimateData?.config?.hours,
+        ...resp.content
       };
+      state.sqftArea = resp.sqftArea;
     },
   },
 });

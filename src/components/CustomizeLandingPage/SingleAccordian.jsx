@@ -33,7 +33,7 @@ const SingleAccordian = ({
   // wineCellarHardwaresList,
   category,
 }) => {
-  const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
+  const [totalPrice, setTotalPrice] = useState(data?.totalCost ?? 0);
   console.log(data, "sdfgqwfgqwfwqvd",totalPrice);
   const chipColor = data?.status
     ? data?.status === "pending"
@@ -56,9 +56,9 @@ const SingleAccordian = ({
   //   setTotalPrice(discountPrice);
   // }, [data]);
 
-  const discountValue = data?.config?.config?.discount?.value ?? 0;
+  const discountValue = data?.config?.discount?.value ?? 0;
   console.log(
-    data?.config?.config?.discount?.value,
+    data?.config?.discount?.value,
     "data?.config?.config?.discount?.value"
   );
 
@@ -108,7 +108,7 @@ const SingleAccordian = ({
               }}
             >
               {data?.category} Estimate -{" "}
-              {data?.layout === "Mirror" ? "Custom" : data?.layout}
+              {data?.selectedItem?.settings?.name ?? "Custom"}
               <Chip
                 label={data?.status ? data?.status : "Pending"}
                 variant="outlined"
@@ -126,7 +126,7 @@ const SingleAccordian = ({
                 fontSize: discountValue > 0 ? "17px" : "20px",
               }}
             >
-              ${totalPrice.toFixed(2)}
+              ${(data?.totalPrice ?? 0).toFixed(2)}
             </Box>{" "}
             {discountValue > 0 && (
               <Box component="span" sx={{ color: "#F95500" }}>
@@ -134,7 +134,7 @@ const SingleAccordian = ({
                 {calculateDiscount(
                   totalPrice,
                   discountValue,
-                  data?.config?.config?.discount?.unit
+                  data?.content?.discount?.unit
                 ).toFixed(2)}
               </Box>
             )}

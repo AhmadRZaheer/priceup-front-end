@@ -6,6 +6,7 @@ import { backendURL } from "@/utilities/common";
 import { Box, Grid, Tooltip, Typography } from "@mui/material";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { EstimateCategory } from "@/utilities/constants";
+import { EstimatesColumns } from "@/utilities/DataGridColumns";
 
 const columns = [
   {
@@ -325,9 +326,13 @@ export default function EditEstimateTable({
       {selectedEstimates?.length > 0 ? (
         <Paper sx={{ width: "100%" }}>
           <DataGrid
-            getRowId={(row) => row.estimate_id}
+            getRowId={(row) => row._id}
             rows={selectedEstimates}
-            columns={columns}
+            columns={EstimatesColumns(
+              ()=>{},
+              ()=>{},
+              ()=>{},
+              false)}
             // initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10]}
             // checkboxSelection

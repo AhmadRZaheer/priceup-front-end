@@ -139,18 +139,18 @@ const ProjectInvoiceComponent = ({
     mirrors: MirrorsHardwareList,
     wineCellars: WinelistData,
   };
-  const EstimateListData = useMemo(() => {
-    if (selectedEstimateRows?.length > 0) {
-      const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
-        selectedEstimateRows,
-        hardwaresList,
-        companySettings
-      );
-      return EstimateDeatilsData;
-    }
-  }, [selectedEstimateRows]);
+  // const EstimateListData = useMemo(() => {
+  //   if (selectedEstimateRows?.length > 0) {
+  //     const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
+  //       selectedEstimateRows,
+  //       hardwaresList,
+  //       companySettings
+  //     );
+  //     return EstimateDeatilsData;
+  //   }
+  // }, [selectedEstimateRows]);
 
-  console.log(EstimateListData,'EstimateListDataEstimateListDataEstimateListData')
+  // console.log(EstimateListData,'EstimateListDataEstimateListDataEstimateListData')
 
   useEffect(() => {
     refetch();
@@ -161,6 +161,7 @@ const ProjectInvoiceComponent = ({
 
   const handleCraete = async (values) => {
     console.log(values, "additionalUpgradesadditionalUpgrades222222");
+    const estimatesList = selectedEstimateRows?.map((item)=>item._id);
     const customer = customerList?.find(
       (data) => data?._id === selectedCustomer?._id
     );
@@ -206,7 +207,8 @@ const ProjectInvoiceComponent = ({
       description: values.notes,
       customer: customerObject,
       project: sourceObject,
-      estimates: EstimateListData?.length > 0 ? EstimateListData : [],
+      // estimates: EstimateListData?.length > 0 ? EstimateListData : [],
+      estimates: estimatesList,
       company: compantDetail,
       content: {},
       additionalUpgrades:values.additionalUpgrades
