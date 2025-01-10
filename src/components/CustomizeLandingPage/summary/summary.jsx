@@ -1693,6 +1693,7 @@ const ShowerSummary = ({
               <Button
                 fullWidth
                 variant="contained"
+                disabled
                 onClick={handleApprove}
                 sx={{
                   backgroundColor: "#F95500",
