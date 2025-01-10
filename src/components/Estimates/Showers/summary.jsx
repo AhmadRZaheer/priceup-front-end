@@ -9,6 +9,7 @@ import {
   Select,
   Stack,
   TextField,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -64,7 +65,11 @@ import {
   renderMeasurementSides,
 } from "@/utilities/estimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
-import { KeyboardArrowDownOutlined } from "@mui/icons-material";
+import {
+  AttachMoneyOutlined,
+  KeyboardArrowDownOutlined,
+  PercentOutlined,
+} from "@mui/icons-material";
 import { useEffect, useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
@@ -1059,25 +1064,41 @@ const Summary = ({ setStep }) => {
                               onChange={(event) => handleSetDiscount(event)}
                             />
                           </Box>
-                          <Button
-                            variant="outlined"
-                            sx={{
-                              borderColor: "#8477DA",
-                              background: "#F6F5FF",
-                              color: "#8477DA",
-                              p: "0px 0px !important",
-                              minWidth: "32px",
-                              borderRadius: "0px 4px 4px 0px !important",
-                              ":hover": {
-                                background: "#F6F5FF",
-                                // color: "white",
-                                borderColor: "#8477DA",
-                              },
-                            }}
-                            onClick={handleUnitChange}
+                          <Tooltip
+                            title={
+                              <span style={{ fontSize: "13px" }}>
+                                {estimateDiscountUnit === "%"
+                                  ? "Shift discount to $"
+                                  : "Shift discount to %"}
+                              </span>
+                            }
+                            placement="top"
                           >
-                            <ChangeCircleOutlinedIcon />
-                          </Button>
+                            <Button
+                              variant="outlined"
+                              sx={{
+                                borderColor: "#8477DA",
+                                background: "#F6F5FF",
+                                color: "#8477DA",
+                                p: "0px 0px !important",
+                                minWidth: "32px",
+                                borderRadius: "0px 4px 4px 0px !important",
+                                ":hover": {
+                                  background: "#F6F5FF",
+                                  // color: "white",
+                                  borderColor: "#8477DA",
+                                },
+                              }}
+                              onClick={handleUnitChange}
+                            >
+                              {estimateDiscountUnit === "%" ? (
+                                <AttachMoneyOutlined />
+                              ) : (
+                                <PercentOutlined sx={{ fontSize: "20px" }} />
+                              )}
+                              {/* <ChangeCircleOutlinedIcon /> */}
+                            </Button>
+                          </Tooltip>
                         </Box>
                         {/* <Button
                           variant="outlined"
@@ -1153,7 +1174,7 @@ const Summary = ({ setStep }) => {
                   //               ?.pricingFactor
                   //           : 1) +
                   //       laborPrice
-                  //     : 0;  
+                  //     : 0;
                   // const price =
                   //   (sqftArea * glass.price - glassPrice) *
                   //   (showersLocationSettings?.miscPricing?.pricingFactorStatus
@@ -1170,12 +1191,11 @@ const Summary = ({ setStep }) => {
                     laborPrice;
                   if (userProfitPercentage > 0 && userProfitPercentage < 100) {
                     singleItemCost =
-                      ((itemCost * 100) / (userProfitPercentage - 100)) *
-                      -1;
+                      ((itemCost * 100) / (userProfitPercentage - 100)) * -1;
                   }
-                  const itemDifference = singleItemCost - totalPrice;                 
+                  const itemDifference = singleItemCost - totalPrice;
                   const singleGlassCost =
-                  estimateDiscount > 0 && estimateDiscountUnit === "%"
+                    estimateDiscount > 0 && estimateDiscountUnit === "%"
                       ? itemDifference -
                         (itemDifference * Number(estimateDiscount)) / 100
                       : itemDifference;
