@@ -6,6 +6,7 @@ import {
   Popover,
   Stack,
   TextField,
+  Tooltip,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -21,8 +22,10 @@ import {
 } from "@/utilities/estimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import {
+  AttachMoneyOutlined,
   ChangeCircleOutlined,
   KeyboardArrowDownOutlined,
+  PercentOutlined,
   RestartAlt,
 } from "@mui/icons-material";
 import { useMemo, useState } from "react";
@@ -1046,25 +1049,41 @@ const Summary = ({ setStep }) => {
                               onChange={(event) => handleSetDiscount(event)}
                             />
                           </Box>
-                          <Button
-                            variant="outlined"
-                            sx={{
-                              borderColor: "#8477DA",
-                              background: "#F6F5FF",
-                              color: "#8477DA",
-                              p: "0px 0px !important",
-                              minWidth: "32px",
-                              borderRadius: "0px 4px 4px 0px !important",
-                              ":hover": {
-                                background: "#F6F5FF",
-                                // color: "white",
-                                borderColor: "#8477DA",
-                              },
-                            }}
-                            onClick={handleUnitChange}
+                          <Tooltip
+                            title={
+                              <span style={{ fontSize: "13px" }}>
+                                {estimateDiscountUnit === "%"
+                                  ? "Shift discount to $"
+                                  : "Shift discount to %"}
+                              </span>
+                            }
+                            placement="top"
                           >
-                            <ChangeCircleOutlined />
-                          </Button>
+                            <Button
+                              variant="outlined"
+                              sx={{
+                                borderColor: "#8477DA",
+                                background: "#F6F5FF",
+                                color: "#8477DA",
+                                p: "0px 0px !important",
+                                minWidth: "32px",
+                                borderRadius: "0px 4px 4px 0px !important",
+                                ":hover": {
+                                  background: "#F6F5FF",
+                                  // color: "white",
+                                  borderColor: "#8477DA",
+                                },
+                              }}
+                              onClick={handleUnitChange}
+                            >
+                              {estimateDiscountUnit === "%" ? (
+                                <AttachMoneyOutlined />
+                              ) : (
+                                <PercentOutlined sx={{ fontSize: "20px" }} />
+                              )}
+                              {/* <ChangeCircleOutlinedIcon /> */}
+                            </Button>
+                          </Tooltip>
                         </Box>
                       </Box>
 
@@ -1130,7 +1149,8 @@ const Summary = ({ setStep }) => {
                     actualCost - glassPrice + sqftArea * glass.price;
                   let singleItemCost =
                     itemCost *
-                      (wineCallerLocationSettings?.miscPricing?.pricingFactorStatus
+                      (wineCallerLocationSettings?.miscPricing
+                        ?.pricingFactorStatus
                         ? wineCallerLocationSettings?.miscPricing?.pricingFactor
                         : 1) +
                     laborPrice;
