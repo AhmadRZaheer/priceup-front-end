@@ -310,7 +310,7 @@ export const calculateTotal = (
     cost: cost,
     total: totalPrice,
     discountTotal:discountTotal,
-    profitPercentage: discountTotal > 0 ?  ((discountTotal - cost) * 100) / discountTotal : 0,
+    profitPercentage: discountTotal > 0 && discountTotal - cost > 0 ?  ((discountTotal - cost) * 100) / discountTotal : 0,
   };
 };
 
