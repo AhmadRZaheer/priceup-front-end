@@ -657,61 +657,80 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
-          {glassDetails?.length > 0  && (
+          {glassDetails?.length > 0 && (
             <>
-          <Divider sx={{ borderColor: "#D4DBDF" }} />
-          <Box sx={{ px: 3, py: 2 }}>
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  lineHeight: "16.41px",
-                  fontFamily: '"Roboto", sans-serif !important',
-                }}
-              >
-                Note:
-              </Typography>
-            {/* {selectedContent?.glassType?.item?.name && (
+              <Divider sx={{ borderColor: "#D4DBDF" }} />
+              <Box sx={{ px: 3, py: 2 }}>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    lineHeight: "16.41px",
+                    fontFamily: '"Roboto", sans-serif !important',
+                  }}
+                >
+                  Note:
+                </Typography>
+                {/* {selectedContent?.glassType?.item?.name && (
               <Typography>
                 Selected glass type '{selectedContent?.glassType?.item?.name}'
                 price is '${pricing.glass?.toFixed(2) || 0}'.
               </Typography>
             )} */}
 
-            {glassDetails.map((glass, index) => {
-                const actualPrice =
-                  pricing.cost - pricing.glass + sqftArea * glass.price;
-                const price = sqftArea !== 0 ?
-                  actualPrice * (mirrorsLocationSettings?.pricingFactorStatus ? mirrorsLocationSettings?.pricingFactor : 1) +
-                  pricing.labor : 0;
-                // const price = ((pricing.total - pricing.glass) + sqftArea*glass.price)
-                return (
-                  glass.status && (
-                    <Typography key={index}>
-                      Glass Option '{glass?.name || "Unknown"}' has a price of 
-                      '${price?.toFixed(2) || "0.00"}' {"=>"} Want to
-                      <Box
-                        component="span"
-                        onClick={() =>
-                          dispatch(
-                            setSelectedContent({
-                              type: hardwareTypes.GLASSTYPE,
-                              item: glass?.selectedGlass,
-                            })
-                          )
-                        }
-                        sx={{ cursor: "pointer",  color: "blue"}}
-                      >
-                        {" "}
-                        apply
-                      </Box>
-                      ?
-                    </Typography>
-                  )
-                );
-              })}
-          </Box>
-          </>
+                {glassDetails.map((glass, index) => {
+                  // const actualPrice =
+                  //   pricing.cost - pricing.glass + sqftArea * glass.price;
+                  // const price = sqftArea !== 0 ?
+                  //   actualPrice * (mirrorsLocationSettings?.pricingFactorStatus ? mirrorsLocationSettings?.pricingFactor : 1) +
+                  //   pricing.labor : 0;
+                  // const price = ((pricing.total - pricing.glass) + sqftArea*glass.price)
+
+                  const itemCost =
+                    pricing.cost - pricing.glass + sqftArea * glass.price;
+                  let singleItemCost =
+                    itemCost *
+                      (mirrorsLocationSettings?.pricingFactorStatus
+                        ? mirrorsLocationSettings?.pricingFactor
+                        : 1) +
+                    pricing.labor;
+                  if (
+                    modifiedProfitPercentage > 0 &&
+                    modifiedProfitPercentage < 100
+                  ) {
+                    singleItemCost =
+                      ((itemCost * 100) / (modifiedProfitPercentage - 100)) *
+                      -1;
+                  }
+                  const itemDifference = singleItemCost;
+
+                  return (
+                    glass.status && (
+                      <Typography key={index}>
+                        Glass Option '{glass?.name || "Unknown"}' has a price of
+                        '${itemDifference?.toFixed(2) || "0.00"}' {"=>"} Want to
+                        <Box
+                          component="span"
+                          onClick={() =>
+                            dispatch(
+                              setSelectedContent({
+                                type: hardwareTypes.GLASSTYPE,
+                                item: glass?.selectedGlass,
+                              })
+                            )
+                          }
+                          sx={{ cursor: "pointer", color: "blue" }}
+                        >
+                          {" "}
+                          apply
+                        </Box>
+                        ?
+                      </Typography>
+                    )
+                  );
+                })}
+              </Box>
+            </>
           )}
         </Box>
       </Box>
