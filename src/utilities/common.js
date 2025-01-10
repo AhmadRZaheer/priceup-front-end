@@ -376,7 +376,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     discountTotal: discountTotal,
     cost: cost,
     profit:
-      discountTotal > 0 ? ((discountTotal - cost) * 100) / discountTotal : 0,
+      discountTotal > 0 && discountTotal - cost > 0 ? ((discountTotal - cost) * 100) / discountTotal : 0,
   };
 };
 
