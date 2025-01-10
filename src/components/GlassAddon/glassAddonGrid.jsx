@@ -31,6 +31,8 @@ import DeleteModal from "../Modal/deleteModal";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 import { inputLength, inputMaxValue } from "@/utilities/constants";
+import { useEditDocument } from "@/utilities/ApiHooks/common";
+import { backendURL } from "@/utilities/common";
 
 const GlassAddonGrid = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -47,7 +49,7 @@ const GlassAddonGrid = ({ type }) => {
     isLoading: LoadingForDelete,
   } = useDeleteGlassAddon();
   const { mutate: editGlassAddon, isSuccess: glassAddonEditSuccess } =
-    useEditFullGlassAddon();
+    useEditDocument();
 
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
@@ -59,6 +61,7 @@ const GlassAddonGrid = ({ type }) => {
   const [rowStatus, setRowStatus] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [updateRefetch, setUpdateRefetch] = useState(false);
+  const [upgradeOption, setUpgradeOption] = useState({});
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -97,7 +100,10 @@ const GlassAddonGrid = ({ type }) => {
           : option.cost,
     }));
     setUpdateRefetch(false);
-    editGlassAddon({ optionsData: updatedOptions, id: data._id });
+    editGlassAddon({
+      data: { options: updatedOptions },
+      apiRoute: `${backendURL}/glassAddons/${data._id}`,
+    });
   };
   const handleStatusChange = (row) => {
     setRowStatus({
@@ -110,9 +116,24 @@ const GlassAddonGrid = ({ type }) => {
     }));
 
     // Update the backend with the new status
-    editGlassAddon({ optionsData: updatedOptions, id: row._id });
+    editGlassAddon({
+      data: { options: updatedOptions },
+      apiRoute: `${backendURL}/glassAddons/${row._id}`,
+    });
     setUpdateRefetch(true);
   };
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.showInUpgrades,
+    });
+    editGlassAddon({
+      data: { showInUpgrades: !row.showInUpgrades },
+      apiRoute: `${backendURL}/glassAddons/${row._id}`,
+    });
+    setUpdateRefetch(true);
+  };
+
   const actionColumn = [
     {
       field: "cost",
@@ -300,6 +321,30 @@ const GlassAddonGrid = ({ type }) => {
                   text={""}
                 />
                 {/* </Box> */}
+              </MenuItem>
+
+              <MenuItem
+                // className="mirror-meun-item"
+                onClick={() => handleUpgradeStatusChange(params.row)}
+                sx={{ borderTop: "1px solid #D0D5DD", p: "12px" }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt">Show in Upgrade</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[params.row._id] !== undefined
+                        ? upgradeOption[params.row._id]
+                        : params?.row?.showInUpgrades
+                    }
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
               </MenuItem>
 
               <MenuItem

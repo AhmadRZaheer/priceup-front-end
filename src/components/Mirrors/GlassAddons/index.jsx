@@ -75,6 +75,7 @@ const MirrorsGlassAddonComponent = () => {
   const [activeRow, setActiveRow] = useState(null);
   const [rowCosts, setRowCosts] = useState({});
   const [rowStatus, setRowStatus] = useState({});
+  const [upgradeOption, setUpgradeOption] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenDeleteModal = () => {
@@ -109,6 +110,9 @@ const MirrorsGlassAddonComponent = () => {
       if (props?.options) {
         formData.append("options", props.options);
       }
+      if (props?.description) {
+        formData.append("description", props.description);
+      }
       console.log(formData, "form data");
       editGlassAddon({
         data: formData,
@@ -132,6 +136,7 @@ const MirrorsGlassAddonComponent = () => {
     formData.append("name", props.name);
     formData.append("company_id", decodedToken?.company_id);
     formData.append("slug", slug);
+    formData.append("description", props.description);
     createGlassAddon({ data: formData, apiRoute: `${routePrefix}/save` });
   };
   const miniTab = useMediaQuery("(max-width: 1280px)");
@@ -179,6 +184,17 @@ const MirrorsGlassAddonComponent = () => {
     });
     setUpdateRefetch(true);
   };
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.showInUpgrades,
+    });
+    editGlassAddon({
+      data: { showInUpgrades: !row.showInUpgrades },
+      apiRoute: `${routePrefix}/${row._id}`,
+    });
+    setUpdateRefetch(true);
+  }
 
   useEffect(() => {
     refetchGlassAddonsList();
@@ -399,6 +415,29 @@ const MirrorsGlassAddonComponent = () => {
                       rowStatus[params.row._id] !== undefined
                         ? rowStatus[params.row._id]
                         : params?.row?.options[0]?.status
+                    }
+                    // onChange={() => handleStatusChange(params.row)}
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
+              </MenuItem>
+              <MenuItem
+                className="mirror-meun-item"
+                onClick={() => handleUpgradeStatusChange(params.row)}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt">Show in Upgrade</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[params.row._id] !== undefined
+                        ? upgradeOption[params.row._id]
+                        : params?.row?.showInUpgrades
                     }
                     // onChange={() => handleStatusChange(params.row)}
                     inputProps={{ "aria-label": "ant design" }}

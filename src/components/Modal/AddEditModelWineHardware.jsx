@@ -13,6 +13,7 @@ import {
   CircularProgress,
   Grid,
   IconButton,
+  TextField,
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { useEffect } from "react";
@@ -94,6 +95,7 @@ export default function AddEditWineHardwareModel({
       formData.append("image", props.image);
     }
     formData.append("name", props.name);
+    formData.append("description", props.description);
     formData.append("slug", slug);
     formData.append("hardware_category_slug", props.hardware_category_slug);
     formData.append("fabrication.hingeCut", props.hingeCut);
@@ -108,6 +110,7 @@ export default function AddEditWineHardwareModel({
   const handleEditClick = (props) => {
     const formData = new FormData();
     formData.append("name", props.hardwareData.name);
+    formData.append("description", props.hardwareData.description);
     formData.append("fabrication.hingeCut", props.hardwareData.hingeCut);
     formData.append(
       "fabrication.oneInchHoles",
@@ -118,7 +121,7 @@ export default function AddEditWineHardwareModel({
     formData.append("fabrication.outages", props.hardwareData.outages);
     if (props.hardwareData.image) {
       formData.append("image", props.hardwareData.image);
-    }  
+    }
     editWineHardware({
       data: formData,
       apiRoute: `${routePrefix}/${props.id}`,
@@ -134,6 +137,7 @@ export default function AddEditWineHardwareModel({
     initialValues: isEdit
       ? {
           name: data?.name,
+          description: data?.description,
           oneInchHoles: data?.fabrication?.oneInchHoles,
           hingeCut: data?.fabrication?.hingeCut,
           clampCut: data?.fabrication?.clampCut || 0,
@@ -143,6 +147,7 @@ export default function AddEditWineHardwareModel({
         }
       : {
           name: "",
+          description: "",
           image: "",
           oneInchHoles: 0,
           hingeCut: 0,
@@ -335,6 +340,36 @@ export default function AddEditWineHardwareModel({
                   fullWidth
                 />
               </Box>
+              {categorySlug === "add-ons" && (
+                <Box sx={{ width: "100%", pt: 1 }} className="model-field">
+                  <Typography className="input-label-text">
+                    Description
+                  </Typography>
+                  <TextField
+                    size="small"
+                    placeholder={`Enter Description`}
+                    name="description"
+                    className="custom-textfield"
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    sx={{ ".MuiOutlinedInput-input": { p: "10px !important" } }}
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={2}
+                  />
+                  {formik.touched.description && formik.errors.description && (
+                    <Typography
+                      variant="caption"
+                      color="error"
+                      sx={{ paddingLeft: "5px" }}
+                    >
+                      {formik.errors.description}
+                    </Typography>
+                  )}
+                </Box>
+              )}
               <Box sx={{ width: "100%" }} className="model-field">
                 <Typography className="input-label-text">
                   Fabrication{" "}

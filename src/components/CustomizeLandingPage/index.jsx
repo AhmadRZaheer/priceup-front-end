@@ -28,6 +28,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { PDFViewer } from "@react-pdf/renderer";
 import PDFFile from "../PDFFile";
+import Bulb from "../../Assets/CustomerLandingImages/blubImg.png";
 import {
   backendURL,
   calculateAreaAndPerimeter,
@@ -91,6 +92,7 @@ import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 import SingleAccordian from "./SingleAccordian";
 import { getEstimatesList } from "@/redux/customerEstimateCalculation";
+import CustomSwiper from "../CustomSwiper";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const controls = {
@@ -1175,6 +1177,11 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
+                {selectedData?.content?.section2?.shower && (
+                  <CustomSwiper
+                    data={selectedData?.content?.section2?.shower}
+                  />
+                )}
               </>
             )}
             {estimateTotal?.totalMirrors?.length > 0 && (
@@ -1229,6 +1236,11 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
+                {selectedData?.content?.section2?.mirror && (
+                  <CustomSwiper
+                    data={selectedData?.content?.section2?.mirror}
+                  />
+                )}
               </>
             )}
             {estimateTotal?.totalWineCellar?.length > 0 && (
@@ -1281,6 +1293,11 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
+                {selectedData?.content?.section2?.wineCellar && (
+                  <CustomSwiper
+                    data={selectedData?.content?.section2?.wineCellar}
+                  />
+                )}
               </>
             )}
 

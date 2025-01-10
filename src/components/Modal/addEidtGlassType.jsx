@@ -59,8 +59,6 @@ export default function AddEditGlassType({
     isSuccess: SuccessForEdit,
   } = useEditGlassType();
 
-
-
   const handleCreateClick = async (props) => {
     await addGlassType(props);
   };
@@ -79,14 +77,16 @@ export default function AddEditGlassType({
   const formik = useFormik({
     initialValues: isEdit
       ? {
-        name: data?.name,
-        image: data?.image,
-        id: data?._id,
-      }
+          name: data?.name,
+          image: data?.image,
+          description: data?.description,
+          id: data?._id,
+        }
       : {
-        name: "",
-        image: "",
-      },
+          name: "",
+          image: "",
+          description: "",
+        },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -100,7 +100,7 @@ export default function AddEditGlassType({
     if (CreatedSuccessfully) {
       refetch();
       close();
-      formik.resetForm()
+      formik.resetForm();
     }
   }, [CreatedSuccessfully]);
 
@@ -108,7 +108,7 @@ export default function AddEditGlassType({
     if (SuccessForEdit) {
       refetch();
       close();
-      formik.resetForm()
+      formik.resetForm();
     }
   }, [SuccessForEdit]);
 
@@ -187,8 +187,8 @@ export default function AddEditGlassType({
             <Box sx={{ display: "flex", gap: "19px", my: 2 }}>
               <Box>
                 {formik.values.image !== undefined &&
-                  formik.values.image !== null &&
-                  formik.values.image !== "" ? (
+                formik.values.image !== null &&
+                formik.values.image !== "" ? (
                   <img
                     width={"84px"}
                     height={"84px"}
@@ -260,8 +260,10 @@ export default function AddEditGlassType({
                 <Typography color="error">{formik.errors.image}</Typography>
               )} */}
             </Box>
-            <Box className='model-field'>
-              <Typography className="input-label-text">Glass Type Label</Typography>
+            <Box className="model-field">
+              <Typography className="input-label-text">
+                Glass Type Label
+              </Typography>
               <CustomInputField
                 placeholder="Glass Type Label"
                 name="name"
@@ -273,6 +275,32 @@ export default function AddEditGlassType({
                 variant="outlined"
                 fullWidth
               />
+            </Box>
+            <Box sx={{ width: "100%", pt: 1 }} className="model-field">
+              <Typography className="input-label-text">Description</Typography>
+              <TextField
+                size="small"
+                placeholder={`Enter Description`}
+                name="description"
+                className="custom-textfield"
+                value={formik.values.description}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                sx={{ ".MuiOutlinedInput-input": { p: "10px !important" } }}
+                variant="outlined"
+                fullWidth
+                multiline
+                rows={2}
+              />
+              {formik.touched.description && formik.errors.description && (
+                <Typography
+                  variant="caption"
+                  color="error"
+                  sx={{ paddingLeft: "5px" }}
+                >
+                  {formik.errors.description}
+                </Typography>
+              )}
             </Box>
           </Box>
           <Box
