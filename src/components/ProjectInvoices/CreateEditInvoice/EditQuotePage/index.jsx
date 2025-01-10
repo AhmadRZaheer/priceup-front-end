@@ -6,6 +6,7 @@ import {
   Chip,
   CircularProgress,
   Grid,
+  IconButton,
   TextareaAutosize,
   TextField,
   Tooltip,
@@ -24,7 +25,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import EditEstimateTable from "./EditEstimateTable";
-import { ContentCopy, Delete, DoneOutlined } from "@mui/icons-material";
+import { ContentCopy, Delete, DoneOutlined, Edit } from "@mui/icons-material";
 import bgHeaderImage from "@/Assets/CustomerLandingImages/BannerHeadImg.png";
 import GCSLogo from "@/Assets/GCS-logo.png";
 import FAQSection from "./FAQSection";
@@ -79,13 +80,17 @@ const EditQuoteInvoice = () => {
   const apiPath = `${backendURL}/projects/landing-page-preview/${selectedItemId}`;
   const { data: singleItemData, refetch: refetchSingleItem } =
     useFetchSingleDocument(apiPath);
-  const { data: logsData, refetch: logsRefetch, isFetching: logsFetching } = useFetchAllDocuments(
-    `${backendURL}/logs?resource_id=${selectedItemId}`
-  );
+  const {
+    data: logsData,
+    refetch: logsRefetch,
+    isFetching: logsFetching,
+  } = useFetchAllDocuments(`${backendURL}/logs?resource_id=${selectedItemId}`);
   const WinelistData = useSelector(getWineCellarsHardware);
   const MirrorsHardwareList = useSelector(getMirrorsHardware);
   const ShowerHardwareList = useSelector(getListData);
-  const locationPresentationSettings = useSelector(getLocationPresentationSettings);
+  const locationPresentationSettings = useSelector(
+    getLocationPresentationSettings
+  );
 
   const [accordionData, setAccordionData] = useState(
     singleItemData?.content?.section5 ?? accordionDefaultData
@@ -228,17 +233,23 @@ const EditQuoteInvoice = () => {
           "Turning your Vision into reality– Get a Precise Estimate for Your Next Project Today!",
       },
       section2: {
-        shower :{
-          images : singleItemData?.content?.section2?.shower?.images ?? [],
-          description: singleItemData?.content?.section2?.shower?.description ?? locationPresentationSettings?.shower?.description
+        shower: {
+          images: singleItemData?.content?.section2?.shower?.images ?? [],
+          description:
+            singleItemData?.content?.section2?.shower?.description ??
+            locationPresentationSettings?.shower?.description,
         },
-        mirror :{
-           images : singleItemData?.content?.section2?.mirror?.images ?? [],
-          description: singleItemData?.content?.section2?.mirror?.description ?? locationPresentationSettings?.mirror?.description
+        mirror: {
+          images: singleItemData?.content?.section2?.mirror?.images ?? [],
+          description:
+            singleItemData?.content?.section2?.mirror?.description ??
+            locationPresentationSettings?.mirror?.description,
         },
-        wineCellar :{
-           images : singleItemData?.content?.section2?.wineCellar?.images ?? [],
-          description: singleItemData?.content?.section2?.wineCellar?.description ?? locationPresentationSettings?.wineCellar?.description
+        wineCellar: {
+          images: singleItemData?.content?.section2?.wineCellar?.images ?? [],
+          description:
+            singleItemData?.content?.section2?.wineCellar?.description ??
+            locationPresentationSettings?.wineCellar?.description,
         },
       },
       section3: {
@@ -332,17 +343,17 @@ const EditQuoteInvoice = () => {
           text2: values.section1?.text2,
         },
         section2: {
-          shower:{
+          shower: {
             ...singleItemData?.content?.section2?.shower,
-            description : values?.section2?.shower?.description
+            description: values?.section2?.shower?.description,
           },
-          mirror:{
+          mirror: {
             ...singleItemData?.content?.section2?.mirror,
-            description : values?.section2?.mirror?.description
+            description: values?.section2?.mirror?.description,
           },
-          wineCellar:{
+          wineCellar: {
             ...singleItemData?.content?.section2?.wineCellar,
-            description : values?.section2?.wineCellar?.description
+            description: values?.section2?.wineCellar?.description,
           },
         },
         section3: {
@@ -578,9 +589,9 @@ const EditQuoteInvoice = () => {
                   }}
                   disabled={
                     formik.values.customer === "" ||
-                      formik.values.project === "" ||
-                      formik.values.dueDate === null ||
-                      isLoading
+                    formik.values.project === "" ||
+                    formik.values.dueDate === null ||
+                    isLoading
                       ? true
                       : false
                   }
@@ -624,7 +635,7 @@ const EditQuoteInvoice = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   width: "100%",
-                  maxHeight: '300px'
+                  maxHeight: "300px",
                 }}
               >
                 <Box sx={{ width: "64%" }}>
@@ -799,38 +810,94 @@ const EditQuoteInvoice = () => {
                       </Box>
                     </Box>
                   </Box>
-                  <Box sx={{display:'flex',alignItems:'center',padding:'16px',gap:'10px'}}><Typography sx={{fontSize:'22px',fontWeight:'600'}}>Payment Status : </Typography><Typography sx={{textTransform:'capitalize',
-                          backgroundColor: singleItemData?.invoice_id ? '#daf4e9' : '#FCDEC0',
-                          borderRadius: '10px',
-                          color: singleItemData?.invoice_id ? '#3ac688' : '#503000',
-                          fontSize:'18px',
-                          fontWeight:500,
-                          padding: '8px 10px',}}>{singleItemData?.invoice_id ? 'Paid' : 'Unpaid'}</Typography> </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "16px",
+                      gap: "10px",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "22px", fontWeight: "600" }}>
+                      Payment Status :{" "}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        textTransform: "capitalize",
+                        backgroundColor: singleItemData?.invoice_id
+                          ? "#daf4e9"
+                          : "#FCDEC0",
+                        borderRadius: "10px",
+                        color: singleItemData?.invoice_id
+                          ? "#3ac688"
+                          : "#503000",
+                        fontSize: "18px",
+                        fontWeight: 500,
+                        padding: "8px 10px",
+                      }}
+                    >
+                      {singleItemData?.invoice_id ? "Paid" : "Unpaid"}
+                    </Typography>{" "}
+                  </Box>
                 </Box>
-                <Box sx={{ width: "35%", borderLeft: '1px solid #D4DBDF', mt: 2, }}>
-                  <Card sx={{ mx: 2, p: 2, }}>
-                    <Typography sx={{ fontSize: 21, fontWeight: "bold", pb: 1 }}>Activity Logs</Typography>
-                    <Box sx={{ maxHeight: '210px', overflow: 'auto' }}>
-                      {logsFetching ?
-                        <Box sx={{ height: '200px', alignContent: 'center', textAlign: 'center' }}>
-                          <CircularProgress size={30} sx={{ color: "#8477DA" }} />
+                <Box
+                  sx={{ width: "35%", borderLeft: "1px solid #D4DBDF", mt: 2 }}
+                >
+                  <Card sx={{ mx: 2, p: 2 }}>
+                    <Typography
+                      sx={{ fontSize: 21, fontWeight: "bold", pb: 1 }}
+                    >
+                      Activity Logs
+                    </Typography>
+                    <Box sx={{ maxHeight: "210px", overflow: "auto" }}>
+                      {logsFetching ? (
+                        <Box
+                          sx={{
+                            height: "200px",
+                            alignContent: "center",
+                            textAlign: "center",
+                          }}
+                        >
+                          <CircularProgress
+                            size={30}
+                            sx={{ color: "#8477DA" }}
+                          />
                         </Box>
-                        :
-                        logsData.length > 0 ?
-                          logsData?.map((data, index) => (
-                            <Box sx={{ display: 'flex', gap: 1 }}>
-                              <Box sx={{
-                                height: '10px',
-                                width: '14px',
-                                borderRadius: '4.94px',
-                                background: '#8477DA',
-                                alignSelf: 'center',
-                              }}></Box>
-                              <Typography sx={{ fontSize: 18, fontWeight: "bold", pb: 1 }} key={index}>{data?.title}</Typography>
-                            </Box>
-                          )) : <Typography sx={{ fontSize: 18, fontWeight: "bold", pb: 1, height: '200px', alignContent: 'center', textAlign: 'center' }}>No Activity Log Found!</Typography>}
+                      ) : logsData.length > 0 ? (
+                        logsData?.map((data, index) => (
+                          <Box sx={{ display: "flex", gap: 1 }}>
+                            <Box
+                              sx={{
+                                height: "10px",
+                                width: "14px",
+                                borderRadius: "4.94px",
+                                background: "#8477DA",
+                                alignSelf: "center",
+                              }}
+                            ></Box>
+                            <Typography
+                              sx={{ fontSize: 18, fontWeight: "bold", pb: 1 }}
+                              key={index}
+                            >
+                              {data?.title}
+                            </Typography>
+                          </Box>
+                        ))
+                      ) : (
+                        <Typography
+                          sx={{
+                            fontSize: 18,
+                            fontWeight: "bold",
+                            pb: 1,
+                            height: "200px",
+                            alignContent: "center",
+                            textAlign: "center",
+                          }}
+                        >
+                          No Activity Log Found!
+                        </Typography>
+                      )}
                     </Box>
-
                   </Card>
                 </Box>
               </Box>
@@ -855,11 +922,10 @@ const EditQuoteInvoice = () => {
                         multiple
                         options={filteredShowerGlassType ?? []}
                         getOptionLabel={(glassType) => glassType.name}
-                        value={filteredShowerGlassType?.filter(
-                          (glassType) =>
-                            formik.values.additionalUpgrades.shower.glassTypes?.includes(
-                              glassType._id
-                            )
+                        value={filteredShowerGlassType?.filter((glassType) =>
+                          formik.values.additionalUpgrades.shower.glassTypes?.includes(
+                            glassType._id
+                          )
                         )}
                         onChange={(event, newValue) => {
                           formik.setFieldValue(
@@ -903,11 +969,10 @@ const EditQuoteInvoice = () => {
                           ) ?? []
                         }
                         getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={filteredShowerGlassAddon?.filter(
-                          (glassAddon) =>
-                            formik.values.additionalUpgrades.shower.glassAddons?.includes(
-                              glassAddon._id
-                            )
+                        value={filteredShowerGlassAddon?.filter((glassAddon) =>
+                          formik.values.additionalUpgrades.shower.glassAddons?.includes(
+                            glassAddon._id
+                          )
                         )}
                         onChange={(event, newValue) => {
                           formik.setFieldValue(
@@ -994,11 +1059,10 @@ const EditQuoteInvoice = () => {
                         multiple
                         options={filteredMirrorGlassType ?? []}
                         getOptionLabel={(glassType) => glassType.name}
-                        value={filteredMirrorGlassType?.filter(
-                          (glassType) =>
-                            formik.values.additionalUpgrades.mirror.glassTypes?.includes(
-                              glassType._id
-                            )
+                        value={filteredMirrorGlassType?.filter((glassType) =>
+                          formik.values.additionalUpgrades.mirror.glassTypes?.includes(
+                            glassType._id
+                          )
                         )}
                         onChange={(event, newValue) => {
                           formik.setFieldValue(
@@ -1038,11 +1102,10 @@ const EditQuoteInvoice = () => {
                         multiple
                         options={filteredMirrorGlassAddon ?? []}
                         getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={filteredMirrorGlassAddon?.filter(
-                          (glassAddon) =>
-                            formik.values.additionalUpgrades.mirror.glassAddons?.includes(
-                              glassAddon._id
-                            )
+                        value={filteredMirrorGlassAddon?.filter((glassAddon) =>
+                          formik.values.additionalUpgrades.mirror.glassAddons?.includes(
+                            glassAddon._id
+                          )
                         )}
                         onChange={(event, newValue) => {
                           formik.setFieldValue(
@@ -1226,216 +1289,325 @@ const EditQuoteInvoice = () => {
                   <Typography variant="h5" fontWeight={"bold"}>
                     Hero Section
                   </Typography>
-
-                  <Box sx={{ display: "flex", gap: 2, mt: 2, width: "70%" }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 0.2,
-                        width: "50%",
-                      }}
-                    >
-                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 1
-                      </Typography>
-                      <TextareaAutosize
-                        style={{
-                          padding: "10px",
-                          borderColor: "#cccc",
-                          borderRadius: "5px",
-                        }}
-                        className="custom-textfield"
-                        color="neutral"
-                        minRows={3}
-                        maxRows={4}
-                        name="section1.text1"
-                        placeholder="Enter Text"
-                        size="large"
-                        variant="outlined"
-                        value={formik.values.section1.text1 || ""}
-                        onChange={formik.handleChange}
-                      />
-                    </Box>
-
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 0.2,
-                        width: "50%",
-                      }}
-                    >
-                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 2
-                      </Typography>
-                      <TextareaAutosize
-                        style={{
-                          padding: "10px",
-                          borderColor: "#cccc",
-                          borderRadius: "5px",
-                        }}
-                        className="custom-textfield"
-                        color="neutral"
-                        minRows={3}
-                        maxRows={4}
-                        placeholder="Enter Text"
-                        size="large"
-                        variant="outlined"
-                        name="section1.text2"
-                        value={formik.values.section1.text2 || ""}
-                        onChange={formik.handleChange}
-                      />
-                    </Box>
-                  </Box>
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-around",
-                      py: 3,
-                    }}
-                  >
-                    {/* section logo */}
-
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
+                  <Box sx={{ border: "1px solid #ccc", p: 1.5, mt: 1 }}>
+                    <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
                       <Box
                         sx={{
-                          width: 400,
-
                           display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 3,
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "39%",
                         }}
                       >
-                        {singleItemData?.content?.section1?.logo ||
-                          uploadedImageLogo?.content?.section1?.logo ? (
-                          <Box>
-                            <img
-                              src={`${backendURL}/${singleItemData?.content?.section1?.logo ??
-                                uploadedImageLogo?.content?.section1?.logo
-                                }`}
-                              width={400}
-                              height={340}
-                              alt="section image logo"
-                            />
-                          </Box>
-                        ) : (
-                          <Box>
-                            <img
-                              src={GCSLogo}
-                              width={400}
-                              height={340}
-                              alt="section image logo"
-                            />
-                          </Box>
-                        )}
-                      </Box>
-
-                      <Button
-                        disabled={isLoading}
-                        variant="contained"
-                        component="label"
-                        sx={{
-                          background: "#8477DA",
-                          ":hover": {
-                            background: "#8477DA",
-                          },
-                        }}
-                      >
-                        Upload logo
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          hidden
-                          onChange={(e) =>
-                            handleImageUploadLogo(e, "content.section1.logo")
-                          }
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 1
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={5}
+                          maxRows={7}
+                          name="section1.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          value={formik.values.section1.text1 || ""}
+                          onChange={formik.handleChange}
                         />
-                      </Button>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "39%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 2
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={5}
+                          maxRows={7}
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          name="section1.text2"
+                          value={formik.values.section1.text2 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "20%",
+                        }}
+                      >
+                        {/* section logo */}
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Company Logo
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                            // justifyContent: "center",
+                            // alignItems: "center",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              // justifyContent: "center",
+                              // alignItems: "center",
+                              // padding: 3,
+                              cursor: "pointer",
+                            }}
+                            onClick={() =>
+                              document
+                                .getElementById("image-upload-logo")
+                                .click()
+                            } // Trigger the file input click
+                          >
+                            <input
+                              id="image-upload-logo" // Add an ID to target this input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              hidden
+                              onChange={(e) =>
+                                handleImageUploadLogo(
+                                  e,
+                                  "content.section1.logo"
+                                )
+                              }
+                            />
+                            <Box sx={{ position: "relative" }}>
+                              <Box
+                                sx={{
+                                  position: "absolute",
+                                  top: "-10px",
+                                  zIndex: 3,
+                                  right: "-5px",
+                                }}
+                              >
+                                <IconButton
+                                  sx={{
+                                    background: "#8477DA",
+                                    color: "white",
+                                    p: "5px",
+                                    ":hover": {
+                                      background: "#8477DA",
+                                    },
+                                  }}
+                                >
+                                  <Edit sx={{ fontSize: "20px" }} />
+                                </IconButton>
+                              </Box>
+
+                              {singleItemData?.content?.section1?.logo ||
+                              uploadedImageLogo?.content?.section1?.logo ? (
+                                <img
+                                  src={`${backendURL}/${
+                                    singleItemData?.content?.section1?.logo ??
+                                    uploadedImageLogo?.content?.section1?.logo
+                                  }`}
+                                  width={120}
+                                  height={120}
+                                  alt="section image logo"
+                                  style={{
+                                    border: "1px solid  #ccc",
+                                    borderRadius: "10px",
+                                  }}
+                                />
+                              ) : (
+                                <img
+                                  src={GCSLogo}
+                                  width={120}
+                                  height={120}
+                                  alt="section image logo"
+                                  style={{
+                                    border: "1px solid  #ccc",
+                                    borderRadius: "10px",
+                                  }}
+                                />
+                              )}
+                            </Box>
+                          </Box>
+
+                          {/* <Button
+                            disabled={isLoading}
+                            variant="contained"
+                            component="label"
+                            sx={{
+                              background: "#8477DA",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            Upload logo
+                            <input
+                              type="file"
+                              accept="image/*"
+                              multiple
+                              hidden
+                              onChange={(e) =>
+                                handleImageUploadLogo(
+                                  e,
+                                  "content.section1.logo"
+                                )
+                              }
+                            />
+                          </Button> */}
+                        </Box>
+                      </Box>
                     </Box>
-                    {/* section background image */}
                     <Box
                       sx={{
                         display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        justifyContent: "center",
-                        alignItems: "center",
+                        // justifyContent: "space-around",
+                        // py: 3,
                       }}
                     >
+                      {/* section background image */}
                       <Box
                         sx={{
-                          width: 400,
-
                           display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: 3,
+                          flexDirection: "column",
+                          gap: 1,
+                          // justifyContent: "center",
+                          // alignItems: "center",
                         }}
                       >
-                        {singleItemData?.content?.section1?.backgroundImage ||
-                          uploadedImageBackgroundImage?.content?.section1
-                            ?.backgroundImage ? (
-                          <Box>
-                            <img
-                              src={`${backendURL}/${singleItemData?.content?.section1
-                                ?.backgroundImage ??
-                                uploadedImageBackgroundImage?.content?.section1
-                                  ?.backgroundImage
-                                }`}
-                              width={400}
-                              height={340}
-                              alt="section image backgroundImage"
-                            />
-                          </Box>
-                        ) : (
-                          <Box>
-                            <img
-                              src={bgHeaderImage}
-                              width={400}
-                              height={340}
-                              alt="section image logo"
-                            />
-                          </Box>
-                        )}
-                      </Box>
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Company Logo
+                        </Typography>
 
-                      <Button
-                        disabled={isLoading}
-                        variant="contained"
-                        component="label"
-                        sx={{
-                          background: "#8477DA",
-                          ":hover": {
+                        <Box
+                          sx={{
+                            width: "100%",
+                            display: "flex",
+                            // justifyContent: "center",
+                            // alignItems: "center",
+                            // padding: 3,
+                          }}
+                          onClick={() =>
+                            document
+                              .getElementById("image-upload-background")
+                              .click()
+                          } // Trigger the file input click
+                        >
+                          <input
+                            id="image-upload-background" // Add an ID to target this input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            hidden
+                            onChange={(e) =>
+                              handleImageUploadBackgroundImage(
+                                e,
+                                "content.section1.backgroundImage"
+                              )
+                            }
+                          />
+                          <Box sx={{ position: "relative" }}>
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                top: "-10px",
+                                zIndex: 3,
+                                right: "-5px",
+                              }}
+                            >
+                              <IconButton
+                                sx={{
+                                  background: "#8477DA",
+                                  color: "white",
+                                  p: "5px",
+                                  ":hover": {
+                                    background: "#8477DA",
+                                  },
+                                }}
+                              >
+                                <Edit sx={{ fontSize: "20px" }} />
+                              </IconButton>
+                            </Box>
+                            {singleItemData?.content?.section1
+                              ?.backgroundImage ||
+                            uploadedImageBackgroundImage?.content?.section1
+                              ?.backgroundImage ? (
+                              <img
+                                src={`${backendURL}/${
+                                  singleItemData?.content?.section1
+                                    ?.backgroundImage ??
+                                  uploadedImageBackgroundImage?.content
+                                    ?.section1?.backgroundImage
+                                }`}
+                                width="100%"
+                                height={400}
+                                alt="section image backgroundImage"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={bgHeaderImage}
+                                width="100%"
+                                height={400}
+                                alt="section image logo"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                }}
+                              />
+                            )}
+                          </Box>
+                        </Box>
+
+                        {/* <Button
+                          disabled={isLoading}
+                          variant="contained"
+                          component="label"
+                          sx={{
                             background: "#8477DA",
-                          },
-                        }}
-                      >
-                        Upload background image
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          hidden
-                          onChange={(e) =>
-                            handleImageUploadBackgroundImage(
-                              e,
-                              "content.section1.backgroundImage"
-                            )
-                          }
-                        />
-                      </Button>
+                            ":hover": {
+                              background: "#8477DA",
+                            },
+                          }}
+                        >
+                          Upload background image
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            hidden
+                            onChange={(e) =>
+                              handleImageUploadBackgroundImage(
+                                e,
+                                "content.section1.backgroundImage"
+                              )
+                            }
+                          />
+                        </Button> */}
+                      </Box>
                     </Box>
                   </Box>
                 </Box>
@@ -1561,419 +1733,435 @@ const EditQuoteInvoice = () => {
                   ))}
                 </Box> */}
 
-  <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              // gap: 3,
-              width: "100%",
-              pt: 2,
-            }}
-          >
-            <Box sx={{background:'white',p:2,borderRadius:'5px'}}>
-              <Typography variant="h5" fontWeight={"bold"}>
-                Shower Gallery
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  pt:1.5,
-                  gap:2,
-                  width:'100%'
-                }}
-              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    // gap: 3,
+                    width: "100%",
+                    pt: 2,
+                  }}
+                >
+                  <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Shower Gallery
+                    </Typography>
                     <Box
                       sx={{
                         display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        border: "1px solid #ccc",
-                        width: '65%',
+                        justifyContent: "space-between",
+                        pt: 1.5,
+                        gap: 2,
+                        width: "100%",
                       }}
                     >
-                      <Grid
-                        container
+                      <Box
                         sx={{
-                          width: "100%",
                           display: "flex",
-                          flexWrap: "wrap",
-                          gap: "10px",
+                          flexDirection: "column",
+                          gap: 1,
+                          border: "1px solid #ccc",
+                          width: "65%",
                         }}
                       >
-                   {(formik.values.section2.shower.images.length && formik.values.section2.shower.images.length > 0) ? (
-                          formik.values.section2.shower.images?.map((_image) => (
-                            <Box
-                              sx={{
-                                width: "200px",
-                                height: "200px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                px: 3,
-                                py: 1.5,
-                                position: "relative",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  position: "absolute",
-                                  right: "18px",
-                                  top: "3px",
-                                  color: "red",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() =>
-                                  handleDeleteImageFromEstimate(
-                                    formik.values.section2.shower.images,
-                                    _image,
-                                    `content.section2.shower.images`
-                                  )
-                                }
-                              >
-                                <Delete />
-                              </Box>
-                              <img
-                                style={{ width: "100%", height: "100%" }}
-                                src={`${backendURL}/${_image}`}
-                                alt="section image backgroundImage"
-                              />
-                            </Box>
-                          ))
-                        ) : (
-                          <Typography
-                            sx={{
-                              height: "150px",
-                              textAlign: "center",
-                              width: "100%",
-                              alignContent: "center",
-                            }}
-                          >
-                            No Image Selected!
-                          </Typography>
-                        )} 
-                      </Grid>
-                      <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                        <Button
-                          variant="contained"
-                          component="label"
+                        <Grid
+                          container
                           sx={{
-                            background: "#8477DA",
-                            ":hover": {
-                              background: "#8477DA",
-                            },
+                            width: "100%",
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "10px",
                           }}
                         >
-                          Upload image
-                          <input
-                            type="file"
-                            accept="image/*"
-                            hidden
-                            onChange={(e) =>
-                              handleUploadEstimatesImage(
-                                e,
-                                `content.section2.shower.images`
+                          {formik.values.section2.shower.images.length &&
+                          formik.values.section2.shower.images.length > 0 ? (
+                            formik.values.section2.shower.images?.map(
+                              (_image) => (
+                                <Box
+                                  sx={{
+                                    width: "200px",
+                                    height: "200px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    px: 3,
+                                    py: 1.5,
+                                    position: "relative",
+                                  }}
+                                >
+                                  <Box
+                                    sx={{
+                                      position: "absolute",
+                                      right: "18px",
+                                      top: "3px",
+                                      color: "red",
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                      handleDeleteImageFromEstimate(
+                                        formik.values.section2.shower.images,
+                                        _image,
+                                        `content.section2.shower.images`
+                                      )
+                                    }
+                                  >
+                                    <Delete />
+                                  </Box>
+                                  <img
+                                    style={{ width: "100%", height: "100%" }}
+                                    src={`${backendURL}/${_image}`}
+                                    alt="section image backgroundImage"
+                                  />
+                                </Box>
                               )
-                            }
-                          />
-                        </Button>
+                            )
+                          ) : (
+                            <Typography
+                              sx={{
+                                height: "150px",
+                                textAlign: "center",
+                                width: "100%",
+                                alignContent: "center",
+                              }}
+                            >
+                              No Image Selected!
+                            </Typography>
+                          )}
+                        </Grid>
+                        <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                          <Button
+                            variant="contained"
+                            component="label"
+                            sx={{
+                              background: "#8477DA",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            Upload image
+                            <input
+                              type="file"
+                              accept="image/*"
+                              hidden
+                              onChange={(e) =>
+                                handleUploadEstimatesImage(
+                                  e,
+                                  `content.section2.shower.images`
+                                )
+                              }
+                            />
+                          </Button>
+                        </Box>
+                      </Box>
+                      <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                        <TextareaAutosize
+                          fullWidth
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                            width: "100%",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={7}
+                          maxRows={10}
+                          id="section2.shower.description"
+                          name="section2.shower.description"
+                          placeholder="Enter Shower Description"
+                          size="large"
+                          variant="outlined"
+                          sx={{ padding: "10px" }}
+                          value={
+                            formik.values.section2.shower.description ?? ""
+                          }
+                          onChange={formik.handleChange}
+                        />
                       </Box>
                     </Box>
-                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
-                  <TextareaAutosize
-                    fullWidth
-                    style={{
-                      padding: "10px",
-                      borderColor: "#cccc",
-                      borderRadius: "5px",
-                      width: "100%",
-                    }}
-                    className="custom-textfield"
-                    color="neutral"
-                    minRows={7}
-                    maxRows={10}
-                    id="section2.shower.description"
-                    name="section2.shower.description"
-                    placeholder="Enter Shower Description"
-                    size="large"
-                    variant="outlined"
-                    sx={{ padding: "10px" }}
-                    value={formik.values.section2.shower.description ?? ''}
-                    onChange={formik.handleChange}
-                  />
-                </Box>
-              </Box>
-            </Box>
-            <Box sx={{background:'white',p:2,borderRadius:'5px'}}>
-              <Typography variant="h5" fontWeight={"bold"}>
-                Mirror Gallery
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  pt:1.5,
-                  gap:2,
-                  width:'100%'
-                }}
-              >
+                  </Box>
+                  <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Mirror Gallery
+                    </Typography>
                     <Box
                       sx={{
                         display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        border: "1px solid #ccc",
-                        width: '65%',
+                        justifyContent: "space-between",
+                        pt: 1.5,
+                        gap: 2,
+                        width: "100%",
                       }}
                     >
-                      <Grid
-                        container
+                      <Box
                         sx={{
-                          width: "100%",
                           display: "flex",
-                          flexWrap: "wrap",
-                          gap: "10px",
+                          flexDirection: "column",
+                          gap: 1,
+                          border: "1px solid #ccc",
+                          width: "65%",
                         }}
                       >
-                         {(formik.values.section2.mirror.images.length && formik.values.section2.mirror.images.length > 0) ? (
-                          formik.values.section2.mirror.images?.map((_image) => (
-                            <Box
-                              sx={{
-                                width: "200px",
-                                height: "200px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                px: 3,
-                                py: 1.5,
-                                position: "relative",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  position: "absolute",
-                                  right: "18px",
-                                  top: "3px",
-                                  color: "red",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() =>
-                                  handleDeleteImageFromEstimate(
-                                    formik.values.section2.mirror.images,
-                                    _image,
-                                    `content.section2.mirror.images`
-                                  )
-                                }
-                              >
-                                <Delete />
-                              </Box>
-                              <img
-                                style={{ width: "100%", height: "100%" }}
-                                src={`${backendURL}/${_image}`}
-                                alt="section image backgroundImage"
-                              />
-                            </Box>
-                          ))
-                        ) : (
-                          <Typography
-                            sx={{
-                              height: "150px",
-                              textAlign: "center",
-                              width: "100%",
-                              alignContent: "center",
-                            }}
-                          >
-                            No Image Selected!
-                          </Typography>
-                        )} 
-                      </Grid>
-                      <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                        <Button
-                          variant="contained"
-                          component="label"
+                        <Grid
+                          container
                           sx={{
-                            background: "#8477DA",
-                            ":hover": {
-                              background: "#8477DA",
-                            },
+                            width: "100%",
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "10px",
                           }}
                         >
-                          Upload image
-                          <input
-                            type="file"
-                            accept="image/*"
-                            hidden
-                            onChange={(e) =>
-                              handleUploadEstimatesImage(
-                                e,
-                                `content.section2.mirror.images`
+                          {formik.values.section2.mirror.images.length &&
+                          formik.values.section2.mirror.images.length > 0 ? (
+                            formik.values.section2.mirror.images?.map(
+                              (_image) => (
+                                <Box
+                                  sx={{
+                                    width: "200px",
+                                    height: "200px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    px: 3,
+                                    py: 1.5,
+                                    position: "relative",
+                                  }}
+                                >
+                                  <Box
+                                    sx={{
+                                      position: "absolute",
+                                      right: "18px",
+                                      top: "3px",
+                                      color: "red",
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                      handleDeleteImageFromEstimate(
+                                        formik.values.section2.mirror.images,
+                                        _image,
+                                        `content.section2.mirror.images`
+                                      )
+                                    }
+                                  >
+                                    <Delete />
+                                  </Box>
+                                  <img
+                                    style={{ width: "100%", height: "100%" }}
+                                    src={`${backendURL}/${_image}`}
+                                    alt="section image backgroundImage"
+                                  />
+                                </Box>
                               )
-                            }
-                          />
-                        </Button>
+                            )
+                          ) : (
+                            <Typography
+                              sx={{
+                                height: "150px",
+                                textAlign: "center",
+                                width: "100%",
+                                alignContent: "center",
+                              }}
+                            >
+                              No Image Selected!
+                            </Typography>
+                          )}
+                        </Grid>
+                        <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                          <Button
+                            variant="contained"
+                            component="label"
+                            sx={{
+                              background: "#8477DA",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            Upload image
+                            <input
+                              type="file"
+                              accept="image/*"
+                              hidden
+                              onChange={(e) =>
+                                handleUploadEstimatesImage(
+                                  e,
+                                  `content.section2.mirror.images`
+                                )
+                              }
+                            />
+                          </Button>
+                        </Box>
+                      </Box>
+                      <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                        <TextareaAutosize
+                          fullWidth
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                            width: "100%",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={7}
+                          maxRows={10}
+                          id="section2.mirror.description"
+                          name="section2.mirror.description"
+                          placeholder="Enter Mirror Description"
+                          size="large"
+                          variant="outlined"
+                          sx={{ padding: "10px" }}
+                          value={
+                            formik.values.section2.mirror.description ?? ""
+                          }
+                          onChange={formik.handleChange}
+                        />
                       </Box>
                     </Box>
-                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
-                  <TextareaAutosize
-                    fullWidth
-                    style={{
-                      padding: "10px",
-                      borderColor: "#cccc",
-                      borderRadius: "5px",
-                      width: "100%",
-                    }}
-                    className="custom-textfield"
-                    color="neutral"
-                    minRows={7}
-                    maxRows={10}
-                    id="section2.mirror.description"
-                    name="section2.mirror.description"
-                    placeholder="Enter Mirror Description"
-                    size="large"
-                    variant="outlined"
-                    sx={{ padding: "10px" }}
-                    value={formik.values.section2.mirror.description ?? ''}
-                    onChange={formik.handleChange}
-                  />
-                </Box>
-              </Box>
-            </Box>
-            <Box sx={{background:'white',p:2,borderRadius:'5px'}}>
-              <Typography variant="h5" fontWeight={"bold"}>
-                Wine Cellar Gallery
-              </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  pt:1.5,
-                  gap:2,
-                    width:'100%'
-                }}
-              >
+                  </Box>
+                  <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Wine Cellar Gallery
+                    </Typography>
                     <Box
                       sx={{
                         display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        border: "1px solid #ccc",
-                        width: '65%',
+                        justifyContent: "space-between",
+                        pt: 1.5,
+                        gap: 2,
+                        width: "100%",
                       }}
                     >
-                      <Grid
-                        container
+                      <Box
                         sx={{
-                          width: "100%",
                           display: "flex",
-                          flexWrap: "wrap",
-                          gap: "10px",
+                          flexDirection: "column",
+                          gap: 1,
+                          border: "1px solid #ccc",
+                          width: "65%",
                         }}
                       >
-                     {(formik.values.section2.wineCellar.images.length && formik.values.section2.wineCellar.images.length > 0) ? (
-                          formik.values.section2.wineCellar.images?.map((_image) => (
-                            <Box
-                              sx={{
-                                width: "200px",
-                                height: "200px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                px: 3,
-                                py: 1.5,
-                                position: "relative",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  position: "absolute",
-                                  right: "18px",
-                                  top: "3px",
-                                  color: "red",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() =>
-                                  handleDeleteImageFromEstimate(
-                                    formik.values.section2.wineCellar.images,
-                                    _image,
-                                    `content.section2.wineCellar.images`
-                                  )
-                                }
-                              >
-                                <Delete />
-                              </Box>
-                              <img
-                                style={{ width: "100%", height: "100%" }}
-                                src={`${backendURL}/${_image}`}
-                                alt="section image backgroundImage"
-                              />
-                            </Box>
-                          ))
-                        ) : (
-                          <Typography
-                            sx={{
-                              height: "150px",
-                              textAlign: "center",
-                              width: "100%",
-                              alignContent: "center",
-                            }}
-                          >
-                            No Image Selected!
-                          </Typography>
-                        )} 
-                      </Grid>
-                      <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                        <Button
-                          variant="contained"
-                          component="label"
+                        <Grid
+                          container
                           sx={{
-                            background: "#8477DA",
-                            ":hover": {
-                              background: "#8477DA",
-                            },
+                            width: "100%",
+                            display: "flex",
+                            flexWrap: "wrap",
+                            gap: "10px",
                           }}
                         >
-                          Upload image
-                          <input
-                            type="file"
-                            accept="image/*"
-                            hidden
-                            onChange={(e) =>
-                              handleUploadEstimatesImage(
-                                e,
-                                `content.section2.wineCellar.images`
+                          {formik.values.section2.wineCellar.images.length &&
+                          formik.values.section2.wineCellar.images.length >
+                            0 ? (
+                            formik.values.section2.wineCellar.images?.map(
+                              (_image) => (
+                                <Box
+                                  sx={{
+                                    width: "200px",
+                                    height: "200px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    px: 3,
+                                    py: 1.5,
+                                    position: "relative",
+                                  }}
+                                >
+                                  <Box
+                                    sx={{
+                                      position: "absolute",
+                                      right: "18px",
+                                      top: "3px",
+                                      color: "red",
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                      handleDeleteImageFromEstimate(
+                                        formik.values.section2.wineCellar
+                                          .images,
+                                        _image,
+                                        `content.section2.wineCellar.images`
+                                      )
+                                    }
+                                  >
+                                    <Delete />
+                                  </Box>
+                                  <img
+                                    style={{ width: "100%", height: "100%" }}
+                                    src={`${backendURL}/${_image}`}
+                                    alt="section image backgroundImage"
+                                  />
+                                </Box>
                               )
-                            }
-                          />
-                        </Button>
+                            )
+                          ) : (
+                            <Typography
+                              sx={{
+                                height: "150px",
+                                textAlign: "center",
+                                width: "100%",
+                                alignContent: "center",
+                              }}
+                            >
+                              No Image Selected!
+                            </Typography>
+                          )}
+                        </Grid>
+                        <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                          <Button
+                            variant="contained"
+                            component="label"
+                            sx={{
+                              background: "#8477DA",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            Upload image
+                            <input
+                              type="file"
+                              accept="image/*"
+                              hidden
+                              onChange={(e) =>
+                                handleUploadEstimatesImage(
+                                  e,
+                                  `content.section2.wineCellar.images`
+                                )
+                              }
+                            />
+                          </Button>
+                        </Box>
+                      </Box>
+                      <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                        <TextareaAutosize
+                          fullWidth
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                            width: "100%",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={7}
+                          maxRows={10}
+                          id="section2.wineCellar.description"
+                          name="section2.wineCellar.description"
+                          placeholder="Enter WineCellar Description"
+                          size="large"
+                          variant="outlined"
+                          sx={{ padding: "10px" }}
+                          value={
+                            formik.values.section2.wineCellar.description ?? ""
+                          }
+                          onChange={formik.handleChange}
+                        />
                       </Box>
                     </Box>
-                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
-                  <TextareaAutosize
-                    fullWidth
-                    style={{
-                      padding: "10px",
-                      borderColor: "#cccc",
-                      borderRadius: "5px",
-                      width: "100%",
-                    }}
-                    className="custom-textfield"
-                    color="neutral"
-                    minRows={7}
-                    maxRows={10}
-                    id="section2.wineCellar.description"
-                    name="section2.wineCellar.description"
-                    placeholder="Enter WineCellar Description"
-                    size="large"
-                    variant="outlined"
-                    sx={{ padding: "10px" }}
-                    value={formik.values.section2.wineCellar.description ?? ''}
-                    onChange={formik.handleChange}
-                  />
+                  </Box>
                 </Box>
-              </Box>
-            </Box>
-          
-          </Box>
 
                 {/* section 3 */}
                 <Box sx={{ p: 2 }}>
