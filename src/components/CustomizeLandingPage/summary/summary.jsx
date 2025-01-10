@@ -756,9 +756,10 @@ const ShowerSummary = ({
   };
   const handleChangeHardware = (type, value) => {
     if (type === hardwareTypes.HARDWAREADDONS) {
-      dispatch(setCounter({ type, item: value.item, counter: value.counter, estimateId: data?._id }));
+      dispatch(setCounter({ type, item: value.item, counter: value.counter, estimateId: data?.selectedItem?._id }));
     } else {
-      dispatch(setContent({ type, item: value, hardwaresList, estimateId: data?._id }));
+      console.log('setContent call',data?.selectedItem?._id );
+      dispatch(setContent({ type, item: value, hardwaresList, estimateId: data?.selectedItem?._id }));
     }
   }
   const handleApprove = () => {
