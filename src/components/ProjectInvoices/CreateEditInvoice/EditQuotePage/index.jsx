@@ -152,7 +152,40 @@ const EditQuoteInvoice = () => {
     logsRefetch();
   }, []);
 
-  console.log(logsData, "logsDatalogsDatalogsData");
+  const filterByShowInUpgrades = (list, key) =>
+    list?.[key]?.filter((item) => item.showInUpgrades === true) || [];
+  const filteredShowerGlassType = filterByShowInUpgrades(
+    ShowerHardwareList,
+    "glassType"
+  );
+  const filteredShowerGlassAddon = filterByShowInUpgrades(
+    ShowerHardwareList,
+    "glassAddons"
+  );
+  const filteredShowerHardwareAddon = filterByShowInUpgrades(
+    ShowerHardwareList,
+    "hardwareAddons"
+  );
+  const filteredMirrorGlassType = filterByShowInUpgrades(
+    MirrorsHardwareList,
+    "glassTypes"
+  );
+  const filteredMirrorGlassAddon = filterByShowInUpgrades(
+    MirrorsHardwareList,
+    "glassAddons"
+  );
+  const filteredWineGlassType = filterByShowInUpgrades(
+    WinelistData,
+    "glassType"
+  );
+  const filteredWineGlassAddon = filterByShowInUpgrades(
+    WinelistData,
+    "glassAddons"
+  );
+  const filteredWineHardwareAddon = filterByShowInUpgrades(
+    WinelistData,
+    "hardwareAddons"
+  );
 
   const { mutateAsync: EditInvoice, isSuccess, isLoading } = useEditDocument();
   const formik = useFormik({
@@ -820,9 +853,9 @@ const EditQuoteInvoice = () => {
                     <Box sx={{ pt: 1 }}>
                       <Autocomplete
                         multiple
-                        options={ShowerHardwareList?.glassType ?? []}
+                        options={filteredShowerGlassType ?? []}
                         getOptionLabel={(glassType) => glassType.name}
-                        value={ShowerHardwareList?.glassType?.filter(
+                        value={filteredShowerGlassType?.filter(
                           (glassType) =>
                             formik.values.additionalUpgrades.shower.glassTypes?.includes(
                               glassType._id
@@ -865,12 +898,12 @@ const EditQuoteInvoice = () => {
                       <Autocomplete
                         multiple
                         options={
-                          ShowerHardwareList?.glassAddons.filter(
+                          filteredShowerGlassAddon.filter(
                             (item) => item?.slug !== "no-treatment"
                           ) ?? []
                         }
                         getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={ShowerHardwareList?.glassAddons?.filter(
+                        value={filteredShowerGlassAddon?.filter(
                           (glassAddon) =>
                             formik.values.additionalUpgrades.shower.glassAddons?.includes(
                               glassAddon._id
@@ -912,9 +945,9 @@ const EditQuoteInvoice = () => {
                     <Box sx={{ pt: 2 }}>
                       <Autocomplete
                         multiple
-                        options={ShowerHardwareList?.hardwareAddons ?? []}
+                        options={filteredShowerHardwareAddon ?? []}
                         getOptionLabel={(hardwareAddon) => hardwareAddon.name}
-                        value={ShowerHardwareList?.hardwareAddons?.filter(
+                        value={filteredShowerHardwareAddon?.filter(
                           (hardwareAddon) =>
                             formik.values.additionalUpgrades.shower.hardwareAddons?.includes(
                               hardwareAddon._id
@@ -959,9 +992,9 @@ const EditQuoteInvoice = () => {
                     <Box sx={{ pt: 1 }}>
                       <Autocomplete
                         multiple
-                        options={MirrorsHardwareList?.glassTypes ?? []}
+                        options={filteredMirrorGlassType ?? []}
                         getOptionLabel={(glassType) => glassType.name}
-                        value={MirrorsHardwareList?.glassTypes?.filter(
+                        value={filteredMirrorGlassType?.filter(
                           (glassType) =>
                             formik.values.additionalUpgrades.mirror.glassTypes?.includes(
                               glassType._id
@@ -1003,9 +1036,9 @@ const EditQuoteInvoice = () => {
                     <Box sx={{ pt: 2 }}>
                       <Autocomplete
                         multiple
-                        options={MirrorsHardwareList?.glassAddons ?? []}
+                        options={filteredMirrorGlassAddon ?? []}
                         getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={MirrorsHardwareList?.glassAddons?.filter(
+                        value={filteredMirrorGlassAddon?.filter(
                           (glassAddon) =>
                             formik.values.additionalUpgrades.mirror.glassAddons?.includes(
                               glassAddon._id
@@ -1052,9 +1085,9 @@ const EditQuoteInvoice = () => {
                     <Box sx={{ pt: 1 }}>
                       <Autocomplete
                         multiple
-                        options={WinelistData?.glassType ?? []}
+                        options={filteredWineGlassType ?? []}
                         getOptionLabel={(glassType) => glassType.name}
-                        value={WinelistData?.glassType?.filter((glassType) =>
+                        value={filteredWineGlassType?.filter((glassType) =>
                           formik.values.additionalUpgrades.wineCellar.glassTypes?.includes(
                             glassType._id
                           )
@@ -1096,12 +1129,12 @@ const EditQuoteInvoice = () => {
                       <Autocomplete
                         multiple
                         options={
-                          WinelistData?.glassAddons.filter(
+                          filteredWineGlassAddon.filter(
                             (item) => item?.slug !== "no-treatment"
                           ) ?? []
                         }
                         getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={WinelistData?.glassAddons?.filter((glassAddon) =>
+                        value={filteredWineGlassAddon?.filter((glassAddon) =>
                           formik.values.additionalUpgrades.wineCellar.glassAddons?.includes(
                             glassAddon._id
                           )
@@ -1142,9 +1175,9 @@ const EditQuoteInvoice = () => {
                     <Box sx={{ pt: 2 }}>
                       <Autocomplete
                         multiple
-                        options={WinelistData?.hardwareAddons ?? []}
+                        options={filteredWineHardwareAddon ?? []}
                         getOptionLabel={(hardwareAddon) => hardwareAddon.name}
-                        value={WinelistData?.hardwareAddons?.filter(
+                        value={filteredWineHardwareAddon?.filter(
                           (hardwareAddon) =>
                             formik.values.additionalUpgrades.wineCellar.hardwareAddons?.includes(
                               hardwareAddon._id

@@ -69,6 +69,40 @@ const ProjectInvoiceComponent = ({
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedEstimateRows, setSelectedEstimateRows] = useState([]);
   const [copyLink, setCopyLink] = useState(false);
+  const filterByShowInUpgrades = (list, key) =>
+    list?.[key]?.filter((item) => item.showInUpgrades === true) || [];
+  const filteredShowerGlassType = filterByShowInUpgrades(
+    ShowerHardwareList,
+    "glassType"
+  );
+  const filteredShowerGlassAddon = filterByShowInUpgrades(
+    ShowerHardwareList,
+    "glassAddons"
+  );
+  const filteredShowerHardwareAddon = filterByShowInUpgrades(
+    ShowerHardwareList,
+    "hardwareAddons"
+  );
+  const filteredMirrorGlassType = filterByShowInUpgrades(
+    MirrorsHardwareList,
+    "glassTypes"
+  );
+  const filteredMirrorGlassAddon = filterByShowInUpgrades(
+    MirrorsHardwareList,
+    "glassAddons"
+  );
+  const filteredWineGlassType = filterByShowInUpgrades(
+    WinelistData,
+    "glassType"
+  );
+  const filteredWineGlassAddon = filterByShowInUpgrades(
+    WinelistData,
+    "glassAddons"
+  );
+  const filteredWineHardwareAddon = filterByShowInUpgrades(
+    WinelistData,
+    "hardwareAddons"
+  );
   const navigate = useNavigate();
   const {
     mutateAsync: createInvoice,
@@ -210,8 +244,27 @@ const ProjectInvoiceComponent = ({
       project: sourceObject,
       estimates: EstimateListData?.length > 0 ? EstimateListData : [],
       company: compantDetail,
-      content: { section2: locationPresentationSettings },
-      additionalUpgrades: values.additionalUpgrades,
+      content: {
+        section2: locationPresentationSettings,
+      },
+      additionalUpgrades: {
+        shower: {
+          glassTypes: filteredShowerGlassType.map((item) => item._id) ?? [],
+          glassAddons: filteredShowerGlassAddon.map((item) => item._id) ?? [],
+          hardwareAddons:
+            filteredShowerHardwareAddon.map((item) => item._id) ?? [],
+        },
+        mirror: {
+          glassTypes: filteredMirrorGlassType.map((item) => item._id) ?? [],
+          glassAddons: filteredMirrorGlassAddon.map((item) => item._id) ?? [],
+        },
+        wineCellar: {
+          glassTypes: filteredWineGlassType.map((item) => item._id) ?? [],
+          glassAddons: filteredWineGlassAddon.map((item) => item._id) ?? [],
+          hardwareAddons:
+            filteredWineHardwareAddon.map((item) => item._id) ?? [],
+        },
+      },
       // subTotal: totalSum,
       // grandTotal: totalSum,
     };
@@ -933,7 +986,7 @@ const ProjectInvoiceComponent = ({
                     selectedEstimateRows={selectedEstimateRows}
                   />
                 </Box>
-                <Box sx={{ py: 3, px: "16px" }}>
+                {/* <Box sx={{ py: 3, px: "16px" }}>
                   <Typography sx={{ fontSize: 21, fontWeight: "bold", pb: 1 }}>
                     Choose upgrades for each category
                   </Typography>
@@ -1313,7 +1366,7 @@ const ProjectInvoiceComponent = ({
                       </Box>
                     </Box>
                   </Box>
-                </Box>
+                </Box> */}
               </Box>
 
               {/** Section 2 */}
