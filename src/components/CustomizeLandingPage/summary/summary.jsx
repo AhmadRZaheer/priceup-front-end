@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import Bulb from "../../../Assets/CustomerLandingImages/blubImg.png";
-import CustomImage from "../../../Assets/customlayoutimage.svg";
+import CustomImage from "@/Assets/customlayoutimage.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -80,8 +80,7 @@ const ShowerSummary = ({
   const { mutate: customerDecision, isLoading, isSuccess } = useEditDocument();
   const { mutate: activityLog } = useCreateDocument();
   const [images, setImages] = useState([]);
-  const imageData =
-    data?.selectedItem?.settings?.image !== null ? `${backendURL}/${data?.selectedItem?.settings?.image}` : null;
+  const imageData = data?.selectedItem?.settings !== null ? `${backendURL}/${data?.selectedItem?.settings?.image}` : null;
 
   const [selectedHardware, setSelectedHardware] = useState(null);
   const [fabricationsCount, setFabricationsCount] = useState({
@@ -91,7 +90,6 @@ const ShowerSummary = ({
     notch: 0,
     outages: 0,
   });
-  console.log(selectedHardware, "selectedHardwareselectedHardware");
   const factorPrice =
     data?.category === EstimateCategory.MIRRORS
       ? locationSettings?.pricingFactorStatus
@@ -116,18 +114,22 @@ const ShowerSummary = ({
   //     }
   //   }
   // }, [data]);
-
   const glasstypeList = useMemo(() => {
     const upgradeGlassList =
       hardwaresList?.glassType
-        ?.filter((obj) => UpgradeOPtions?.glassTypes?.includes(obj._id))
-        ?.filter((obj) =>
-          obj.options.some(
-            (option) =>
-              option.thickness === data?.content?.glassType?.thickness &&
-              option.status === true
-          )
-        ) ?? [];
+        ?.filter((obj) => UpgradeOPtions?.glassTypes?.includes(obj._id) && obj.options.some(
+          (option) =>
+            option.thickness === data?.content?.glassType?.thickness &&
+            option.status === true
+        ))
+      // ?.filter((obj) =>
+      //   obj.options.some(
+      //     (option) =>
+      //       option.thickness === data?.content?.glassType?.thickness &&
+      //       option.status === true
+      //   )
+      // )
+      ?? [];
     if (
       upgradeGlassList?.length === 0 ||
       !upgradeGlassList?.some((glass) => glass._id === data?.content?.glassType?.item?._id)
@@ -143,7 +145,7 @@ const ShowerSummary = ({
       const price = item?.options?.find(
         (option) => option.thickness === data?.content?.glassType?.thickness
       )?.cost;
-      const itemPrice = (data?.sqftArea * price ?? 0) * factorPrice;
+      // const itemPrice = (data?.sqftArea * price ?? 0) * factorPrice;
       const costDifference =
         upgradeGlassList
           ?.filter((item) => item._id === data?.content?.glassType?.item?._id)
@@ -177,7 +179,7 @@ const ShowerSummary = ({
 
       return {
         ...item,
-        description: (
+        modifiedName: (
           <span>
             {item?._id === data?.content?.glassType?.item?._id ? (
               item?.name
@@ -200,10 +202,11 @@ const ShowerSummary = ({
   const glassAddonsList = useMemo(() => {
     const upgradeGlassAddonsList =
       hardwaresList?.glassAddons
-        ?.filter((obj) => UpgradeOPtions?.glassAddons?.includes(obj._id))
-        ?.filter((obj) =>
-          obj.options.some((option) => option.status === true)
-        ) ?? [];
+        ?.filter((obj) => UpgradeOPtions?.glassAddons?.includes(obj._id) && obj.options.some((option) => option.status === true))
+        // ?.filter((obj) =>
+        //   obj.options.some((option) => option.status === true)
+        // ) 
+        ?? [];
 
     if (data?.category !== EstimateCategory.MIRRORS) {
       const noTreatment = hardwaresList?.glassAddons?.find(
@@ -235,9 +238,9 @@ const ShowerSummary = ({
       const price = item?.options?.[0]?.cost;
       const costDifference =
         data?.content?.glassAddons
-          .map((item) => {
-            const matchedItem = upgradeGlassAddonsList.find(
-              (firstItem) => firstItem._id === item._id
+          ?.map((addon) => {
+            const matchedItem = upgradeGlassAddonsList?.find(
+              (firstItem) => firstItem._id === addon?._id
             );
             if (matchedItem && matchedItem.options?.length > 0) {
               return matchedItem.options[0].cost;
@@ -264,10 +267,10 @@ const ShowerSummary = ({
 
       return {
         ...item,
-        description: (
+        modifiedName: (
           <span>
             {data?.content?.glassAddons?.some(
-              (hardware) => hardware.type === item._id
+              (hardware) => hardware?.type === item._id
             ) ? (
               item?.name
             ) : (
@@ -287,7 +290,7 @@ const ShowerSummary = ({
         ),
       };
     });
-    return glassAddonsData;
+    return glassAddonsData ?? [];
   }, [data?.content?.glassAddons, hardwaresList?.glassAddons, UpgradeOPtions]);
 
   // useEffect(() => {
@@ -666,50 +669,50 @@ const ShowerSummary = ({
   //     }
   //   }
   // };
-  const getCostByThickness = (item) => {
-    const glassType = hardwaresList?.glassType.find(
-      (_item) => _item?._id === item.type
-    );
-    if (glassType) {
-      const option = glassType.options.find(
-        (_item) => _item.thickness === item.thickness
-      );
-      return option?.cost ?? 0;
-    }
-    return 0; // Return null if no matching thickness is found
-  };
-  const getGlassAddonsCost = (items) => {
-    let glassAddonsPrice = 0;
-    items?.forEach((_item) => {
-      const fullItem = hardwaresList?.glassAddons?.find(
-        (glassAddon) => glassAddon?._id === _item.type
-      );
-      let price = 0;
-      if (fullItem?.options?.length) {
-        price = fullItem?.options[0]?.cost || 0;
-      }
-      glassAddonsPrice = glassAddonsPrice + price * data?.sqftArea;
-    });
-    return glassAddonsPrice;
-  };
-  const getHardwareAddonsCost = (items) => {
-    let hardwareAddonsPrice = 0;
-    items?.forEach((row) => {
-      const fullItem = hardwaresList?.hardwareAddons?.find(
-        (_hardwareAddon) => _hardwareAddon?._id === row.type
-      );
-      let price = 0;
-      if (fullItem) {
-        price =
-          fullItem?.finishes?.find(
-            (finish) =>
-              finish?.finish_id === selectedHardware?.hardwareFinish?.type
-          )?.cost || 0;
-      }
-      hardwareAddonsPrice = hardwareAddonsPrice + price * row?.count;
-    });
-    return hardwareAddonsPrice;
-  };
+  // const getCostByThickness = (item) => {
+  //   const glassType = hardwaresList?.glassType.find(
+  //     (_item) => _item?._id === item.type
+  //   );
+  //   if (glassType) {
+  //     const option = glassType.options.find(
+  //       (_item) => _item.thickness === item.thickness
+  //     );
+  //     return option?.cost ?? 0;
+  //   }
+  //   return 0; // Return null if no matching thickness is found
+  // };
+  // const getGlassAddonsCost = (items) => {
+  //   let glassAddonsPrice = 0;
+  //   items?.forEach((_item) => {
+  //     const fullItem = hardwaresList?.glassAddons?.find(
+  //       (glassAddon) => glassAddon?._id === _item.type
+  //     );
+  //     let price = 0;
+  //     if (fullItem?.options?.length) {
+  //       price = fullItem?.options[0]?.cost || 0;
+  //     }
+  //     glassAddonsPrice = glassAddonsPrice + price * data?.sqftArea;
+  //   });
+  //   return glassAddonsPrice;
+  // };
+  // const getHardwareAddonsCost = (items) => {
+  //   let hardwareAddonsPrice = 0;
+  //   items?.forEach((row) => {
+  //     const fullItem = hardwaresList?.hardwareAddons?.find(
+  //       (_hardwareAddon) => _hardwareAddon?._id === row.type
+  //     );
+  //     let price = 0;
+  //     if (fullItem) {
+  //       price =
+  //         fullItem?.finishes?.find(
+  //           (finish) =>
+  //             finish?.finish_id === selectedHardware?.hardwareFinish?.type
+  //         )?.cost || 0;
+  //     }
+  //     hardwareAddonsPrice = hardwareAddonsPrice + price * row?.count;
+  //   });
+  //   return hardwareAddonsPrice;
+  // };
 
   const getFabricationsCost = (selectedFabrication) => {
     let fabricationPrice = 0;
@@ -756,10 +759,13 @@ const ShowerSummary = ({
   };
   const handleChangeHardware = (type, value) => {
     if (type === hardwareTypes.HARDWAREADDONS) {
-      dispatch(setCounter({ type, item: value.item, counter: value.counter, estimateId: data?.selectedItem?._id }));
+      const item = { ...value.item };
+      if ('modifiedName' in item) delete item.modifiedName;
+      dispatch(setCounter({ type, item, counter: value.counter, estimateId: data?.selectedItem?._id }));
     } else {
-      console.log('setContent call',data?.selectedItem?._id );
-      dispatch(setContent({ type, item: value, hardwaresList, estimateId: data?.selectedItem?._id }));
+      const item = { ...value };
+      if ('modifiedName' in item) delete item.modifiedName;
+      dispatch(setContent({ type, item, hardwaresList, estimateId: data?.selectedItem?._id }));
     }
   }
   const handleApprove = () => {
@@ -834,7 +840,7 @@ const ShowerSummary = ({
         data?.sqftArea,
         locationSettings
       );
-      dispatch(setEstimateTotal({ prices, estimateId: data?._id, category: data?.category }));
+      dispatch(setEstimateTotal({ prices, estimateId: data?.selectedItem?._id, category: data?.category }));
     } else if (data && data?.category === EstimateCategory.MIRRORS) {
       const prices = calculateTotalForMirror(
         data?.content,
@@ -842,21 +848,26 @@ const ShowerSummary = ({
         locationSettings,
         data?.measurements
       );
-      dispatch(setEstimateTotal({ prices, estimateId: data?._id, category: data?.category }));
+      dispatch(setEstimateTotal({ prices, estimateId: data?.selectedItem?._id, category: data?.category }));
     }
   }, [data?.content])
 
   const hardwareAddonsList = useMemo(() => {
     const upgradeHardwareAddonList =
       hardwaresList?.hardwareAddons
-        ?.filter((obj) => UpgradeOPtions?.hardwareAddons?.includes(obj._id))
-        ?.filter((obj) =>
-          obj.finishes.some(
-            (option) =>
-              option.finish_id === data?.content?.hardwareFinishes?._id &&
-              option.status === true
-          )
-        ) ?? [];
+        ?.filter((obj) => UpgradeOPtions?.hardwareAddons?.includes(obj._id) && obj.finishes.some(
+          (option) =>
+            option.finish_id === data?.content?.hardwareFinishes?._id &&
+            option.status === true
+        ))
+        // ?.filter((obj) =>
+        //   obj.finishes.some(
+        //     (option) =>
+        //       option.finish_id === data?.content?.hardwareFinishes?._id &&
+        //       option.status === true
+        //   )
+        // ) 
+        ?? [];
     data?.content?.hardwareAddons?.forEach((data) => {
       // Check if upgradeHardwareAddonList is empty
       if (
@@ -902,7 +913,7 @@ const ShowerSummary = ({
           : itemPrice;
       return {
         ...item,
-        description: (
+        modifiedName: (
           <span>
             {item?.name} cost{" "}
             <b style={{ color: "#28A745" }}>
@@ -912,7 +923,7 @@ const ShowerSummary = ({
         ),
       };
     });
-    return glassAddonsData;
+    return glassAddonsData ?? [];
   }, [data?.content?.hardwareAddons, hardwaresList?.hardwareAddons]);
   const renderDimensions = data?.category === EstimateCategory.SHOWERS || data?.category === EstimateCategory.WINECELLARS ? renderShowerMeasurementSides : data?.category === EstimateCategory.MIRRORS ? renderMirrorMeasurementSides : () => { };
   return (

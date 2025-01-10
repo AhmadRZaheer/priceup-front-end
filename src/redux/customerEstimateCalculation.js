@@ -21,7 +21,7 @@ const customerEstimationSlice = createSlice({
     setEstimateTotal(state, action) {
       const { prices, estimateId, category } = action.payload;
       const estimateIndex = state.estimates.findIndex(
-        (estimate) => estimate._id === estimateId
+        (estimate) => estimate?.selectedItem?._id === estimateId
       );
       if (estimateIndex !== -1) {
         if (
@@ -62,87 +62,10 @@ const customerEstimationSlice = createSlice({
         }
       }
     },
-    // setContent(state, action) {
-    //   const { type, item, hardwaresList, estimateId } = action.payload;
-
-    //   // Find the index of the estimate to update
-    //   const estimateIndex = state.estimates.findIndex(
-    //     (estimate) => estimate._id === estimateId
-    //   );
-
-    //   if (estimateIndex !== -1) {
-    //     // Make sure to clone the state to avoid mutation
-    //     const newEstimates = [...state.estimates];
-    //     const estimate = newEstimates[estimateIndex];
-
-    //     if (["glassAddons"].includes(type)) {
-    //       if (item.slug === "no-treatment") {
-    //         const noGlassAddon = hardwaresList.glassAddons?.find(
-    //           (item) => item.slug === "no-treatment"
-    //         );
-    //         // Create a new content object to avoid mutation
-    //         newEstimates[estimateIndex] = {
-    //           ...estimate,
-    //           content: {
-    //             ...estimate.content,
-    //             glassAddons: [noGlassAddon],
-    //           },
-    //         };
-    //       } else {
-    //         const glassAddons = [...(estimate.content.glassAddons || [])];
-    //         const foundIndex = glassAddons.findIndex(
-    //           (row) => row.slug === item.slug
-    //         );
-
-    //         if (foundIndex !== -1) {
-    //           glassAddons.splice(foundIndex, 1);
-    //         } else {
-    //           glassAddons.push(item);
-    //         }
-
-    //         // Remove the "no-treatment" addon if it's in the list
-    //         const indexOfNoTreatment = glassAddons.findIndex(
-    //           (row) => row.slug === "no-treatment"
-    //         );
-
-    //         if (indexOfNoTreatment !== -1) {
-    //           glassAddons.splice(indexOfNoTreatment, 1);
-    //         }
-
-    //         // Create a new content object with updated glassAddons
-    //         newEstimates[estimateIndex] = {
-    //           ...estimate,
-    //           content: {
-    //             ...estimate.content,
-    //             glassAddons,
-    //           },
-    //         };
-    //       }
-    //     } else {
-    //       // Update content based on type
-    //       newEstimates[estimateIndex] = {
-    //         ...estimate,
-    //         content: {
-    //           ...estimate.content,
-    //           [type]: {
-    //             ...estimate.content[type],
-    //             item: item,
-    //           },
-    //         },
-    //       };
-    //     }
-
-    //     // Return the new state with updated estimates
-    //     return {
-    //       ...state,
-    //       estimates: newEstimates,
-    //     };
-    //   }
-    // },
     setContent(state, action) {
       const { type, item, hardwaresList, estimateId } = action.payload;
       const estimateIndex = state.estimates.findIndex(
-        (estimate) => estimate._id === estimateId
+        (estimate) => estimate?.selectedItem?._id === estimateId
       );
       if (estimateIndex !== -1) {
         if (["glassAddons"].includes(type)) {
@@ -189,7 +112,7 @@ const customerEstimationSlice = createSlice({
     setCounter(state, action) {
       const { type, item, counter, estimateId } = action.payload;
       const estimateIndex = state.estimates.findIndex(
-        (estimate) => estimate._id === estimateId
+        (estimate) => estimate?.selectedItem?._id === estimateId
       );
       if (estimateIndex !== -1) {
         const fabricationsCount = {

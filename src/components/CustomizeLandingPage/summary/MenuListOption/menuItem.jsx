@@ -153,7 +153,7 @@ const MenuItem = ({
               alt="Selected"
             /> */}
             <Typography>
-              {item?.description ?? item?.name}
+              {item?.modifiedName ?? item?.name}
               {/* has price of $
               {(selectedContent?.sqftArea * thicknessPrice ?? 0) *
                 (locationSettings?.miscPricing?.pricingFactorStatus
