@@ -133,6 +133,7 @@ export const statusTypes = {
   APPROVED: "approved",
   PAID:'Paid',
   UNPAID:'Unpaid',
+  CUSTOMER_APPROVED: "customer_approved"
 };
 
 export const inputLength = 6;

@@ -1,4 +1,4 @@
-const { layoutVariants, notificationsVariant } = require("./constants");
+const { layoutVariants, notificationsVariant, quoteState } = require("./constants");
 
 export const generateContentForShowerEdit = (listData, estimate) => {
   let calculateChannelWarning = {

@@ -146,9 +146,10 @@ const customerEstimationSlice = createSlice({
             item,
             count: counter ?? 0,
           };
-          const getHardwareFabrication = state.estimates[estimateIndex].category === EstimateCategory.SHOWERS
-            ? getShowerHardwareFabrication
-            : getWineCellarHardwareFabrication;
+          const getHardwareFabrication =
+            state.estimates[estimateIndex].category === EstimateCategory.SHOWERS
+              ? getShowerHardwareFabrication
+              : getWineCellarHardwareFabrication;
           const hardwareFabrication = getHardwareFabrication(
             type,
             fabricationsCount,
@@ -309,10 +310,24 @@ const customerEstimationSlice = createSlice({
       state.estimates = [...data];
       state.grandTotal = totalPrice;
     },
+    setEstimateStatus(state, action) {
+      const { estimateId, status } = action.payload;
+      const estimateIndex = state.estimates.findIndex(
+        (estimate) => estimate?.selectedItem?._id === estimateId
+      );
+      if (estimateIndex !== -1) {
+        state.estimates[estimateIndex].selectedItem.status = status;
+      }
+    },
   },
 });
 
-export const { setContent, setCounter, initializeState, setEstimateTotal } =
-  customerEstimationSlice.actions;
+export const {
+  setContent,
+  setCounter,
+  initializeState,
+  setEstimateTotal,
+  setEstimateStatus,
+} = customerEstimationSlice.actions;
 
 export default customerEstimationSlice.reducer;

@@ -24,6 +24,8 @@ import {
 import { backendURL, base64ToFile } from "@/utilities/common";
 import { useParams } from "react-router-dom";
 import { logActions } from "@/utilities/constants";
+import { getEstimatesList } from "@/redux/customerEstimateCalculation";
+import { useSelector } from "react-redux";
 
 const controls = {
   viewPricingSubCategory: true,
@@ -42,16 +44,24 @@ const pdfLocationData = {
   website: "www.gcs.glass",
 };
 
-const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms,totalSum }) => {
+const SigntureSection = ({
+  data,
+  refetchData,
+  estimatePdfs,
+  acceptTerms,
+  totalSum,
+}) => {
+  const estimatesList = useSelector(getEstimatesList);
+  console.log(data, "sdfsdddfgfweefvcddd", estimatesList);
   const newDate = new Date();
   const formattedDateTime = newDate.toLocaleString("en-US", {
     weekday: "long", // Full weekday name
-    month: "long",   // Full month name
-    day: "numeric",  // Numeric day
+    month: "long", // Full month name
+    day: "numeric", // Numeric day
     year: "numeric", // Full year
     hour: "numeric", // Hour
     minute: "2-digit", // Minute
-    hour12: true,    // 12-hour format
+    hour12: true, // 12-hour format
   });
   const { id } = useParams();
   const {
@@ -132,7 +142,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms,totalSum
             quote: estimatePdfs,
             location: pdfLocationData,
             estimateData: data,
-            totalSum:totalSum
+            totalSum: totalSum,
           }}
           key={`pdfFile${1}`}
         />
@@ -189,8 +199,8 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms,totalSum
   };
   const estimateStatus = useMemo(() => {
     let status = true;
-    data?.estimates?.forEach((item) => {
-      if (item?.status !== "approve") {
+    estimatesList?.forEach((item) => {
+      if (item?.selectedItem?.status !== "customer_approved") {
         status = false;
         return;
       }
@@ -586,65 +596,67 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms,totalSum
                   Your Estimate PDF is ready to download!{" "}
                 </Typography>
 
-                {!data?.invoice_id && <Stack
-                  sx={{ pb: 2.5, width: "285px" }}
-                  direction={"row"}
-                  gap={1.5}
-                  justifyContent={"space-between"}
-                >
-                  <Button
-                    fullWidth
-                    disabled={!estimateStatus}
-                    variant="contained"
-                    onClick={handleOpenEditModal}
-                    sx={{
-                      backgroundColor: "#F95500",
-                      color: "#0B0B0B",
-                      height: "44px",
-                      width: { sm: "100%", xs: "187px" },
-                      "&:hover": { backgroundColor: "#F95500" },
-                      "&.Mui-disabled": {
-                        background: "#F95500",
-                      },
-                      textTransform: "capitalize",
-                      borderRadius: 1,
-                      fontSize: { lg: 16, md: 15, xs: 12 },
-                      fontWeight: "bold !important",
-                      padding: {
-                        sm: "10px 16px  !important",
-                        xs: "5px 5px !important",
-                      },
-                    }}
+                {!data?.invoice_id && (
+                  <Stack
+                    sx={{ pb: 2.5, width: "285px" }}
+                    direction={"row"}
+                    gap={1.5}
+                    justifyContent={"space-between"}
                   >
-                    Pay Now
-                  </Button>
-                  <Button
-                    fullWidth
-                    // onClick={handleAddSignature}
-                    disabled={!estimateStatus}
-                    variant="contained"
-                    sx={{
-                      backgroundColor: "#F95500",
-                      color: "#0B0B0B",
-                      height: "44px",
-                      width: { sm: "100%", xs: "187px" },
-                      "&:hover": { backgroundColor: "#F95500" },
-                      "&.Mui-disabled": {
-                        background: "#F95500",
-                      },
-                      textTransform: "capitalize",
-                      borderRadius: 1,
-                      fontSize: { lg: 16, md: 15, xs: 12 },
-                      fontWeight: "bold !important",
-                      padding: {
-                        sm: "10px 16px  !important",
-                        xs: "5px 5px !important",
-                      },
-                    }}
-                  >
-                    Pay Later
-                  </Button>
-                </Stack>}
+                    <Button
+                      fullWidth
+                      disabled={!estimateStatus}
+                      variant="contained"
+                      onClick={handleOpenEditModal}
+                      sx={{
+                        backgroundColor: "#F95500",
+                        color: "#0B0B0B",
+                        height: "44px",
+                        width: { sm: "100%", xs: "187px" },
+                        "&:hover": { backgroundColor: "#F95500" },
+                        "&.Mui-disabled": {
+                          background: "#F95500",
+                        },
+                        textTransform: "capitalize",
+                        borderRadius: 1,
+                        fontSize: { lg: 16, md: 15, xs: 12 },
+                        fontWeight: "bold !important",
+                        padding: {
+                          sm: "10px 16px  !important",
+                          xs: "5px 5px !important",
+                        },
+                      }}
+                    >
+                      Pay Now
+                    </Button>
+                    <Button
+                      fullWidth
+                      // onClick={handleAddSignature}
+                      disabled={!estimateStatus}
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "#F95500",
+                        color: "#0B0B0B",
+                        height: "44px",
+                        width: { sm: "100%", xs: "187px" },
+                        "&:hover": { backgroundColor: "#F95500" },
+                        "&.Mui-disabled": {
+                          background: "#F95500",
+                        },
+                        textTransform: "capitalize",
+                        borderRadius: 1,
+                        fontSize: { lg: 16, md: 15, xs: 12 },
+                        fontWeight: "bold !important",
+                        padding: {
+                          sm: "10px 16px  !important",
+                          xs: "5px 5px !important",
+                        },
+                      }}
+                    >
+                      Pay Later
+                    </Button>
+                  </Stack>
+                )}
                 <Button
                   disabled={loading || !estimateStatus} // Disable button when loading
                   onClick={() => generatePDFDocument()}
