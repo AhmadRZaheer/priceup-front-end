@@ -160,6 +160,7 @@ const CustomizeLandingPage = ({
   // const [invoiceStatusBtn, setInvoiceStatusBtn] = useState(true);
 
   const generatePDF = (data) => {
+    console.log(data,'generatePDFgeneratePDF')
     // console.log("Call this function", data);
     if (data?.category === EstimateCategory.SHOWERS) {
       const formattedData = generateObjectForPDFPreview(
@@ -291,7 +292,7 @@ const CustomizeLandingPage = ({
     showersLocationSettings,
     pdfSettings,
   ]);
-  console.log(estimatePdfs, "estimatePdfsestimatePdfs");
+  console.log(estimatePdfs, "estimatePdfsestimatePdfs",selectedData?.estimateDetailArray);
   const decodedToken = getDecryptedToken();
   // const [estimatePdf, setEstimatePdf] = useState([]);
   const fileInputRef = useRef(null);

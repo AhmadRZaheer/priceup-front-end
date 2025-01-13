@@ -1,4 +1,8 @@
-const { layoutVariants, notificationsVariant, quoteState } = require("./constants");
+const {
+  layoutVariants,
+  notificationsVariant,
+  quoteState,
+} = require("./constants");
 
 export const generateContentForShowerEdit = (listData, estimate) => {
   let calculateChannelWarning = {
@@ -286,7 +290,7 @@ export const generateContentForMirrorEdit = (hardwaresList, estimate) => {
 };
 
 export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
-  console.log(hardwaresList,estimate,'ddddd')
+  console.log(hardwaresList, estimate, "ddddd");
   let calculateChannelWarning = {
     status: false,
     variant: notificationsVariant.DEFAULT,
@@ -649,10 +653,10 @@ export const generateEstimatePayloadForShower = (
     people: selectedContent?.people,
     hours: selectedContent?.hours,
     userProfitPercentage: selectedContent?.userProfitPercentage,
-    discount : {
-      value:selectedContent?.discount?.value ?? 0,
-      unit:selectedContent?.discount?.unit ?? 0,
-      total: selectedContent?.discount?.total ?? 0
+    discount: {
+      value: selectedContent?.discount?.value ?? 0,
+      unit: selectedContent?.discount?.unit ?? 0,
+      total: selectedContent?.discount?.total ?? 0,
     },
     // cost: Number(estimatesTotal),
     hardwareAddons: [...hardwareAddonsArray],
@@ -728,10 +732,10 @@ export const generateEstimatePayloadForMirror = (
     // doubleDuplex: selectedContent.doubleDuplex,
     // tripleDuplex: selectedContent.tripleDuplex,
     modifiedProfitPercentage: selectedContent.modifiedProfitPercentage,
-    discount : {
-      value:selectedContent?.discount?.value ?? 0,
-      unit:selectedContent?.discount?.unit ?? 0,
-      total: selectedContent?.discount?.total ?? 0
+    discount: {
+      value: selectedContent?.discount?.value ?? 0,
+      unit: selectedContent?.discount?.unit ?? 0,
+      total: selectedContent?.discount?.total ?? 0,
     },
     additionalFields: [...additionalFieldsArray],
     people: selectedContent.people,
@@ -888,7 +892,7 @@ export const generateEstimatePayloadForWineCellar = (
     discount: {
       value: selectedContent?.discount?.value ?? 0,
       unit: selectedContent?.discount?.unit ?? 0,
-      total: selectedContent?.discount?.total ?? 0
+      total: selectedContent?.discount?.total ?? 0,
     },
     // towelBarsCount: selectedContent?.sleeveOverCount,
     hardwareAddons: [...hardwareAddonsArray],
@@ -899,4 +903,85 @@ export const generateEstimatePayloadForWineCellar = (
     sqftArea: sqftArea,
   };
   return estimateConfig;
+};
+
+export const getFabricationsCostForShowerItem = (
+  item,
+  thickness,
+  fabricatingPricing
+) => {
+  let fabricationPrice = 0;
+  if (thickness === "1/2") {
+    fabricationPrice =
+      Number(item?.oneInchHoles ?? 0) *
+        (fabricatingPricing?.oneHoleOneByTwoInchGlass ?? 0) +
+      Number(item?.hingeCut ?? 0) *
+        (fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
+      Number(item?.clampCut ?? 0) *
+        (fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
+      Number(item?.notch ?? 0) * (fabricatingPricing?.notchOneByTwoInch ?? 0) +
+      Number(item?.outages ?? 0) *
+        (fabricatingPricing?.outageOneByTwoInch ?? 0) +
+      Number(item?.mitre ?? 0) * (fabricatingPricing?.miterOneByTwoInch ?? 0) +
+      Number(item?.polish ?? 0) *
+        (fabricatingPricing?.polishPricePerOneByTwoInch ?? 0);
+  } else if (thickness === "3/8") {
+    fabricationPrice =
+      Number(item?.oneInchHoles ?? 0) *
+        (fabricatingPricing?.oneHoleThreeByEightInchGlass ?? 0) +
+      Number(item?.hingeCut ?? 0) *
+        (fabricatingPricing?.hingeCutoutThreeByEightInch ?? 0) +
+      Number(item?.clampCut ?? 0) *
+        (fabricatingPricing?.clampCutoutThreeByEightInch ?? 0) +
+      Number(item?.notch ?? 0) *
+        (fabricatingPricing?.notchThreeByEightInch ?? 0) +
+      Number(item?.outages ?? 0) *
+        (fabricatingPricing?.outageThreeByEightInch ?? 0) +
+      Number(item?.mitre ?? 0) *
+        (fabricatingPricing?.miterThreeByEightInch ?? 0) +
+      Number(item?.polish ?? 0) *
+        (fabricatingPricing?.polishPricePerThreeByEightInch ?? 0);
+  }
+  return fabricationPrice;
+};
+export const getFabricationsCostForWineCellarItem = (
+  item,
+  thickness,
+  fabricatingPricing
+) => {
+  let fabricationPrice = 0;
+  if (thickness === "1/2") {
+    fabricationPrice =
+      Number(item?.oneInchHoles ?? 0) *
+        (fabricatingPricing?.fabrication?.oneHoleOneByTwoInchGlass ?? 0) +
+      Number(item?.hingeCut ?? 0) *
+        (fabricatingPricing?.fabrication?.hingeCutoutOneByTwoInch ?? 0) +
+      Number(item?.clampCut ?? 0) *
+        (fabricatingPricing?.fabrication?.clampCutoutOneByTwoInch ?? 0) +
+      Number(item?.notch ?? 0) *
+        (fabricatingPricing?.fabrication?.notchOneByTwoInch ?? 0) +
+      Number(item?.outages ?? 0) *
+        (fabricatingPricing?.fabrication?.outageOneByTwoInch ?? 0) +
+      Number(item?.mitre ?? 0) *
+        (fabricatingPricing?.fabrication?.miterOneByTwoInch ?? 0) +
+      Number(item?.polish ?? 0) *
+        (fabricatingPricing?.fabrication?.polishPricePerOneByTwoInch ?? 0);
+  } else if (thickness === "3/8") {
+    fabricationPrice =
+      Number(item?.oneInchHoles ?? 0) *
+        (fabricatingPricing?.fabrication?.oneHoleThreeByEightInchGlass ?? 0) +
+      Number(item?.hingeCut ?? 0) *
+        (fabricatingPricing?.fabrication?.hingeCutoutThreeByEightInch ?? 0) +
+      Number(item?.clampCut ?? 0) *
+        (fabricatingPricing?.fabrication?.clampCutoutThreeByEightInch ?? 0) +
+      Number(item?.notch ?? 0) *
+        (fabricatingPricing?.fabrication?.notchThreeByEightInch ?? 0) +
+      Number(item?.outages ?? 0) *
+        (fabricatingPricing?.fabrication?.outageThreeByEightInch ?? 0) +
+      Number(item?.mitre ?? 0) *
+        (fabricatingPricing?.fabrication?.miterThreeByEightInch ?? 0) +
+      Number(item?.polish ?? 0) *
+        (fabricatingPricing?.fabrication?.polishPricePerThreeByEightInch ?? 0);
+  }
+  return fabricationPrice;
 };

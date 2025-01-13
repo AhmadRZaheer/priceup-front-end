@@ -130,6 +130,7 @@ const SigntureSection = ({
     setIsPadOpen(false);
   };
   const [loading, setLoading] = useState(false);
+  console.log(estimatePdfs,pdfLocationData,data,totalSum,'totalSumtotalSumtotalSum')
   const generatePDFDocument = async () => {
     try {
       setLoading(true);
