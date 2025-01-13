@@ -515,3 +515,388 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
     calculateChannelWarning,
   };
 };
+
+export const generateEstimatePayloadForShower = (
+  estimateState,
+  measurements,
+  selectedContent,
+  layout_id,
+  isCustomizedDoorWidth,
+  doorWidthredux,
+  perimeter,
+  sqftArea
+) => {
+  let measurementsArray = measurements;
+  if (
+    (estimateState === quoteState.EDIT && !layout_id) ||
+    estimateState === quoteState.CUSTOM
+  ) {
+    let newArray = [];
+    for (const key in measurementsArray) {
+      const index = parseInt(key);
+      newArray[index] = measurementsArray[key];
+    }
+    measurementsArray = newArray;
+  }
+  let filteredFields = selectedContent.additionalFields.filter(
+    (item) => item.label !== "" && item.cost !== 0
+  );
+
+  const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
+    return {
+      type: row.item._id,
+      count: row.count,
+    };
+  });
+  const wallClampArray = selectedContent?.mountingClamps?.wallClamp?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+  const sleeveOverArray = selectedContent?.mountingClamps?.sleeveOver?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+  const additionalFieldsArray = filteredFields.map((row) => {
+    return {
+      cost: row.cost,
+      label: row.label,
+    };
+  });
+  const glassToGlassArray = selectedContent?.mountingClamps?.glassToGlass?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+  const cornerWallClampArray =
+    selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const cornerSleeveOverArray =
+    selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const cornerGlassToGlassArray =
+    selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const glassAddonsArray = selectedContent?.glassAddons?.map(
+    (item) => item?._id
+  );
+  const estimateConfig = {
+    doorWidth: Number(doorWidthredux),
+    isCustomizedDoorWidth: isCustomizedDoorWidth,
+    additionalFields: [...additionalFieldsArray],
+    hardwareFinishes: selectedContent?.hardwareFinishes?._id,
+    handles: {
+      type: selectedContent?.handles?.item?._id,
+      count: selectedContent?.handles?.count,
+    },
+    hinges: {
+      type: selectedContent?.hinges?.item?._id,
+      count: selectedContent?.hinges?.count,
+    },
+    mountingClamps: {
+      wallClamp: [...wallClampArray],
+      sleeveOver: [...sleeveOverArray],
+      glassToGlass: [...glassToGlassArray],
+    },
+    cornerClamps: {
+      wallClamp: [...cornerWallClampArray],
+      sleeveOver: [...cornerSleeveOverArray],
+      glassToGlass: [...cornerGlassToGlassArray],
+    },
+    mountingChannel: selectedContent?.mountingChannel?.item?._id || null,
+    glassType: {
+      type: selectedContent?.glassType?.item?._id,
+      thickness: selectedContent?.glassType?.thickness,
+    },
+    glassAddons: [...glassAddonsArray],
+    slidingDoorSystem: {
+      type: selectedContent?.slidingDoorSystem?.item?._id,
+      count: selectedContent?.slidingDoorSystem?.count,
+    },
+    header: {
+      type: selectedContent?.header?.item?._id,
+      count: selectedContent?.header?.count,
+    },
+    oneInchHoles: selectedContent?.oneInchHoles,
+    hingeCut: selectedContent?.hingeCut,
+    clampCut: selectedContent?.clampCut,
+    notch: selectedContent?.notch,
+    outages: selectedContent?.outages,
+    mitre: selectedContent?.mitre,
+    polish: selectedContent?.polish,
+    people: selectedContent?.people,
+    hours: selectedContent?.hours,
+    userProfitPercentage: selectedContent?.userProfitPercentage,
+    discount : {
+      value:selectedContent?.discount?.value ?? 0,
+      unit:selectedContent?.discount?.unit ?? 0,
+      total: selectedContent?.discount?.total ?? 0
+    },
+    // cost: Number(estimatesTotal),
+    hardwareAddons: [...hardwareAddonsArray],
+    sleeveOverCount: selectedContent?.sleeveOverCount,
+    towelBarsCount: selectedContent?.sleeveOverCount,
+    measurements: measurementsArray,
+    perimeter: perimeter,
+    sqftArea: sqftArea,
+  };
+  return estimateConfig;
+};
+
+export const generateEstimatePayloadForMirror = (
+  measurements,
+  selectedContent,
+  sqftArea
+) => {
+  let measurementsArray = measurements;
+  // if (estimateState === quoteState.EDIT && !layout_id || estimateState === quoteState.CUSTOM) {
+  let newArray = [];
+  for (const key in measurementsArray) {
+    const index = parseInt(key);
+    newArray[index] = measurementsArray[key];
+  }
+  measurementsArray = newArray;
+  // }
+
+  const glassAddonsArray = selectedContent?.glassAddons?.map(
+    (item) => item?._id
+  );
+
+  const hardwaresArray = selectedContent?.hardwares?.map((row) => {
+    return {
+      type: row.item._id,
+      count: row.count,
+    };
+  });
+  const filteredFields = selectedContent.additionalFields?.filter(
+    (item) => item.label !== "" && item.cost !== 0
+  );
+
+  const additionalFieldsArray = filteredFields?.map((row) => {
+    return {
+      cost: row.cost,
+      label: row.label,
+    };
+  });
+
+  const estimateConfig = {
+    glassType: {
+      type: selectedContent?.glassType?.item?._id,
+      thickness: selectedContent?.glassType?.thickness,
+    },
+    edgeWork: {
+      type: selectedContent?.edgeWork?.item?._id,
+      thickness: selectedContent?.edgeWork?.thickness,
+    },
+    glassAddons: [...glassAddonsArray],
+    hardwares: [...hardwaresArray],
+    // floatingSize: selectedContent.floatingSize,
+    // sandBlasting: selectedContent.sandBlasting,
+    // bevelStrip: selectedContent.bevelStrip,
+    // safetyBacking: selectedContent.safetyBacking,
+    simpleHoles: selectedContent.simpleHoles,
+    // outlets: selectedContent.outlets,
+    lightHoles: selectedContent.lightHoles,
+    notch: selectedContent.notch,
+    singleOutletCutout: selectedContent.singleOutletCutout,
+    doubleOutletCutout: selectedContent.doubleOutletCutout,
+    tripleOutletCutout: selectedContent.tripleOutletCutout,
+    quadOutletCutout: selectedContent.quadOutletCutout,
+    // singleDuplex: selectedContent.singleDuplex,
+    // doubleDuplex: selectedContent.doubleDuplex,
+    // tripleDuplex: selectedContent.tripleDuplex,
+    modifiedProfitPercentage: selectedContent.modifiedProfitPercentage,
+    discount : {
+      value:selectedContent?.discount?.value ?? 0,
+      unit:selectedContent?.discount?.unit ?? 0,
+      total: selectedContent?.discount?.total ?? 0
+    },
+    additionalFields: [...additionalFieldsArray],
+    people: selectedContent.people,
+    hours: selectedContent.hours,
+    measurements: measurementsArray,
+    sqftArea: sqftArea,
+  };
+  return estimateConfig;
+};
+
+export const generateEstimatePayloadForWineCellar = (
+  estimateState,
+  measurements,
+  selectedContent,
+  layout_id,
+  isCustomizedDoorWidth,
+  doorWidthredux,
+  doorQuantity,
+  perimeter,
+  sqftArea
+) => {
+  let measurementsArray = measurements;
+  if (
+    (estimateState === quoteState.EDIT && !layout_id) ||
+    estimateState === quoteState.CUSTOM
+  ) {
+    let newArray = [];
+    for (const key in measurementsArray) {
+      const index = parseInt(key);
+      newArray[index] = measurementsArray[key];
+    }
+    measurementsArray = newArray;
+  }
+  let filteredFields = selectedContent.additionalFields.filter(
+    (item) => item.label !== "" && item.cost !== 0
+  );
+
+  const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
+    return {
+      type: row.item._id,
+      count: row.count,
+    };
+  });
+  const wallClampArray = selectedContent?.mountingClamps?.wallClamp?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+  const sleeveOverArray = selectedContent?.mountingClamps?.sleeveOver?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+
+  const additionalFieldsArray = filteredFields.map((row) => {
+    return {
+      cost: row.cost,
+      label: row.label,
+    };
+  });
+
+  const glassToGlassArray = selectedContent?.mountingClamps?.glassToGlass?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+  const cornerWallClampArray =
+    selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const cornerSleeveOverArray =
+    selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const cornerGlassToGlassArray =
+    selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const glassAddonsArray = selectedContent?.glassAddons?.map(
+    (item) => item?._id
+  );
+
+  const estimateConfig = {
+    doorWidth: Number(doorWidthredux),
+    doorQuantity: Number(doorQuantity),
+    isCustomizedDoorWidth: isCustomizedDoorWidth,
+    additionalFields: [...additionalFieldsArray],
+    hardwareFinishes: selectedContent?.hardwareFinishes?._id,
+    handles: {
+      type: selectedContent?.handles?.item?._id,
+      count: selectedContent?.handles?.count,
+    },
+    doorLock: {
+      type: selectedContent?.doorLock?.item?._id || null,
+      count: selectedContent?.doorLock?.count,
+    },
+    hinges: {
+      type: selectedContent?.hinges?.item?._id,
+      count: selectedContent?.hinges?.count,
+    },
+    mountingClamps: {
+      wallClamp: [...wallClampArray],
+      sleeveOver: [...sleeveOverArray],
+      glassToGlass: [...glassToGlassArray],
+    },
+    cornerClamps: {
+      wallClamp: [...cornerWallClampArray],
+      sleeveOver: [...cornerSleeveOverArray],
+      glassToGlass: [...cornerGlassToGlassArray],
+    },
+    mountingChannel: selectedContent?.mountingChannel?.item?._id || null,
+    glassType: {
+      type: selectedContent?.glassType?.item?._id,
+      thickness: selectedContent?.glassType?.thickness,
+    },
+    glassAddons: [...glassAddonsArray],
+    slidingDoorSystem: {
+      type: selectedContent?.slidingDoorSystem?.item?._id,
+      count: selectedContent?.slidingDoorSystem?.count,
+    },
+    header: {
+      type: selectedContent?.header?.item?._id,
+      count: selectedContent?.header?.count,
+    },
+    oneInchHoles: selectedContent?.oneInchHoles,
+    hingeCut: selectedContent?.hingeCut,
+    clampCut: selectedContent?.clampCut,
+    notch: selectedContent?.notch,
+    outages: selectedContent?.outages,
+    mitre: selectedContent?.mitre,
+    polish: selectedContent?.polish,
+    people: selectedContent?.people,
+    hours: selectedContent?.hours,
+    laborHoursForDoor: selectedContent?.laborHoursForDoor,
+    userProfitPercentage: selectedContent?.userProfitPercentage,
+    discount: {
+      value: selectedContent?.discount?.value ?? 0,
+      unit: selectedContent?.discount?.unit ?? 0,
+      total: selectedContent?.discount?.total ?? 0
+    },
+    // towelBarsCount: selectedContent?.sleeveOverCount,
+    hardwareAddons: [...hardwareAddonsArray],
+    sleeveOverCount: selectedContent?.sleeveOverCount,
+    towelBarsCount: selectedContent?.sleeveOverCount,
+    measurements: measurementsArray,
+    perimeter: perimeter,
+    sqftArea: sqftArea,
+  };
+  return estimateConfig;
+};

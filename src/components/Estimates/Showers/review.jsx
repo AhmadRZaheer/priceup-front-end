@@ -64,154 +64,8 @@ import { CustomerSelectModal } from "../CustomerSelectModal";
 import EnterLabelModal from "../enterLabelModal";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import { Add } from "@mui/icons-material";
+import { generateEstimatePayloadForShower } from "@/utilities/generateEstimateCalculationContent";
 
-export const generateEstimatePayload = (
-  estimateState,
-  measurements,
-  selectedContent,
-  layout_id,
-  isCustomizedDoorWidth,
-  doorWidthredux,
-  perimeter,
-  sqftArea
-) => {
-  let measurementsArray = measurements;
-  if (
-    (estimateState === quoteState.EDIT && !layout_id) ||
-    estimateState === quoteState.CUSTOM
-  ) {
-    let newArray = [];
-    for (const key in measurementsArray) {
-      const index = parseInt(key);
-      newArray[index] = measurementsArray[key];
-    }
-    measurementsArray = newArray;
-  }
-  let filteredFields = selectedContent.additionalFields.filter(
-    (item) => item.label !== "" && item.cost !== 0
-  );
-
-  const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
-    return {
-      type: row.item._id,
-      count: row.count,
-    };
-  });
-  const wallClampArray = selectedContent?.mountingClamps?.wallClamp?.map(
-    (row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    }
-  );
-  const sleeveOverArray = selectedContent?.mountingClamps?.sleeveOver?.map(
-    (row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    }
-  );
-  const additionalFieldsArray = filteredFields.map((row) => {
-    return {
-      cost: row.cost,
-      label: row.label,
-    };
-  });
-  const glassToGlassArray = selectedContent?.mountingClamps?.glassToGlass?.map(
-    (row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    }
-  );
-  const cornerWallClampArray =
-    selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    });
-  const cornerSleeveOverArray =
-    selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    });
-  const cornerGlassToGlassArray =
-    selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    });
-  const glassAddonsArray = selectedContent?.glassAddons?.map(
-    (item) => item?._id
-  );
-  const estimateConfig = {
-    doorWidth: Number(doorWidthredux),
-    isCustomizedDoorWidth: isCustomizedDoorWidth,
-    additionalFields: [...additionalFieldsArray],
-    hardwareFinishes: selectedContent?.hardwareFinishes?._id,
-    handles: {
-      type: selectedContent?.handles?.item?._id,
-      count: selectedContent?.handles?.count,
-    },
-    hinges: {
-      type: selectedContent?.hinges?.item?._id,
-      count: selectedContent?.hinges?.count,
-    },
-    mountingClamps: {
-      wallClamp: [...wallClampArray],
-      sleeveOver: [...sleeveOverArray],
-      glassToGlass: [...glassToGlassArray],
-    },
-    cornerClamps: {
-      wallClamp: [...cornerWallClampArray],
-      sleeveOver: [...cornerSleeveOverArray],
-      glassToGlass: [...cornerGlassToGlassArray],
-    },
-    mountingChannel: selectedContent?.mountingChannel?.item?._id || null,
-    glassType: {
-      type: selectedContent?.glassType?.item?._id,
-      thickness: selectedContent?.glassType?.thickness,
-    },
-    glassAddons: [...glassAddonsArray],
-    slidingDoorSystem: {
-      type: selectedContent?.slidingDoorSystem?.item?._id,
-      count: selectedContent?.slidingDoorSystem?.count,
-    },
-    header: {
-      type: selectedContent?.header?.item?._id,
-      count: selectedContent?.header?.count,
-    },
-    oneInchHoles: selectedContent?.oneInchHoles,
-    hingeCut: selectedContent?.hingeCut,
-    clampCut: selectedContent?.clampCut,
-    notch: selectedContent?.notch,
-    outages: selectedContent?.outages,
-    mitre: selectedContent?.mitre,
-    polish: selectedContent?.polish,
-    people: selectedContent?.people,
-    hours: selectedContent?.hours,
-    userProfitPercentage: selectedContent?.userProfitPercentage,
-    discount : {
-      value:selectedContent?.discount?.value ?? 0,
-      unit:selectedContent?.discount?.unit ?? 0,
-    },
-    // cost: Number(estimatesTotal),
-    hardwareAddons: [...hardwareAddonsArray],
-    sleeveOverCount: selectedContent?.sleeveOverCount,
-    towelBarsCount: selectedContent?.sleeveOverCount,
-    measurements: measurementsArray,
-    perimeter: perimeter,
-    sqftArea: sqftArea,
-  };
-  return estimateConfig;
-};
 
 export const ShowerReview = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -270,7 +124,7 @@ export const ShowerReview = ({ setStep }) => {
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
-    const estimateConfig = generateEstimatePayload(
+    const estimateConfig = generateEstimatePayloadForShower(
       currentQuoteState,
       measurements,
       selectedContent,
@@ -326,7 +180,7 @@ export const ShowerReview = ({ setStep }) => {
     console.log(allGoodStatus, "Estimate Status");
     if (allGoodStatus) {
       if ([quoteState.CREATE, quoteState.CUSTOM].includes(currentQuoteState)) {
-        const estimateConfig = generateEstimatePayload(
+        const estimateConfig = generateEstimatePayloadForShower(
           currentQuoteState,
           measurements,
           selectedContent,

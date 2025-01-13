@@ -146,7 +146,7 @@ const customerEstimationSlice = createSlice({
             item,
             count: counter ?? 0,
           };
-          const getHardwareFabrication = EstimateCategory.SHOWERS
+          const getHardwareFabrication = state.estimates[estimateIndex].category === EstimateCategory.SHOWERS
             ? getShowerHardwareFabrication
             : getWineCellarHardwareFabrication;
           const hardwareFabrication = getHardwareFabrication(

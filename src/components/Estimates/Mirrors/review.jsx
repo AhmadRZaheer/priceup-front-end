@@ -50,84 +50,10 @@ import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import { enqueueSnackbar } from "notistack";
 import EnterLabelModal from "../enterLabelModal";
 import { Add } from "@mui/icons-material";
+import { generateEstimatePayloadForMirror } from "@/utilities/generateEstimateCalculationContent";
 
 // const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
-export const generateEstimatePayload = (
-  measurements,
-  selectedContent,
-  sqftArea
-) => {
-  let measurementsArray = measurements;
-  // if (estimateState === quoteState.EDIT && !layout_id || estimateState === quoteState.CUSTOM) {
-  let newArray = [];
-  for (const key in measurementsArray) {
-    const index = parseInt(key);
-    newArray[index] = measurementsArray[key];
-  }
-  measurementsArray = newArray;
-  // }
-
-  const glassAddonsArray = selectedContent?.glassAddons?.map(
-    (item) => item?._id
-  );
-
-  const hardwaresArray = selectedContent?.hardwares?.map((row) => {
-    return {
-      type: row.item._id,
-      count: row.count,
-    };
-  });
-  const filteredFields = selectedContent.additionalFields?.filter(
-    (item) => item.label !== "" && item.cost !== 0
-  );
-
-  const additionalFieldsArray = filteredFields?.map((row) => {
-    return {
-      cost: row.cost,
-      label: row.label,
-    };
-  });
-
-  const estimateConfig = {
-    glassType: {
-      type: selectedContent?.glassType?.item?._id,
-      thickness: selectedContent?.glassType?.thickness,
-    },
-    edgeWork: {
-      type: selectedContent?.edgeWork?.item?._id,
-      thickness: selectedContent?.edgeWork?.thickness,
-    },
-    glassAddons: [...glassAddonsArray],
-    hardwares: [...hardwaresArray],
-    // floatingSize: selectedContent.floatingSize,
-    // sandBlasting: selectedContent.sandBlasting,
-    // bevelStrip: selectedContent.bevelStrip,
-    // safetyBacking: selectedContent.safetyBacking,
-    simpleHoles: selectedContent.simpleHoles,
-    // outlets: selectedContent.outlets,
-    lightHoles: selectedContent.lightHoles,
-    notch: selectedContent.notch,
-    singleOutletCutout: selectedContent.singleOutletCutout,
-    doubleOutletCutout: selectedContent.doubleOutletCutout,
-    tripleOutletCutout: selectedContent.tripleOutletCutout,
-    quadOutletCutout: selectedContent.quadOutletCutout,
-    // singleDuplex: selectedContent.singleDuplex,
-    // doubleDuplex: selectedContent.doubleDuplex,
-    // tripleDuplex: selectedContent.tripleDuplex,
-    modifiedProfitPercentage: selectedContent.modifiedProfitPercentage,
-    discount : {
-      value:selectedContent?.discount?.value ?? 0,
-      unit:selectedContent?.discount?.unit ?? 0,
-    },
-    additionalFields: [...additionalFieldsArray],
-    people: selectedContent.people,
-    hours: selectedContent.hours,
-    measurements: measurementsArray,
-    sqftArea: sqftArea,
-  };
-  return estimateConfig;
-};
 
 export const MirrorReview = ({ setStep }) => {
   const navigate = useNavigate();
@@ -165,7 +91,7 @@ export const MirrorReview = ({ setStep }) => {
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
-    const estimateConfig = generateEstimatePayload(
+    const estimateConfig = generateEstimatePayloadForMirror(
       measurements,
       selectedContent,
       sqftArea
@@ -216,7 +142,7 @@ export const MirrorReview = ({ setStep }) => {
     const allGoodStatus = getEstimateErrorStatus(selectedContent);
     if (allGoodStatus) {
       if (currentEstimateState === quoteState.CREATE) {
-        const estimateConfig = generateEstimatePayload(
+        const estimateConfig = generateEstimatePayloadForMirror(
           measurements,
           selectedContent,
           sqftArea
