@@ -101,8 +101,8 @@ const CreateInvoice = () => {
         source_id: selectedPreview?._id,
       }
       const response = await createInvoice({
-        payload,
-        apiRoute: `${backendURL}/projects/landing-page-preview`,
+        data:payload,
+        apiRoute: `${backendURL}/invoices/save`,
       });
       console.log(response);
       navigate(`/invoices/edit/?item_id=${response?._id}`);
