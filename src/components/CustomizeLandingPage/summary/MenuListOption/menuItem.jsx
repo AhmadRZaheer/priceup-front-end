@@ -1,4 +1,9 @@
-import { MenuItem as MuiMenuItem, Tooltip } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  MenuItem as MuiMenuItem,
+  Tooltip,
+} from "@mui/material";
 import { backendURL } from "@/utilities/common";
 import { Box, Typography } from "@mui/material";
 import OptionWithCounter from "./optionWithCounter";
@@ -6,6 +11,8 @@ import { getActiveStatus } from "@/utilities/estimatorHelper";
 import { useMemo, useState } from "react";
 import { hardwareTypes } from "@/utilities/constants";
 import { CheckCircle } from "@mui/icons-material";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import OptionInfoModel from "./optionInfoModel";
 
 const MenuItem = ({
   item,
@@ -54,7 +61,9 @@ const MenuItem = ({
   };
   const isSelected =
     type === "hardwareAddons"
-      ? selectedContent?.hardwareAddons.some((row) => row?.item?._id === item?._id)
+      ? selectedContent?.hardwareAddons.some(
+          (row) => row?.item?._id === item?._id
+        )
       : type === "glassAddons"
       ? selectedContent?.glassAddons.some(
           (selectedItem) => selectedItem?._id === item?._id
@@ -84,7 +93,7 @@ const MenuItem = ({
           (selectedItem) => selectedItem?.item?._id === item?._id
         )
       : item?._id === selectedItem?._id;
-       console.log(isSelected,type,item?._id === selectedItem?._id);
+  console.log(isSelected, type, item?._id === selectedItem?._id);
   // const selectedCount = useMemo(() => {
   //   const value =  selectedContent?.hardwareAddons?.find(
   //     (row) => row?.type === item?._id
@@ -145,7 +154,7 @@ const MenuItem = ({
             //  : "#BABABA",
           }}
         >
-          <Box sx={{ display: "flex", gap: 2 }}>
+          <Box sx={{ display: "flex", gap: 1 }}>
             {/* <img
               width={"25px"}
               height={"25px"}
@@ -160,6 +169,7 @@ const MenuItem = ({
                   ? locationSettings?.miscPricing?.pricingFactor
                   : 1)} */}
             </Typography>
+            <OptionInfoModel itemData={item} />
           </Box>
           <Box>
             {type === "hardwareAddons" ? (

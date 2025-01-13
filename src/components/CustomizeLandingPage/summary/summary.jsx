@@ -72,7 +72,7 @@ const ShowerSummary = ({
   UpgradeOPtions,
   reCalculateTotal,
 }) => {
-  console.log(data, "datadatadata123", locationSettings);
+  console.log(data, "datadatadata123");
   const { id } = useParams();
   const dispatch = useDispatch();
   const userProfitPercentage =
@@ -1200,7 +1200,7 @@ const ShowerSummary = ({
                         Sub Total:
                       </Typography>
                       <Typography className="text-xs-ragular">
-                        $ {(totalPrice ?? 0)?.toFixed(2)}
+                        $ {(data?.totalPrice ?? 0)?.toFixed(2)}
                       </Typography>
                     </Box>
                     <Box
@@ -1234,7 +1234,7 @@ const ShowerSummary = ({
                       Total Price:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      ${(data?.totalPrice ?? 0).toFixed(2)}
+                      ${((discountValue > 0 ? data?.content?.discount?.total : data?.totalPrice) ?? 0).toFixed(2)}
                       {/* {calculateDiscount(
                         totalPrice,
                         discountValue,
@@ -1465,12 +1465,12 @@ const ShowerSummary = ({
                               fontWeight: "bold !important",
                             }}
                           >
-                            $
-                            {calculateDiscount(
+                            $ {(data?.content?.discount?.total ?? 0)?.toFixed(2)}
+                            {/* {calculateDiscount(
                               totalPrice,
                               discountValue,
                               data?.config?.config?.discount?.unit
-                            ).toFixed(2)}
+                            ).toFixed(2)} */}
                           </Typography>
                         )}
                       </Box>
@@ -1995,6 +1995,7 @@ const ShowerSummary = ({
                         : 1,
                   }}
                 >
+                  {console.log(glasstypeList,'asasasaswesssd')}
                   <MenuList
                     menuOptions={glasstypeList ?? []}
                     title={"Glass type"}

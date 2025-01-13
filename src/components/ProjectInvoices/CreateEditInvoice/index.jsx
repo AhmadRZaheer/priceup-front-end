@@ -227,6 +227,10 @@ const ProjectInvoiceComponent = ({
     // const updatedDate = currentDate.add(15, "day");
     // ISO format mein convert karein
     // const formattedDate = currentDate.toISOString();
+
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const dateForName = new Date().toLocaleDateString(undefined, options);
+
     const customerPayLoad = {
       link: "",
       expiresAt: currentDate,
@@ -237,6 +241,7 @@ const ProjectInvoiceComponent = ({
       address: companySettings?.address,
     };
     const data = {
+      name:`Preview Created on ${dateForName} for ${estimatesList?.length} Estimates.`,
       customer_id: selectedCustomer?._id,
       project_id: selectedProject?._id,
       customerPreview: customerPayLoad,
