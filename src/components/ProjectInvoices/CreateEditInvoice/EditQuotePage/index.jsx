@@ -712,7 +712,9 @@ const EditQuoteInvoice = () => {
                       gap: 2,
                       aligItems: "baseline",
                       width: "98%",
-                      padding: "16px",
+                      p: "16px",
+                      pt:'16px',
+                      pb:'8px'
                     }}
                   >
                     <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
@@ -814,8 +816,9 @@ const EditQuoteInvoice = () => {
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      padding: "16px",
+                      px: "16px",
                       gap: "10px",
+                      mb:1.5
                     }}
                   >
                     <Typography sx={{ fontSize: "22px", fontWeight: "600" }}>

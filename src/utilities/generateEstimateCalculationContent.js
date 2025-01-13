@@ -952,36 +952,36 @@ export const getFabricationsCostForWineCellarItem = (
   let fabricationPrice = 0;
   if (thickness === "1/2") {
     fabricationPrice =
-      Number(item?.oneInchHoles ?? 0) *
-        (fabricatingPricing?.fabrication?.oneHoleOneByTwoInchGlass ?? 0) +
-      Number(item?.hingeCut ?? 0) *
-        (fabricatingPricing?.fabrication?.hingeCutoutOneByTwoInch ?? 0) +
-      Number(item?.clampCut ?? 0) *
-        (fabricatingPricing?.fabrication?.clampCutoutOneByTwoInch ?? 0) +
-      Number(item?.notch ?? 0) *
-        (fabricatingPricing?.fabrication?.notchOneByTwoInch ?? 0) +
-      Number(item?.outages ?? 0) *
-        (fabricatingPricing?.fabrication?.outageOneByTwoInch ?? 0) +
-      Number(item?.mitre ?? 0) *
-        (fabricatingPricing?.fabrication?.miterOneByTwoInch ?? 0) +
-      Number(item?.polish ?? 0) *
-        (fabricatingPricing?.fabrication?.polishPricePerOneByTwoInch ?? 0);
+      Number(item?.fabrication?.oneInchHoles ?? 0) *
+        (fabricatingPricing?.oneHoleOneByTwoInchGlass ?? 0) +
+      Number(item?.fabrication?.hingeCut ?? 0) *
+        (fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
+      Number(item?.fabrication?.clampCut ?? 0) *
+        (fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
+      Number(item?.fabrication?.notch ?? 0) *
+        (fabricatingPricing?.notchOneByTwoInch ?? 0) +
+      Number(item?.fabrication?.outages ?? 0) *
+        (fabricatingPricing?.outageOneByTwoInch ?? 0) +
+      Number(item?.fabrication?.mitre ?? 0) *
+        (fabricatingPricing?.miterOneByTwoInch ?? 0) +
+      Number(item?.fabrication?.polish ?? 0) *
+        (fabricatingPricing?.polishPricePerOneByTwoInch ?? 0);
   } else if (thickness === "3/8") {
     fabricationPrice =
-      Number(item?.oneInchHoles ?? 0) *
-        (fabricatingPricing?.fabrication?.oneHoleThreeByEightInchGlass ?? 0) +
-      Number(item?.hingeCut ?? 0) *
-        (fabricatingPricing?.fabrication?.hingeCutoutThreeByEightInch ?? 0) +
-      Number(item?.clampCut ?? 0) *
-        (fabricatingPricing?.fabrication?.clampCutoutThreeByEightInch ?? 0) +
-      Number(item?.notch ?? 0) *
-        (fabricatingPricing?.fabrication?.notchThreeByEightInch ?? 0) +
-      Number(item?.outages ?? 0) *
-        (fabricatingPricing?.fabrication?.outageThreeByEightInch ?? 0) +
-      Number(item?.mitre ?? 0) *
-        (fabricatingPricing?.fabrication?.miterThreeByEightInch ?? 0) +
-      Number(item?.polish ?? 0) *
-        (fabricatingPricing?.fabrication?.polishPricePerThreeByEightInch ?? 0);
+      Number(item?.fabrication?.oneInchHoles ?? 0) *
+        (fabricatingPricing?.oneHoleThreeByEightInchGlass ?? 0) +
+      Number(item?.fabrication?.hingeCut ?? 0) *
+        (fabricatingPricing?.hingeCutoutThreeByEightInch ?? 0) +
+      Number(item?.fabrication?.clampCut ?? 0) *
+        (fabricatingPricing?.clampCutoutThreeByEightInch ?? 0) +
+      Number(item?.fabrication?.notch ?? 0) *
+        (fabricatingPricing?.notchThreeByEightInch ?? 0) +
+      Number(item?.fabrication?.outages ?? 0) *
+        (fabricatingPricing?.outageThreeByEightInch ?? 0) +
+      Number(item?.fabrication?.mitre ?? 0) *
+        (fabricatingPricing?.miterThreeByEightInch ?? 0) +
+      Number(item?.fabrication?.polish ?? 0) *
+        (fabricatingPricing?.polishPricePerThreeByEightInch ?? 0);
   }
   return fabricationPrice;
 };
