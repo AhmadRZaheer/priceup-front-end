@@ -56,6 +56,8 @@ import {
   generateEstimatePayloadForMirror,
   generateEstimatePayloadForShower,
   generateEstimatePayloadForWineCellar,
+  getFabricationsCostForShowerItem,
+  getFabricationsCostForWineCellarItem,
 } from "@/utilities/generateEstimateCalculationContent";
 
 const arr = [1, 2];
@@ -70,7 +72,7 @@ const ShowerSummary = ({
   UpgradeOPtions,
   reCalculateTotal,
 }) => {
-  console.log(data, "datadatadata123");
+  console.log(data, "datadatadata123", locationSettings);
   const { id } = useParams();
   const dispatch = useDispatch();
   const userProfitPercentage =
@@ -92,8 +94,8 @@ const ShowerSummary = ({
   const discountUnit = data?.content?.discount?.unit ?? "%";
   const laborPrice =
     data?.category === EstimateCategory.WINECELLARS
-      ? data?.pricing?.laborPrice + (data?.pricing?.doorLaborPrice ?? 0)
-      : data?.pricing?.laborPrice;
+      ? data?.laborPrice + (data?.doorLaborPrice ?? 0)
+      : data?.laborPrice;
   // const hardwaresList = useSelector(getListData);
   const {
     mutateAsync: customerDecision,
@@ -161,22 +163,24 @@ const ShowerSummary = ({
     if (
       upgradeGlassList?.length === 0 ||
       !upgradeGlassList?.some(
-        (glass) => glass._id === data?.content?.glassType?.item?._id
+        (glass) => glass._id === data?.selectedItem?.config?.glassType?.type
       )
     ) {
       const item = hardwaresList?.glassType?.find(
-        (glass) => glass._id === data?.content?.glassType?.item?._id
+        (glass) => glass._id === data?.selectedItem?.config?.glassType?.type
       );
-      console.log(item,upgradeGlassList,'sdsdwwwwws');
       if (item) {
-        upgradeGlassList.push(item,'sdsdwwwwws');
+        upgradeGlassList.push(item);
       }
       console.log(upgradeGlassList);
     }
+
     const glassTypedata = upgradeGlassList?.map((item) => {
-      const price = item?.options?.find(
-        (option) => option.thickness === data?.content?.glassType?.thickness
-      )?.cost;
+      const price =
+        item?.options?.find(
+          (option) => option.thickness === data?.content?.glassType?.thickness
+        )?.cost || 0;
+
       // const itemPrice = (data?.sqftArea * price ?? 0) * factorPrice;
       const costDifference =
         upgradeGlassList
@@ -188,20 +192,21 @@ const ShowerSummary = ({
             )
           )
           ?.find((option) => option)?.cost || 0;
-
       // let totalDiference =
       //   itemPrice -
       //   (selectedHardware?.sqftArea * costDifference ?? 0) * factorPrice;
 
       const currentItemCost =
-        totalCost - data?.sqftArea * costDifference + data?.sqftArea * price;
-      let singleItemCost = currentItemCost * factorPrice + laborPrice;
+        (data?.cost ?? 0) -
+          data?.sqftArea * costDifference +
+          data?.sqftArea * price ?? 0;
+      let singleItemCost = currentItemCost * factorPrice + laborPrice ?? 0;
 
       if (userProfitPercentage > 0 && userProfitPercentage < 100) {
         singleItemCost =
           ((currentItemCost * 100) / (userProfitPercentage - 100)) * -1;
       }
-      const itemDifference = singleItemCost - totalPrice;
+      const itemDifference = singleItemCost - data?.totalPrice;
       const singleGlassCost =
         discountValue > 0 && discountUnit === "%"
           ? itemDifference - (itemDifference * Number(discountValue)) / 100
@@ -227,7 +232,7 @@ const ShowerSummary = ({
       };
     });
     return glassTypedata ?? [];
-  }, [data?.content?.glassType, hardwaresList?.glassType, UpgradeOPtions]);
+  }, [data?.content?.glassType, hardwaresList?.glassType, UpgradeOPtions,data?.cost]);
 
   const glassAddonsList = useMemo(() => {
     const upgradeGlassAddonsList =
@@ -253,13 +258,13 @@ const ShowerSummary = ({
       }
     }
 
-    data?.content?.glassAddons?.forEach((glassAddon) => {
+    data?.selectedItem?.config?.glassAddons?.forEach((glassAddon) => {
       if (
         upgradeGlassAddonsList?.length === 0 ||
-        !upgradeGlassAddonsList.some((addon) => addon._id === glassAddon?._id)
+        !upgradeGlassAddonsList.some((addon) => addon._id === glassAddon)
       ) {
         const item = hardwaresList?.glassAddons?.find(
-          (item) => item._id === glassAddon?._id
+          (item) => item._id === glassAddon
         );
         if (item) {
           upgradeGlassAddonsList.push(item);
@@ -747,49 +752,49 @@ const ShowerSummary = ({
   //   return hardwareAddonsPrice;
   // };
 
-  const getFabricationsCost = (selectedFabrication) => {
-    let fabricationPrice = 0;
-    if (selectedHardware?.glassType?.thickness === "1/2") {
-      fabricationPrice =
-        Number(selectedFabrication?.oneInchHoles ?? 0) *
-          (locationSettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ??
-            0) +
-        Number(selectedFabrication?.hingeCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
-        Number(selectedFabrication?.clampCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
-        Number(selectedFabrication?.notch ?? 0) *
-          (locationSettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
-        Number(selectedFabrication?.outages ?? 0) *
-          (locationSettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
-        Number(selectedFabrication?.mitre ?? 0) *
-          (locationSettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
-        Number(selectedFabrication?.polish ?? 0) *
-          (locationSettings?.fabricatingPricing?.polishPricePerOneByTwoInch ??
-            0);
-    } else if (selectedHardware?.glassType?.thickness === "3/8") {
-      fabricationPrice =
-        Number(selectedFabrication?.oneInchHoles ?? 0) *
-          (locationSettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
-            0) +
-        Number(selectedFabrication?.hingeCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
-            0) +
-        Number(selectedFabrication?.clampCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
-            0) +
-        Number(selectedFabrication?.notch ?? 0) *
-          (locationSettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
-        Number(selectedFabrication?.outages ?? 0) *
-          (locationSettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
-        Number(selectedFabrication?.mitre ?? 0) *
-          (locationSettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
-        Number(selectedFabrication?.polish ?? 0) *
-          (locationSettings?.fabricatingPricing
-            ?.polishPricePerThreeByEightInch ?? 0);
-    }
-    return fabricationPrice;
-  };
+  // const getFabricationsCostForShowerItem = (selectedFabrication) => {
+  //   let fabricationPrice = 0;
+  //   if (selectedHardware?.glassType?.thickness === "1/2") {
+  //     fabricationPrice =
+  //       Number(selectedFabrication?.oneInchHoles ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ??
+  //           0) +
+  //       Number(selectedFabrication?.hingeCut ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
+  //       Number(selectedFabrication?.clampCut ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
+  //       Number(selectedFabrication?.notch ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
+  //       Number(selectedFabrication?.outages ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
+  //       Number(selectedFabrication?.mitre ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
+  //       Number(selectedFabrication?.polish ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.polishPricePerOneByTwoInch ??
+  //           0);
+  //   } else if (selectedHardware?.glassType?.thickness === "3/8") {
+  //     fabricationPrice =
+  //       Number(selectedFabrication?.oneInchHoles ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
+  //           0) +
+  //       Number(selectedFabrication?.hingeCut ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
+  //           0) +
+  //       Number(selectedFabrication?.clampCut ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
+  //           0) +
+  //       Number(selectedFabrication?.notch ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
+  //       Number(selectedFabrication?.outages ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
+  //       Number(selectedFabrication?.mitre ?? 0) *
+  //         (locationSettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
+  //       Number(selectedFabrication?.polish ?? 0) *
+  //         (locationSettings?.fabricatingPricing
+  //           ?.polishPricePerThreeByEightInch ?? 0);
+  //   }
+  //   return fabricationPrice;
+  // };
   const handleChangeHardware = (type, value) => {
     if (type === hardwareTypes.HARDWAREADDONS) {
       const item = { ...value.item };
@@ -976,14 +981,14 @@ const ShowerSummary = ({
       //   )
       // )
       [];
-    data?.content?.hardwareAddons?.forEach((data) => {
+    data?.selectedItem?.config?.hardwareAddons?.forEach((data) => {
       // Check if upgradeHardwareAddonList is empty
       if (
         upgradeHardwareAddonList?.length === 0 ||
-        !upgradeHardwareAddonList.some((addon) => addon._id === data?.item?._id)
+        !upgradeHardwareAddonList.some((addon) => addon._id === data?.type)
       ) {
         const item = hardwaresList?.hardwareAddons?.find(
-          (item) => item._id === data?.item?._id
+          (item) => item._id === data?.type
         );
         if (item) {
           upgradeHardwareAddonList.push(item);
@@ -996,29 +1001,40 @@ const ShowerSummary = ({
         (option) => option.finish_id === data?.content?.hardwareFinishes?._id
       )?.cost;
 
-      let fabricationsCount = {};
+      let fabricationsCountPrice = 0;
       if (data?.category === EstimateCategory.SHOWERS) {
-        fabricationsCount.oneInchHoles = item?.oneInchHoles || 0;
-        fabricationsCount.hingeCut = item?.hingeCut || 0;
-        fabricationsCount.clampCut = item?.clampCut || 0;
-        fabricationsCount.notch = item?.notch || 0;
-        fabricationsCount.outages = item?.outages || 0;
+        fabricationsCountPrice = getFabricationsCostForShowerItem(
+          item,
+          data?.content?.glassType?.thickness,
+          locationSettings.fabricatingPricing
+        );
+        // fabricationsCount.oneInchHoles = item?.oneInchHoles || 0;
+        // fabricationsCount.hingeCut = item?.hingeCut || 0;
+        // fabricationsCount.clampCut = item?.clampCut || 0;
+        // fabricationsCount.notch = item?.notch || 0;
+        // fabricationsCount.outages = item?.outages || 0;
       } else if (data?.category === EstimateCategory.WINECELLARS) {
-        fabricationsCount = item?.fabrication;
+        fabricationsCountPrice = getFabricationsCostForWineCellarItem(
+          item,
+          data?.content?.glassType?.thickness,
+          locationSettings.fabricatingPricing
+        );
       }
-      const fabricationPrice = getFabricationsCost(fabricationsCount);
-      let itemPrice = (price + fabricationPrice) * factorPrice;
+      // const fabricationPrice =
+      //   getFabricationsCostForShowerItem(fabricationsCount);
 
+      let itemPrice = (price + fabricationsCountPrice) * factorPrice;
       if (userProfitPercentage > 0 && userProfitPercentage < 100) {
         itemPrice =
-          (((price + fabricationPrice) * 100) / (userProfitPercentage - 100)) *
+          (((price + fabricationsCountPrice) * 100) /
+            (userProfitPercentage - 100)) *
           -1;
       }
-
       const singleGlassAddonCost =
         discountValue > 0 && discountUnit === "%"
           ? itemPrice - (itemPrice * Number(discountValue)) / 100
           : itemPrice;
+
       return {
         ...item,
         modifiedName: (
