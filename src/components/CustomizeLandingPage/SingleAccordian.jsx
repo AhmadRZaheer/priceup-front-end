@@ -13,7 +13,7 @@ import ShowerImg from "@/Assets/CustomerLandingImages/shower.png";
 import MirrorImg from "@/Assets/CustomerLandingImages/mirror.png";
 import WineCallerImg from "@/Assets/CustomerLandingImages/wineCaller.png";
 import { backendURL, calculateDiscount } from "@/utilities/common";
-import { EstimateCategory } from "@/utilities/constants";
+import { EstimateCategory, statusTypes } from "@/utilities/constants";
 
 const SingleAccordian = ({
   refetchData,
@@ -34,9 +34,9 @@ const SingleAccordian = ({
   category,
 }) => {
   const [totalPrice, setTotalPrice] = useState(data?.totalCost ?? 0);
-  console.log(data, "sdfgqwfgqwfwqvd",totalPrice);
-  const chipColor = data?.status
-    ? data?.status === "pending"
+  console.log(data, "sdfgqwfgqwfwqvd", totalPrice);
+  const chipColor = data?.selectedItem?.status
+    ? data?.selectedItem?.status === "pending"
       ? "#F95500"
       : "#0FE90D"
     : "#F95500";
@@ -56,11 +56,7 @@ const SingleAccordian = ({
   //   setTotalPrice(discountPrice);
   // }, [data]);
 
-  const discountValue = data?.config?.discount?.value ?? 0;
-  console.log(
-    data?.config?.discount?.value,
-    "data?.config?.config?.discount?.value"
-  );
+  const discountValue = data?.content?.discount?.value ?? 0;
 
   return (
     <Accordion
@@ -110,7 +106,11 @@ const SingleAccordian = ({
               {data?.category} Estimate -{" "}
               {data?.selectedItem?.settings?.name ?? "Custom"}
               <Chip
-                label={data?.status ? data?.status : "Pending"}
+                label={
+                  data?.selectedItem?.status === statusTypes.CUSTOMER_APPROVED
+                    ? "Approve"
+                    : "Pending"
+                }
                 variant="outlined"
                 sx={{ color: chipColor, borderColor: chipColor, ml: 2 }}
               />
@@ -130,12 +130,12 @@ const SingleAccordian = ({
             </Box>{" "}
             {discountValue > 0 && (
               <Box component="span" sx={{ color: "#F95500" }}>
-                $
-                {calculateDiscount(
+                $ {(data?.content?.discount?.total ?? 0)?.toFixed(2)}
+                {/* {calculateDiscount(
                   totalPrice,
                   discountValue,
                   data?.content?.discount?.unit
-                ).toFixed(2)}
+                ).toFixed(2)} */}
               </Box>
             )}
           </Typography>
