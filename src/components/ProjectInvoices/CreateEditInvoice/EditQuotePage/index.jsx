@@ -1363,7 +1363,9 @@ const EditQuoteInvoice = () => {
                           width: "39%",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 ,pb:0.8}}>
+                        <Typography
+                          sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                        >
                           Text 2
                         </Typography>
                         <TextareaAutosize
@@ -1532,9 +1534,7 @@ const EditQuoteInvoice = () => {
                           // alignItems: "center",
                         }}
                       >
-                        <Typography
-                          sx={{ fontSize: "14px", fontWeight: 500,}}
-                        >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
                           Background Image
                         </Typography>
 
@@ -2221,6 +2221,98 @@ const EditQuoteInvoice = () => {
                     Info Cards
                   </Typography>
                   <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
+                    <Box sx={{ display: "flex",gap:2, }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "33%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Heading
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section3.card1.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={20}
+                          value={formik.values.section3.card1.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>{" "}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "33%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Sub Heading
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section3.card1.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={20}
+                          value={formik.values.section3.card1.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>{" "}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "33%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Description
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section3.card1.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={20}
+                          value={formik.values.section3.card1.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                    </Box>
                     <Box
                       sx={{
                         display: "flex",

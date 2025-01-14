@@ -106,7 +106,7 @@ const CreateInvoice = () => {
         apiRoute: `${backendURL}/invoices/save`,
       });
       console.log(response);
-      navigate(`/invoices/edit/?item_id=${response?._id}`);
+      navigate(`/invoices/${response?._id}`);
     } catch (error) {
       console.log(error);
     }
