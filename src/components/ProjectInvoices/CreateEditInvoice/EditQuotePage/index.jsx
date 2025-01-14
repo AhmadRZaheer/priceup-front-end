@@ -1363,7 +1363,9 @@ const EditQuoteInvoice = () => {
                           width: "39%",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 ,pb:0.8}}>
+                        <Typography
+                          sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                        >
                           Text 2
                         </Typography>
                         <TextareaAutosize
@@ -1532,9 +1534,7 @@ const EditQuoteInvoice = () => {
                           // alignItems: "center",
                         }}
                       >
-                        <Typography
-                          sx={{ fontSize: "14px", fontWeight: 500,}}
-                        >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
                           Background Image
                         </Typography>
 
@@ -2221,6 +2221,7 @@ const EditQuoteInvoice = () => {
                     Info Cards
                   </Typography>
                   <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
+                   
                     <Box
                       sx={{
                         display: "flex",

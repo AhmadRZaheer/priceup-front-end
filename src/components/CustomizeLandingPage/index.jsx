@@ -1192,6 +1192,7 @@ const CustomizeLandingPage = ({
                 {selectedData?.content?.section2?.shower && (
                   <CustomSwiper
                     data={selectedData?.content?.section2?.shower}
+                    category={EstimateCategory.SHOWERS}
                   />
                 )}
               </>
@@ -1251,6 +1252,7 @@ const CustomizeLandingPage = ({
                 {selectedData?.content?.section2?.mirror && (
                   <CustomSwiper
                     data={selectedData?.content?.section2?.mirror}
+                    category={EstimateCategory.MIRRORS}
                   />
                 )}
               </>
@@ -1322,6 +1324,7 @@ const CustomizeLandingPage = ({
                 {selectedData?.content?.section2?.wineCellar && (
                   <CustomSwiper
                     data={selectedData?.content?.section2?.wineCellar}
+                    category={EstimateCategory.WINECELLARS}
                   />
                 )}
               </>
