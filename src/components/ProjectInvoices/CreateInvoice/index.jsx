@@ -245,6 +245,7 @@ const CreateInvoice = () => {
                     formik.values.customer === "" ||
                     formik.values.project === "" ||
                     formik.values.dueDate === null ||
+                    formik.values.preview === "" ||
                     createInvoiceLoading
                   }
                   variant="contained"
