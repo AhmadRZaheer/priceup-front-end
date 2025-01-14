@@ -8,11 +8,11 @@ import "swiper/css/navigation";
 import Bulb from "@/Assets/CustomerLandingImages/blubImg.png";
 import { EstimateCategory } from "@/utilities/constants";
 
-const CustomSwiper = ({ data }) => {
+const CustomSwiper = ({ data,category }) => {
   const detailDesc =
-    data?.category === EstimateCategory.SHOWERS
+    category === EstimateCategory.SHOWERS
       ? "Shower"
-      : data?.category === EstimateCategory.MIRRORS
+      : category === EstimateCategory.MIRRORS
       ? "Mirror"
       : "Wine Cellar";
   return (
