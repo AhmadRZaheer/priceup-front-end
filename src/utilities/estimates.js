@@ -918,9 +918,9 @@ const generateInvoiceItemForShowers = async (
   summaryObject.people = estimate.config.people;
   summaryObject.hours = estimate.config.hours;
   summaryObject.additionalFields = estimate.config.additionalFields;
-  summaryObject.creatorData = estimate.creatorData;
-  summaryObject.customerData = estimate.customerData;
-  summaryObject.status = 'pending';
+  summaryObject.creatorData = estimate?.creatorData;
+  summaryObject.customerData = estimate?.customerData;
+  summaryObject.status = estimate.status;
   // hardware finish
   const hardwareFinish = hardwaresList.hardwareFinishes.find(
     (item) => item._id === estimate.config.hardwareFinishes
@@ -1342,10 +1342,10 @@ const generateInvoiceItemForMirrors = async (
   summaryObject.quadOutletCutout = estimate.config.quadOutletCutout;
   summaryObject.people = estimate.config.people;
   summaryObject.hours = estimate.config.hours;
-  summaryObject.additionalFields = estimate.config.additionalFields;
-  summaryObject.creatorData = estimate.creatorData;
-  summaryObject.customerData = estimate.customerData;
-  summaryObject.status = 'pending';
+  summaryObject.additionalFields = estimate.config?.additionalFields ?? [];
+  summaryObject.creatorData = estimate?.creatorData;
+  summaryObject.customerData = estimate?.customerData;
+  summaryObject.status = estimate.status;
 
   // glass Type
   const glassType = hardwaresList.glassTypes.find(
@@ -1518,7 +1518,7 @@ const generateInvoiceItemForWineCellars = async (
   summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
-  summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
+  summaryObject.layout = estimate?.settings?.name ?? "Custom winecellar";
   summaryObject.image = estimate?.settings?.image ?? null;
   summaryObject.sqftArea = estimate.config?.sqftArea;
   summaryObject.perimeter = estimate.config?.perimeter;
@@ -1533,9 +1533,9 @@ const generateInvoiceItemForWineCellars = async (
   summaryObject.hours = estimate.config.hours;
   summaryObject.laborHoursForDoor = estimate.config.laborHoursForDoor;
   summaryObject.additionalFields = estimate.config.additionalFields;
-  summaryObject.creatorData = estimate.creatorData;
-  summaryObject.customerData = estimate.customerData;
-  summaryObject.status = 'pending';
+  summaryObject.creatorData = estimate?.creatorData;
+  summaryObject.customerData = estimate?.customerData;
+  summaryObject.status = estimate.status;
   // hardware finish
   const hardwareFinish = hardwaresList.hardwareFinishes.find(
     (item) => item._id === estimate.config.hardwareFinishes
