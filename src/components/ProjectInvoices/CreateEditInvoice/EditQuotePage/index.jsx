@@ -890,7 +890,7 @@ const EditQuoteInvoice = () => {
                             <Box
                               sx={{
                                 height: "10px",
-                                width: "14px",
+                                width: "16px",
                                 borderRadius: "4.94px",
                                 background: "#8477DA",
                                 alignSelf: "center",
@@ -1332,7 +1332,9 @@ const EditQuoteInvoice = () => {
                           width: "39%",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        <Typography
+                          sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                        >
                           Text 1
                         </Typography>
                         <TextareaAutosize
@@ -1361,7 +1363,7 @@ const EditQuoteInvoice = () => {
                           width: "39%",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 ,pb:0.8}}>
                           Text 2
                         </Typography>
                         <TextareaAutosize
@@ -1391,7 +1393,9 @@ const EditQuoteInvoice = () => {
                         }}
                       >
                         {/* section logo */}
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        <Typography
+                          sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                        >
                           Company Logo
                         </Typography>
                         <Box
@@ -1460,8 +1464,8 @@ const EditQuoteInvoice = () => {
                                     singleItemData?.content?.section1?.logo ??
                                     uploadedImageLogo?.content?.section1?.logo
                                   }`}
-                                  width={120}
-                                  height={120}
+                                  width={115}
+                                  height={115}
                                   alt="section image logo"
                                   style={{
                                     border: "1px solid  #ccc",
@@ -1528,8 +1532,10 @@ const EditQuoteInvoice = () => {
                           // alignItems: "center",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Company Logo
+                        <Typography
+                          sx={{ fontSize: "14px", fontWeight: 500,}}
+                        >
+                          Background Image
                         </Typography>
 
                         <Box
