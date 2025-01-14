@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Button,
   Card,
@@ -37,6 +37,11 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { showSnackbar } from "@/redux/snackBarSlice";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getListData } from "@/redux/estimateCalculations";
+import { generateInvoiceItemsFromEstimates } from "@/utilities/estimates";
+import { useSelector } from "react-redux";
 
 export default function InvoicePage() {
   return <InvoiceDetails />;
@@ -53,13 +58,17 @@ function InvoiceDetails() {
     isLoading: editLoading,
     isSuccess: editSuccess,
   } = useEditDocument();
-  const [notes, setNotes] = useState(data?.notes);
+  const [notes, setNotes] = useState(data?.description);
   const [editNotes, setEditNotes] = useState(true);
   const [status, setStatus] = useState(data?.status);
   const [editInvoiceDetail, setEditInvoiceDetail] = useState(true);
   const [dueDate, setDueDate] = useState(dayjs(data?.dueDate));
   const [isEdit, setIsEdit] = useState(false);
   const [copyLink, setCopyLink] = useState(false);
+  const wineCellarHardwareList = useSelector(getWineCellarsHardware);
+  const mirrorsHardwareList = useSelector(getMirrorsHardware);
+  const showerHardwareList = useSelector(getListData);
+  const companySettings = useSelector((state) => state.location);
 
   useEffect(() => {
     setIsEdit(false);
@@ -147,6 +156,24 @@ function InvoiceDetails() {
   useEffect(() => {
     refetch();
   }, []);
+
+  const hardwaresList = {
+    showers: showerHardwareList,
+    mirrors: mirrorsHardwareList,
+    wineCellars: wineCellarHardwareList,
+};
+const estimateListData = useMemo(() => {
+    let result = [];
+    if (data?.estimateDetailArray?.length > 0 && hardwaresList.showers && hardwaresList.mirrors && hardwaresList.wineCellars) {
+        const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
+            data?.estimateDetailArray ?? [],
+            hardwaresList,
+            companySettings
+        );
+        result = EstimateDeatilsData ?? [];
+    }
+    return result;
+}, [data]);
 
   return (
     <Card sx={{ pb: 4 }}>
@@ -583,7 +610,7 @@ function InvoiceDetails() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data?.items?.map((item, index) => (
+              {estimateListData?.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell sx={{ textTransform: "capitalize" }}>
                     {item?.category}
