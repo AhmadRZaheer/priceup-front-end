@@ -99,6 +99,7 @@ const CreateInvoice = () => {
         description: values?.description,
         customer_id: selectedPreview?.customer_id,
         source_id: selectedPreview?._id,
+        dueDate: values?.dueDate      
       }
       const response = await createInvoice({
         data:payload,

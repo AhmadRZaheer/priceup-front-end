@@ -116,7 +116,6 @@ const AppRoutes = () => {
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
           <Route path="/preview/">
-            <Route index element={<Invoices />} />
             <Route path="create" element={<ProjectInvoiceCreate />} />
             <Route path="edit" element={<ProjectInvoiceEdit />} />
             <Route
@@ -199,15 +198,12 @@ const AppRoutes = () => {
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
           <Route path="/preview/">
-            <Route index element={<Invoices />} />
             <Route path="create" element={<ProjectInvoiceCreate />} />
             <Route path="edit" element={<ProjectInvoiceEdit />} />
-            <Route path="new-invoice" element={<CreateNewInvoice />} />
             <Route
               path=":id/customer-preview"
               element={<CustomerInvoicePreview />}
             />
-            <Route path=":id" element={<ProjectInvoiceDetail />} />
           </Route>
           <Route path="*" element={<Estimates />} />
         </Route>
