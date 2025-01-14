@@ -364,7 +364,9 @@ const LocationTable = ({ locationsData, refetchList, isFetching }) => {
                 }}
               >
                 <CircularProgress
+                  // size={24}
                   sx={{
+                    color: "#8477DA",
                     width: "100%",
                     ".MuiDataGrid-virtualScroller": {
                       overflow: "hidden !important",
@@ -403,6 +405,9 @@ const LocationTable = ({ locationsData, refetchList, isFetching }) => {
                     ".MuiDataGrid-cell": {
                       borderRight: "1px solid #D6DAE3",
                     },
+                    '.MuiDataGrid-columnHeader':{
+                      backgroundColor:'#F3F5F6 !important',
+                    }
                   }}
                   // page={page}
                   // pageSize={itemsPerPage}

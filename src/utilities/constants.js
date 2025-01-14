@@ -121,6 +121,11 @@ export const projectStatus = {
   VOIDED: "voided",
   APPROVED: "approved",
 };
+export const logActions = {
+  DOWNLOADPDF: "Download Pdf",
+  APPROVEESTIMATE: "Approve Estimate",
+  APPROVEPROJECT: "Approve Project",
+};
 
 export const statusTypes = {
   PENDING: "pending",
@@ -128,6 +133,7 @@ export const statusTypes = {
   APPROVED: "approved",
   PAID:'Paid',
   UNPAID:'Unpaid',
+  CUSTOMER_APPROVED: "customer_approved"
 };
 
 export const inputLength = 6;

@@ -25,7 +25,13 @@ import {
 } from "@/utilities/ApiHooks/common";
 import { backendURL, frontendURL, getDecryptedToken } from "@/utilities/common";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Add, Close, VisibilityOutlined } from "@mui/icons-material";
+import {
+  Add,
+  Close,
+  ContentCopy,
+  DoneOutlined,
+  VisibilityOutlined,
+} from "@mui/icons-material";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import ShowerEstimatesList from "./EstimatesList/showers";
 import MirrorEstimatesList from "./EstimatesList/mirrors";
@@ -43,6 +49,8 @@ import { useDispatch } from "react-redux";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CompanySelect from "./CompanyContactSelect";
+import PreviewLinkList from "./PreviewLinkList";
+import AllEstimatesList from "./EstimatesList/allEstimatesList";
 
 const validationSchema = yup.object({
   name: yup
@@ -61,7 +69,7 @@ const ProjectInfoComponent = ({
   const [searchParams] = useSearchParams();
   const selectedTab = searchParams.get("category");
   const tabValue =
-    selectedTab === null ? EstimateCategory.SHOWERS : selectedTab;
+    selectedTab === null ? 'All' : selectedTab;
   const decryptedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
@@ -98,13 +106,23 @@ const ProjectInfoComponent = ({
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
   const [openCompanySelectModal, setOpenCompanySelectModal] = useState(false);
+  const [openLandingList, setOpenLandingList] = useState(false);
+
   const navigate = useNavigate();
   const [activeTabNumber, setActiveTabNumber] = useState(
     EstimateCategory.SHOWERS
   ); // 0 for showers, 1 for mirrors
+
+  const handleLandingList = () => {
+    setOpenLandingList(true);
+  };
+
   const handleChange = (event, newValue) => {
-    console.log(newValue, "sdsdsdsdsd");
-    navigate(`/projects/${projectData?._id}?category=${newValue}`);
+    if(newValue === 'All'){
+      navigate(`/projects/${projectData?._id}`); 
+    }else{
+      navigate(`/projects/${projectData?._id}?category=${newValue}`);
+    }
     // setActiveTabNumber(newValue);
   };
   // const [activeTabNumber, setActiveTabNumber] = useState(Number(localStorage.getItem("activeTab")) || 0);
@@ -228,7 +246,7 @@ const ProjectInfoComponent = ({
   const [openCategoryModal, setOpenCategoryModal] = useState(false);
   const handleOpenCategoryModal = () => setOpenCategoryModal(true);
   const handleCloseCategoryModal = () => setOpenCategoryModal(false);
-
+  const [copyLink, setCopyLink] = useState(false);
   useEffect(() => {
     setProjectName(formik.values.name);
   }, [formik.values.name]);
@@ -236,7 +254,38 @@ const ProjectInfoComponent = ({
   useEffect(() => {
     setProjectNotes(formik.values.notes);
   }, [formik.values.notes]);
+  const handleCopyPreview = (value) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      // Modern clipboard API
+      navigator.clipboard
+        .writeText(value ?? "")
+        .then(() => {
+          setCopyLink(true);
+          showSnackbar("Link Copied", "success");
+        })
+        .catch((err) => {
+          console.error("Failed to copy text using clipboard API:", err);
+        });
+    } else {
+      // Fallback for older browsers
+      const textarea = document.createElement("textarea");
+      textarea.value = value ?? "";
+      textarea.style.position = "fixed"; // Prevent scrolling
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
 
+      try {
+        document.execCommand("copy");
+        setCopyLink(true);
+        showSnackbar("Link Copied", "success");
+      } catch (err) {
+        console.error("Fallback: Failed to copy text using execCommand:", err);
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+  };
   return (
     <Box
       sx={{
@@ -282,6 +331,63 @@ const ProjectInfoComponent = ({
         </Box>
         {projectState !== "create" ? (
           <Box sx={{ alignSelf: "center", display: "flex", gap: 2 }}>
+            {/* {projectData?.landingPage?.customerPreview?.link ? (
+            <Box>
+              <div className="subscribe-box">
+                <input
+                  type="text"
+                  className="email-input"
+                  placeholder="Customer Preview Link"
+                  value={`${frontendURL}/customer-landing-page-preview/${projectData?._id}`}
+                  disabled
+                />
+                <Tooltip
+                  placement="top"
+                  title={copyLink ? "Copied" : "Copy Customer Preview Link"}
+                >
+                  <button
+                    className="subscribe-btn"
+                    onClick={() =>
+                      handleCopyPreview(
+                        `${frontendURL}/customer-landing-page-preview/${projectData?._id}`
+                      )
+                    }
+                  >
+                    {copyLink ? (
+                      <DoneOutlined sx={{ fontSize: "19px" }} />
+                    ) : (
+                      <ContentCopy sx={{ fontSize: "19px" }} />
+                    )}
+                  </button>
+                </Tooltip>
+              </div>
+            </Box>
+          ) : (
+            ""
+          )} */}
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleLandingList}
+              // startIcon={<Add />}
+              sx={{
+                backgroundColor: "#8477DA",
+                height: "44px",
+                width: { sm: "auto", xs: "187px" },
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 1,
+                fontSize: { lg: 16, md: 15, xs: 12 },
+                padding: {
+                  sm: "10px 16px  !important",
+                  xs: "5px 5px !important",
+                },
+              }}
+            >
+              View Existing List
+            </Button>
+
             {projectData?.invoice ? (
               <Button
                 fullWidth
@@ -313,7 +419,7 @@ const ProjectInfoComponent = ({
                 variant="contained"
                 onClick={() =>
                   navigate(
-                    `/invoices/create?customer_id=${selectedCustomer?._id}&project_id=${projectData?._id}`
+                    `/preview/create?customer_id=${selectedCustomer?._id}&project_id=${projectData?._id}`
                   )
                 }
                 startIcon={<Add />}
@@ -332,8 +438,7 @@ const ProjectInfoComponent = ({
                   },
                 }}
               >
-                Create Quote Page
-                {/* Customer Preview */}
+                Create Preview Link
               </Button>
             )}
             <Button
@@ -396,7 +501,10 @@ const ProjectInfoComponent = ({
             background: "#FFFF",
           }}
         >
-          <form onSubmit={formik.handleSubmit} style={{margin:'0px !important'}}>
+          <form
+            onSubmit={formik.handleSubmit}
+            style={{ margin: "0px !important" }}
+          >
             {/** Section 1 */}
             <Box
               sx={{
@@ -698,7 +806,7 @@ const ProjectInfoComponent = ({
                 width: "100%",
               }}
             >
-              <Box sx={{ width: { lg: "80%", md: "100%" }, }}>
+              <Box sx={{ width: { lg: "80%", md: "100%" } }}>
                 <Box
                   sx={{
                     display: "flex",
@@ -1003,7 +1111,7 @@ const ProjectInfoComponent = ({
                     <CircularProgress
                       sx={{
                         color:
-                          updateLoading || createLoading ? "#8477da":"white" ,
+                          updateLoading || createLoading ? "#8477da" : "white",
                       }}
                       size={24}
                     />
@@ -1175,7 +1283,7 @@ const ProjectInfoComponent = ({
                   border: "1px solid #D0D5DD",
                   borderRadius: "6px",
                   background: "#F3F5F6",
-                  width: "252.5px",
+                  width: "fit-content",
                   minHeight: "40px",
                   height: "40px",
                   p: "2px",
@@ -1193,6 +1301,13 @@ const ProjectInfoComponent = ({
                   },
                 }}
               >
+                <Tab
+                  className="categoryTab"
+                  label="All"
+                  value={'All'}
+                  sx={{ minWidth: "70px" }}
+                  {...a11yProps('All')}
+                />
                 <Tab
                   className="categoryTab"
                   label="Showers"
@@ -1219,6 +1334,14 @@ const ProjectInfoComponent = ({
             {/** end */}
             {/** Showers tab */}
             <Divider sx={{ borderColor: "#D4DBDF" }} />
+            <CustomTabPanel value={tabValue} index={'All'}>
+              <AllEstimatesList
+                projectId={projectData?._id}
+                searchValue={search}
+                statusValue={status}
+                dateValue={selectedDate}
+              />
+            </CustomTabPanel>
             <CustomTabPanel value={tabValue} index={EstimateCategory.SHOWERS}>
               <ShowerEstimatesList
                 projectId={projectData?._id}
@@ -1256,6 +1379,11 @@ const ProjectInfoComponent = ({
         handleClose={() => setOpenCustomerSelectModal(false)}
         selectedCustomer={selectedCustomer}
         setSelectedCustomer={handleCustomerChange}
+      />
+      <PreviewLinkList
+        open={openLandingList}
+        handleClose={() => setOpenLandingList(false)}
+        projectId={projectData?._id}
       />
       <AddressSelect
         open={openAddressSelectModal}

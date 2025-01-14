@@ -1,4 +1,8 @@
-import { mirrorHardwareTypes, notificationsVariant } from "@/utilities/constants";
+import {
+  mirrorHardwareTypes,
+  notificationsVariant,
+} from "@/utilities/constants";
+import { generateContentForMirrorEdit } from "@/utilities/generateEstimateCalculationContent";
 import { createSlice } from "@reduxjs/toolkit";
 export const getEstimateMeasurements = (state) =>
   state.mirrorsEstimate.measurements;
@@ -14,8 +18,13 @@ export const getAdditionalFields = (state) =>
   state.mirrorsEstimate.content.additionalFields;
 export const getModifiedProfitPercentage = (state) =>
   state.mirrorsEstimate.content.modifiedProfitPercentage;
-export const getNotifications = (state) =>
-  state.mirrorsEstimate.notifications;
+export const getEstimateDiscountValue = (state) =>
+  state.mirrorsEstimate.content.discount.value;
+export const getEstimateDiscountUnit = (state) =>
+  state.mirrorsEstimate.content.discount.unit;
+export const getEstimateDiscountTotal = (state) =>
+  state.mirrorsEstimate.content.discount.total;
+export const getNotifications = (state) => state.mirrorsEstimate.notifications;
 
 const initialState = {
   estimateId: "",
@@ -23,7 +32,7 @@ const initialState = {
   estimateState: "", // 'create' || 'edit'
   sqftArea: 0,
   selectedItem: null,
-  projectId:null,
+  projectId: null,
   pricing: {
     labor: 0,
     glass: 0,
@@ -33,6 +42,7 @@ const initialState = {
     profitPercentage: 0,
     cost: 0,
     total: 0,
+    discountTotal:0,
   },
   notifications: {
     glassTypeNotAvailable: {
@@ -50,6 +60,11 @@ const initialState = {
   },
   content: {
     modifiedProfitPercentage: 0,
+    discount: {
+      value: 0,
+      unit: "%",
+      total: 0,
+    },
     additionalFields: [],
     glassType: {
       item: null,
@@ -108,7 +123,7 @@ const mirrorsEstimateSlice = createSlice({
     setCounters: (state, action) => {
       const { type, value, item } = action.payload;
       if (["hardwares"].includes(type)) {
-      let existing = state.content.hardwares;
+        let existing = state.content.hardwares;
         const foundIndex = existing.findIndex(
           (row) => row?.item?.slug === item.slug
         );
@@ -143,6 +158,18 @@ const mirrorsEstimateSlice = createSlice({
     setModifiedProfitPercentage: (state, action) => {
       const { payload } = action;
       state.content.modifiedProfitPercentage = payload;
+    },
+    setEstimateDiscountValue: (state, action) => {
+      const { payload } = action;
+      state.content.discount.value = payload;
+    },
+    setEstimateDiscountUnit: (state, action) => {
+      const { payload } = action;
+      state.content.discount.unit = payload;
+    },
+    setEstimateDiscountTotal: (state, action) => {
+      const { payload } = action;
+      state.content.discount.total = payload;
     },
     setSelectedContent: (state, action) => {
       const { type, item } = action.payload;
@@ -219,66 +246,13 @@ const mirrorsEstimateSlice = createSlice({
     },
     initializeStateForEditQuote: (state, action) => {
       const { estimateData, hardwaresList } = action.payload;
-      let glassTypee = null;
-      glassTypee = hardwaresList?.glassTypes?.find(
-        (item) => item?._id === estimateData?.config?.glassType?.type
-      );
-
-      let edgeWork = null;
-      edgeWork = hardwaresList?.edgeWorks?.find(
-        (item) => item?._id === estimateData?.config?.edgeWork?.type
-      );
-
-      let glassAddons = [];
-      glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-        const record = hardwaresList?.glassAddons?.find(
-          (addon) => addon?._id === item
-        );
-        return record;
-      });
-      let hardwares = [];
-      hardwares = estimateData?.config?.hardwares?.map((row) => {
-        const found = hardwaresList?.hardwares?.find(
-          (item) => item?._id === row.type
-        );
-        return { item: found, count: row.count };
-      });
-
       state.estimateId = estimateData?._id;
-      state.sqftArea = estimateData?.config?.sqftArea;
+      const resp = generateContentForMirrorEdit(hardwaresList,estimateData);
       state.content = {
         ...state.content,
-        glassType: {
-          item: glassTypee,
-          thickness: estimateData?.config?.glassType?.thickness,
-        },
-        edgeWork: {
-          item: edgeWork,
-          thickness: estimateData?.config?.edgeWork?.thickness,
-        },
-        glassAddons: glassAddons ? [...glassAddons] : [], 
-        hardwares: hardwares ? [...hardwares] : [],
-        modifiedProfitPercentage:
-          estimateData?.config?.modifiedProfitPercentage,
-        additionalFields: estimateData?.config?.additionalFields,
-        // floatingSize: estimateData?.config?.floatingSize ?? null,
-        // sandBlasting: estimateData?.config?.sandBlasting,
-        // bevelStrip: estimateData?.config?.bevelStrip, // true, false
-        // safetyBacking: estimateData?.config?.safetyBacking, //true, false
-        simpleHoles: estimateData?.config?.simpleHoles,
-        // outlets: estimateData?.config?.outlets,
-        lightHoles: estimateData?.config?.lightHoles,
-        notch: estimateData?.config?.notch,
-        singleOutletCutout: estimateData?.config?.singleOutletCutout,
-        doubleOutletCutout: estimateData?.config?.doubleOutletCutout,
-        tripleOutletCutout: estimateData?.config?.tripleOutletCutout,
-        quadOutletCutout: estimateData?.config?.quadOutletCutout,
-        // singleDuplex: estimateData?.config?.singleDuplex,
-        // doubleDuplex: estimateData?.config?.doubleDuplex,
-        // tripleDuplex: estimateData?.config?.tripleDuplex,
-        people: estimateData?.config?.people,
-        hours: estimateData?.config?.hours,
+        ...resp.content
       };
+      state.sqftArea = resp.sqftArea;
     },
   },
 });
@@ -300,10 +274,13 @@ export const {
   setSelectedItem,
   initializeStateForEditQuote,
   setModifiedProfitPercentage,
+  setEstimateDiscountValue,
+  setEstimateDiscountUnit,
+  setEstimateDiscountTotal,
   setMultipleNotifications,
   resetNotifications,
   setMirrorProjectId,
-  setCounters
+  setCounters,
 } = mirrorsEstimateSlice.actions;
 
 export default mirrorsEstimateSlice.reducer;

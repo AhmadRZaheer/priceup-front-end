@@ -12,9 +12,11 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  Grid,
   Switch,
   Tab,
   Tabs,
+  TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
@@ -39,6 +41,8 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { getListData } from "@/redux/estimateCalculations";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+import { Delete } from "@mui/icons-material";
+import { useEditDocument } from "@/utilities/ApiHooks/common";
 
 const CampanySetting = () => {
   const dispatch = useDispatch();
@@ -51,7 +55,7 @@ const CampanySetting = () => {
     mutate: editSetting,
     isLoading: editLoading,
     isSuccess: SuccessForEdit,
-  } = useEditSetting();
+  } = useEditDocument();
   const [selectedImage, setSelectedImage] = useState(null);
   const CustomerU_change = useSelector(getDataRefetch);
   const [value, setValue] = React.useState(0);
@@ -182,32 +186,41 @@ const CampanySetting = () => {
         },
         fabricatingPricing: {
           oneHoleOneByTwoInchGlass:
-            settingData?.wineCellars?.fabricatingPricing?.oneHoleOneByTwoInchGlass || 0,
+            settingData?.wineCellars?.fabricatingPricing
+              ?.oneHoleOneByTwoInchGlass || 0,
           oneHoleThreeByEightInchGlass:
             settingData?.wineCellars?.fabricatingPricing
               ?.oneHoleThreeByEightInchGlass || 0,
           clampCutoutOneByTwoInch:
-            settingData?.wineCellars?.fabricatingPricing?.clampCutoutOneByTwoInch || 0,
+            settingData?.wineCellars?.fabricatingPricing
+              ?.clampCutoutOneByTwoInch || 0,
           clampCutoutThreeByEightInch:
             settingData?.wineCellars?.fabricatingPricing
               ?.clampCutoutThreeByEightInch || 0,
           hingeCutoutOneByTwoInch:
-            settingData?.wineCellars?.fabricatingPricing?.hingeCutoutOneByTwoInch || 0,
+            settingData?.wineCellars?.fabricatingPricing
+              ?.hingeCutoutOneByTwoInch || 0,
           hingeCutoutThreeByEightInch:
             settingData?.wineCellars?.fabricatingPricing
               ?.hingeCutoutThreeByEightInch || 0,
           miterOneByTwoInch:
-            settingData?.wineCellars?.fabricatingPricing?.miterOneByTwoInch || 0,
+            settingData?.wineCellars?.fabricatingPricing?.miterOneByTwoInch ||
+            0,
           miterThreeByEightInch:
-            settingData?.wineCellars?.fabricatingPricing?.miterThreeByEightInch || 0,
+            settingData?.wineCellars?.fabricatingPricing
+              ?.miterThreeByEightInch || 0,
           notchOneByTwoInch:
-            settingData?.wineCellars?.fabricatingPricing?.notchOneByTwoInch || 0,
+            settingData?.wineCellars?.fabricatingPricing?.notchOneByTwoInch ||
+            0,
           notchThreeByEightInch:
-            settingData?.wineCellars?.fabricatingPricing?.notchThreeByEightInch || 0,
+            settingData?.wineCellars?.fabricatingPricing
+              ?.notchThreeByEightInch || 0,
           outageOneByTwoInch:
-            settingData?.wineCellars?.fabricatingPricing?.outageOneByTwoInch || 0,
+            settingData?.wineCellars?.fabricatingPricing?.outageOneByTwoInch ||
+            0,
           outageThreeByEightInch:
-            settingData?.wineCellars?.fabricatingPricing?.outageThreeByEightInch || 0,
+            settingData?.wineCellars?.fabricatingPricing
+              ?.outageThreeByEightInch || 0,
           polishPricePerOneByTwoInch:
             settingData?.wineCellars?.fabricatingPricing
               ?.polishPricePerOneByTwoInch || 0,
@@ -230,6 +243,23 @@ const CampanySetting = () => {
           settingData?.highlevelSettings?.locationReference ?? "",
         apiKey: settingData?.highlevelSettings?.apiKey ?? "",
       },
+      presentationSettings: {
+        shower: {
+          images: settingData?.presentationSettings?.shower?.images ?? [],
+          description:
+            settingData?.presentationSettings?.shower?.description ?? "",
+        },
+        mirror: {
+          images: settingData?.presentationSettings?.mirror?.images ?? [],
+          description:
+            settingData?.presentationSettings?.mirror?.description ?? "",
+        },
+        wineCellar: {
+          images: settingData?.presentationSettings?.wineCellar?.images ?? [],
+          description:
+            settingData?.presentationSettings?.wineCellar?.description ?? "",
+        },
+      },
     },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -250,7 +280,19 @@ const CampanySetting = () => {
   //   setSelectedImage(URL.createObjectURL(file));
   // };
   const handleEditSetting = (props) => {
-    editSetting({ data: props, id: settingData._id });
+    const formData = new FormData();
+    if (props?.image) {
+      formData.append("image", props.image);
+      delete props?.image;
+    }
+    if (props?.image === null ?? props?.image === undefined) {
+      delete props?.image;
+    }
+    formData.append("data", JSON.stringify(props));
+    editSetting({
+      data: formData,
+      apiRoute: `${backendURL}/companies/${settingData._id}`,
+    });
     reFetchDataSetting();
   };
   const handleCopy = (value) => {
@@ -273,6 +315,48 @@ const CampanySetting = () => {
       ...formik.values[fieldName],
       glassTypesForComparison: selectedOptionIds,
     });
+  };
+  // Preview images
+  const handleUploadPreviewImage = (event, images, key) => {
+    if (images?.length < 5) {
+      const image = event.target.files[0];
+      const formData = new FormData();
+      if (image) {
+        formData.append("image", image);
+      }
+      // formData.append("key", key);
+      formData.append("data", JSON.stringify({ key }));
+      // Make the API call
+      editSetting({
+        data: formData,
+        apiRoute: `${backendURL}/companies/${settingData._id}`,
+      });
+      reFetchDataSetting();
+    } else {
+      dispatch(
+        showSnackbar({
+          message: "You can upload a maximum of 5 images.",
+          severity: "error",
+        })
+      );
+    }
+  };
+
+  const handleDeleteImageFromPrevew = (gallery, removeGalleryImage, key) => {
+    const galleryFiltered = gallery?.filter(
+      (item) => item !== removeGalleryImage
+    );
+    const deletItem = JSON.stringify({
+      key,
+      gallery: galleryFiltered ?? [],
+      removeGalleryImage,
+    });
+
+    editSetting({
+      data: { data: deletItem },
+      apiRoute: `${backendURL}/companies/${settingData._id}`,
+    });
+    reFetchDataSetting();
   };
 
   return (
@@ -535,6 +619,22 @@ const CampanySetting = () => {
               onClick={() => handleChange(4)}
             >
               High Level Settings
+            </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 5 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(5)}
+            >
+              Presentation Settings
             </Button>
           </Box>
           {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
@@ -2653,6 +2753,443 @@ const CampanySetting = () => {
                 >
                   <ContentCopyIcon />
                 </Button>
+              </Box>
+            </Box>
+          </Box>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={5}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              // gap: 3,
+              width: "100%",
+              pt: 2,
+            }}
+          >
+            <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+              <Typography variant="h5" fontWeight={"bold"}>
+                Shower Gallery
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  pt: 1.5,
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    border: "1px solid #ccc",
+                    width: "65%",
+                    // background:'white'
+                  }}
+                >
+                  <Grid
+                    container
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                    }}
+                  >
+                    {formik.values.presentationSettings.shower.images.length >
+                    0 ? (
+                      formik.values.presentationSettings.shower.images?.map(
+                        (_image) => (
+                          <Box
+                            sx={{
+                              width: "200px",
+                              height: "200px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              px: 3,
+                              py: 1.5,
+                              position: "relative",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                right: "18px",
+                                top: "3px",
+                                color: "red",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleDeleteImageFromPrevew(
+                                  formik.values.presentationSettings.shower
+                                    .images,
+                                  _image,
+                                  "presentationSettings.shower.images"
+                                )
+                              }
+                            >
+                              <Delete />
+                            </Box>
+                            <img
+                              style={{ width: "100%", height: "100%" }}
+                              src={`${backendURL}/${_image}`}
+                              alt="not found"
+                            />
+                          </Box>
+                        )
+                      )
+                    ) : (
+                      <Typography
+                        sx={{
+                          height: "150px",
+                          textAlign: "center",
+                          width: "100%",
+                          alignContent: "center",
+                        }}
+                      >
+                        No Image Selected!
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{
+                        background: "#8477DA",
+                        ":hover": {
+                          background: "#8477DA",
+                        },
+                      }}
+                    >
+                      Upload image
+                      <input
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={(e) =>
+                          handleUploadPreviewImage(
+                            e,
+                            formik.values.presentationSettings.shower.images,
+                            `presentationSettings.shower.images`
+                          )
+                        }
+                      />
+                    </Button>
+                  </Box>
+                </Box>
+                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                  <TextareaAutosize
+                    fullWidth
+                    style={{
+                      padding: "10px",
+                      borderColor: "#cccc",
+                      borderRadius: "5px",
+                      width: "100%",
+                    }}
+                    className="custom-textfield"
+                    color="neutral"
+                    minRows={7}
+                    maxRows={10}
+                    id="presentationSettings.shower.description"
+                    name="presentationSettings.shower.description"
+                    placeholder="Enter Shower Description"
+                    size="large"
+                    variant="outlined"
+                    sx={{ padding: "10px" }}
+                    value={
+                      formik.values.presentationSettings.shower.description
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+              <Typography variant="h5" fontWeight={"bold"}>
+                Mirror Gallery
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  pt: 1.5,
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    border: "1px solid #ccc",
+                    width: "65%",
+                  }}
+                >
+                  <Grid
+                    container
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                    }}
+                  >
+                    {formik.values.presentationSettings.mirror.images.length >
+                    0 ? (
+                      formik.values.presentationSettings.mirror.images?.map(
+                        (_image) => (
+                          <Box
+                            sx={{
+                              width: "200px",
+                              height: "200px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              px: 3,
+                              py: 1.5,
+                              position: "relative",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                right: "18px",
+                                top: "3px",
+                                color: "red",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleDeleteImageFromPrevew(
+                                  formik.values.presentationSettings.mirror
+                                    .images,
+                                  _image,
+                                  "presentationSettings.mirror.images"
+                                )
+                              }
+                            >
+                              <Delete />
+                            </Box>
+                            <img
+                              style={{ width: "100%", height: "100%" }}
+                              src={`${backendURL}/${_image}`}
+                              alt="not found"
+                            />
+                          </Box>
+                        )
+                      )
+                    ) : (
+                      <Typography
+                        sx={{
+                          height: "150px",
+                          textAlign: "center",
+                          width: "100%",
+                          alignContent: "center",
+                        }}
+                      >
+                        No Image Selected!
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{
+                        background: "#8477DA",
+                        ":hover": {
+                          background: "#8477DA",
+                        },
+                      }}
+                    >
+                      Upload image
+                      <input
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={(e) =>
+                          handleUploadPreviewImage(
+                            e,
+                            formik.values.presentationSettings.mirror.images,
+                            `presentationSettings.mirror.images`
+                          )
+                        }
+                      />
+                    </Button>
+                  </Box>
+                </Box>
+                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                  <TextareaAutosize
+                    fullWidth
+                    style={{
+                      padding: "10px",
+                      borderColor: "#cccc",
+                      borderRadius: "5px",
+                      width: "100%",
+                    }}
+                    className="custom-textfield"
+                    color="neutral"
+                    minRows={7}
+                    maxRows={10}
+                    id="presentationSettings.mirror.description"
+                    name="presentationSettings.mirror.description"
+                    placeholder="Enter Mirror Description"
+                    size="large"
+                    variant="outlined"
+                    sx={{ padding: "10px" }}
+                    value={
+                      formik.values.presentationSettings.mirror.description
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+              <Typography variant="h5" fontWeight={"bold"}>
+                Wine Cellar Gallery
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  pt: 1.5,
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    border: "1px solid #ccc",
+                    width: "65%",
+                  }}
+                >
+                  <Grid
+                    container
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                    }}
+                  >
+                    {formik.values.presentationSettings.wineCellar.images
+                      .length > 0 ? (
+                      formik.values.presentationSettings.wineCellar.images?.map(
+                        (_image) => (
+                          <Box
+                            sx={{
+                              width: "200px",
+                              height: "200px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              px: 3,
+                              py: 1.5,
+                              position: "relative",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                right: "18px",
+                                top: "3px",
+                                color: "red",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleDeleteImageFromPrevew(
+                                  formik.values.presentationSettings.wineCellar
+                                    .images,
+                                  _image,
+                                  "presentationSettings.wineCellar.images"
+                                )
+                              }
+                            >
+                              <Delete />
+                            </Box>
+                            <img
+                              style={{ width: "100%", height: "100%" }}
+                              src={`${backendURL}/${_image}`}
+                              alt="not found"
+                            />
+                          </Box>
+                        )
+                      )
+                    ) : (
+                      <Typography
+                        sx={{
+                          height: "150px",
+                          textAlign: "center",
+                          width: "100%",
+                          alignContent: "center",
+                        }}
+                      >
+                        No Image Selected!
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{
+                        background: "#8477DA",
+                        ":hover": {
+                          background: "#8477DA",
+                        },
+                      }}
+                    >
+                      Upload image
+                      <input
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={(e) =>
+                          handleUploadPreviewImage(
+                            e,
+                            formik.values.presentationSettings.wineCellar
+                              .images,
+                            `presentationSettings.wineCellar.images`
+                          )
+                        }
+                      />
+                    </Button>
+                  </Box>
+                </Box>
+                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                  <TextareaAutosize
+                    fullWidth
+                    style={{
+                      padding: "10px",
+                      borderColor: "#cccc",
+                      borderRadius: "5px",
+                      width: "100%",
+                    }}
+                    className="custom-textfield"
+                    color="neutral"
+                    minRows={7}
+                    maxRows={10}
+                    id="presentationSettings.wineCellar.description"
+                    name="presentationSettings.wineCellar.description"
+                    placeholder="Enter WineCellar Description"
+                    size="large"
+                    variant="outlined"
+                    sx={{ padding: "10px" }}
+                    value={
+                      formik.values.presentationSettings.wineCellar.description
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
               </Box>
             </Box>
           </Box>

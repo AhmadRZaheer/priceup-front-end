@@ -9,7 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import GCS_logo from "../../Assets/GCS-logo.png";
 import CustomImage from "../../Assets/customlayoutimage.png";
-import { backendURL } from "../../utilities/common";
+import { backendURL, calculateDiscount } from "../../utilities/common";
 import { renderMeasurementSides } from "../../utilities/estimates";
 import { EstimateCategory, quoteState } from "../../utilities/constants";
 import { dimensionsSection, fabricationSection, pdfFields, pricingSection, summarySection } from "@/utilities/pdfConfigs";
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#fff",
     padding: "10px 20px",
-    gap:5
+    gap:5,
   },
   section_top: {
     display: "flex",
@@ -107,7 +107,7 @@ const PDFFile = ({controls,data}) => {
         <View style={{flexGrow:1}}>
           <Text style={{padding:'5px 10px',backgroundColor:'#ccc',borderRadius:'5px',fontSize:'15px',fontWeight:'semibold'}}>Job Info</Text>
           <View style={{padding:'5px'}}>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.settings?.name ? data?.quote?.settings?.name : data?.quote?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'} Layout - Estimate</Text>
+          <Text style={{fontSize:'12px',flexShrink: 1,flexWrap: 'wrap',width:'210px'}}>{data?.quote?.settings?.name ? data?.quote?.settings?.name : data?.quote?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'} Layout - Estimate</Text>
           <Text style={{fontSize:'12px'}}>{data?.quote?.label}</Text>
           </View>
         </View>
@@ -127,7 +127,7 @@ const PDFFile = ({controls,data}) => {
            <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'357px'}}>{data?.quote?.settings?.name ? data?.quote?.settings?.name : data?.quote?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'} Layout - Estimate</Text>
            {dimensionsSection[data?.quote?.category]?.includes(pdfFields.MEASUREMENTS) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}} wrap>
             <Text style={{fontSize:'14px'}}>Dimensions:</Text>
-            <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right'}} wrap>{data?.quote?.measurements}</Text>
+            <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right',paddingLeft:'14px',width:'90%'}} wrap>{data?.quote?.measurements}</Text>
            </View>}
            {dimensionsSection[data?.quote?.category]?.includes(pdfFields.DOORWIDTH) && data?.quote?.doorWidth && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Door Width:</Text>
@@ -149,9 +149,20 @@ const PDFFile = ({controls,data}) => {
             <Text style={{fontSize:'14px'}}>Return Weight:</Text>
             <Text style={{fontSize:'12px'}}>{data?.quote?.returnWeight}</Text>
            </View>}
-           {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-            <Text style={{fontSize:'14px'}}>Total:</Text>
+           {(data?.quote?.discount?.value && data?.quote?.discount?.value > 0 ) && 
+           <>
+           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+            <Text style={{fontSize:'14px'}}>Sub total:</Text>
             <Text style={{fontSize:'12px'}}> ${data?.quote?.cost?.toFixed(2) || 0}</Text>
+           </View>
+           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',}}>
+            <Text style={{fontSize:'14px'}}>Discount:</Text>
+            <Text style={{fontSize:'12px'}}>{data?.quote?.discount?.unit === '$' && '$'}{data?.quote?.discount?.value || 0}{data?.quote?.discount?.unit === '%' && '%'}</Text>
+           </View>
+           </>}
+           {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',borderTop:'1px solid #ccc',paddingTop:'6px',marginTop:'3px'}}>
+            <Text style={{fontSize:'14px'}}>Total:</Text>
+            <Text style={{fontSize:'12px'}}> ${calculateDiscount(data?.quote?.cost,data?.quote?.discount?.value,data?.quote?.discount?.unit)?.toFixed(2) || 0}</Text>
            </View>}
                   {/** undefined is used for custom layout  */}
                   {/* {![undefined].includes(data?.quote?.settings?.variant) && (
@@ -346,9 +357,9 @@ const PDFFile = ({controls,data}) => {
             ""
           )}
           {summarySection[data?.quote?.category]?.includes(pdfFields.HARDWARES) && data?.quote?.hardwares?.length ? (
-          <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-            <Text style={{fontSize:'14px'}}>Hardwares:</Text>
-            <Text style={{fontSize:'12px'}}>
+          <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between' }}>
+            <Text style={{fontSize:'14px',flexShrink: 0}}>Hardwares:</Text>
+            <Text style={{fontSize:'12px', flexGrow: 1, wordWrap: 'break-word', whiteSpace: 'pre-wrap',width:'79%',paddingLeft:'12px' }}>
             {data?.quote?.hardwares?.map((record,index) => (`${record?.item?.name} - (${record?.count})${commaFn(index, data?.quote?.hardwares?.length)}`))}
             </Text>
           </View>
@@ -386,7 +397,7 @@ const PDFFile = ({controls,data}) => {
                 
         </View>}
        </View>
-       <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px'}}>
+       <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px', paddingBottom: '30px'}}>
        {controls?.viewFabrication && 
        <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display:'flex',flexDirection:'column'}}>
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Fabrication:</Text>
@@ -459,7 +470,7 @@ const PDFFile = ({controls,data}) => {
        </View>
       </View>
       {/** Pagination */}
-      <View style={{borderTop:'1px solid #ccc',position:'absolute',bottom:'10px',left:'20px',right:'20px',padding:'5px'}} fixed>
+      <View style={{borderTop:'1px solid #ccc',position:'absolute',bottom:'10px',left:'20px',right:'20px',padding:'5px',marginTop:'10px'}} fixed>
       <Text style={{fontSize:'13px'}} render={({ pageNumber, totalPages }) => (
         `Page ${pageNumber} / ${totalPages}`
       )} />

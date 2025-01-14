@@ -33,6 +33,7 @@ import {
   updateMeasurements,
 } from "@/redux/estimateCalculations";
 import { calculateAreaAndPerimeter } from "./common";
+import CustomImage from "../Assets/customlayoutimage.svg";
 import { renderMeasurementSides as renderMeasurementSidesOfMirror } from "@/utilities/mirrorEstimates";
 export const generateNotificationsForCurrentItem = (
   estimateState,
@@ -454,7 +455,7 @@ export const generateObjectForPDFPreview = (
 
   let glassAddons = [];
   glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-    const record = listData?.glassAddons.find((addon) => addon._id === item);
+    const record = listData?.glassAddons?.find((addon) => addon._id === item);
     return record;
   });
 
@@ -630,6 +631,7 @@ export const generateObjectForPDFPreview = (
     label: estimateData?.config?.label,
     layout_id: estimateData?.config?.layout_id,
     measurements: estimateData?.config?.measurements,
+    discount:estimateData?.config?.discount,
     pricingFactor: showerMiscPricing?.pricingFactorStatus
       ? showerMiscPricing?.pricingFactor
       : 1,
@@ -671,7 +673,8 @@ export const setStateForShowerEstimate = (
   item,
   dispatch,
   navigate,
-  flag = true
+  flag = true,
+  redirect = false
 ) => {
   // if (item?.category === EstimateCategory.SHOWERS) {
   dispatch(resetNotifications());
@@ -704,9 +707,15 @@ export const setStateForShowerEstimate = (
   }
   // navigate(`/estimates/dimensions`);
   if (flag) {
-    navigate(
-      `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`
-    );
+    if(redirect){
+      navigate(
+        `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}&redirectTab=all`
+      );
+    }else{
+      navigate(
+        `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`
+      );
+    }
   }
   // }
 };
@@ -792,6 +801,7 @@ export const generateObjectForPDFRuntime = (
     pricingFactor: showersLocationSettings?.miscPricing?.pricingFactor,
     panelWeight: showerState.panelWeight,
     doorWeight: showerState.doorWeight,
+    discount:showerState?.content?.discount,
     returnWeight: showerState.returnWeight,
   };
 };
@@ -827,6 +837,7 @@ export const generateObjForMirrorPDFRuntime = (
     singleOutletCutout: mirrorState?.content?.singleOutletCutout,
     sqftArea: mirrorState?.sqftArea,
     tripleOutletCutout: mirrorState?.content?.tripleOutletCutout,
+    discount:mirrorState?.content?.discount,
     updatedAt: new Date(),
   };
 };
@@ -838,6 +849,7 @@ export const generateInvoiceItemsFromEstimates = (
 ) => {
   let items = [];
   estimatesList.forEach(async (estimate) => {
+    console.log(estimate,'wqwqwddwdwertw');
     switch (estimate.category) {
       case EstimateCategory.SHOWERS:
         const showerResp = await generateInvoiceItemForShowers(
@@ -877,6 +889,7 @@ const generateInvoiceItemForShowers = async (
 ) => {
   let summaryObject = {};
   let hardwarePrice = 0;
+  let hardwareAddonsPrice = 0;
   let glassPrice = 0;
   let glassAddonPrice = 0;
   const measurementString = renderMeasurementSides(
@@ -884,12 +897,15 @@ const generateInvoiceItemForShowers = async (
     estimate.config.measurements,
     estimate.config.layout_id
   );
+  summaryObject.estimate_id= estimate._id;
+  summaryObject.config= estimate;
   summaryObject.name= estimate.name;
   summaryObject.label= estimate.label;
   summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
   summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
+  summaryObject.image = estimate?.settings?.image ?? null;
   summaryObject.sqftArea = estimate.config?.sqftArea;
   summaryObject.perimeter = estimate.config?.perimeter;
   summaryObject.oneInchHoles = estimate.config.oneInchHoles;
@@ -902,12 +918,15 @@ const generateInvoiceItemForShowers = async (
   summaryObject.people = estimate.config.people;
   summaryObject.hours = estimate.config.hours;
   summaryObject.additionalFields = estimate.config.additionalFields;
+  summaryObject.creatorData = estimate?.creatorData;
+  summaryObject.customerData = estimate?.customerData;
+  summaryObject.status = estimate.status;
   // hardware finish
   const hardwareFinish = hardwaresList.hardwareFinishes.find(
     (item) => item._id === estimate.config.hardwareFinishes
   );
   if (hardwareFinish) {
-    summaryObject.hardwareFinish = hardwareFinish.name;
+    summaryObject.hardwareFinish = {type:hardwareFinish._id,name:hardwareFinish.name};
   }
   // handle
   const handle = hardwaresList.handles.find(
@@ -915,8 +934,9 @@ const generateInvoiceItemForShowers = async (
   );
   if (handle) {
     summaryObject.handle = {
-      type: handle.name,
+      type: handle._id,
       count: estimate.config?.handles?.count,
+      name: handle.name
     };
     const handlePrice =
       (handle?.finishes?.find(
@@ -930,8 +950,9 @@ const generateInvoiceItemForShowers = async (
   );
   if (hinge) {
     summaryObject.hinge = {
-      type: handle.name,
+      type: hinge._id,
       count: estimate.config?.hinges?.count,
+      name: hinge.name
     };
     const hingePrice =
       (hinge?.finishes?.find(
@@ -947,7 +968,7 @@ const generateInvoiceItemForShowers = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -973,7 +994,7 @@ const generateInvoiceItemForShowers = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -999,7 +1020,7 @@ const generateInvoiceItemForShowers = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1025,7 +1046,7 @@ const generateInvoiceItemForShowers = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1051,7 +1072,7 @@ const generateInvoiceItemForShowers = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1077,7 +1098,7 @@ const generateInvoiceItemForShowers = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1100,7 +1121,7 @@ const generateInvoiceItemForShowers = async (
     (item) => item._id === estimate.config?.mountingChannel
   );
   if (mountingChannel) {
-    summaryObject.mountingChannel = mountingChannel.name;
+    summaryObject.mountingChannel = {type:mountingChannel._id,name:mountingChannel.name};
     const price =
       (mountingChannel?.finishes?.find(
         (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1115,8 +1136,9 @@ const generateInvoiceItemForShowers = async (
   );
   if (glassType) {
     summaryObject.glassType = {
-      type: glassType.name,
+      type: glassType._id,
       thickness: estimate.config?.glassType?.thickness,
+      name: glassType.name
     };
     const price =
       (glassType?.options?.find(
@@ -1131,7 +1153,7 @@ const generateInvoiceItemForShowers = async (
       (_item) => _item._id === glassAddonId
     );
     if (item) {
-      glassAddonsNameArray.push(item.name);
+      glassAddonsNameArray.push({type:item._id,name:item.name});
       glassAddonPrice +=
         (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
     }
@@ -1145,8 +1167,9 @@ const generateInvoiceItemForShowers = async (
   );
   if (slidingDoorSystem) {
     summaryObject.slidingDoorSystem = {
-      type: slidingDoorSystem.name,
+      type: slidingDoorSystem._id,
       count: estimate.config?.slidingDoorSystem?.count,
+      name: slidingDoorSystem.name
     };
     const price =
       (slidingDoorSystem?.finishes?.find(
@@ -1160,8 +1183,9 @@ const generateInvoiceItemForShowers = async (
   );
   if (header) {
     summaryObject.header = {
-      type: header.name,
+      type: header._id,
       count: estimate.config?.header?.count,
+      name: header.name
     };
     const price =
       (header?.finishes?.find(
@@ -1177,12 +1201,12 @@ const generateInvoiceItemForShowers = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name:record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
           )?.cost || 0) * (item.count || 0);
-        hardwarePrice += price;
+        hardwareAddonsPrice += price;
       }
     });
     summaryObject.hardwareAddons = data;
@@ -1234,8 +1258,22 @@ const generateInvoiceItemForShowers = async (
     estimate.config?.people *
     estimate.config?.hours *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
+     //additionalField price
+  let additionalFieldPrice = 0;
+  estimate.config?.additionalFields?.forEach((item) => {
+    additionalFieldPrice += Number(
+      item.cost
+    );
+  });
+  const cost =
+  hardwarePrice +
+    fabricationPrice +
+    glassPrice +
+    glassAddonPrice +
+    hardwareAddonsPrice +
+    additionalFieldPrice;
   let totalPrice =
-    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
+    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice + hardwareAddonsPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
         ? companySettings?.miscPricing?.pricingFactor
         : 1) +
@@ -1253,13 +1291,21 @@ const generateInvoiceItemForShowers = async (
       0
     );
   }
+  if (
+    estimate.config?.userProfitPercentage > 0 &&
+    estimate.config?.userProfitPercentage < 100
+  ) {
+    totalPrice = ((cost * 100) / (estimate.config.userProfitPercentage - 100)) * -1;
+  }
   summaryObject.pricing = {
     hardwarePrice,
+    hardwareAddonsPrice,
     fabricationPrice,
     glassPrice,
     glassAddonPrice,
     laborPrice,
     totalPrice,
+    cost
   };
   return summaryObject;
 };
@@ -1269,6 +1315,7 @@ const generateInvoiceItemForMirrors = async (
   hardwaresList,
   companySettings
 ) => {
+  console.log(estimate,'estimateestimatewwddd')
   let summaryObject = {};
   let hardwarePrice = 0;
   let glassPrice = 0;
@@ -1277,12 +1324,14 @@ const generateInvoiceItemForMirrors = async (
   const measurementString = renderMeasurementSidesOfMirror(
     estimate.config?.measurements
   );
-  
+  summaryObject.estimate_id= estimate._id;
+  summaryObject.config= estimate;
   summaryObject.name= estimate.name;
   summaryObject.label= estimate.label;
   summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.layout = "Mirror";
+  summaryObject.image = null;
   summaryObject.sqftArea = estimate.config?.sqftArea;
   summaryObject.simpleHoles = estimate.config.simpleHoles;
   summaryObject.lightHoles = estimate.config.lightHoles;
@@ -1293,7 +1342,10 @@ const generateInvoiceItemForMirrors = async (
   summaryObject.quadOutletCutout = estimate.config.quadOutletCutout;
   summaryObject.people = estimate.config.people;
   summaryObject.hours = estimate.config.hours;
-  summaryObject.additionalFields = estimate.config.additionalFields;
+  summaryObject.additionalFields = estimate.config?.additionalFields ?? [];
+  summaryObject.creatorData = estimate?.creatorData;
+  summaryObject.customerData = estimate?.customerData;
+  summaryObject.status = estimate.status;
 
   // glass Type
   const glassType = hardwaresList.glassTypes.find(
@@ -1301,8 +1353,9 @@ const generateInvoiceItemForMirrors = async (
   );
   if (glassType) {
     summaryObject.glassType = {
-      type: glassType.name,
+      type: glassType._id,
       thickness: estimate.config?.glassType?.thickness,
+      name: glassType.name
     };
     const price =
       (glassType?.options?.find(
@@ -1316,8 +1369,9 @@ const generateInvoiceItemForMirrors = async (
   );
   if (edgeWork) {
     summaryObject.edgeWork = {
-      type: edgeWork.name,
+      type: edgeWork._id,
       thickness: estimate.config?.edgeWork?.thickness,
+      name: edgeWork.name
     };
     const price =
       (edgeWork?.options?.find(
@@ -1341,7 +1395,7 @@ const generateInvoiceItemForMirrors = async (
       (_item) => _item._id === glassAddonId
     );
     if (item) {
-      glassAddonsNameArray.push(item.name);
+      glassAddonsNameArray.push({type:item._id,name:item.name});
       glassAddonPrice +=
         (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
     }
@@ -1357,7 +1411,7 @@ const generateInvoiceItemForMirrors = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name:record.name });
         const price = (record?.options[0]?.cost || 0) * (item.count || 0);
         hardwarePrice += price;
       }
@@ -1392,6 +1446,19 @@ const generateInvoiceItemForMirrors = async (
     estimate.config?.people *
     estimate.config?.hours *
     (companySettings?.hourlyRate ?? 0);
+        //additionalField price
+  let additionalFieldPrice = 0;
+  estimate.config?.additionalFields?.forEach((item) => {
+    additionalFieldPrice += Number(
+      item.cost
+    );
+  });
+  const cost =
+  hardwarePrice +
+    fabricationPrice +
+    glassPrice +
+    glassAddonPrice +
+    additionalFieldPrice;
   let totalPrice =
     (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
       (companySettings?.pricingFactorStatus
@@ -1411,6 +1478,12 @@ const generateInvoiceItemForMirrors = async (
       0
     );
   }
+  if (
+    estimate.config?.modifiedProfitPercentage > 0 &&
+    estimate.config?.modifiedProfitPercentage < 100
+  ) {
+    totalPrice = ((cost * 100) / (estimate.config.modifiedProfitPercentage - 100)) * -1;
+  }
   summaryObject.pricing = {
     hardwarePrice,
     fabricationPrice,
@@ -1418,6 +1491,7 @@ const generateInvoiceItemForMirrors = async (
     glassAddonPrice,
     laborPrice,
     totalPrice,
+    cost
   };
   return summaryObject;
 };
@@ -1429,6 +1503,7 @@ const generateInvoiceItemForWineCellars = async (
 ) => {
   let summaryObject = {};
   let hardwarePrice = 0;
+  let hardwareAddonsPrice = 0;
   let glassPrice = 0;
   let glassAddonPrice = 0;
   const measurementString = renderMeasurementSides(
@@ -1436,13 +1511,15 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config.measurements,
     estimate.config.layout_id
   );
-  
+  summaryObject.estimate_id= estimate._id;
+  summaryObject.config= estimate;
   summaryObject.name= estimate.name;
   summaryObject.label= estimate.label;
   summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
-  summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
+  summaryObject.layout = estimate?.settings?.name ?? "Custom winecellar";
+  summaryObject.image = estimate?.settings?.image ?? null;
   summaryObject.sqftArea = estimate.config?.sqftArea;
   summaryObject.perimeter = estimate.config?.perimeter;
   summaryObject.oneInchHoles = estimate.config.oneInchHoles;
@@ -1456,12 +1533,15 @@ const generateInvoiceItemForWineCellars = async (
   summaryObject.hours = estimate.config.hours;
   summaryObject.laborHoursForDoor = estimate.config.laborHoursForDoor;
   summaryObject.additionalFields = estimate.config.additionalFields;
+  summaryObject.creatorData = estimate?.creatorData;
+  summaryObject.customerData = estimate?.customerData;
+  summaryObject.status = estimate.status;
   // hardware finish
   const hardwareFinish = hardwaresList.hardwareFinishes.find(
     (item) => item._id === estimate.config.hardwareFinishes
   );
   if (hardwareFinish) {
-    summaryObject.hardwareFinish = hardwareFinish.name;
+    summaryObject.hardwareFinish = {type:hardwareFinish._id,name:hardwareFinish.name};
   }
   // handle
   const handle = hardwaresList.handles.find(
@@ -1469,8 +1549,9 @@ const generateInvoiceItemForWineCellars = async (
   );
   if (handle) {
     summaryObject.handle = {
-      type: handle.name,
+      type: handle._id,
       count: estimate.config?.handles?.count,
+      name: handle.name
     };
     const handlePrice =
       (handle?.finishes?.find(
@@ -1484,8 +1565,9 @@ const generateInvoiceItemForWineCellars = async (
   );
   if (hinge) {
     summaryObject.hinge = {
-      type: handle.name,
+      type: hinge._id,
       count: estimate.config?.hinges?.count,
+      name: hinge.name
     };
     const hingePrice =
       (hinge?.finishes?.find(
@@ -1499,8 +1581,9 @@ const generateInvoiceItemForWineCellars = async (
   );
   if (doorLock) {
     summaryObject.doorLock = {
-      type: doorLock.name,
+      type: doorLock._id,
       count: estimate.config?.doorLock?.count,
+      name: doorLock.name
     };
     const price =
       (doorLock?.finishes?.find(
@@ -1516,7 +1599,7 @@ const generateInvoiceItemForWineCellars = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1542,7 +1625,7 @@ const generateInvoiceItemForWineCellars = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1568,7 +1651,7 @@ const generateInvoiceItemForWineCellars = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1594,7 +1677,7 @@ const generateInvoiceItemForWineCellars = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1620,7 +1703,7 @@ const generateInvoiceItemForWineCellars = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1646,7 +1729,7 @@ const generateInvoiceItemForWineCellars = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1669,7 +1752,7 @@ const generateInvoiceItemForWineCellars = async (
     (item) => item._id === estimate.config?.mountingChannel
   );
   if (mountingChannel) {
-    summaryObject.mountingChannel = mountingChannel.name;
+    summaryObject.mountingChannel = {type:mountingChannel._id,name:mountingChannel.name};
     const price =
       (mountingChannel?.finishes?.find(
         (item) => item.finish_id === estimate.config.hardwareFinishes
@@ -1684,8 +1767,9 @@ const generateInvoiceItemForWineCellars = async (
   );
   if (glassType) {
     summaryObject.glassType = {
-      type: glassType.name,
+      type: glassType._id,
       thickness: estimate.config?.glassType?.thickness,
+      name: glassType.name
     };
     const price =
       (glassType?.options?.find(
@@ -1700,7 +1784,7 @@ const generateInvoiceItemForWineCellars = async (
       (_item) => _item._id === glassAddonId
     );
     if (item) {
-      glassAddonsNameArray.push(item.name);
+      glassAddonsNameArray.push({type:item._id,name:item.name});
       glassAddonPrice +=
         (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
     }
@@ -1714,8 +1798,9 @@ const generateInvoiceItemForWineCellars = async (
   );
   if (slidingDoorSystem) {
     summaryObject.slidingDoorSystem = {
-      type: slidingDoorSystem.name,
+      type: slidingDoorSystem._id,
       count: estimate.config?.slidingDoorSystem?.count,
+      name: slidingDoorSystem.name
     };
     const price =
       (slidingDoorSystem?.finishes?.find(
@@ -1729,8 +1814,9 @@ const generateInvoiceItemForWineCellars = async (
   );
   if (header) {
     summaryObject.header = {
-      type: header.name,
+      type: header._id,
       count: estimate.config?.header?.count,
+      name: header.name
     };
     const price =
       (header?.finishes?.find(
@@ -1746,12 +1832,12 @@ const generateInvoiceItemForWineCellars = async (
         (_item) => _item._id === item.type
       );
       if (record) {
-        data.push({ type: record.name, count: item.count });
+        data.push({ type: record._id, count: item.count, name: record.name });
         const price =
           (record?.finishes?.find(
             (item) => item.finish_id === estimate.config.hardwareFinishes
           )?.cost || 0) * (item.count || 0);
-        hardwarePrice += price;
+        hardwareAddonsPrice += price;
       }
     });
     summaryObject.hardwareAddons = data;
@@ -1807,8 +1893,22 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config?.people *
     estimate.config?.laborHoursForDoor *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
+        //additionalField price
+  let additionalFieldPrice = 0;
+  estimate.config?.additionalFields?.forEach((item) => {
+    additionalFieldPrice += Number(
+      item.cost
+    );
+  });
+  const cost =
+  hardwarePrice +
+    fabricationPrice +
+    glassPrice +
+    glassAddonPrice +
+    hardwareAddonsPrice +
+    additionalFieldPrice;
   let totalPrice =
-    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
+    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice + hardwareAddonsPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
         ? companySettings?.miscPricing?.pricingFactor
         : 1) +
@@ -1826,14 +1926,22 @@ const generateInvoiceItemForWineCellars = async (
       0
     );
   }
+  if (
+    estimate.config?.userProfitPercentage > 0 &&
+    estimate.config?.userProfitPercentage < 100
+  ) {
+    totalPrice = ((cost * 100) / (estimate.config.userProfitPercentage - 100)) * -1;
+  }
   summaryObject.pricing = {
     hardwarePrice,
+    hardwareAddonsPrice,
     fabricationPrice,
     glassPrice,
     glassAddonPrice,
     laborPrice,
     doorLaborPrice,
     totalPrice,
+    cost
   };
   return summaryObject;
 };

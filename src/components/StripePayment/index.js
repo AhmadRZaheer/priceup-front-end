@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "./CheckoutForm";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import "./style.scss";
 
 function Payment(props) {
-  const { stripePromise,refetchData } = props;
+  const { stripePromise,refetchData,handleClose } = props;
   const [clientSecret, setClientSecret] = useState(
     "pi_3QRs8ZRujwjTz5jA0JZcwoov_secret_NrmCC54cC7Gozt16djTnu0abp"
   );
@@ -20,9 +20,10 @@ function Payment(props) {
 
   return (
     <Box sx={{ maxWidth: 345 }}>
+     
       {clientSecret && stripePromise && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm refetchData={refetchData} />
+          <CheckoutForm refetchData={refetchData} handleClose={handleClose} />
         </Elements>
       )}
     </Box>

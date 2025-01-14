@@ -69,6 +69,7 @@ const WineGlassTypeComponent = () => {
   const [rowStatus, setRowStatus] = useState({});
   const [editGlassType, setEditGlassType] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [upgradeOption, setUpgradeOption] = useState({});
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -100,6 +101,9 @@ const WineGlassTypeComponent = () => {
       if (props?.options) {
         formData.append("options", props.options);
       }
+      if (props?.description) {
+        formData.append("description", props.description);
+      }
       editWineGlassType({
         data: formData,
         apiRoute: `${routePrefix}/${props.id}`,
@@ -107,6 +111,17 @@ const WineGlassTypeComponent = () => {
       setUpdateRefetch(true);
     }
     localStorage.setItem("scrollToIndex", props.id);
+  };
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.showInUpgrades,
+    });
+    editWineGlassType({
+      data: { showInUpgrades: !row.showInUpgrades },
+      apiRoute: `${routePrefix}/${row._id}`,
+    });
+    setUpdateRefetch(true);
   };
 
   const handleOpenCreateModal = () => {
@@ -120,6 +135,7 @@ const WineGlassTypeComponent = () => {
       formData.append("image", props.image);
     }
     formData.append("name", props.name);
+    formData.append("description", props.description);
     formData.append("company_id", decodedToken?.company_id);
     formData.append("slug", slug);
     createWineGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
@@ -467,6 +483,28 @@ const WineGlassTypeComponent = () => {
                   </Box>
                 </MenuItem>
               ))}
+              <MenuItem
+                className="mirror-meun-item"
+                onClick={() => handleUpgradeStatusChange(params.row)}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt">Show in Upgrade</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[params.row._id] !== undefined
+                        ? upgradeOption[params.row._id]
+                        : params?.row?.showInUpgrades
+                    }
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
+              </MenuItem>
 
               <MenuItem
                 onClick={() => {

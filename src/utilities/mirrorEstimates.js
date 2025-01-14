@@ -286,6 +286,20 @@ export const calculateTotal = (
     totalPrice =
       ((cost * 100) / (selectedContent.modifiedProfitPercentage - 100)) * -1;
   }
+  let discountTotal = totalPrice;
+  if (
+    selectedContent?.discount?.value > 0 &&
+    selectedContent?.discount?.unit === "$"
+  ) {
+    discountTotal = totalPrice - selectedContent.discount.value;
+  } else if (
+    selectedContent?.discount?.value > 0 &&
+    selectedContent?.discount?.value < 100 &&
+    selectedContent?.discount?.unit === "%"
+  ) {
+    const discountAmount = (totalPrice * selectedContent.discount.value) / 100;
+    discountTotal = totalPrice -  discountAmount;
+  }
 
   return {
     glass: glassPrice,
@@ -295,11 +309,12 @@ export const calculateTotal = (
     misc: misc,
     cost: cost,
     total: totalPrice,
-    profitPercentage: totalPrice > 0 ?  ((totalPrice - cost) * 100) / totalPrice : 0,
+    discountTotal:discountTotal,
+    profitPercentage: discountTotal > 0 && discountTotal - cost > 0 ?  ((discountTotal - cost) * 100) / discountTotal : 0,
   };
 };
 
-export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
+export const setStateForMirrorEstimate = (item, dispatch, navigate,redirect = false) => {
   dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
   dispatch(setEstimateState(quoteState.EDIT));
@@ -308,9 +323,15 @@ export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
   dispatch(setMirrorProjectId(item?.project_id));
   dispatch(setEstimateMeasurements(item.config.measurements));
   // console.log("mirror edit", item);
-  navigate(
-    `/estimates/dimensions?category=${EstimateCategory.MIRRORS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}`
-  );
+  if(redirect){
+    navigate(
+      `/estimates/dimensions?category=${EstimateCategory.MIRRORS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}&redirectTab=all`
+    );
+  }else{
+    navigate(
+      `/estimates/dimensions?category=${EstimateCategory.MIRRORS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}`
+    );
+  }  
 };
 
 export const getActiveStatus = (
@@ -548,13 +569,13 @@ export const generateObjectForPDFPreview = (
 
   let glassAddons = [];
   glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-    const record = listData?.glassAddons.find((addon) => addon._id === item);
+    const record = listData?.glassAddons?.find((addon) => addon._id === item);
     return record;
   });
 
   let hardwares = [];
   hardwares = estimateData?.config?.hardwares?.map((row) => {
-    const record = listData?.hardwares.find(
+    const record = listData?.hardwares?.find(
       (addon) => addon?._id === row?.type
     );
     return { item: record, count: row?.count };
@@ -597,6 +618,7 @@ export const generateObjectForPDFPreview = (
     label: estimateData?.config?.label,
     layout_id: estimateData?.config?.layout_id,
     measurements: estimateData?.config?.measurements,
+    discount:estimateData?.config?.discount,
     pricingFactor: mirrorMiscPricing?.pricingFactorStatus
       ? mirrorMiscPricing?.pricingFactor
       : 1,

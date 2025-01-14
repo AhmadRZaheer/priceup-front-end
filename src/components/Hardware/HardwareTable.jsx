@@ -1,16 +1,34 @@
-import { HardWareColumns } from '@/utilities/DataGridColumns'
-import { DeleteOutlineOutlined, EditOutlined, KeyboardArrowDown } from '@mui/icons-material'
-import { Box, Button, Menu, MenuItem, Typography, CircularProgress, Stack } from '@mui/material'
-import { DataGrid } from '@mui/x-data-grid'
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import CustomToggle from '../ui-components/Toggle'
-import CustomInputField from '../ui-components/CustomInput'
-import DeleteModal from '../Modal/deleteModal'
-import { useDeleteHardwares, useEditFullHardware } from '@/utilities/ApiHooks/hardware'
+import { HardWareColumns } from "@/utilities/DataGridColumns";
+import {
+  DeleteOutlineOutlined,
+  EditOutlined,
+  KeyboardArrowDown,
+} from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Menu,
+  MenuItem,
+  Typography,
+  CircularProgress,
+  Stack,
+} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
+import CustomToggle from "../ui-components/Toggle";
+import CustomInputField from "../ui-components/CustomInput";
+import DeleteModal from "../Modal/deleteModal";
+import {
+  useDeleteHardwares,
+  useEditFullHardware,
+} from "@/utilities/ApiHooks/hardware";
 // import AddEditHardware from '../Modal/addEditHardware'
-import AddEditModelHardware from '../Modal/AddEditModelHardware'
-import DefaultImage from '../ui-components/defaultImage'
-import { inputLength, inputMaxValue } from '@/utilities/constants'
+import AddEditModelHardware from "../Modal/AddEditModelHardware";
+import DefaultImage from "../ui-components/defaultImage";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
+import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
+import { useEditDocument } from "@/utilities/ApiHooks/common";
+import { backendURL } from "@/utilities/common";
 
 const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -18,10 +36,16 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [upgradeOption, setUpgradeOption] = useState({});
 
   const open = Boolean(anchorEl);
-  const { mutate: editFinish, isSuccess: hardwareEditSuccess } = useEditFullHardware();
-  const { mutate: deleteHardware, isSuccess: deleteSuccess, isLoading: LoadingForDelete } = useDeleteHardwares();
+  const { mutate: editFinish, isSuccess: hardwareEditSuccess } =
+    useEditDocument();
+  const {
+    mutate: deleteHardware,
+    isSuccess: deleteSuccess,
+    isLoading: LoadingForDelete,
+  } = useDeleteHardwares();
 
   useEffect(() => {
     setLoading(false);
@@ -54,21 +78,25 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
 
   const handleUpdate = useCallback(() => {
     setAnchorEl(null);
-    const selectedData = {
-      id: data._id,
-      finishesData: finishes,
-    };
-    editFinish({ DataFinishes: selectedData });
+    // const selectedData = {
+    //   id: data._id,
+    //   finishesData: finishes,
+    // };
+    editFinish({
+      data: {
+        ...(finishes ? { finishes: finishes } : {}),
+      },
+      apiRoute: `${backendURL}/hardwares/${data._id}`,
+    });
   }, [data._id, finishes, editFinish]);
 
-  const handleStatusChange = useCallback(
-    (id) => {
-      setFinishes((prevFinishes) =>
-        prevFinishes.map((item) => (item._id === id ? { ...item, status: !item.status } : item))
-      );
-    },
-    []
-  );
+  const handleStatusChange = useCallback((id) => {
+    setFinishes((prevFinishes) =>
+      prevFinishes.map((item) =>
+        item._id === id ? { ...item, status: !item.status } : item
+      )
+    );
+  }, []);
   //Open Model
   const [openModel, setOpenModel] = useState(false);
   const handleCloseModel = () => {
@@ -80,17 +108,31 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
     setAnchorEl(null);
   };
 
-  const handleCostChange = useCallback(
-    (event, id) => {
-      const value = event.target.value;
-      if(value.length <= inputLength) {      
+  const handleCostChange = useCallback((event, id) => {
+    const value = event.target.value;
+    if (value.length <= inputLength) {
       setFinishes((prevFinishes) =>
-        prevFinishes.map((item) => (item._id === id ? { ...item, cost: value } : item))
+        prevFinishes.map((item) =>
+          item._id === id ? { ...item, cost: value } : item
+        )
       );
     }
-    },
-    []
-  );
+  }, []);
+
+  const handleUpgradeStatusChange = (row) => {
+    setUpgradeOption({
+      ...upgradeOption,
+      [row._id]: !row.showInUpgrades,
+    });
+    // const selectedData = {
+    //   id: data._id,
+    //   showInUpgrades: !row.showInUpgrades,
+    // };
+    editFinish({
+      data: { showInUpgrades: !row.showInUpgrades },
+      apiRoute: `${backendURL}/hardwares/${data._id}`,
+    });
+  };
 
   const actionColumns = useMemo(
     () => [
@@ -171,40 +213,40 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
     <>
       <Box
         sx={{
-          border: '1px solid #D0D5DD',
-          borderRadius: '8px',
-          overflow: 'hidden',
+          border: "1px solid #D0D5DD",
+          borderRadius: "8px",
+          overflow: "hidden",
           width: "99.88%",
-          m: 'auto',
+          m: "auto",
           mt: 1.5,
-          background: '#FFFF',
+          background: "#FFFF",
         }}
       >
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            py: '15px',
+            display: "flex",
+            justifyContent: "space-between",
+            py: "15px",
             px: 3,
           }}
         >
-          <Box sx={{ display: 'flex', gap: 1.5 }}>
+          <Box sx={{ display: "flex", gap: 1.5 }}>
             <DefaultImage image={data?.image} type={5} name={data?.name} />
             <Typography className="tableHeader">{data?.name}</Typography>
           </Box>
           <Box>
             <Button
               id="demo-customized-button"
-              aria-controls={open ? 'demo-customized-menu' : undefined}
+              aria-controls={open ? "demo-customized-menu" : undefined}
               aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
+              aria-expanded={open ? "true" : undefined}
               variant="outlined"
               disableElevation
               onClick={handleClick}
               className="actionBtn"
             >
               Actions
-              <KeyboardArrowDown sx={{ width: '16px', height: '16px' }} />
+              <KeyboardArrowDown sx={{ width: "16px", height: "16px" }} />
             </Button>
             <Menu
               id="basic-menu"
@@ -213,58 +255,97 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
               onClose={handleClose}
               elevation={0}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
+                vertical: "bottom",
+                horizontal: "right",
               }}
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               MenuListProps={{
-                'aria-labelledby': 'basic-button',
+                "aria-labelledby": "basic-button",
               }}
               slotProps={{
                 paper: {
                   elevation: 0,
                   sx: {
-                    overflow: 'visible',
-                    filter: 'none',
-                    boxShadow: '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
-                    border: '1px solid #D0D5DD',
+                    overflow: "visible",
+                    filter: "none",
+                    boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+                    border: "1px solid #D0D5DD",
                     p: 0,
-                    width: '171px',
-                    '& .MuiList-padding': {
+                    width: "174px",
+                    "& .MuiList-padding": {
                       p: 0,
                     },
                   },
                 },
               }}
             >
-              <MenuItem onClick={handleUpdate} sx={{ p: '12px', ':hover': { background: '#EDEBFA' } }}>
+              <MenuItem
+                onClick={handleUpdate}
+                sx={{ p: "12px", ":hover": { background: "#EDEBFA" } }}
+              >
                 <Typography className="dropTxt">Update</Typography>
               </MenuItem>
-              <MenuItem onClick={handleOpenEdit} sx={{ p: '12px', ':hover': { background: '#EDEBFA' } }}>
+              <MenuItem
+                onClick={handleOpenEdit}
+                sx={{ p: "12px", ":hover": { background: "#EDEBFA" } }}
+              >
                 <Box
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '100%',
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
                   }}
                 >
-                  <Typography className="dropTxt" >Edit</Typography>
-                  <EditOutlined sx={{ color: '#5D6164', height: '20px', width: '20px' }} />
+                  <Typography className="dropTxt">Edit</Typography>
+                  <EditOutlined
+                    sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                  />
                 </Box>
               </MenuItem>
-              <MenuItem onClick={() => handleOpenDeleteModal(data._id)} sx={{ p: '12px', ':hover': { background: '#EDEBFA' } }}>
+
+              <MenuItem
+                // className="mirror-meun-item"
+                onClick={() => handleUpgradeStatusChange(data)}
+                sx={{ p: "12px" }}
+              >
                 <Box
                   sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    width: '100%',
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                  }}
+                >
+                  <Typography className="dropTxt" sx={{ pr: "4px" }}>
+                    Show in Upgrade
+                  </Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      upgradeOption[data?._id] !== undefined
+                        ? upgradeOption[data?._id]
+                        : data?.showInUpgrades
+                    }
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                </Box>
+              </MenuItem>
+              <MenuItem
+                onClick={() => handleOpenDeleteModal(data._id)}
+                sx={{ p: "12px", ":hover": { background: "#EDEBFA" } }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
                   }}
                 >
                   <Typography className="dropTxt">Delete</Typography>
-                  <DeleteOutlineOutlined sx={{ color: '#E22A2D', height: '20px', width: '20px' }} />
+                  <DeleteOutlineOutlined
+                    sx={{ color: "#E22A2D", height: "20px", width: "20px" }}
+                  />
                 </Box>
               </MenuItem>
             </Menu>
@@ -272,12 +353,12 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
         </Box>
         <DataGrid
           loading={loading}
-          style={{ border: 'none' }}
+          style={{ border: "none" }}
           getRowId={(row) => row._id}
           rows={finishes}
           columns={HardWareColumns.concat(actionColumns)}
           rowHeight={70.75}
-          sx={{ width: '100%', minHeight: '500px' }}
+          sx={{ width: "100%", minHeight: "500px" }}
           hideFooter
           disableColumnMenu
         />

@@ -110,8 +110,8 @@ export default function ProjectInvoices() {
               padding: { sm: "10px 16px", xs: "5px 8px" },
             }}
           >
-            <Add sx={{ mr: { sm: 1, xs: 0.8 }, color: "#FFFFFF" }} />
-            Create Quote Page
+            <Add sx={{ mr: { sm: 0.8, xs: 0.8 }, color: "#FFFFFF" }} />
+            Create Invoice
           </Button>
         </Box>
       </Box>

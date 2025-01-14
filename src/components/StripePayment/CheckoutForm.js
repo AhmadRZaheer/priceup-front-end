@@ -4,15 +4,26 @@ import {
 } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
 import { useStripe, useElements } from "@stripe/react-stripe-js";
-import { Box, Button, CircularProgress, Container } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import "./style.scss";
 import { backendURL } from "@/utilities/common";
 import { useEditDocument } from "@/utilities/ApiHooks/common";
 import { useParams } from "react-router-dom";
+import { Close } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "@/redux/snackBarSlice";
 
-export default function CheckoutForm({ refetchData }) {
+export default function CheckoutForm({ refetchData, handleClose }) {
   const { id } = useParams();
   const stripe = useStripe();
+  const dispatch = useDispatch();
   const elements = useElements();
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,12 +34,19 @@ export default function CheckoutForm({ refetchData }) {
   } = useEditDocument();
   const [descion, setDescion] = useState("");
   const handleChangeStatus = async (value) => {
-    setDescion(value);
+    dispatch(
+      showSnackbar({
+        message: `Payment Successfully`,
+        severity: "success",
+      })
+    );
+    // setDescion(value);
     try {
       await updateInvoiceStatus({
-        data: { status: value },
-        apiRoute: `${backendURL}/invoices/${id}/customer-preview`,
+        data: { transaction: 'performed' },
+        apiRoute:`${backendURL}/landing-page-preview/${id}`,
       });
+      handleClose();
       refetchData();
     } catch (error) {
       console.log(error);
@@ -71,6 +89,14 @@ export default function CheckoutForm({ refetchData }) {
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
+      <Box
+        sx={{ display: "flex", justifyContent: "space-between", px: 1, pt: 1 }}
+      >
+        <Typography fontWeight="bold">Payment</Typography>
+        <IconButton onClick={handleClose} sx={{ p: "0px !important" }}>
+          <Close />
+        </IconButton>
+      </Box>
       <Box sx={{ m: "10px" }}>
         <LinkAuthenticationElement
           id="link-authentication-element"
@@ -110,11 +136,12 @@ export default function CheckoutForm({ refetchData }) {
             fullWidth
             variant="contained"
             sx={{
-              backgroundColor: statusLoading ? "#d8cece" : "#8477DA",
+              fontWeight: "bold !important",
+              backgroundColor: statusLoading ? "#d8cece" : "#F95500",
               height: "44px",
               width: { sm: "100%", xs: "187px" },
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
+              "&:hover": { backgroundColor: "#F95500" },
+              color: "#0B0B0B",
               textTransform: "capitalize",
               borderRadius: 1,
               fontSize: { lg: 16, md: 15, xs: 12 },
@@ -124,13 +151,13 @@ export default function CheckoutForm({ refetchData }) {
               },
             }}
           >
-            {descion === "Paid" && statusLoading ? (
+            {statusLoading ? (
               <CircularProgress size={24} sx={{ color: "#8477DA" }} />
             ) : (
-              "Pay now"
+              "Pay"
             )}
           </Button>
-          <Button
+          {/* <Button
             onClick={() => handleChangeStatus("Voided")}
             fullWidth
             variant="contained"
@@ -154,7 +181,7 @@ export default function CheckoutForm({ refetchData }) {
             ) : (
               "Disapproved"
             )}
-          </Button>
+          </Button> */}
         </Box>
       </Box>
       {/* Show any error or success messages */}

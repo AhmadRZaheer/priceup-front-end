@@ -18,6 +18,7 @@ import notificationsSlice from "./notificationsSlice";
 import wineCellarsHardwareReducer from "./wineCellarsHardwareSlice";
 import wineCellarsEstimateReducer from "./wineCellarEstimateSlice";
 import globalEstimateForm from "./globalEstimateForm";
+import customerEstimationSlice from "./customerEstimateCalculation";
 
 const store = configureStore({
   reducer: {
@@ -39,6 +40,7 @@ const store = configureStore({
     wineCellarsHardware: wineCellarsHardwareReducer,
     wineCellarsEstimate: wineCellarsEstimateReducer,
     globalEstimateForm: globalEstimateForm,
+    customerEstimation: customerEstimationSlice,
   },
 });
 

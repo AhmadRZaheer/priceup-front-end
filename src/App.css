@@ -425,28 +425,28 @@ input {
   border-right: 1px solid #D6DAE3;
 }
 /* Customize Swiper navigation button size and color */
-.swiper-button-next,
+/* .swiper-button-next,
 .swiper-button-prev {
-  color: #8477DA !important; /* Set your custom color */
+  color: white !important; 
+  background-color: #8477DA;
+  padding: 8px;
 }
 
-/* Adjust button's position if needed */
 .swiper-button-next {
-  right: 20px !important; /* Move closer to the edge if necessary */
+  right: 20px !important; 
 }
 
 .swiper-button-prev {
-  left: 20px !important; /* Move closer to the edge if necessary */
-}
+  left: 20px !important; 
+} */
 
 /* Optional: Change color on hover */
-.swiper-button-next:hover,
+/* .swiper-button-next:hover,
 .swiper-button-prev:hover {
-  color: #8477DA !important;
-  /* background-color: #8477DA; */
-  /* padding: 10px; */
-  /* border-radius: 50%; */
-}
+  color: white !important;
+  background-color: #8477DA;
+  padding: 8px;
+} */
 
 
 /* Subscribe Button */
@@ -485,4 +485,7 @@ input {
   cursor: pointer;
   font-family: 'Muli', sans-serif;
   margin-top: 0px !important;
+}
+.MuiDataGrid-columnHeaderTitleContainer{
+  background: #F3F5F6;
 }

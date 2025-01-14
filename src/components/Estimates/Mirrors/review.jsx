@@ -34,6 +34,7 @@ import {
   getSelectedContent,
   getSqftArea,
   resetNotifications,
+  setEstimateDiscountTotal,
   setInputContent,
   setPricing,
   setSelectedContent,
@@ -49,80 +50,10 @@ import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import { enqueueSnackbar } from "notistack";
 import EnterLabelModal from "../enterLabelModal";
 import { Add } from "@mui/icons-material";
+import { generateEstimatePayloadForMirror } from "@/utilities/generateEstimateCalculationContent";
 
 // const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
-export const generateEstimatePayload = (
-  measurements,
-  selectedContent,
-  sqftArea
-) => {
-  let measurementsArray = measurements;
-  // if (estimateState === quoteState.EDIT && !layout_id || estimateState === quoteState.CUSTOM) {
-  let newArray = [];
-  for (const key in measurementsArray) {
-    const index = parseInt(key);
-    newArray[index] = measurementsArray[key];
-  }
-  measurementsArray = newArray;
-  // }
-
-  const glassAddonsArray = selectedContent?.glassAddons?.map(
-    (item) => item?._id
-  );
-
-  const hardwaresArray = selectedContent?.hardwares?.map((row) => {
-    return {
-      type: row.item._id,
-      count: row.count,
-    };
-  });
-  const filteredFields = selectedContent.additionalFields?.filter(
-    (item) => item.label !== "" && item.cost !== 0
-  );
-
-  const additionalFieldsArray = filteredFields?.map((row) => {
-    return {
-      cost: row.cost,
-      label: row.label,
-    };
-  });
-
-  const estimateConfig = {
-    glassType: {
-      type: selectedContent?.glassType?.item?._id,
-      thickness: selectedContent?.glassType?.thickness,
-    },
-    edgeWork: {
-      type: selectedContent?.edgeWork?.item?._id,
-      thickness: selectedContent?.edgeWork?.thickness,
-    },
-    glassAddons: [...glassAddonsArray],
-    hardwares: [...hardwaresArray],
-    // floatingSize: selectedContent.floatingSize,
-    // sandBlasting: selectedContent.sandBlasting,
-    // bevelStrip: selectedContent.bevelStrip,
-    // safetyBacking: selectedContent.safetyBacking,
-    simpleHoles: selectedContent.simpleHoles,
-    // outlets: selectedContent.outlets,
-    lightHoles: selectedContent.lightHoles,
-    notch: selectedContent.notch,
-    singleOutletCutout: selectedContent.singleOutletCutout,
-    doubleOutletCutout: selectedContent.doubleOutletCutout,
-    tripleOutletCutout: selectedContent.tripleOutletCutout,
-    quadOutletCutout: selectedContent.quadOutletCutout,
-    // singleDuplex: selectedContent.singleDuplex,
-    // doubleDuplex: selectedContent.doubleDuplex,
-    // tripleDuplex: selectedContent.tripleDuplex,
-    modifiedProfitPercentage: selectedContent.modifiedProfitPercentage,
-    additionalFields: [...additionalFieldsArray],
-    people: selectedContent.people,
-    hours: selectedContent.hours,
-    measurements: measurementsArray,
-    sqftArea: sqftArea,
-  };
-  return estimateConfig;
-};
 
 export const MirrorReview = ({ setStep }) => {
   const navigate = useNavigate();
@@ -151,6 +82,7 @@ export const MirrorReview = ({ setStep }) => {
   const pricing = useSelector(getPricing);
   const addedFields = useSelector(getAdditionalFields);
   const category = searchParams.get("category");
+  const redirectTab = searchParams.get("redirectTab");
   const disable_com = Object.entries(measurements)?.length > 0 ? false : true;
   // const handleToggleShift = (type, value) => {
   //     console.log(value, 'val');
@@ -159,7 +91,7 @@ export const MirrorReview = ({ setStep }) => {
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
-    const estimateConfig = generateEstimatePayload(
+    const estimateConfig = generateEstimatePayloadForMirror(
       measurements,
       selectedContent,
       sqftArea
@@ -196,7 +128,11 @@ export const MirrorReview = ({ setStep }) => {
 
   const handleCancel = () => {
     if (projectId) {
-      navigate(`/projects/${projectId}?category=${category}`);
+      if(redirectTab && redirectTab==='all'){
+        navigate(`/projects/${projectId}`);
+      }else{
+        navigate(`/projects/${projectId}?category=${category}`);
+      }
     } else {
       navigate("/estimates");
     }
@@ -206,7 +142,7 @@ export const MirrorReview = ({ setStep }) => {
     const allGoodStatus = getEstimateErrorStatus(selectedContent);
     if (allGoodStatus) {
       if (currentEstimateState === quoteState.CREATE) {
-        const estimateConfig = generateEstimatePayload(
+        const estimateConfig = generateEstimatePayloadForMirror(
           measurements,
           selectedContent,
           sqftArea
@@ -230,6 +166,7 @@ export const MirrorReview = ({ setStep }) => {
       measurements
     );
     dispatch(setPricing(prices));
+    dispatch(setEstimateDiscountTotal(prices?.discountTotal));
   }, [selectedContent]);
 
   useEffect(() => {
