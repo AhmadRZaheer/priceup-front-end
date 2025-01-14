@@ -125,6 +125,7 @@ const CustomizeLandingPage = ({
   // showersLocationSettings,
   // pdfSettings,
 }) => {
+  console.log(selectedData,'selectedDataselectedData')
   const { id } = useParams();
   const [acceptTerms, setAcceptTerms] = useState(false);
   const signaturePadRef = useRef(null);
@@ -160,7 +161,7 @@ const CustomizeLandingPage = ({
   // const [invoiceStatusBtn, setInvoiceStatusBtn] = useState(true);
 
   const generatePDF = (data) => {
-    console.log(data,'generatePDFgeneratePDF')
+    console.log(data, "generatePDFgeneratePDF");
     // console.log("Call this function", data);
     if (data?.category === EstimateCategory.SHOWERS) {
       const formattedData = generateObjectForPDFPreview(
@@ -275,7 +276,7 @@ const CustomizeLandingPage = ({
     const generatedPdfs = [];
     if (isFetched && selectedData?.estimateDetailArray) {
       selectedData?.estimateDetailArray?.forEach((data, index) => {
-        const singleEstimatePdf = generatePDF(data?.config);
+        const singleEstimatePdf = generatePDF(data);
         if (singleEstimatePdf) {
           generatedPdfs.push(singleEstimatePdf);
         }
@@ -292,7 +293,11 @@ const CustomizeLandingPage = ({
     showersLocationSettings,
     pdfSettings,
   ]);
-  console.log(estimatePdfs, "estimatePdfsestimatePdfs",selectedData?.estimateDetailArray);
+  console.log(
+    estimatePdfs,
+    "estimatePdfsestimatePdfs",
+    selectedData?.estimateDetailArray
+  );
   const decodedToken = getDecryptedToken();
   // const [estimatePdf, setEstimatePdf] = useState([]);
   const fileInputRef = useRef(null);
@@ -357,7 +362,6 @@ const CustomizeLandingPage = ({
         "pk_test_51PbsdGRujwjTz5jAngiBVuLGHvo6F3ALHulFXgBb9VCl2sY9oX6mQSLYv7ryU8nCqwo2XUCKBGoN2DnKBE7nFhOZ0047xQUUoC"
       )
     );
-
   }, []);
 
   const [expanded, setExpanded] = useState("panel1");
@@ -367,10 +371,11 @@ const CustomizeLandingPage = ({
   };
 
   const estimateTotal = useMemo(() => {
-    let totalShowers = [], totalMirrors = [], totalWineCellar = [];
+    let totalShowers = [],
+      totalMirrors = [],
+      totalWineCellar = [];
     estimatesList?.forEach((item) => {
-      if (item?.category === EstimateCategory.SHOWERS)
-        totalShowers.push(item);
+      if (item?.category === EstimateCategory.SHOWERS) totalShowers.push(item);
       else if (item?.category === EstimateCategory.MIRRORS)
         totalMirrors.push(item);
       else if (item?.category === EstimateCategory.WINECELLARS)
@@ -387,20 +392,17 @@ const CustomizeLandingPage = ({
 
   useEffect(() => {
     if (estimatesList) {
-      console.log(estimatesList,'list')
-      const sum = estimatesList?.reduce(
-        (accumulator, currentItem) => {
-          return (
-            accumulator +
-            calculateDiscount(
-              currentItem.totalPrice,
-              currentItem?.content?.discount?.value,
-              currentItem?.content?.discount?.unit
-            )
-          );
-        },
-        0
-      );
+      console.log(estimatesList, "list");
+      const sum = estimatesList?.reduce((accumulator, currentItem) => {
+        return (
+          accumulator +
+          calculateDiscount(
+            currentItem.totalPrice,
+            currentItem?.content?.discount?.value,
+            currentItem?.content?.discount?.unit
+          )
+        );
+      }, 0);
       SetTotalSum(sum);
     }
   }, [estimatesList]);
@@ -460,10 +462,11 @@ const CustomizeLandingPage = ({
             // width: { md: "89%", xs: "90%" },
             // m: "auto",
             backgroundImage: {
-              md: `url(${selectedData?.content?.section1?.backgroundImage
-                ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
-                : bgHeaderImage
-                })`,
+              md: `url(${
+                selectedData?.content?.section1?.backgroundImage
+                  ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
+                  : bgHeaderImage
+              })`,
               xs: "none",
             },
             backgroundRepeat: "no-repeat",
@@ -1145,6 +1148,14 @@ const CustomizeLandingPage = ({
                     {estimateTotal?.totalShowers?.length}
                   </Box>
                 </Typography>
+                {selectedData?.content?.section2?.shower?.description
+                  .length && (
+                  <Typography
+                    sx={{ fontSize: "18px", fontWeight: 500, color: "white" }}
+                  >
+                    {selectedData?.content?.section2?.shower?.description}
+                  </Typography>
+                )}
                 <Box sx={{ color: "white" }}>
                   {isFetched ? (
                     estimateTotal?.totalShowers?.length > 0 &&
@@ -1261,6 +1272,20 @@ const CustomizeLandingPage = ({
                     {estimateTotal?.totalWineCellar?.length}
                   </Box>
                 </Typography>
+                {selectedData?.content?.section2?.wineCellar?.description
+                  .length && (
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                      fontWeight: 500,
+                      color: "white",
+                      maxHeight: "159px",
+                      overflowY: "auto",
+                    }}
+                  >
+                    {selectedData?.content?.section2?.wineCellar?.description}
+                  </Typography>
+                )}
                 <Box sx={{ color: "white" }}>
                   {isFetched ? (
                     estimateTotal?.totalWineCellar?.length > 0 &&

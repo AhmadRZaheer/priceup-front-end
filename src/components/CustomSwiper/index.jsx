@@ -6,8 +6,15 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import Bulb from "@/Assets/CustomerLandingImages/blubImg.png";
+import { EstimateCategory } from "@/utilities/constants";
 
 const CustomSwiper = ({ data }) => {
+  const detailDesc =
+    data?.category === EstimateCategory.SHOWERS
+      ? "Shower"
+      : data?.category === EstimateCategory.MIRRORS
+      ? "Mirror"
+      : "Wine Cellar";
   return (
     <Box>
       <Box sx={{ display: "flex", py: 4, justifyContent: "center" }}>
@@ -26,25 +33,25 @@ const CustomSwiper = ({ data }) => {
           <Box component="span" sx={{ color: "#F95500" }}>
             Similar
           </Box>{" "}
-          projects that we’ve worked on:
+         {detailDesc} projects that we’ve worked on:
         </Typography>
       </Box>
       <Container sx={{ px: "0px !important" }}>
         <Box sx={{ width: "100%", display: "flex", gap: 2 }}>
-          <Box sx={{ width: "75%" }}>
+          <Box sx={{ width: "100%" }}>
             {" "}
             <Swiper
               modules={[Navigation]}
               navigation
               spaceBetween={20}
-              slidesPerView={3}
+              slidesPerView={4}
               breakpoints={{
                 640: {
                   slidesPerView: 2,
                   spaceBetween: 20,
                 },
                 1024: {
-                  slidesPerView: 3,
+                  slidesPerView: 4,
                   spaceBetween: 20,
                 },
               }}
@@ -64,7 +71,7 @@ const CustomSwiper = ({ data }) => {
                         src={`${backendURL}/${data}`}
                         alt="not"
                         style={{
-                          height: "325px",
+                          height: "345px",
                           width: "100%",
                           objectFit: "fill",
                         }}
@@ -86,7 +93,7 @@ const CustomSwiper = ({ data }) => {
               )}
             </Swiper>
           </Box>
-          <Box sx={{ width: "25%" }}>
+          {/* <Box sx={{ width: "25%" }}>
             {data?.description.length && (
               <Typography
                 sx={{ fontSize: "18px", fontWeight: 500, color: "white" }}
@@ -94,7 +101,7 @@ const CustomSwiper = ({ data }) => {
                 {data?.description}
               </Typography>
             )}
-          </Box>
+          </Box> */}
         </Box>
       </Container>
     </Box>

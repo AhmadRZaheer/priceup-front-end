@@ -1380,7 +1380,7 @@ export const estimateTotalWithCategory = (estimatelist) => {
     return (
       accumulator +
       calculateDiscount(
-        currentItem.pricing.total,
+        currentItem?.pricing?.total,
         currentItem?.discount?.value,
         currentItem?.discount?.unit
       )
