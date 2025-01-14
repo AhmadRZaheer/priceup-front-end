@@ -1153,7 +1153,7 @@ const Summary = ({ setStep }) => {
                         ?.pricingFactorStatus
                         ? wineCallerLocationSettings?.miscPricing?.pricingFactor
                         : 1) +
-                    laborPrice;
+                        (laborPrice + doorLaborPrice);
                   if (userProfitPercentage > 0 && userProfitPercentage < 100) {
                     singleItemCost =
                       ((itemCost * 100) / (userProfitPercentage - 100)) * -1;
