@@ -74,7 +74,7 @@ const SigntureSection = ({
   const [openEditModal, setOpenEditModal] = useState(false);
   const handleOpenEditModal = () => setOpenEditModal(true);
   const handleCloseEditModal = () => setOpenEditModal(false);
-  const [customerName, setCustomerName] = useState(data?.name ?? "");
+  const [customerName, setCustomerName] = useState(data?.customer?.name ?? "");
 
   const handleNameChange = (event) => {
     setCustomerName(event.target.value);
@@ -144,6 +144,9 @@ const SigntureSection = ({
             location: pdfLocationData,
             estimateData: data,
             totalSum: totalSum,
+            signature : {
+              image : signatureURL
+            }
           }}
           key={`pdfFile${1}`}
         />
@@ -174,7 +177,7 @@ const SigntureSection = ({
   const handleProjectApproved = async () => {
     const formData = new FormData();
     formData.append("status", "approve");
-    formData.append("name", customerName);
+    formData.append("customer.name", customerName);
     if (signatureURL) {
       const imageSignature = base64ToFile(signatureURL, `${Date.now()}.png`);
       formData.append("signature", imageSignature);
@@ -470,10 +473,10 @@ const SigntureSection = ({
                     fontFamily: '"Inter" !important',
                   }}
                 >
-                  {data?.name ? "Your Name" : "Type in your name"}
+                  {data?.customer?.name && data?.status === 'approve' ? "Your Name" : "Type in your name"}
                 </Typography>
                 <CustomInputField
-                  disabled={data?.name ? true : false}
+                  disabled={data?.customer?.name && data?.status === 'approve' ? true : false}
                   id="name"
                   name="name"
                   size="small"

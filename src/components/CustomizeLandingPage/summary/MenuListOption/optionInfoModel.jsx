@@ -13,7 +13,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  minWidth: 400,
+  minWidth: 700,
+  minHeight: 300,
   bgcolor: "background.paper",
   //   border: "2px solid #000",
   boxShadow: 24,
@@ -21,6 +22,9 @@ const style = {
   px: 3,
   pb: 1.5,
   pt: 4,
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
 };
 
 export default function OptionInfoModel({ itemData }) {
@@ -47,15 +51,15 @@ export default function OptionInfoModel({ itemData }) {
         disableAutoFocus
       >
         <Box sx={style}>
-          <Grid container spacing={3}>
-            <Grid item xs={4}>
+          <Box sx={{display:'flex',gap:4,width:'100%'}}>
+            <Box sx={{width:'190px'}}>
               <img
                 src={`${backendURL}/${itemData?.image}`}
                 alt="not"
-                style={{ width: "100%" }}
+                style={{ width: "170px", height: "170px" }}
               />
-            </Grid>
-            <Grid item xs={7.5} sx={{ display: "flex" }}>
+            </Box>
+            <Box  sx={{width:'100%' }}>
               <Box
                 sx={{
                   display: "flex",
@@ -66,24 +70,18 @@ export default function OptionInfoModel({ itemData }) {
               >
                 <Typography className="optionHead">
                   {itemData?.name ?? ""}
-                  {/* GCS ARMOR THE ULTIMATE GLASS PROTECTION SOLUTION{" "} */}
                 </Typography>
                 <Typography
                   className="optionSubHead"
-                  sx={{ pr: 1, fontSize: "20px !important" }}
+                  sx={{ pr: 1, fontSize: "18px !important",height:'200px',overflowY:'auto' }}
                 >
                   {itemData?.description?.length
                     ? itemData?.description
-                    : "No Dscription Found!"}
-                  {/* Glass is naturally porous, allowing water and contaminants to
-                  seep in, but GCS Armor's hydrophobic nano coating fills and
-                  seals these pores, leaving surfaces smooth and protected.
-                  Backed by a 10-year warranty, it ensures long-lasting
-                  durability. */}
+                    : "No Description Found!"}
                 </Typography>
               </Box>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
           <Box sx={{ display: "flex", justifyContent: "end", pt: 1.5 }}>
             <Box>
               <Button

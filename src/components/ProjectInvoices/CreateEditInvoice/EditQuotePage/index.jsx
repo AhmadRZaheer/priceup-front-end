@@ -14,17 +14,18 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   useEditDocument,
   useFetchAllDocuments,
   useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
-import { backendURL } from "@/utilities/common";
+import { backendURL, estimateTotalWithCategory } from "@/utilities/common";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import EditEstimateTable from "./EditEstimateTable";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { ContentCopy, Delete, DoneOutlined, Edit } from "@mui/icons-material";
 import bgHeaderImage from "@/Assets/CustomerLandingImages/BannerHeadImg.png";
 import GCSLogo from "@/Assets/GCS-logo.png";
@@ -92,6 +93,10 @@ const EditQuoteInvoice = () => {
     getLocationPresentationSettings
   );
 
+  const estimatesWithCategory = useMemo(() => {
+    return estimateTotalWithCategory(singleItemData?.estimateDetailArray);
+  }, [singleItemData?.estimateDetailArray]);
+
   const [accordionData, setAccordionData] = useState(
     singleItemData?.content?.section5 ?? accordionDefaultData
   );
@@ -156,6 +161,8 @@ const EditQuoteInvoice = () => {
   useEffect(() => {
     logsRefetch();
   }, []);
+
+  console.log(singleItemData, "singleItemData?.project?.projectName");
 
   const filterByShowInUpgrades = (list, key) =>
     list?.[key]?.filter((item) => item.showInUpgrades === true) || [];
@@ -467,7 +474,7 @@ const EditQuoteInvoice = () => {
     });
     refetchSingleItem();
   };
-
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -487,30 +494,42 @@ const EditQuoteInvoice = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: { lg: 24, md: 20 },
-                    fontWeight: 600,
-                    color: "#000000",
-                    display: "flex",
-                    lineHeight: "32.78px",
-                    gap: 1,
-                  }}
+              <Box sx={{ display: "flex" }}>
+                <Button
+                  sx={{ minWidth: "auto", p: "0px !important" }}
+                  onClick={() =>
+                    navigate(`/projects/${singleItemData?.project_id}`)
+                  }
                 >
-                  Edit Quote Page
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "#212528",
-                    fontSize: { lg: 16, md: 14 },
-                    fontWeight: 600,
-                    lineHeight: "21.86px",
-                    opacity: "70%",
-                  }}
-                >
-                  Edit Quoted Page.
-                </Typography>
+                  <KeyboardArrowLeftIcon
+                    sx={{ fontSize: "35px", color: "black" }}
+                  />
+                </Button>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: { lg: 24, md: 20 },
+                      fontWeight: 600,
+                      color: "#000000",
+                      display: "flex",
+                      lineHeight: "32.78px",
+                      gap: 1,
+                    }}
+                  >
+                    Edit Quote Page
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#212528",
+                      fontSize: { lg: 16, md: 14 },
+                      fontWeight: 600,
+                      lineHeight: "21.86px",
+                      opacity: "70%",
+                    }}
+                  >
+                    Edit Quoted Page.
+                  </Typography>
+                </Box>
               </Box>
 
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -710,11 +729,10 @@ const EditQuoteInvoice = () => {
                       display: "flex",
                       flexDirection: "row",
                       gap: 2,
-                      aligItems: "baseline",
+                      alignItems: "baseline",
                       width: "98%",
-                      p: "16px",
-                      pt:'16px',
-                      pb:'8px'
+                      px: "16px",
+                      pb: "16px",
                     }}
                   >
                     <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
@@ -818,7 +836,7 @@ const EditQuoteInvoice = () => {
                       alignItems: "center",
                       px: "16px",
                       gap: "10px",
-                      mb:1.5
+                      mb: 1.5,
                     }}
                   >
                     <Typography sx={{ fontSize: "22px", fontWeight: "600" }}>
@@ -918,371 +936,383 @@ const EditQuoteInvoice = () => {
                   Choose upgrades for each category
                 </Typography>
                 <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
-                  <Box sx={{ width: "33.3%" }}>
-                    <Typography sx={{ fontWeight: "bold" }}>Shower</Typography>
-                    <Box sx={{ pt: 1 }}>
-                      <Autocomplete
-                        multiple
-                        options={filteredShowerGlassType ?? []}
-                        getOptionLabel={(glassType) => glassType.name}
-                        value={filteredShowerGlassType?.filter((glassType) =>
-                          formik.values.additionalUpgrades.shower.glassTypes?.includes(
-                            glassType._id
-                          )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.shower.glassTypes",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.shower.glassTypes
-                                ?.length > 0
-                                ? ""
-                                : "Select Glass Type"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={
-                          filteredShowerGlassAddon.filter(
-                            (item) => item?.slug !== "no-treatment"
-                          ) ?? []
-                        }
-                        getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={filteredShowerGlassAddon?.filter((glassAddon) =>
-                          formik.values.additionalUpgrades.shower.glassAddons?.includes(
-                            glassAddon._id
-                          )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.shower.glassAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.shower
-                                .glassAddons?.length > 0
-                                ? ""
-                                : "Select Glass Addon"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={filteredShowerHardwareAddon ?? []}
-                        getOptionLabel={(hardwareAddon) => hardwareAddon.name}
-                        value={filteredShowerHardwareAddon?.filter(
-                          (hardwareAddon) =>
-                            formik.values.additionalUpgrades.shower.hardwareAddons?.includes(
-                              hardwareAddon._id
+                  {estimatesWithCategory?.totalShowers?.length > 0 && (
+                    <Box sx={{ width: "33.3%" }}>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Shower
+                      </Typography>
+                      <Box sx={{ pt: 1 }}>
+                        <Autocomplete
+                          multiple
+                          options={filteredShowerGlassType ?? []}
+                          getOptionLabel={(glassType) => glassType.name}
+                          value={filteredShowerGlassType?.filter((glassType) =>
+                            formik.values.additionalUpgrades.shower.glassTypes?.includes(
+                              glassType._id
                             )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.shower.hardwareAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
+                          )}
+                          onChange={(event, newValue) => {
+                            formik.setFieldValue(
+                              "additionalUpgrades.shower.glassTypes",
+                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                            );
+                          }}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip
+                                key={option._id}
+                                label={option.name}
+                                {...getTagProps({ index })}
+                              />
+                            ))
+                          }
+                          sx={{
+                            width: "100%",
+                            ".MuiOutlinedInput-root": { p: "2px !important" },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              className="custom-textfield"
+                              placeholder={
+                                formik.values.additionalUpgrades.shower
+                                  .glassTypes?.length > 0
+                                  ? ""
+                                  : "Select Glass Type"
+                              }
                             />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.shower
-                                .hardwareAddons?.length > 0
-                                ? ""
-                                : "Select Hardware Addon"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                  </Box>
-                  <Box sx={{ width: "33.3%" }}>
-                    <Typography sx={{ fontWeight: "bold" }}>Mirror</Typography>
-                    <Box sx={{ pt: 1 }}>
-                      <Autocomplete
-                        multiple
-                        options={filteredMirrorGlassType ?? []}
-                        getOptionLabel={(glassType) => glassType.name}
-                        value={filteredMirrorGlassType?.filter((glassType) =>
-                          formik.values.additionalUpgrades.mirror.glassTypes?.includes(
-                            glassType._id
-                          )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.mirror.glassTypes",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
+                          )}
+                        />
+                      </Box>
+                      <Box sx={{ pt: 2 }}>
+                        <Autocomplete
+                          multiple
+                          options={
+                            filteredShowerGlassAddon.filter(
+                              (item) => item?.slug !== "no-treatment"
+                            ) ?? []
+                          }
+                          getOptionLabel={(glassAddon) => glassAddon.name}
+                          value={filteredShowerGlassAddon?.filter(
+                            (glassAddon) =>
+                              formik.values.additionalUpgrades.shower.glassAddons?.includes(
+                                glassAddon._id
+                              )
+                          )}
+                          onChange={(event, newValue) => {
+                            formik.setFieldValue(
+                              "additionalUpgrades.shower.glassAddons",
+                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                            );
+                          }}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip
+                                key={option._id}
+                                label={option.name}
+                                {...getTagProps({ index })}
+                              />
+                            ))
+                          }
+                          sx={{
+                            width: "100%",
+                            ".MuiOutlinedInput-root": { p: "2px !important" },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              className="custom-textfield"
+                              placeholder={
+                                formik.values.additionalUpgrades.shower
+                                  .glassAddons?.length > 0
+                                  ? ""
+                                  : "Select Glass Addon"
+                              }
                             />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.mirror.glassTypes
-                                ?.length > 0
-                                ? ""
-                                : "Select Glass Type"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={filteredMirrorGlassAddon ?? []}
-                        getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={filteredMirrorGlassAddon?.filter((glassAddon) =>
-                          formik.values.additionalUpgrades.mirror.glassAddons?.includes(
-                            glassAddon._id
-                          )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.mirror.glassAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
+                          )}
+                        />
+                      </Box>
+                      <Box sx={{ pt: 2 }}>
+                        <Autocomplete
+                          multiple
+                          options={filteredShowerHardwareAddon ?? []}
+                          getOptionLabel={(hardwareAddon) => hardwareAddon.name}
+                          value={filteredShowerHardwareAddon?.filter(
+                            (hardwareAddon) =>
+                              formik.values.additionalUpgrades.shower.hardwareAddons?.includes(
+                                hardwareAddon._id
+                              )
+                          )}
+                          onChange={(event, newValue) => {
+                            formik.setFieldValue(
+                              "additionalUpgrades.shower.hardwareAddons",
+                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                            );
+                          }}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip
+                                key={option._id}
+                                label={option.name}
+                                {...getTagProps({ index })}
+                              />
+                            ))
+                          }
+                          sx={{
+                            width: "100%",
+                            ".MuiOutlinedInput-root": { p: "2px !important" },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              className="custom-textfield"
+                              placeholder={
+                                formik.values.additionalUpgrades.shower
+                                  .hardwareAddons?.length > 0
+                                  ? ""
+                                  : "Select Hardware Addon"
+                              }
                             />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.mirror
-                                .glassAddons?.length > 0
-                                ? ""
-                                : "Select Glass Addon"
-                            }
-                          />
-                        )}
-                      />
+                          )}
+                        />
+                      </Box>
                     </Box>
-                  </Box>
-                  <Box sx={{ width: "33.3%" }}>
-                    <Typography sx={{ fontWeight: "bold" }}>
-                      WineCaller
-                    </Typography>
-                    <Box sx={{ pt: 1 }}>
-                      <Autocomplete
-                        multiple
-                        options={filteredWineGlassType ?? []}
-                        getOptionLabel={(glassType) => glassType.name}
-                        value={filteredWineGlassType?.filter((glassType) =>
-                          formik.values.additionalUpgrades.wineCellar.glassTypes?.includes(
-                            glassType._id
-                          )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.wineCellar.glassTypes",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.wineCellar
-                                .glassTypes?.length > 0
-                                ? ""
-                                : "Select Glass Type"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={
-                          filteredWineGlassAddon.filter(
-                            (item) => item?.slug !== "no-treatment"
-                          ) ?? []
-                        }
-                        getOptionLabel={(glassAddon) => glassAddon.name}
-                        value={filteredWineGlassAddon?.filter((glassAddon) =>
-                          formik.values.additionalUpgrades.wineCellar.glassAddons?.includes(
-                            glassAddon._id
-                          )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.wineCellar.glassAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
-                            />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.wineCellar
-                                .glassAddons?.length > 0
-                                ? ""
-                                : "Select Glass Addon"
-                            }
-                          />
-                        )}
-                      />
-                    </Box>
-                    <Box sx={{ pt: 2 }}>
-                      <Autocomplete
-                        multiple
-                        options={filteredWineHardwareAddon ?? []}
-                        getOptionLabel={(hardwareAddon) => hardwareAddon.name}
-                        value={filteredWineHardwareAddon?.filter(
-                          (hardwareAddon) =>
-                            formik.values.additionalUpgrades.wineCellar.hardwareAddons?.includes(
-                              hardwareAddon._id
+                  )}
+                  {estimatesWithCategory?.totalMirrors?.length > 0 && (
+                    <Box sx={{ width: "33.3%" }}>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Mirror
+                      </Typography>
+                      <Box sx={{ pt: 1 }}>
+                        <Autocomplete
+                          multiple
+                          options={filteredMirrorGlassType ?? []}
+                          getOptionLabel={(glassType) => glassType.name}
+                          value={filteredMirrorGlassType?.filter((glassType) =>
+                            formik.values.additionalUpgrades.mirror.glassTypes?.includes(
+                              glassType._id
                             )
-                        )}
-                        onChange={(event, newValue) => {
-                          formik.setFieldValue(
-                            "additionalUpgrades.wineCellar.hardwareAddons",
-                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
-                          );
-                        }}
-                        renderTags={(value, getTagProps) =>
-                          value.map((option, index) => (
-                            <Chip
-                              key={option._id}
-                              label={option.name}
-                              {...getTagProps({ index })}
+                          )}
+                          onChange={(event, newValue) => {
+                            formik.setFieldValue(
+                              "additionalUpgrades.mirror.glassTypes",
+                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                            );
+                          }}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip
+                                key={option._id}
+                                label={option.name}
+                                {...getTagProps({ index })}
+                              />
+                            ))
+                          }
+                          sx={{
+                            width: "100%",
+                            ".MuiOutlinedInput-root": { p: "2px !important" },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              className="custom-textfield"
+                              placeholder={
+                                formik.values.additionalUpgrades.mirror
+                                  .glassTypes?.length > 0
+                                  ? ""
+                                  : "Select Glass Type"
+                              }
                             />
-                          ))
-                        }
-                        sx={{
-                          width: "100%",
-                          ".MuiOutlinedInput-root": { p: "2px !important" },
-                        }}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            className="custom-textfield"
-                            placeholder={
-                              formik.values.additionalUpgrades.wineCellar
-                                .hardwareAddons?.length > 0
-                                ? ""
-                                : "Select Hardware Addon"
-                            }
-                          />
-                        )}
-                      />
+                          )}
+                        />
+                      </Box>
+                      <Box sx={{ pt: 2 }}>
+                        <Autocomplete
+                          multiple
+                          options={filteredMirrorGlassAddon ?? []}
+                          getOptionLabel={(glassAddon) => glassAddon.name}
+                          value={filteredMirrorGlassAddon?.filter(
+                            (glassAddon) =>
+                              formik.values.additionalUpgrades.mirror.glassAddons?.includes(
+                                glassAddon._id
+                              )
+                          )}
+                          onChange={(event, newValue) => {
+                            formik.setFieldValue(
+                              "additionalUpgrades.mirror.glassAddons",
+                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                            );
+                          }}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip
+                                key={option._id}
+                                label={option.name}
+                                {...getTagProps({ index })}
+                              />
+                            ))
+                          }
+                          sx={{
+                            width: "100%",
+                            ".MuiOutlinedInput-root": { p: "2px !important" },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              className="custom-textfield"
+                              placeholder={
+                                formik.values.additionalUpgrades.mirror
+                                  .glassAddons?.length > 0
+                                  ? ""
+                                  : "Select Glass Addon"
+                              }
+                            />
+                          )}
+                        />
+                      </Box>
                     </Box>
-                  </Box>
+                  )}
+                  {estimatesWithCategory?.totalWineCellar?.length > 0 && (
+                    <Box sx={{ width: "33.3%" }}>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        WineCaller
+                      </Typography>
+                      <Box sx={{ pt: 1 }}>
+                        <Autocomplete
+                          multiple
+                          options={filteredWineGlassType ?? []}
+                          getOptionLabel={(glassType) => glassType.name}
+                          value={filteredWineGlassType?.filter((glassType) =>
+                            formik.values.additionalUpgrades.wineCellar.glassTypes?.includes(
+                              glassType._id
+                            )
+                          )}
+                          onChange={(event, newValue) => {
+                            formik.setFieldValue(
+                              "additionalUpgrades.wineCellar.glassTypes",
+                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                            );
+                          }}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip
+                                key={option._id}
+                                label={option.name}
+                                {...getTagProps({ index })}
+                              />
+                            ))
+                          }
+                          sx={{
+                            width: "100%",
+                            ".MuiOutlinedInput-root": { p: "2px !important" },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              className="custom-textfield"
+                              placeholder={
+                                formik.values.additionalUpgrades.wineCellar
+                                  .glassTypes?.length > 0
+                                  ? ""
+                                  : "Select Glass Type"
+                              }
+                            />
+                          )}
+                        />
+                      </Box>
+                      <Box sx={{ pt: 2 }}>
+                        <Autocomplete
+                          multiple
+                          options={
+                            filteredWineGlassAddon.filter(
+                              (item) => item?.slug !== "no-treatment"
+                            ) ?? []
+                          }
+                          getOptionLabel={(glassAddon) => glassAddon.name}
+                          value={filteredWineGlassAddon?.filter((glassAddon) =>
+                            formik.values.additionalUpgrades.wineCellar.glassAddons?.includes(
+                              glassAddon._id
+                            )
+                          )}
+                          onChange={(event, newValue) => {
+                            formik.setFieldValue(
+                              "additionalUpgrades.wineCellar.glassAddons",
+                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                            );
+                          }}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip
+                                key={option._id}
+                                label={option.name}
+                                {...getTagProps({ index })}
+                              />
+                            ))
+                          }
+                          sx={{
+                            width: "100%",
+                            ".MuiOutlinedInput-root": { p: "2px !important" },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              className="custom-textfield"
+                              placeholder={
+                                formik.values.additionalUpgrades.wineCellar
+                                  .glassAddons?.length > 0
+                                  ? ""
+                                  : "Select Glass Addon"
+                              }
+                            />
+                          )}
+                        />
+                      </Box>
+                      <Box sx={{ pt: 2 }}>
+                        <Autocomplete
+                          multiple
+                          options={filteredWineHardwareAddon ?? []}
+                          getOptionLabel={(hardwareAddon) => hardwareAddon.name}
+                          value={filteredWineHardwareAddon?.filter(
+                            (hardwareAddon) =>
+                              formik.values.additionalUpgrades.wineCellar.hardwareAddons?.includes(
+                                hardwareAddon._id
+                              )
+                          )}
+                          onChange={(event, newValue) => {
+                            formik.setFieldValue(
+                              "additionalUpgrades.wineCellar.hardwareAddons",
+                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                            );
+                          }}
+                          renderTags={(value, getTagProps) =>
+                            value.map((option, index) => (
+                              <Chip
+                                key={option._id}
+                                label={option.name}
+                                {...getTagProps({ index })}
+                              />
+                            ))
+                          }
+                          sx={{
+                            width: "100%",
+                            ".MuiOutlinedInput-root": { p: "2px !important" },
+                          }}
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              className="custom-textfield"
+                              placeholder={
+                                formik.values.additionalUpgrades.wineCellar
+                                  .hardwareAddons?.length > 0
+                                  ? ""
+                                  : "Select Hardware Addon"
+                              }
+                            />
+                          )}
+                        />
+                      </Box>
+                    </Box>
+                  )}
                 </Box>
               </Box>
 
@@ -1745,425 +1775,438 @@ const EditQuoteInvoice = () => {
                     pt: 2,
                   }}
                 >
-                  <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
-                    <Typography variant="h5" fontWeight={"bold"}>
-                      Shower Gallery
-                    </Typography>
+                  {estimatesWithCategory?.totalShowers?.length > 0 && (
                     <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        pt: 1.5,
-                        gap: 2,
-                        width: "100%",
-                      }}
+                      sx={{ background: "white", p: 2, borderRadius: "5px" }}
                     >
+                      <Typography variant="h5" fontWeight={"bold"}>
+                        Shower Gallery
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          border: "1px solid #ccc",
-                          width: "65%",
+                          justifyContent: "space-between",
+                          pt: 1.5,
+                          gap: 2,
+                          width: "100%",
                         }}
                       >
-                        <Grid
-                          container
+                        <Box
                           sx={{
-                            width: "100%",
                             display: "flex",
-                            flexWrap: "wrap",
-                            gap: "10px",
+                            flexDirection: "column",
+                            gap: 1,
+                            border: "1px solid #ccc",
+                            width: "65%",
                           }}
                         >
-                          {formik.values.section2.shower.images.length &&
-                          formik.values.section2.shower.images.length > 0 ? (
-                            formik.values.section2.shower.images?.map(
-                              (_image) => (
-                                <Box
-                                  sx={{
-                                    width: "200px",
-                                    height: "200px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    px: 3,
-                                    py: 1.5,
-                                    position: "relative",
-                                  }}
-                                >
-                                  <Box
-                                    sx={{
-                                      position: "absolute",
-                                      right: "18px",
-                                      top: "3px",
-                                      color: "red",
-                                      cursor: "pointer",
-                                    }}
-                                    onClick={() =>
-                                      handleDeleteImageFromEstimate(
-                                        formik.values.section2.shower.images,
-                                        _image,
-                                        `content.section2.shower.images`
-                                      )
-                                    }
-                                  >
-                                    <Delete />
-                                  </Box>
-                                  <img
-                                    style={{ width: "100%", height: "100%" }}
-                                    src={`${backendURL}/${_image}`}
-                                    alt="section image backgroundImage"
-                                  />
-                                </Box>
-                              )
-                            )
-                          ) : (
-                            <Typography
-                              sx={{
-                                height: "150px",
-                                textAlign: "center",
-                                width: "100%",
-                                alignContent: "center",
-                              }}
-                            >
-                              No Image Selected!
-                            </Typography>
-                          )}
-                        </Grid>
-                        <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                          <Button
-                            variant="contained"
-                            component="label"
+                          <Grid
+                            container
                             sx={{
-                              background: "#8477DA",
-                              ":hover": {
-                                background: "#8477DA",
-                              },
+                              width: "100%",
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: "10px",
                             }}
                           >
-                            Upload image
-                            <input
-                              type="file"
-                              accept="image/*"
-                              hidden
-                              onChange={(e) =>
-                                handleUploadEstimatesImage(
-                                  e,
-                                  `content.section2.shower.images`
+                            {formik.values.section2.shower.images.length &&
+                            formik.values.section2.shower.images.length > 0 ? (
+                              formik.values.section2.shower.images?.map(
+                                (_image) => (
+                                  <Box
+                                    sx={{
+                                      width: "200px",
+                                      height: "200px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      px: 3,
+                                      py: 1.5,
+                                      position: "relative",
+                                    }}
+                                  >
+                                    <Box
+                                      sx={{
+                                        position: "absolute",
+                                        right: "18px",
+                                        top: "3px",
+                                        color: "red",
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() =>
+                                        handleDeleteImageFromEstimate(
+                                          formik.values.section2.shower.images,
+                                          _image,
+                                          `content.section2.shower.images`
+                                        )
+                                      }
+                                    >
+                                      <Delete />
+                                    </Box>
+                                    <img
+                                      style={{ width: "100%", height: "100%" }}
+                                      src={`${backendURL}/${_image}`}
+                                      alt="section image backgroundImage"
+                                    />
+                                  </Box>
                                 )
-                              }
-                            />
-                          </Button>
+                              )
+                            ) : (
+                              <Typography
+                                sx={{
+                                  height: "150px",
+                                  textAlign: "center",
+                                  width: "100%",
+                                  alignContent: "center",
+                                }}
+                              >
+                                No Image Selected!
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                            <Button
+                              variant="contained"
+                              component="label"
+                              sx={{
+                                background: "#8477DA",
+                                ":hover": {
+                                  background: "#8477DA",
+                                },
+                              }}
+                            >
+                              Upload image
+                              <input
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                onChange={(e) =>
+                                  handleUploadEstimatesImage(
+                                    e,
+                                    `content.section2.shower.images`
+                                  )
+                                }
+                              />
+                            </Button>
+                          </Box>
+                        </Box>
+                        <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                          <TextareaAutosize
+                            fullWidth
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                              width: "100%",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={7}
+                            maxRows={10}
+                            id="section2.shower.description"
+                            name="section2.shower.description"
+                            placeholder="Enter Shower Description"
+                            size="large"
+                            variant="outlined"
+                            sx={{ padding: "10px" }}
+                            value={
+                              formik.values.section2.shower.description ?? ""
+                            }
+                            onChange={formik.handleChange}
+                          />
                         </Box>
                       </Box>
-                      <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
-                        <TextareaAutosize
-                          fullWidth
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
-                            width: "100%",
-                          }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={7}
-                          maxRows={10}
-                          id="section2.shower.description"
-                          name="section2.shower.description"
-                          placeholder="Enter Shower Description"
-                          size="large"
-                          variant="outlined"
-                          sx={{ padding: "10px" }}
-                          value={
-                            formik.values.section2.shower.description ?? ""
-                          }
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
                     </Box>
-                  </Box>
-                  <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
-                    <Typography variant="h5" fontWeight={"bold"}>
-                      Mirror Gallery
-                    </Typography>
+                  )}
+                  {estimatesWithCategory?.totalMirrors?.length > 0 && (
                     <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        pt: 1.5,
-                        gap: 2,
-                        width: "100%",
-                      }}
+                      sx={{ background: "white", p: 2, borderRadius: "5px" }}
                     >
+                      <Typography variant="h5" fontWeight={"bold"}>
+                        Mirror Gallery
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          border: "1px solid #ccc",
-                          width: "65%",
+                          justifyContent: "space-between",
+                          pt: 1.5,
+                          gap: 2,
+                          width: "100%",
                         }}
                       >
-                        <Grid
-                          container
+                        <Box
                           sx={{
-                            width: "100%",
                             display: "flex",
-                            flexWrap: "wrap",
-                            gap: "10px",
+                            flexDirection: "column",
+                            gap: 1,
+                            border: "1px solid #ccc",
+                            width: "65%",
                           }}
                         >
-                          {formik.values.section2.mirror.images.length &&
-                          formik.values.section2.mirror.images.length > 0 ? (
-                            formik.values.section2.mirror.images?.map(
-                              (_image) => (
-                                <Box
-                                  sx={{
-                                    width: "200px",
-                                    height: "200px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    px: 3,
-                                    py: 1.5,
-                                    position: "relative",
-                                  }}
-                                >
-                                  <Box
-                                    sx={{
-                                      position: "absolute",
-                                      right: "18px",
-                                      top: "3px",
-                                      color: "red",
-                                      cursor: "pointer",
-                                    }}
-                                    onClick={() =>
-                                      handleDeleteImageFromEstimate(
-                                        formik.values.section2.mirror.images,
-                                        _image,
-                                        `content.section2.mirror.images`
-                                      )
-                                    }
-                                  >
-                                    <Delete />
-                                  </Box>
-                                  <img
-                                    style={{ width: "100%", height: "100%" }}
-                                    src={`${backendURL}/${_image}`}
-                                    alt="section image backgroundImage"
-                                  />
-                                </Box>
-                              )
-                            )
-                          ) : (
-                            <Typography
-                              sx={{
-                                height: "150px",
-                                textAlign: "center",
-                                width: "100%",
-                                alignContent: "center",
-                              }}
-                            >
-                              No Image Selected!
-                            </Typography>
-                          )}
-                        </Grid>
-                        <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                          <Button
-                            variant="contained"
-                            component="label"
+                          <Grid
+                            container
                             sx={{
-                              background: "#8477DA",
-                              ":hover": {
-                                background: "#8477DA",
-                              },
+                              width: "100%",
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: "10px",
                             }}
                           >
-                            Upload image
-                            <input
-                              type="file"
-                              accept="image/*"
-                              hidden
-                              onChange={(e) =>
-                                handleUploadEstimatesImage(
-                                  e,
-                                  `content.section2.mirror.images`
+                            {formik.values.section2.mirror.images.length &&
+                            formik.values.section2.mirror.images.length > 0 ? (
+                              formik.values.section2.mirror.images?.map(
+                                (_image) => (
+                                  <Box
+                                    sx={{
+                                      width: "200px",
+                                      height: "200px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      px: 3,
+                                      py: 1.5,
+                                      position: "relative",
+                                    }}
+                                  >
+                                    <Box
+                                      sx={{
+                                        position: "absolute",
+                                        right: "18px",
+                                        top: "3px",
+                                        color: "red",
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() =>
+                                        handleDeleteImageFromEstimate(
+                                          formik.values.section2.mirror.images,
+                                          _image,
+                                          `content.section2.mirror.images`
+                                        )
+                                      }
+                                    >
+                                      <Delete />
+                                    </Box>
+                                    <img
+                                      style={{ width: "100%", height: "100%" }}
+                                      src={`${backendURL}/${_image}`}
+                                      alt="section image backgroundImage"
+                                    />
+                                  </Box>
                                 )
-                              }
-                            />
-                          </Button>
+                              )
+                            ) : (
+                              <Typography
+                                sx={{
+                                  height: "150px",
+                                  textAlign: "center",
+                                  width: "100%",
+                                  alignContent: "center",
+                                }}
+                              >
+                                No Image Selected!
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                            <Button
+                              variant="contained"
+                              component="label"
+                              sx={{
+                                background: "#8477DA",
+                                ":hover": {
+                                  background: "#8477DA",
+                                },
+                              }}
+                            >
+                              Upload image
+                              <input
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                onChange={(e) =>
+                                  handleUploadEstimatesImage(
+                                    e,
+                                    `content.section2.mirror.images`
+                                  )
+                                }
+                              />
+                            </Button>
+                          </Box>
+                        </Box>
+                        <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                          <TextareaAutosize
+                            fullWidth
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                              width: "100%",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={7}
+                            maxRows={10}
+                            id="section2.mirror.description"
+                            name="section2.mirror.description"
+                            placeholder="Enter Mirror Description"
+                            size="large"
+                            variant="outlined"
+                            sx={{ padding: "10px" }}
+                            value={
+                              formik.values.section2.mirror.description ?? ""
+                            }
+                            onChange={formik.handleChange}
+                          />
                         </Box>
                       </Box>
-                      <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
-                        <TextareaAutosize
-                          fullWidth
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
-                            width: "100%",
-                          }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={7}
-                          maxRows={10}
-                          id="section2.mirror.description"
-                          name="section2.mirror.description"
-                          placeholder="Enter Mirror Description"
-                          size="large"
-                          variant="outlined"
-                          sx={{ padding: "10px" }}
-                          value={
-                            formik.values.section2.mirror.description ?? ""
-                          }
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
                     </Box>
-                  </Box>
-                  <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
-                    <Typography variant="h5" fontWeight={"bold"}>
-                      Wine Cellar Gallery
-                    </Typography>
+                  )}
+                  {estimatesWithCategory?.totalWineCellar?.length > 0 && (
                     <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        pt: 1.5,
-                        gap: 2,
-                        width: "100%",
-                      }}
+                      sx={{ background: "white", p: 2, borderRadius: "5px" }}
                     >
+                      <Typography variant="h5" fontWeight={"bold"}>
+                        Wine Cellar Gallery
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          border: "1px solid #ccc",
-                          width: "65%",
+                          justifyContent: "space-between",
+                          pt: 1.5,
+                          gap: 2,
+                          width: "100%",
                         }}
                       >
-                        <Grid
-                          container
+                        <Box
                           sx={{
-                            width: "100%",
                             display: "flex",
-                            flexWrap: "wrap",
-                            gap: "10px",
+                            flexDirection: "column",
+                            gap: 1,
+                            border: "1px solid #ccc",
+                            width: "65%",
                           }}
                         >
-                          {formik.values.section2.wineCellar.images.length &&
-                          formik.values.section2.wineCellar.images.length >
-                            0 ? (
-                            formik.values.section2.wineCellar.images?.map(
-                              (_image) => (
-                                <Box
-                                  sx={{
-                                    width: "200px",
-                                    height: "200px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    px: 3,
-                                    py: 1.5,
-                                    position: "relative",
-                                  }}
-                                >
-                                  <Box
-                                    sx={{
-                                      position: "absolute",
-                                      right: "18px",
-                                      top: "3px",
-                                      color: "red",
-                                      cursor: "pointer",
-                                    }}
-                                    onClick={() =>
-                                      handleDeleteImageFromEstimate(
-                                        formik.values.section2.wineCellar
-                                          .images,
-                                        _image,
-                                        `content.section2.wineCellar.images`
-                                      )
-                                    }
-                                  >
-                                    <Delete />
-                                  </Box>
-                                  <img
-                                    style={{ width: "100%", height: "100%" }}
-                                    src={`${backendURL}/${_image}`}
-                                    alt="section image backgroundImage"
-                                  />
-                                </Box>
-                              )
-                            )
-                          ) : (
-                            <Typography
-                              sx={{
-                                height: "150px",
-                                textAlign: "center",
-                                width: "100%",
-                                alignContent: "center",
-                              }}
-                            >
-                              No Image Selected!
-                            </Typography>
-                          )}
-                        </Grid>
-                        <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                          <Button
-                            variant="contained"
-                            component="label"
+                          <Grid
+                            container
                             sx={{
-                              background: "#8477DA",
-                              ":hover": {
-                                background: "#8477DA",
-                              },
+                              width: "100%",
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: "10px",
                             }}
                           >
-                            Upload image
-                            <input
-                              type="file"
-                              accept="image/*"
-                              hidden
-                              onChange={(e) =>
-                                handleUploadEstimatesImage(
-                                  e,
-                                  `content.section2.wineCellar.images`
+                            {formik.values.section2.wineCellar.images.length &&
+                            formik.values.section2.wineCellar.images.length >
+                              0 ? (
+                              formik.values.section2.wineCellar.images?.map(
+                                (_image) => (
+                                  <Box
+                                    sx={{
+                                      width: "200px",
+                                      height: "200px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      px: 3,
+                                      py: 1.5,
+                                      position: "relative",
+                                    }}
+                                  >
+                                    <Box
+                                      sx={{
+                                        position: "absolute",
+                                        right: "18px",
+                                        top: "3px",
+                                        color: "red",
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() =>
+                                        handleDeleteImageFromEstimate(
+                                          formik.values.section2.wineCellar
+                                            .images,
+                                          _image,
+                                          `content.section2.wineCellar.images`
+                                        )
+                                      }
+                                    >
+                                      <Delete />
+                                    </Box>
+                                    <img
+                                      style={{ width: "100%", height: "100%" }}
+                                      src={`${backendURL}/${_image}`}
+                                      alt="section image backgroundImage"
+                                    />
+                                  </Box>
                                 )
-                              }
-                            />
-                          </Button>
+                              )
+                            ) : (
+                              <Typography
+                                sx={{
+                                  height: "150px",
+                                  textAlign: "center",
+                                  width: "100%",
+                                  alignContent: "center",
+                                }}
+                              >
+                                No Image Selected!
+                              </Typography>
+                            )}
+                          </Grid>
+                          <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                            <Button
+                              variant="contained"
+                              component="label"
+                              sx={{
+                                background: "#8477DA",
+                                ":hover": {
+                                  background: "#8477DA",
+                                },
+                              }}
+                            >
+                              Upload image
+                              <input
+                                type="file"
+                                accept="image/*"
+                                hidden
+                                onChange={(e) =>
+                                  handleUploadEstimatesImage(
+                                    e,
+                                    `content.section2.wineCellar.images`
+                                  )
+                                }
+                              />
+                            </Button>
+                          </Box>
+                        </Box>
+                        <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                          <TextareaAutosize
+                            fullWidth
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                              width: "100%",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={7}
+                            maxRows={10}
+                            id="section2.wineCellar.description"
+                            name="section2.wineCellar.description"
+                            placeholder="Enter WineCellar Description"
+                            size="large"
+                            variant="outlined"
+                            sx={{ padding: "10px" }}
+                            value={
+                              formik.values.section2.wineCellar.description ??
+                              ""
+                            }
+                            onChange={formik.handleChange}
+                          />
                         </Box>
                       </Box>
-                      <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
-                        <TextareaAutosize
-                          fullWidth
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
-                            width: "100%",
-                          }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={7}
-                          maxRows={10}
-                          id="section2.wineCellar.description"
-                          name="section2.wineCellar.description"
-                          placeholder="Enter WineCellar Description"
-                          size="large"
-                          variant="outlined"
-                          sx={{ padding: "10px" }}
-                          value={
-                            formik.values.section2.wineCellar.description ?? ""
-                          }
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
                     </Box>
-                  </Box>
+                  )}
                 </Box>
 
                 {/* section 3 */}

@@ -41,6 +41,7 @@ import { EstimateCategory } from "@/utilities/constants";
 import DefaultIcon from "@/Assets/columns.svg";
 import EstimateDataList from "./EstimateTable";
 import { getLocationPresentationSettings } from "@/redux/locationSlice";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -197,7 +198,7 @@ const ProjectInvoiceComponent = ({
 
   const handleCraete = async (values) => {
     console.log(values, "additionalUpgradesadditionalUpgrades222222");
-    const estimatesList = selectedEstimateRows?.map((item)=>item._id);
+    const estimatesList = selectedEstimateRows?.map((item) => item._id);
     const customer = customerList?.find(
       (data) => data?._id === selectedCustomer?._id
     );
@@ -241,7 +242,7 @@ const ProjectInvoiceComponent = ({
       address: companySettings?.address,
     };
     const data = {
-      name:`Preview Created on ${dateForName} for ${estimatesList?.length} Estimates.`,
+      name: `Preview Created on ${dateForName} for ${estimatesList?.length} Estimates.`,
       customer_id: selectedCustomer?._id,
       project_id: selectedProject?._id,
       customerPreview: customerPayLoad,
@@ -501,31 +502,42 @@ const ProjectInvoiceComponent = ({
                   justifyContent: "space-between",
                 }}
               >
-                <Box>
-                  <Typography
-                    sx={{
-                      fontSize: { lg: 24, md: 20 },
-                      fontWeight: 600,
-                      color: "#000000",
-                      display: "flex",
-                      lineHeight: "32.78px",
-                      gap: 1,
-                    }}
+                <Box sx={{ display: "flex" }}>
+                  <Button
+                    sx={{ minWidth: "auto", p: "0px !important" }}
+                    onClick={() => navigate(`/projects/${selectedProject?._id}`)}
                   >
-                    Create Quote Page
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: "#212528",
-                      fontSize: { lg: 16, md: 14 },
-                      fontWeight: 600,
-                      lineHeight: "21.86px",
-                      opacity: "70%",
-                    }}
-                  >
-                    Create new quote.
-                  </Typography>
+                    <KeyboardArrowLeftIcon
+                      sx={{ fontSize: "35px", color: "black" }}
+                    />
+                  </Button>
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontSize: { lg: 24, md: 20 },
+                        fontWeight: 600,
+                        color: "#000000",
+                        display: "flex",
+                        lineHeight: "32.78px",
+                        gap: 1,
+                      }}
+                    >
+                      Create Quote Page
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: "#212528",
+                        fontSize: { lg: 16, md: 14 },
+                        fontWeight: 600,
+                        lineHeight: "21.86px",
+                        opacity: "70%",
+                      }}
+                    >
+                      Create new quote.
+                    </Typography>
+                  </Box>
                 </Box>
+
                 {projectState !== "create" ? (
                   <Box sx={{ alignSelf: "center", display: "flex", gap: 2 }}>
                     {projectData?.invoicePreview?._id ? (

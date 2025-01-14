@@ -1200,11 +1200,12 @@ const LandingPDFFile = ({ controls, data }) => {
             );
           })}
 
-          {(data?.estimateData?.signature || data?.estimateData?.name)  &&
+          {(data?.estimateData?.signature || data?.estimateData?.customer?.name  || data?.signature?.image )  &&
             <View  wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'flex-end', width: '100%' }}>
              <View style={{ paddingTop: '10px', width: '150px', height: '150px' }}>
              {data?.estimateData?.signature && <Image style={styles.logo2} textAlign='center' src={`${backendURL}/${data?.estimateData?.signature}`} alt="logo" />} 
-             {data?.estimateData?.name && <Text style={{ marginTop: '6px',textAlign:'center' }}>{data?.estimateData?.name ?? ''}</Text>} 
+             {(data?.signature?.image) && <Image style={styles.logo2} textAlign='center' src={data?.signature?.image} alt="logo" />} 
+             {data?.estimateData?.customer?.name && <Text style={{ marginTop: '6px',textAlign:'center' }}>{data?.estimateData?.customer?.name ?? ''}</Text>} 
               <Text style={{ marginTop: '6px', borderTop: '1px solid #ccc',textAlign:'center',fontSize: 12,paddingTop:'4px' }}>Signature</Text>
             </View>
           </View>         

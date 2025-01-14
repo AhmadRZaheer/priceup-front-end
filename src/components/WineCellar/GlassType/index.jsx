@@ -102,7 +102,7 @@ const WineGlassTypeComponent = () => {
         formData.append("options", props.options);
       }
       if (props?.description) {
-        formData.append("options", props.description);
+        formData.append("description", props.description);
       }
       editWineGlassType({
         data: formData,
