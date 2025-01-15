@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close"; // Import the Close icon
 import React, { useState } from "react";
 
 const FAQSection = ({ accordionData, setAccordionData }) => {
-    console.log(accordionData,'accordionDataaccordionData')
+  console.log(accordionData, "accordionDataaccordionData");
   // State for dynamically added question/answer fields
   const [fields, setFields] = useState([]);
 
@@ -43,17 +43,7 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
   };
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 1,
-        border: "1px solid #ccc",
-        mt: 2,
-        px: 3,
-        py: 2,
-      }}
-    >
+    <>
       {/* Display existing FAQ data */}
       <div>
         {accordionData &&
@@ -110,7 +100,7 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
             }}
             onClick={handleAddFields}
           >
-            Add Question
+            Add New
           </Button>
         </Box>
       )}
@@ -128,7 +118,7 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
                 name="title"
                 value={field.title}
                 onChange={(e) => handleFieldChange(index, e)}
-                placeholder="Enter question"
+                placeholder="Enter title"
               />
             </Box>
             <Box sx={{ width: "30%" }}>
@@ -149,8 +139,22 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
                 name="desc"
                 value={field.desc}
                 onChange={(e) => handleFieldChange(index, e)}
-                placeholder="Enter answer"
+                placeholder="Enter description"
               />
+            </Box>
+            <Box sx={{ pl: 1 }}>
+              <IconButton
+                sx={{
+                  color: "#FF0000",
+                  p: "0px",
+                }}
+                onClick={() => {
+                  setShowFields(false);
+                  setFields([]);
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
             </Box>
           </Box>
         ))}
@@ -173,7 +177,7 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
           </Button>
         </Box>
       )}
-    </Box>
+    </>
   );
 };
 

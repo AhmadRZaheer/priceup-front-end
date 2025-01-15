@@ -10,6 +10,7 @@ import React, { useMemo, useState } from "react";
 import LimitationImg from "../../Assets/CustomerLandingImages/LimitationImg.svg";
 import { Add, Remove } from "@mui/icons-material";
 import "./style.scss";
+import { backendURL } from "@/utilities/common";
 
 const accordionData = [
   {
@@ -42,7 +43,7 @@ const LimitationsSection = ({ data }) => {
   const [expanded, setExpanded] = useState("panel1");
 
   const FAQSData = useMemo(() => {
-    const Faqs = data?.content?.section5 ?? accordionData;
+    const Faqs = data?.content?.section5?.faqs ?? accordionData;
     return Faqs;
   }, [data]);
 
@@ -122,9 +123,13 @@ const LimitationsSection = ({ data }) => {
         </Box>
         <Box sx={{ width: "50%", alignContent: "center" }}>
           <img
-            src={LimitationImg}
+            src={
+              data?.content?.section5?.image
+                ? `${backendURL}/${data?.content?.section5?.image}`
+                : LimitationImg
+            }
             alt="not"
-            style={{ height: "500px", width: "500px" }}
+            style={{ height: "500px", width: "500px", borderRadius: "10px" }}
           />
         </Box>
       </Box>

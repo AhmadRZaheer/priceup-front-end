@@ -5,7 +5,7 @@ import Warranty2 from "../../Assets/CustomerLandingImages/CustomerLanding03.jpg"
 import Warranty3 from "../../Assets/CustomerLandingImages/CustomerLanding02.jpg";
 import "./style.scss";
 
-const WarrantySection = () => {
+const WarrantySection = ({ data }) => {
   return (
     <Container maxWidth="lg" sx={{ pt: 7 }}>
       <Box
@@ -19,14 +19,14 @@ const WarrantySection = () => {
         }}
       >
         <Grid container spacing={2}>
-          <Grid item xs={9} >
+          <Grid item xs={9}>
             <Typography className="warrantyHead">
-              Lifetime Craftsmanship Warranty – Our Promise to You
+              {data?.content?.section4?.heading ??
+                "Lifetime Craftsmanship Warranty – Our Promise to You"}
             </Typography>
             <Typography className="warrantySubHead" sx={{ pt: 3 }}>
-              At GCS Glass & Mirror, we stand by our commitment to superior
-              craftsmanship, customized design, and unparalleled customer
-              satisfaction.
+              {data?.content?.section4?.subheading ??
+                "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction."}
             </Typography>
           </Grid>
           <Grid item xs={3} sx={{ display: "flex", justifyContent: "end" }}>

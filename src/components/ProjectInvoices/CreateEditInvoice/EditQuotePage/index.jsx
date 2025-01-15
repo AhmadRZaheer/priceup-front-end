@@ -36,6 +36,10 @@ import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getListData } from "@/redux/estimateCalculations";
 import { getLocationPresentationSettings } from "@/redux/locationSlice";
+import Imag1 from "@/Assets/CustomerLandingImages/2.png";
+import Imag2 from "@/Assets/CustomerLandingImages/3.png";
+import LimitationImg from "@/Assets/CustomerLandingImages/LimitationImg.svg";
+import infoBgHeaderImage from "@/Assets/CustomerLandingImages/WhyChoice.svg";
 
 const accordionDefaultData = [
   {
@@ -61,6 +65,28 @@ const accordionDefaultData = [
   {
     title: "Third-Party Coatings",
     desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+];
+const claimDefaultData = [
+  {
+    title: "Phoenix, AZ",
+    desc: "20634 N. 28th Street, Ste. 150 (602) 828-8276 | phoenix@gcs.glass",
+  },
+  {
+    title: "Austin, TXn",
+    desc: "10509 Circle Drive, Unit 1440 (512) 480-9585 | austin@gcs.glass",
+  },
+  {
+    title: "Denver, CO",
+    desc: "10500 E. 54th Ave, Unit H (720) 601-1124 | denver@gcs.glass",
+  },
+  {
+    title: "Long Island, NY",
+    desc: "1347 Lincoln Avenue, Unit 7 (516) 400-2514 | longisland@gcs.glass",
+  },
+  {
+    title: "Santa Cruz, CA",
+    desc: "1970 17th Avenue (831) 353-6486 | santacruz@gcs.glass",
   },
 ];
 
@@ -98,7 +124,10 @@ const EditQuoteInvoice = () => {
   }, [singleItemData?.estimateDetailArray]);
 
   const [accordionData, setAccordionData] = useState(
-    singleItemData?.content?.section5 ?? accordionDefaultData
+    singleItemData?.content?.section5?.faqs ?? accordionDefaultData
+  );
+  const [claimData, setClaimData] = useState(
+    singleItemData?.content?.section6?.claimData ?? claimDefaultData
   );
   const [copyLink, setCopyLink] = useState(false);
   const handleCopyPreview = (value) => {
@@ -153,7 +182,10 @@ const EditQuoteInvoice = () => {
   useEffect(() => {
     if (singleItemData) {
       setAccordionData(
-        singleItemData?.content?.section5 ?? accordionDefaultData
+        singleItemData?.content?.section5?.faqs ?? accordionDefaultData
+      );
+      setClaimData(
+        singleItemData?.content?.section6?.claimData ?? claimDefaultData
       );
     }
   }, [singleItemData]);
@@ -260,6 +292,15 @@ const EditQuoteInvoice = () => {
         },
       },
       section3: {
+        heading:
+          singleItemData?.content?.section3?.heading || "Why Choose GCS?",
+        subheading:
+          singleItemData?.content?.section3?.subheading ||
+          "The Highest Quality Residential Glass Services",
+        description:
+          singleItemData?.content?.section3?.description ||
+          "Founded in 2013 in Phoenix Arizona, GCS has had a tremendous amount of success due to our “can do it” attitude along with our innovative approach to every aspect of the business.",
+        bgimage: singleItemData?.content?.section3?.bgimage,
         card1: {
           text1:
             singleItemData?.content?.section3?.card1?.text1 ||
@@ -290,6 +331,27 @@ const EditQuoteInvoice = () => {
             "Don’t forget to ask about our starphire ultra-clear glass. It will change your life.",
         },
       },
+      section4: {
+        heading:
+          singleItemData?.content?.section4?.heading ||
+          "Lifetime Craftsmanship Warranty – Our Promise to You",
+        subheading:
+          singleItemData?.content?.section4?.subheading ||
+          "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction.",
+      },
+      section5: {
+        image: singleItemData?.content?.section5?.image,
+      },
+      section6: {
+        heading:
+          singleItemData?.content?.section6?.heading || "How to File a Claim",
+        subheading:
+          singleItemData?.content?.section6?.subheading ||
+          "Submitting a warranty claim is easy! Simply contact your local GCS Glass & Mirror location to begin the process:",
+        bottomtext:
+          singleItemData?.content?.section6?.bottomtext ||
+          "At GCS Glass & Mirror, we value your trust and strive to provide only the highest-quality products and services. Thank you for choosing us to transform your spaces!",
+      },
       section7: {
         card1: {
           text1:
@@ -316,6 +378,21 @@ const EditQuoteInvoice = () => {
             "Never use aggressive cleaning materials (razorblades, steel wool, abrasives, etc.) to clean glass. Always use non-ammonia glass cleaner and/or alcohol to clean glass. Never use products containing hydrofluoric acid, fluorine, chlorine, or ammonia derivatives. They can damage the surface of the glass. Always clean the full surface of the glass. Spot cleaning might create halos. Never try to remove impurities with a dry or dirty cloth, as this may cause scratches or scuffs on the glass surface.",
         },
       },
+      section8: {
+        product: {
+          title:
+            singleItemData?.content?.section8?.product?.title ||
+            "GCS ARMOR THE ULTIMATE GLASS PROTECTION SOLUTION",
+          desc1:
+            singleItemData?.content?.section8?.product?.desc1 ||
+            "Glass is naturally porous, allowing water and contaminants to seep in, but GCS Armor's hydrophobic nano coating fills and seals these pores, leaving surfaces smooth and protected. Backed by a 10-year warranty, it ensures long-lasting durability.",
+          desc2:
+            singleItemData?.content?.section8?.product?.desc2 ||
+            "Ask about our GCS Armor Bath Kit for easy maintenance, and experience the next level of glass protection today. Contact us to get started!",
+        },
+        image1: singleItemData?.content?.section8?.image1,
+        image2: singleItemData?.content?.section8?.image2,
+      },
     },
     validationSchema,
     enableReinitialize: true,
@@ -333,9 +410,7 @@ const EditQuoteInvoice = () => {
   } = useEditDocument();
 
   const handleCraete = async (values) => {
-    console.log(values, "submitedsubmitedsubmited");
-
-    const data = {
+     const data = {
       customerPreview: {
         ...singleItemData?.customerPreview,
         expiresAt: values.dueDate,
@@ -381,6 +456,14 @@ const EditQuoteInvoice = () => {
             text1: values.section3?.card4?.text1,
             text2: values.section3?.card4?.text2,
           },
+          heading: values.section3?.heading,
+          subheading: values.section3?.subheading,
+          description: values.section3?.description,
+        },
+        section4: {
+          ...singleItemData?.content?.section4,          
+          heading: values.section4?.heading,
+          subheading: values.section4?.subheading,
         },
         section7: {
           ...singleItemData?.content?.section7,
@@ -397,9 +480,27 @@ const EditQuoteInvoice = () => {
             text2: values.section7?.card3?.text2,
           },
         },
-        section5: accordionData,
+        section8: {
+          ...singleItemData?.content?.section8,
+          product: {
+            title: values.section8.product.title,
+            desc1: values.section8.product.desc1,
+            desc2: values.section8.product.desc2,
+          },
+        },
+        section5: {
+          ...singleItemData?.content?.section5,
+          faqs: accordionData,
+        },
+        section6: {
+          claimData: claimData,
+          heading: values.section6?.heading,
+          subheading: values.section6?.subheading,
+          bottomtext: values.section6?.bottomtext,
+        },
       },
     };
+    console.log(data, "datadatadata");
     try {
       const response = await EditInvoice({
         data: data,
@@ -1600,7 +1701,7 @@ const EditQuoteInvoice = () => {
                                 }`}
                                 width="100%"
                                 height={400}
-                                alt="section image backgroundImage"
+                                alt="section backgroundImage"
                                 style={{
                                   border: "1px solid  #ccc",
                                   borderRadius: "10px",
@@ -1611,7 +1712,7 @@ const EditQuoteInvoice = () => {
                                 src={bgHeaderImage}
                                 width="100%"
                                 height={400}
-                                alt="section image logo"
+                                alt="section logo"
                                 style={{
                                   border: "1px solid  #ccc",
                                   borderRadius: "10px",
@@ -1771,7 +1872,6 @@ const EditQuoteInvoice = () => {
                     </Box>
                   ))}
                 </Box> */}
-
                 <Box
                   sx={{
                     display: "flex",
@@ -2214,38 +2314,23 @@ const EditQuoteInvoice = () => {
                     </Box>
                   )}
                 </Box>
-
                 {/* section 3 */}
                 <Box sx={{ p: 2 }}>
                   <Typography variant="h5" fontWeight={"bold"}>
                     Info Cards
                   </Typography>
                   <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
-                   
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        pb: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        fontWeight={"bold"}
-                        sx={{ alignContent: "center" }}
-                      >
-                        Card 1 :{" "}
-                      </Typography>
+                    <Box sx={{ display: "flex", gap: 2, pb: 2 }}>
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
                           gap: 0.2,
-                          width: "30%",
+                          width: "33%",
                         }}
                       >
                         <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 1
+                          Heading
                         </Typography>
                         <TextareaAutosize
                           style={{
@@ -2257,26 +2342,25 @@ const EditQuoteInvoice = () => {
                           color="neutral"
                           minRows={3}
                           maxRows={4}
-                          name="section3.card1.text1"
+                          name="section3.heading"
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          maxLength={20}
-                          value={formik.values.section3.card1.text1 || ""}
+                          // maxLength={20}
+                          value={formik.values.section3.heading || ""}
                           onChange={formik.handleChange}
                         />
-                      </Box>
-
+                      </Box>{" "}
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
                           gap: 0.2,
-                          width: "30%",
+                          width: "33%",
                         }}
                       >
                         <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 2
+                          Sub Heading
                         </Typography>
                         <TextareaAutosize
                           style={{
@@ -2288,40 +2372,25 @@ const EditQuoteInvoice = () => {
                           color="neutral"
                           minRows={3}
                           maxRows={4}
+                          name="section3.subheading"
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          name="section3.card1.text2"
-                          maxLength={138}
-                          value={formik.values.section3.card1.text2 || ""}
+                          // maxLength={20}
+                          value={formik.values.section3.subheading || ""}
                           onChange={formik.handleChange}
                         />
-                      </Box>
-                    </Box>{" "}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        pb: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        fontWeight={"bold"}
-                        sx={{ alignContent: "center" }}
-                      >
-                        Card 2 :{" "}
-                      </Typography>
+                      </Box>{" "}
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
                           gap: 0.2,
-                          width: "30%",
+                          width: "33%",
                         }}
                       >
                         <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 1
+                          Description
                         </Typography>
                         <TextareaAutosize
                           style={{
@@ -2333,147 +2402,451 @@ const EditQuoteInvoice = () => {
                           color="neutral"
                           minRows={3}
                           maxRows={4}
-                          name="section3.card2.text1"
+                          name="section3.description"
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          maxLength={20}
-                          value={formik.values.section3.card2.text1 || ""}
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 0.2,
-                          width: "30%",
-                        }}
-                      >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 2
-                        </Typography>
-                        <TextareaAutosize
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
-                          }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={3}
-                          maxRows={4}
-                          placeholder="Enter Text"
-                          size="large"
-                          variant="outlined"
-                          name="section3.card2.text2"
-                          maxLength={138}
-                          value={formik.values.section3.card2.text2 || ""}
+                          // maxLength={20}
+                          value={formik.values.section3.description || ""}
                           onChange={formik.handleChange}
                         />
                       </Box>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        pb: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        fontWeight={"bold"}
-                        sx={{ alignContent: "center" }}
-                      >
-                        Card 3 :{" "}
-                      </Typography>
+                    <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
-                          gap: 0.2,
-                          width: "30%",
+                          gap: 1,
+                          pb: 2,
+                          width: "25%",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 1
+                        <Typography
+                          variant="h6"
+                          fontWeight={"bold"}
+                          sx={{ alignContent: "center" }}
+                        >
+                          Impressions Card :{" "}
                         </Typography>
-                        <TextareaAutosize
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
                           }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={3}
-                          maxRows={4}
-                          name="section3.card3.text1"
-                          placeholder="Enter Text"
-                          size="large"
-                          variant="outlined"
-                          maxLength={20}
-                          value={formik.values.section3.card3.text1 || ""}
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 1
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            name="section3.card1.text1"
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            maxLength={20}
+                            value={formik.values.section3.card1.text1 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
 
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 2
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section3.card1.text2"
+                            maxLength={138}
+                            value={formik.values.section3.card1.text2 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                      </Box>{" "}
                       <Box
                         sx={{
                           display: "flex",
+                          gap: 1,
+                          pb: 2,
                           flexDirection: "column",
-                          gap: 0.2,
-                          width: "30%",
+                          width: "25%",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 2
+                        <Typography
+                          variant="h6"
+                          fontWeight={"bold"}
+                          sx={{ alignContent: "center" }}
+                        >
+                          Customer Card :{" "}
                         </Typography>
-                        <TextareaAutosize
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
                           }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={3}
-                          maxRows={4}
-                          placeholder="Enter Text"
-                          size="large"
-                          variant="outlined"
-                          name="section3.card3.text2"
-                          maxLength={138}
-                          value={formik.values.section3.card3.text2 || ""}
-                          onChange={formik.handleChange}
-                        />
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 1
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            name="section3.card2.text1"
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            maxLength={20}
+                            value={formik.values.section3.card2.text1 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 2
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section3.card2.text2"
+                            maxLength={138}
+                            value={formik.values.section3.card2.text2 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          pb: 2,
+                          flexDirection: "column",
+                          width: "25%",
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          fontWeight={"bold"}
+                          sx={{ alignContent: "center" }}
+                        >
+                          Response Card :{" "}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 1
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            name="section3.card3.text1"
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            maxLength={20}
+                            value={formik.values.section3.card3.text1 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 2
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section3.card3.text2"
+                            maxLength={138}
+                            value={formik.values.section3.card3.text2 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          pb: 2,
+                          flexDirection: "column",
+                          width: "25%",
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          fontWeight={"bold"}
+                          sx={{ alignContent: "center" }}
+                        >
+                          Clarity Card :{" "}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 1
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            name="section3.card4.text1"
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            maxLength={20}
+                            value={formik.values.section3.card4.text1 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 2
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section3.card4.text2"
+                            maxLength={138}
+                            value={formik.values.section3.card4.text2 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
                       </Box>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        pb: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        fontWeight={"bold"}
-                        sx={{ alignContent: "center" }}
+                    <Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                        }}
                       >
-                        Card 4 :{" "}
-                      </Typography>
+                        <Typography
+                          sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                        >
+                          Image
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            document.getElementById("info-image-upload").click()
+                          } // Trigger the file input click
+                        >
+                          <input
+                            id="info-image-upload" // Add an ID to target this input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            hidden
+                            onChange={(e) =>
+                              handleUploadEstimatesImage(
+                                e,
+                                "content.section3.bgimage"
+                              )
+                            }
+                          />
+                          <Box sx={{ position: "relative" }}>
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                top: "-10px",
+                                zIndex: 3,
+                                right: "-5px",
+                              }}
+                            >
+                              <IconButton
+                                sx={{
+                                  background: "#8477DA",
+                                  color: "white",
+                                  p: "5px",
+                                  ":hover": {
+                                    background: "#8477DA",
+                                  },
+                                }}
+                              >
+                                <Edit sx={{ fontSize: "20px" }} />
+                              </IconButton>
+                            </Box>
+
+                            {formik.values.section3?.bgimage ? (
+                              <img
+                                src={`${backendURL}/${formik.values.section3?.bgimage}`}
+                                width="400"
+                                height={380}
+                                alt="not found"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={infoBgHeaderImage}
+                                width="100%"
+                                height={380}
+                                alt="not found"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                }}
+                              />
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+                {/* section 4 */}{" "}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    Craftsmanship Warranty
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      border: "1px solid #ccc",
+                      mt: 2,
+                      px: 3,
+                      py: 2,
+                    }}
+                  >
+                    <Box sx={{ display: "flex", gap: 2, pb: 2 ,width:'100%'}}>
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
                           gap: 0.2,
-                          width: "30%",
+                          width: "33%",
                         }}
                       >
                         <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 1
+                          Heading
                         </Typography>
                         <TextareaAutosize
                           style={{
@@ -2485,26 +2858,24 @@ const EditQuoteInvoice = () => {
                           color="neutral"
                           minRows={3}
                           maxRows={4}
-                          name="section3.card4.text1"
+                          name="section4.heading"
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          maxLength={20}
-                          value={formik.values.section3.card4.text1 || ""}
+                          value={formik.values.section4.heading || ""}
                           onChange={formik.handleChange}
                         />
-                      </Box>
-
+                      </Box>{" "}
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
                           gap: 0.2,
-                          width: "30%",
+                          width: "33%",
                         }}
                       >
                         <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 2
+                          Sub Heading
                         </Typography>
                         <TextareaAutosize
                           style={{
@@ -2516,27 +2887,240 @@ const EditQuoteInvoice = () => {
                           color="neutral"
                           minRows={3}
                           maxRows={4}
+                          name="section4.subheading"
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          name="section3.card4.text2"
-                          maxLength={138}
-                          value={formik.values.section3.card4.text2 || ""}
+                          value={formik.values.section4.subheading || ""}
                           onChange={formik.handleChange}
                         />
                       </Box>
                     </Box>
                   </Box>
                 </Box>
-                {/* section 4 */}
+                {/* section 5 */}
                 <Box sx={{ p: 2 }}>
                   <Typography variant="h5" fontWeight={"bold"}>
                     FAQs
                   </Typography>
-                  <FAQSection
-                    accordionData={accordionData}
-                    setAccordionData={setAccordionData}
-                  />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      border: "1px solid #ccc",
+                      mt: 2,
+                      px: 3,
+                      py: 2,
+                    }}
+                  >
+                    {" "}
+                    <Box sx={{ width: "70%" }}>
+                      {" "}
+                      <FAQSection
+                        accordionData={accordionData}
+                        setAccordionData={setAccordionData}
+                      />
+                    </Box>
+                    <Box sx={{ width: "30%" }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                        }}
+                      >
+                        <Typography
+                          sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                        >
+                          Image
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            document.getElementById("faqs-image-upload").click()
+                          } // Trigger the file input click
+                        >
+                          <input
+                            id="faqs-image-upload" // Add an ID to target this input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            hidden
+                            onChange={(e) =>
+                              handleUploadEstimatesImage(
+                                e,
+                                "content.section5.image"
+                              )
+                            }
+                          />
+                          <Box sx={{ position: "relative" }}>
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                top: "-10px",
+                                zIndex: 3,
+                                right: "-5px",
+                              }}
+                            >
+                              <IconButton
+                                sx={{
+                                  background: "#8477DA",
+                                  color: "white",
+                                  p: "5px",
+                                  ":hover": {
+                                    background: "#8477DA",
+                                  },
+                                }}
+                              >
+                                <Edit sx={{ fontSize: "20px" }} />
+                              </IconButton>
+                            </Box>
+
+                            {formik.values.section5?.image ? (
+                              <img
+                                src={`${backendURL}/${formik.values.section5?.image}`}
+                                width="100%"
+                                height={380}
+                                alt="not found"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={LimitationImg}
+                                width="100%"
+                                height={380}
+                                alt="not found"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                }}
+                              />
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+                {/* section 6 */}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    File a Claim
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                      border: "1px solid #ccc",
+                      mt: 2,
+                      px: 3,
+                      py: 2,
+                    }}
+                  >
+                    <Box sx={{ display: "flex", gap: 2, pb: 2 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "33%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Heading
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section6.heading"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          // maxLength={20}
+                          value={formik.values.section6.heading || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>{" "}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "33%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Sub Heading
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section6.subheading"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          // maxLength={20}
+                          value={formik.values.section6.subheading || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>{" "}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "33%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Bottom Text
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section6.bottomtext"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          // maxLength={20}
+                          value={formik.values.section6.bottomtext || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>{" "}
+                    </Box>{" "}
+                    <FAQSection
+                      accordionData={claimData}
+                      setAccordionData={setClaimData}
+                    />
+                  </Box>
                 </Box>
                 {/* section 7 */}
                 <Box sx={{ p: 2 }}>
@@ -2770,6 +3354,309 @@ const EditQuoteInvoice = () => {
                           value={formik.values.section7.card3.text2 || ""}
                           onChange={formik.handleChange}
                         />
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+                {/* section 8 */}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    Glass Upgrade Product
+                  </Typography>
+                  <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
+                    <Box
+                      sx={{
+                        gap: 2,
+                        pb: 2,
+                      }}
+                    >
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                            width: "30%",
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Product Title
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={4}
+                            maxRows={4}
+                            name="section8.product.title"
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            // maxLength={23}
+                            value={formik.values.section8.product.title || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                            width: "30%",
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Product Description
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={4}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section8.product.desc1"
+                            // maxLength={139}
+                            value={formik.values.section8.product.desc1 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                            width: "30%",
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Result Description
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={4}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section8.product.desc2"
+                            // maxLength={139}
+                            value={formik.values.section8.product.desc2 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                      </Box>
+                      <Box sx={{ display: "flex", gap: 3, pt: 1.5 }}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                            // width: "40%",
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                          >
+                            Product image
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 1,
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                document
+                                  .getElementById("product-image-upload")
+                                  .click()
+                              } // Trigger the file input click
+                            >
+                              <input
+                                id="product-image-upload" // Add an ID to target this input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                hidden
+                                onChange={(e) =>
+                                  handleUploadEstimatesImage(
+                                    e,
+                                    "content.section8.image1"
+                                  )
+                                }
+                              />
+                              <Box sx={{ position: "relative" }}>
+                                <Box
+                                  sx={{
+                                    position: "absolute",
+                                    top: "-10px",
+                                    zIndex: 3,
+                                    right: "-5px",
+                                  }}
+                                >
+                                  <IconButton
+                                    sx={{
+                                      background: "#8477DA",
+                                      color: "white",
+                                      p: "5px",
+                                      ":hover": {
+                                        background: "#8477DA",
+                                      },
+                                    }}
+                                  >
+                                    <Edit sx={{ fontSize: "20px" }} />
+                                  </IconButton>
+                                </Box>
+
+                                {formik.values.section8?.image1 ? (
+                                  <img
+                                    src={`${backendURL}/${formik.values.section8?.image1}`}
+                                    width="100%"
+                                    height={380}
+                                    alt="not found"
+                                    style={{
+                                      border: "1px solid  #ccc",
+                                      borderRadius: "10px",
+                                    }}
+                                  />
+                                ) : (
+                                  <img
+                                    src={Imag1}
+                                    width="100%"
+                                    height={380}
+                                    alt="not found"
+                                    style={{
+                                      border: "1px solid  #ccc",
+                                      borderRadius: "10px",
+                                    }}
+                                  />
+                                )}
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                            // width: "40%",
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                          >
+                            Result Image
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 1,
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: "flex",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                document
+                                  .getElementById("product-result-image-upload")
+                                  .click()
+                              } // Trigger the file input click
+                            >
+                              <input
+                                id="product-result-image-upload" // Add an ID to target this input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                hidden
+                                onChange={(e) =>
+                                  handleUploadEstimatesImage(
+                                    e,
+                                    "content.section8.image2"
+                                  )
+                                }
+                              />
+                              <Box sx={{ position: "relative" }}>
+                                <Box
+                                  sx={{
+                                    position: "absolute",
+                                    top: "-10px",
+                                    zIndex: 3,
+                                    right: "-5px",
+                                  }}
+                                >
+                                  <IconButton
+                                    sx={{
+                                      background: "#8477DA",
+                                      color: "white",
+                                      p: "5px",
+                                      ":hover": {
+                                        background: "#8477DA",
+                                      },
+                                    }}
+                                  >
+                                    <Edit sx={{ fontSize: "20px" }} />
+                                  </IconButton>
+                                </Box>
+
+                                {formik.values.section8?.image2 ? (
+                                  <img
+                                    src={`${backendURL}/${formik.values.section8?.image2}`}
+                                    width="100%"
+                                    height={380}
+                                    alt="not found"
+                                    style={{
+                                      border: "1px solid  #ccc",
+                                      borderRadius: "10px",
+                                    }}
+                                  />
+                                ) : (
+                                  <img
+                                    src={Imag2}
+                                    width="100%"
+                                    height={380}
+                                    alt="not found"
+                                    style={{
+                                      border: "1px solid  #ccc",
+                                      borderRadius: "10px",
+                                    }}
+                                  />
+                                )}
+                              </Box>
+                            </Box>
+                          </Box>
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
