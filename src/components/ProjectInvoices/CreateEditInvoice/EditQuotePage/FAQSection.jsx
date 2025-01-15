@@ -141,7 +141,7 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
                 placeholder="Enter description"
               />
             </Box>
-            <Box sx={{ pl: 1 }}>
+            <Box sx={{ pl: 1, mt: "-12px", ml: "-15px" }}>
               <IconButton
                 sx={{
                   color: "#FF0000",
