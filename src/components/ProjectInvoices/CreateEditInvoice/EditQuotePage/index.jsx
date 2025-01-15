@@ -40,6 +40,8 @@ import Imag1 from "@/Assets/CustomerLandingImages/2.png";
 import Imag2 from "@/Assets/CustomerLandingImages/3.png";
 import LimitationImg from "@/Assets/CustomerLandingImages/LimitationImg.svg";
 import infoBgHeaderImage from "@/Assets/CustomerLandingImages/WhyChoice.svg";
+import TextEditor from "./TextEditor";
+import RichTextEditor from "react-rte";
 
 const accordionDefaultData = [
   {
@@ -89,6 +91,32 @@ const claimDefaultData = [
     desc: "1970 17th Avenue (831) 353-6486 | santacruz@gcs.glass",
   },
 ];
+const  WarrantyText = `
+          <h2 style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 700; line-height: 24px; color: white; padding-bottom: 32px; padding-top: 40px;">
+            What Our Warranty Covers
+          </h2>
+          <br>
+          <p style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 400; line-height: 24px; color: white;">
+            At GCS Glass & Mirror, we are dedicated to ensuring your peace of mind. That’s why we offer a Limited Lifetime Craftsmanship Warranty. This warranty guarantees:
+          </p>
+          <div style="padding-top: 1.6rem;">
+            <ul style="display: flex; flex-direction: column; gap: 8px;">
+              <li style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 400; line-height: 24px; color: white;">
+                Protection against defects in materials and workmanship under normal use for as long as you own the product.
+              </li>
+              <li style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 400; line-height: 24px; color: white;">
+                A promise to repair or replace defective products free of charge if your claim is valid.
+              </li>
+              <li style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 400; line-height: 24px; color: white;">
+                Assurance that we stand behind our superior products and services.
+              </li>
+            </ul>
+          </div>
+          <p style="font-family: 'Poppins', sans-serif; font-size: 24px; line-height: 24px; font-weight: 700; color: white; padding-top: 16px;">
+            Note: This warranty is non-transferable unless otherwise specified.
+          </p>
+        `
+
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -112,6 +140,7 @@ const EditQuoteInvoice = () => {
     refetch: logsRefetch,
     isFetching: logsFetching,
   } = useFetchAllDocuments(`${backendURL}/logs?resource_id=${selectedItemId}`);
+    const [warrantyText, setWarrantyText] = useState(singleItemData?.content?.section4?.description ?? WarrantyText);
   const WinelistData = useSelector(getWineCellarsHardware);
   const MirrorsHardwareList = useSelector(getMirrorsHardware);
   const ShowerHardwareList = useSelector(getListData);
@@ -129,6 +158,7 @@ const EditQuoteInvoice = () => {
   const [claimData, setClaimData] = useState(
     singleItemData?.content?.section6?.claimData ?? claimDefaultData
   );
+ 
   const [copyLink, setCopyLink] = useState(false);
   const handleCopyPreview = (value) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -187,6 +217,7 @@ const EditQuoteInvoice = () => {
       setClaimData(
         singleItemData?.content?.section6?.claimData ?? claimDefaultData
       );
+      setWarrantyText(singleItemData?.content?.section4?.description ?? WarrantyText)
     }
   }, [singleItemData]);
 
@@ -410,7 +441,7 @@ const EditQuoteInvoice = () => {
   } = useEditDocument();
 
   const handleCraete = async (values) => {
-     const data = {
+    const data = {
       customerPreview: {
         ...singleItemData?.customerPreview,
         expiresAt: values.dueDate,
@@ -461,9 +492,10 @@ const EditQuoteInvoice = () => {
           description: values.section3?.description,
         },
         section4: {
-          ...singleItemData?.content?.section4,          
+          ...singleItemData?.content?.section4,
           heading: values.section4?.heading,
           subheading: values.section4?.subheading,
+          description : warrantyText
         },
         section7: {
           ...singleItemData?.content?.section7,
@@ -2427,7 +2459,7 @@ const EditQuoteInvoice = () => {
                           fontWeight={"bold"}
                           sx={{ alignContent: "center" }}
                         >
-                          Impressions Card :{" "}
+                          Card 1:{" "}
                         </Typography>
                         <Box
                           sx={{
@@ -2507,7 +2539,7 @@ const EditQuoteInvoice = () => {
                           fontWeight={"bold"}
                           sx={{ alignContent: "center" }}
                         >
-                          Customer Card :{" "}
+                          Card 2:{" "}
                         </Typography>
                         <Box
                           sx={{
@@ -2587,7 +2619,7 @@ const EditQuoteInvoice = () => {
                           fontWeight={"bold"}
                           sx={{ alignContent: "center" }}
                         >
-                          Response Card :{" "}
+                          Card 3:{" "}
                         </Typography>
                         <Box
                           sx={{
@@ -2667,7 +2699,7 @@ const EditQuoteInvoice = () => {
                           fontWeight={"bold"}
                           sx={{ alignContent: "center" }}
                         >
-                          Clarity Card :{" "}
+                          Card 4:{" "}
                         </Typography>
                         <Box
                           sx={{
@@ -2828,7 +2860,7 @@ const EditQuoteInvoice = () => {
                   </Typography>
                   <Box
                     sx={{
-                      display: "flex",
+                      // display: "flex",
                       gap: 1,
                       border: "1px solid #ccc",
                       mt: 2,
@@ -2836,7 +2868,7 @@ const EditQuoteInvoice = () => {
                       py: 2,
                     }}
                   >
-                    <Box sx={{ display: "flex", gap: 2, pb: 2 ,width:'100%'}}>
+                    <Box sx={{ display: "flex", gap: 2, pb: 2, width: "100%" }}>
                       <Box
                         sx={{
                           display: "flex",
@@ -2896,6 +2928,9 @@ const EditQuoteInvoice = () => {
                         />
                       </Box>
                     </Box>
+                    <Box sx={{width:'100%'}}>
+                    <TextEditor text={warrantyText} setText={setWarrantyText} />
+                  </Box>
                   </Box>
                 </Box>
                 {/* section 5 */}
@@ -3085,6 +3120,12 @@ const EditQuoteInvoice = () => {
                           onChange={formik.handleChange}
                         />
                       </Box>{" "}
+                    </Box>{" "}
+                    <FAQSection
+                      accordionData={claimData}
+                      setAccordionData={setClaimData}
+                    />
+                    <Box>
                       <Box
                         sx={{
                           display: "flex",
@@ -3115,11 +3156,7 @@ const EditQuoteInvoice = () => {
                           onChange={formik.handleChange}
                         />
                       </Box>{" "}
-                    </Box>{" "}
-                    <FAQSection
-                      accordionData={claimData}
-                      setAccordionData={setClaimData}
-                    />
+                    </Box>
                   </Box>
                 </Box>
                 {/* section 7 */}
