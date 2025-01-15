@@ -6,24 +6,34 @@ import Diamond from "../../Assets/CustomerLandingImages/Diamond-Icon.png";
 import EyeIcon from "../../Assets/CustomerLandingImages/Eye-Icon.png";
 import PersonHeart from "../../Assets/CustomerLandingImages/Person-with-Heart-Icon.png";
 import StopWatch from "../../Assets/CustomerLandingImages/Stopwatch-Icon.png";
+import { backendURL } from "@/utilities/common";
 
 const ChoiceGCS = ({ data }) => {
   return (
     <>
       <Container maxWidth="lg" sx={{ pb: 2.5, pt: 3.5 }}>
-        <Typography className="choiceHead">Why Choose GCS?</Typography>
+        <Typography className="choiceHead">
+          {data?.content?.section3?.heading ?? "Why Choose GCS?"}
+        </Typography>
         <Typography className="choiceSubHead">
-          The Highest Quality Residential Glass Services
+          {data?.content?.section3?.subheading ??
+            "The Highest Quality Residential Glass Services"}
         </Typography>
         <Typography className="choiceDesc">
-          Founded in 2013 in Phoenix Arizona, GCS has had a tremendous amount of
-          success due to our “can do it” attitude along with our innovative
-          approach to every aspect of the business.
+          {data?.content?.section3?.description ??
+            "Founded in 2013 in Phoenix Arizona, GCS has had a tremendous amount of success due to our “can do it” attitude along with our innovative approach to every aspect of the business."}
         </Typography>
       </Container>
       <Box
         sx={{
-          backgroundImage: { md: `url(${bgHeaderImage})`, xs: "none" },
+          backgroundImage: {
+            md: `url(${
+              data?.content?.section3?.bgimage
+                ? `${backendURL}/${data?.content?.section3?.bgimage}`
+                : bgHeaderImage
+            })`,
+            xs: "none",
+          },
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           pb: { md: 5, xs: 2 },

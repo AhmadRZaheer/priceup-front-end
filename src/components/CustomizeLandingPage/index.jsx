@@ -125,7 +125,6 @@ const CustomizeLandingPage = ({
   // showersLocationSettings,
   // pdfSettings,
 }) => {
-  console.log(selectedData,'selectedDataselectedData')
   const { id } = useParams();
   const [acceptTerms, setAcceptTerms] = useState(false);
   const signaturePadRef = useRef(null);
@@ -430,6 +429,11 @@ const CustomizeLandingPage = ({
     saveAs(result, "Priceup");
   };
 
+  const imageUrl = selectedData?.content?.section1?.backgroundImage
+    ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
+    : bgHeaderImage;
+  console.log(imageUrl, "imageUrlimageUrl");
+
   return (
     <>
       <Box sx={{ bgcolor: "black", width: "100%" }}>
@@ -461,14 +465,7 @@ const CustomizeLandingPage = ({
           sx={{
             // width: { md: "89%", xs: "90%" },
             // m: "auto",
-            backgroundImage: {
-              md: `url(${
-                selectedData?.content?.section1?.backgroundImage
-                  ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
-                  : bgHeaderImage
-              })`,
-              xs: "none",
-            },
+            backgroundImage: `url(${imageUrl})`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             // px: { md: 12, xs: 0 },
@@ -1421,11 +1418,11 @@ const CustomizeLandingPage = ({
       </Box>
       <ChoiceGCS data={selectedData} />
       {/* <ServiceSection /> */}
-      <WarrantySection />
+      <WarrantySection data={selectedData} />
       <LimitationsSection data={selectedData} />
-      <ClaimSection />
+      <ClaimSection data={selectedData} />
       <ManainanceSection data={selectedData} />
-      <UpgradeOPtions />
+      <UpgradeOPtions data={selectedData} />
       <AggremantCondition
         data={selectedData}
         acceptTerms={acceptTerms}
