@@ -26,7 +26,6 @@ const claimDefaultData = [
 ];
 
 const ClaimSection = ({ data }) => {
-  console.log(data, "asdfgasdsdasdsd");
   const claimData = useMemo(() => {
     const Faqs = data?.content?.section6?.claimData ?? claimDefaultData;
     return Faqs;
@@ -69,45 +68,6 @@ const ClaimSection = ({ data }) => {
             </Box>
           ))}
         </Box>
-
-        {/* <Box sx={{ width: "50%" }}>
-            <Typography className="claimText">
-              <Box component="span" className="spanColorText">
-                Austin, TX:
-              </Box>{" "}
-              10509 Circle Drive, Unit 1440 (512) 480-9585 | austin@gcs.glass
-            </Typography>
-          </Box> */}
-        {/* </Box> */}
-        {/* <Box sx={{ width: "100%", display: "flex", pt: 5, gap: 10 }}>
-          <Box sx={{ width: "50%" }}>
-            <Typography className="claimText">
-              <Box component="span" className="spanColorText">
-                Denver, CO:
-              </Box>{" "}
-              10500 E. 54th Ave, Unit H (720) 601-1124 | denver@gcs.glass
-            </Typography>
-          </Box>
-          <Box sx={{ width: "50%" }}>
-            <Typography className="claimText">
-              <Box component="span" className="spanColorText">
-                Long Island, NY:
-              </Box>
-              1347 Lincoln Avenue, Unit 7 (516) 400-2514 | longisland@gcs.glass
-            </Typography>
-          </Box>
-        </Box>
-        <Box sx={{ width: "100%", display: "flex", pt: 5, gap: 10 }}>
-          <Box sx={{ width: "50%" }}></Box>
-          <Box sx={{ width: "50%" }}>
-            <Typography className="claimText">
-              <Box component="span" className="spanColorText">
-                Santa Cruz, CA:
-              </Box>
-              1970 17th Avenue (831) 353-6486 | santacruz@gcs.glass
-            </Typography>
-          </Box>
-        </Box> */}
         <Typography
           sx={{
             fontFamily: '"Poppins" !important',

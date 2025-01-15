@@ -4,7 +4,6 @@ import CloseIcon from "@mui/icons-material/Close"; // Import the Close icon
 import React, { useState } from "react";
 
 const FAQSection = ({ accordionData, setAccordionData }) => {
-  console.log(accordionData, "accordionDataaccordionData");
   // State for dynamically added question/answer fields
   const [fields, setFields] = useState([]);
 

@@ -125,7 +125,6 @@ const CustomizeLandingPage = ({
   // showersLocationSettings,
   // pdfSettings,
 }) => {
-  console.log(selectedData, "selectedDataselectedData");
   const { id } = useParams();
   const [acceptTerms, setAcceptTerms] = useState(false);
   const signaturePadRef = useRef(null);
