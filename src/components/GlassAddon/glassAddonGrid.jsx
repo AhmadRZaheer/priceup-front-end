@@ -137,7 +137,7 @@ const GlassAddonGrid = ({ type }) => {
   const actionColumn = [
     {
       field: "cost",
-      headerName: "Cost per square inch",
+      headerName: "Cost per square foot",
       headerClassName: "showerHardwareHeader",
       renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       sortable: false,
@@ -381,7 +381,7 @@ const GlassAddonGrid = ({ type }) => {
   ];
   const SkeletonColumnsGenerated = GenrateColumns([
     "Addons Type",
-    "Cost per square inch",
+    "Cost per square foot",
     "status",
     "Actions",
   ]);
