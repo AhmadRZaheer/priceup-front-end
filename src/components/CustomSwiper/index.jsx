@@ -8,7 +8,7 @@ import "swiper/css/navigation";
 import Bulb from "@/Assets/CustomerLandingImages/blubImg.png";
 import { EstimateCategory } from "@/utilities/constants";
 
-const CustomSwiper = ({ data,category }) => {
+const CustomSwiper = ({ data,category ,colorData}) => {
   const detailDesc =
     category === EstimateCategory.SHOWERS
       ? "Shower"
@@ -26,11 +26,12 @@ const CustomSwiper = ({ data,category }) => {
             fontWeight: 600,
             lineHeight: "35px",
             alignSelf: "end",
-            borderBottom: "1px solid #F95500",
-            color: "white",
+            borderBottom: "1px solid",
+            borderColor:colorData?.primary,
+            color: colorData?.secondary,
           }}
         >
-          <Box component="span" sx={{ color: "#F95500" }}>
+          <Box component="span" sx={{ color: colorData?.primary }}>
             Similar
           </Box>{" "}
          {detailDesc} projects that we’ve worked on:

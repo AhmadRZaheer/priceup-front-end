@@ -24,6 +24,7 @@ const SingleAccordian = ({
   reCalculateTotal,
   locationSettings,
   UpgradeOPtions,
+  colorData,
   // showersLocationSettings,
   // mirrorsLocationSettings,
   // wineCellarLocationSettings,
@@ -34,12 +35,15 @@ const SingleAccordian = ({
   category,
 }) => {
   const [totalPrice, setTotalPrice] = useState(data?.totalCost ?? 0);
+  const secondaryColor = colorData?.secondary;
+  const primaryColor = colorData?.primary;
+  const backgroundColor = colorData?.default;
   console.log(data, "sdfgqwfgqwfwqvd", totalPrice);
   const chipColor = data?.selectedItem?.status
     ? data?.selectedItem?.status === "pending"
-      ? "#F95500"
+      ? primaryColor
       : "#0FE90D"
-    : "#F95500";
+    : primaryColor;
   const imageData =
     data?.category === EstimateCategory.SHOWERS
       ? ShowerImg
@@ -67,8 +71,8 @@ const SingleAccordian = ({
         borderRadius: "10px !important",
         // py: "3px",
         px: "4px",
-        background: "#000000",
-        color: "white",
+        background: backgroundColor,
+        color: secondaryColor,
         border: "1px solid #D6D6D6",
         boxShadow: "none",
         mt: 2,
@@ -77,9 +81,9 @@ const SingleAccordian = ({
       <AccordionSummary
         expandIcon={
           expanded === `panel${category}${index + 1}` ? (
-            <Remove sx={{ color: "white" }} />
+            <Remove sx={{ color: secondaryColor }} />
           ) : (
-            <Add sx={{ color: "white" }} />
+            <Add sx={{ color: secondaryColor }} />
           )
         }
         aria-controls={`panel${category}${index + 1}-content`}
@@ -121,7 +125,7 @@ const SingleAccordian = ({
             <Box
               component="span"
               sx={{
-                color: discountValue > 0 ? "#BFBFBD" : "#F95500",
+                color: discountValue > 0 ? "#BFBFBD" : primaryColor,
                 textDecoration: discountValue > 0 ? "line-through" : "auto",
                 fontSize: discountValue > 0 ? "17px" : "20px",
               }}
@@ -129,7 +133,7 @@ const SingleAccordian = ({
               ${(data?.totalPrice ?? 0).toFixed(2)}
             </Box>{" "}
             {discountValue > 0 && (
-              <Box component="span" sx={{ color: "#F95500" }}>
+              <Box component="span" sx={{ color:primaryColor }}>
                 $ {(data?.content?.discount?.total ?? 0)?.toFixed(2)}
                 {/* {calculateDiscount(
                   totalPrice,
@@ -141,7 +145,7 @@ const SingleAccordian = ({
           </Typography>
         </Box>
       </AccordionSummary>
-      <AccordionDetails sx={{ borderBottom: "1ps solid " }}>
+      <AccordionDetails sx={{ borderBottom: "1ps solid" }}>
         <Box>
           <Box>
             <Box>
@@ -153,6 +157,7 @@ const SingleAccordian = ({
                 reCalculateTotal={reCalculateTotal}
                 locationSettings={locationSettings}
                 UpgradeOPtions={UpgradeOPtions}
+                colorData={colorData}
                 // locationSettings={
                 //   data?.category === EstimateCategory.SHOWERS
                 //     ? showersLocationSettings

@@ -53,6 +53,9 @@ const SigntureSection = ({
 }) => {
   const estimatesList = useSelector(getEstimatesList);
   console.log(data, "sdfsdddfgfweefvcddd", estimatesList);
+  const primaryColor = data?.content?.colorSection?.primary;
+  const secondaryColor = data?.content?.colorSection?.secondary;
+  const backgroundColor = data?.content?.colorSection?.default;
   const newDate = new Date();
   const formattedDateTime = newDate.toLocaleString("en-US", {
     weekday: "long", // Full weekday name
@@ -215,10 +218,11 @@ const SigntureSection = ({
   return (
     <Box
       sx={{
-        background: "#000000",
+        background: backgroundColor,
         pb: 3,
         pt: 4,
-        borderTop: "5px solid #F95500",
+        borderTop: "5px solid",
+        borderColor:primaryColor,
       }}
     >
       <Container maxWidth="lg">
@@ -228,7 +232,7 @@ const SigntureSection = ({
             fontSize: "32px",
             fontWeight: 600,
             lineHeight: "39.94px",
-            color: "white",
+            color: secondaryColor,
             pb: 2,
           }}
         >
@@ -236,7 +240,7 @@ const SigntureSection = ({
         </Typography>
         <Box sx={{ width: "100%", display: "flex", gap: 7 }}>
           <Box sx={{ width: "50%" }}>
-            <Box sx={{ background: "white", borderRadius: 2, p: 3 }}>
+            <Box sx={{ background: 'white', borderRadius: 2, p: 3 }}>
               <Box
                 sx={{
                   display: "flex",
@@ -535,7 +539,7 @@ const SigntureSection = ({
                   sx={{
                     fontFamily: '"Poppins" !important',
                     fontSize: "22px",
-                    color: "white",
+                    color: secondaryColor,
                     fontWeight: 600,
                   }}
                 >
@@ -543,9 +547,9 @@ const SigntureSection = ({
                 </Typography>
               ) : (
                 <Box>
-                  <Typography sx={{ color: "white" }}>
+                  <Typography sx={{ color:secondaryColor }}>
                     <Info
-                      sx={{ fontSize: "16px", pt: 0.2, color: "#F95500" }}
+                      sx={{ fontSize: "16px", pt: 0.2, color:primaryColor }}
                     />{" "}
                     You must approve all estimate and provide your signature to
                     continue...
@@ -565,15 +569,13 @@ const SigntureSection = ({
                       borderRadius: "12px",
                       fontSize: "24px",
                       fontWeight: 700,
-                      backgroundColor: "#F95500",
-                      color: "black",
+                     backgroundColor: primaryColor,
+                        color: secondaryColor,
                       lineHeight: "26px",
-                      "&:hover": {
-                        backgroundColor: "#F95500",
-                      },
-                      "&.Mui-disabled": {
-                        background: "#F95500",
-                      },
+                      "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
+                        "&.Mui-disabled": {
+                          background: primaryColor, color: secondaryColor,
+                        },
                       mt: 1,
                     }}
                   >
@@ -591,7 +593,7 @@ const SigntureSection = ({
                   sx={{
                     fontFamily: '"Poppins" !important',
                     fontSize: "32px",
-                    color: "white",
+                    color:secondaryColor,
                     fontWeight: 700,
                     lineHeight: "39.94px",
                     py: 3,
@@ -613,13 +615,13 @@ const SigntureSection = ({
                       variant="contained"
                       onClick={handleOpenEditModal}
                       sx={{
-                        backgroundColor: "#F95500",
-                        color: "#0B0B0B",
+                        backgroundColor: primaryColor,
+                        color: secondaryColor,
                         height: "44px",
                         width: { sm: "100%", xs: "187px" },
-                        "&:hover": { backgroundColor: "#F95500" },
+                        "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
-                          background: "#F95500",
+                          background: primaryColor, color: secondaryColor,
                         },
                         textTransform: "capitalize",
                         borderRadius: 1,
@@ -639,13 +641,13 @@ const SigntureSection = ({
                       disabled={!estimateStatus}
                       variant="contained"
                       sx={{
-                        backgroundColor: "#F95500",
-                        color: "#0B0B0B",
+                        backgroundColor: primaryColor,
+                        color: secondaryColor,
                         height: "44px",
                         width: { sm: "100%", xs: "187px" },
-                        "&:hover": { backgroundColor: "#F95500" },
+                        "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
-                          background: "#F95500",
+                          background: primaryColor, color: secondaryColor,
                         },
                         textTransform: "capitalize",
                         borderRadius: 1,
@@ -673,16 +675,17 @@ const SigntureSection = ({
                     fontSize: "24px",
                     fontWeight: 700,
                     // backgroundColor: "#F95500",
-                    color: "#F95500",
+                    color: primaryColor,
                     lineHeight: "26px",
-                    borderColor: "#F95500",
+                    borderColor: primaryColor,
                     "&:hover": {
-                      backgroundColor: "#F95500",
-                      color: "#0B0B0B",
-                      borderColor: "#F95500",
+                      backgroundColor: primaryColor,
+                      color: secondaryColor,
+                      borderColor: primaryColor,
                     },
                     "&.Mui-disabled": {
-                      background: "#F95500",
+                      background: primaryColor,
+                      color: secondaryColor,
                     },
                   }}
                 >

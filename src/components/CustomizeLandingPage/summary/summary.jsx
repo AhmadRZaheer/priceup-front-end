@@ -15,6 +15,7 @@ import {
   Card,
   Button,
   CircularProgress,
+  Tooltip,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import Bulb from "../../../Assets/CustomerLandingImages/blubImg.png";
@@ -70,9 +71,12 @@ const ShowerSummary = ({
   hardwaresList,
   locationSettings,
   UpgradeOPtions,
+  colorData,
   reCalculateTotal,
 }) => {
-  console.log(data, "datadatadata123");
+  console.log(data, colorData ,"datadatadata123");
+  const secondaryColor = colorData?.secondary;
+  const primaryColor = colorData?.primary;
   const { id } = useParams();
   const dispatch = useDispatch();
   const userProfitPercentage =
@@ -220,8 +224,20 @@ const ShowerSummary = ({
               item?.name
             ) : (
               <>
-                {item?.name} cost{" "}
-                <b style={{ color: singleGlassCost > 0 ? "#28A745" : "red" }}>
+              <Tooltip title={item?.name?.length > 12 ? item?.name : ''} placement="top">
+              <span
+                style={{
+                  maxWidth: "132px",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  paddingRight: "4px",
+                }}
+              >
+                {item?.name}
+              </span>
+            </Tooltip> cost{" "}
+                <b style={{ color: singleGlassCost > 0 ? "#28A745" : "red",paddingLeft: "4px" }}>
                   {singleGlassCost > 0 ? "+" : "-"} $
                   {Math.abs(singleGlassCost ?? 0).toFixed(2)}
                 </b>
@@ -232,7 +248,12 @@ const ShowerSummary = ({
       };
     });
     return glassTypedata ?? [];
-  }, [data?.content?.glassType, hardwaresList?.glassType, UpgradeOPtions,data?.cost]);
+  }, [
+    data?.content?.glassType,
+    hardwaresList?.glassType,
+    UpgradeOPtions,
+    data?.cost,
+  ]);
 
   const glassAddonsList = useMemo(() => {
     const upgradeGlassAddonsList =
@@ -313,10 +334,23 @@ const ShowerSummary = ({
               item?.name
             ) : (
               <>
-                {item?.name} cost{" "}
+              <Tooltip title={item?.name?.length > 12 ? item?.name : ''} placement="top">
+              <span
+                style={{
+                  maxWidth: "132px",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  paddingRight: "4px",
+                }}
+              >
+                {item?.name}
+              </span>
+            </Tooltip>  cost{" "}
                 <b
                   style={{
                     color: singleGlassAddonCost > 0 ? "#28A745" : "red",
+                    paddingLeft: "4px",
                   }}
                 >
                   {singleGlassAddonCost > 0 ? "+" : "-"} $
@@ -1006,7 +1040,7 @@ const ShowerSummary = ({
         fabricationsCountPrice = getFabricationsCostForShowerItem(
           item,
           data?.content?.glassType?.thickness,
-          locationSettings.fabricatingPricing
+          locationSettings?.fabricatingPricing
         );
         // fabricationsCount.oneInchHoles = item?.oneInchHoles || 0;
         // fabricationsCount.hingeCut = item?.hingeCut || 0;
@@ -1017,7 +1051,7 @@ const ShowerSummary = ({
         fabricationsCountPrice = getFabricationsCostForWineCellarItem(
           item,
           data?.content?.glassType?.thickness,
-          locationSettings.fabricatingPricing
+          locationSettings?.fabricatingPricing
         );
       }
       // const fabricationPrice =
@@ -1038,9 +1072,22 @@ const ShowerSummary = ({
       return {
         ...item,
         modifiedName: (
-          <span>
-            {item?.name} cost{" "}
-            <b style={{ color: "#28A745" }}>
+          <span style={{ display: "flex" }}>
+            <Tooltip title={item?.name?.length > 12 ? item?.name : ''} placement="top">
+              <span
+                style={{
+                  maxWidth: "132px",
+                  whiteSpace: "nowrap",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  paddingRight: "4px",
+                }}
+              >
+                {item?.name}
+              </span>
+            </Tooltip>
+            cost{" "}
+            <b style={{ color: "#28A745", paddingLeft: "4px" }}>
               {"+"} ${Math.abs(singleGlassAddonCost ?? 0).toFixed(2)}
             </b>
           </span>
@@ -1061,8 +1108,8 @@ const ShowerSummary = ({
       <Box
         sx={{
           borderRadius: { sm: "14px", xs: 0 },
-          boxShadow:
-            "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+          // boxShadow:
+          //   "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
           border: {
             sm: " 1px solid rgba(212, 219, 223, 1)",
             xs: "none",
@@ -1234,7 +1281,12 @@ const ShowerSummary = ({
                       Total Price:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      ${((discountValue > 0 ? data?.content?.discount?.total : data?.totalPrice) ?? 0).toFixed(2)}
+                      $
+                      {(
+                        (discountValue > 0
+                          ? data?.content?.discount?.total
+                          : data?.totalPrice) ?? 0
+                      ).toFixed(2)}
                       {/* {calculateDiscount(
                         totalPrice,
                         discountValue,
@@ -1432,7 +1484,7 @@ const ShowerSummary = ({
                         <Typography
                           className="text-xs-ragular-bold"
                           sx={{
-                            color: "#F95500",
+                            color: primaryColor,
                             fontSize: "20px !important",
                             fontWeight: "bold !important",
                           }}
@@ -1442,7 +1494,7 @@ const ShowerSummary = ({
                         <Typography
                           className="text-xs-ragular"
                           sx={{
-                            color: discountValue > 0 ? "#BFBFBD" : "#F95500",
+                            color: discountValue > 0 ? "#BFBFBD" : primaryColor,
                             fontSize:
                               discountValue > 0
                                 ? "17px !important"
@@ -1459,13 +1511,14 @@ const ShowerSummary = ({
                           <Typography
                             className="text-xs-ragular"
                             sx={{
-                              color: "#F95500",
+                              color: primaryColor,
                               fontSize: "20px !important",
                               pt: 1,
                               fontWeight: "bold !important",
                             }}
                           >
-                            $ {(data?.content?.discount?.total ?? 0)?.toFixed(2)}
+                            ${" "}
+                            {(data?.content?.discount?.total ?? 0)?.toFixed(2)}
                             {/* {calculateDiscount(
                               totalPrice,
                               discountValue,
@@ -1847,11 +1900,12 @@ const ShowerSummary = ({
                 variant="contained"
                 onClick={handleApprove}
                 sx={{
-                  backgroundColor: "#F95500",
-                  color: "#0B0B0B",
+                  backgroundColor: primaryColor,
+                  color: secondaryColor,
                   height: "44px",
                   width: { sm: "100%", xs: "187px" },
-                  "&:hover": { backgroundColor: "#F95500" },
+                  "&:hover": { backgroundColor: primaryColor,
+                  color: secondaryColor, },
                   textTransform: "capitalize",
                   borderRadius: 1,
                   fontSize: { lg: 16, md: 15, xs: 12 },
@@ -1862,7 +1916,7 @@ const ShowerSummary = ({
                 }}
               >
                 {isLoading ? (
-                  <CircularProgress size={24} sx={{ color: "white" }} />
+                  <CircularProgress size={24} sx={{ color: secondaryColor }} />
                 ) : (
                   "I approve"
                 )}
@@ -1882,6 +1936,7 @@ const ShowerSummary = ({
                 fontWeight: 600,
                 lineHeight: "35px",
                 width: "80%",
+                color: secondaryColor
               }}
             >
               {/* <Box component="span" sx={{ color: "#F95500" }}>
@@ -1911,7 +1966,7 @@ const ShowerSummary = ({
                       data?.selectedItem?.status ===
                       statusTypes.CUSTOMER_APPROVED
                         ? "none"
-                        : "auto", // Disable interaction
+                        : "auto",
                     opacity:
                       data?.selectedItem?.status ===
                       statusTypes.CUSTOMER_APPROVED
@@ -1925,7 +1980,7 @@ const ShowerSummary = ({
                     type={"glassAddons"}
                     selectedContent={data?.content}
                     handleChange={handleChangeHardware}
-                    // selectedContent={}
+                    colorData={colorData}
                   />
                 </Box>
               </Box>
@@ -1965,6 +2020,7 @@ const ShowerSummary = ({
                       type={"hardwareAddons"}
                       selectedContent={data?.content}
                       handleChange={handleChangeHardware}
+                      colorData={colorData}
                     />
                   </Box>
                 </Box>
@@ -1995,7 +2051,7 @@ const ShowerSummary = ({
                         : 1,
                   }}
                 >
-                  {console.log(glasstypeList,'asasasaswesssd')}
+                  {console.log(glasstypeList, "asasasaswesssd")}
                   <MenuList
                     menuOptions={glasstypeList ?? []}
                     title={"Glass type"}
@@ -2005,6 +2061,7 @@ const ShowerSummary = ({
                     selectedContent={data?.content}
                     locationSettings={locationSettings}
                     handleChange={handleChangeHardware}
+                    colorData={colorData}
                   />
                 </Box>
               </Box>

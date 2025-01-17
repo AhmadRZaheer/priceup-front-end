@@ -1,4 +1,3 @@
-import imageUploader from "../../Assets/imageUploader.svg";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -6,24 +5,18 @@ import {
   Autocomplete,
   Box,
   Button,
-  Checkbox,
   Chip,
   CircularProgress,
-  FormControl,
   FormControlLabel,
-  FormGroup,
   Grid,
   Switch,
-  Tab,
-  Tabs,
   TextareaAutosize,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  useEditSetting,
-  useFetchDataSetting,
+    useFetchDataSetting,
 } from "@/utilities/ApiHooks/setting";
 import { backendURL } from "@/utilities/common";
 
@@ -33,7 +26,7 @@ import { useDropzone } from "react-dropzone";
 import InputImageIcon from "@/Assets/imageUploader.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { getDataRefetch } from "@/redux/staff";
-import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
+import CustomTabPanel from "@/components/CustomTabPanel";
 import { setLocationSettingsRefetch } from "@/redux/refetch";
 import { inputLength, inputMaxValue } from "@/utilities/constants";
 import { showSnackbar } from "@/redux/snackBarSlice";
@@ -43,6 +36,79 @@ import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 import { Delete } from "@mui/icons-material";
 import { useEditDocument } from "@/utilities/ApiHooks/common";
+import TextEditor from "../ProjectInvoices/CreateEditInvoice/EditQuotePage/TextEditor";
+
+const termsCondition = `<div style="font-family: 'Roboto', sans-serif; font-size: 17px; font-weight: 500; line-height: 25.5px; color: #6b6b6b; padding-right: 5px;">
+  <div>Last Revised: December 16, 2013</div>
+  <div>
+    Welcome to www.lorem-ipsum.info. This site is provided as a
+    service to our visitors and may be used for informational
+    purposes only. Because the Terms and Conditions contain legal
+    obligations, please read them carefully.
+  </div>
+
+  <div style="display: flex; flex-direction: column;">
+    <div>
+      <strong>1. YOUR AGREEMENT</strong> <br>
+      <span>By using this Site, you agree to be bound by, and to comply with, these Terms and Conditions. If you do not agree to these Terms and Conditions, please do not use this site. PLEASE NOTE: We reserve the right, at our sole discretion, to change, modify or otherwise alter these Terms and Conditions at any time. Unless otherwise indicated, amendments will become effective immediately. Please review these Terms and Conditions periodically. Your continued use of the Site following the posting of changes and/or modifications will constitute your acceptance of the revised Terms and Conditions and the reasonableness of these standards for notice of changes. For your information, this page was last updated as of the date at the top of these terms and conditions.</span>
+    </div>
+
+    <div>
+      <strong>2. PRIVACY</strong> <br>
+      <span>Please review our Privacy Policy, which also governs your visit to this Site, to understand our practices.</span>
+    </div>
+
+    <div>
+      <strong>3. LINKED SITES</strong> <br>
+      <span>This Site may contain links to other independent third-party Web sites ("Linked Sites"). These Linked Sites are provided solely as a convenience to our visitors. Such Linked Sites are not under our control, and we are not responsible for and do not endorse the content of such Linked Sites, including any information or materials contained on such Linked Sites. You will need to make your own independent judgment regarding your interaction with these Linked Sites.</span>
+    </div>
+
+    <div>
+      <strong>4. FORWARD LOOKING STATEMENTS</strong> <br>
+      <span>All materials reproduced on this site speak as of the original date of publication or filing. The fact that a document is available on this site does not mean that the information contained in such document has not been modified or superseded by events or by a subsequent document or filing. We have no duty or policy to update any information or statements contained on this site and, therefore, such information or statements should not be relied upon as being current as of the date you access this site.</span>
+    </div>
+
+    <div>
+      <strong>5. DISCLAIMER OF WARRANTIES AND LIMITATION OF LIABILITY</strong> <br>
+      <span>A. This site may contain inaccuracies and typographical errors. We does not warrant the accuracy or completeness of the materials or the reliability of any advice, opinion, statement or other information displayed or distributed through the site. You expressly understand and agree that: (i) Your use of the site, including any reliance on any such opinion, advice, statement, memorandum, or information contained herein, shall be at your sole risk; (ii) The site is provided on an "as is" and "as available" basis; (iii) Except as expressly provided herein we disclaim all warranties of any kind, whether express or implied, including, but not limited to implied warranties of merchantability, fitness for a particular purpose, workmanlike effort, title and non-infringement; (iv) We make no warranty with respect to the results that may be obtained from this site, the products or services advertised or offered or merchants involved; (v) Any material downloaded or otherwise obtained through the use of the site is done at your own discretion and risk; and (vi) You will be solely responsible for any damage to your computer system or for any loss of data that results from the download of any such material.</span>
+<span>B. You understand and agree that under no circumstances, including, but not limited to, negligence, shall we be liable for any direct, indirect, incidental, special, punitive or consequential damages that result from the use of, or the inability to use, any of our sites or materials or functions on any such site, even if we have been advised of the possibility of such damages. The foregoing limitations shall apply notwithstanding any failure of essential purpose of any limited remedy.</span>      </div>
+    <div>
+      <strong>6. EXCLUSIONS AND LIMITATIONS</strong> <br>
+<span>Some jurisdictions do not allow the exclusion of certain warranties or the limitation or exclusion of liability for incidental or consequential damages. Accordingly, our liability in such jurisdiction shall be limited to the maximum extent permitted by law.</span>    </div>
+
+    <div>
+      <strong>7. OUR PROPRIETARY RIGHTS</strong> <br>
+      <span>This Site and all its Contents are intended solely for personal, non-commercial use. Except as expressly provided, nothing within the Site shall be construed as conferring any license under our or any third party's intellectual property rights, whether by estoppel, implication, waiver, or otherwise. Without limiting the generality of the foregoing, you acknowledge and agree that all content available through and used to operate the Site and its services is protected by copyright, trademark, patent, or other proprietary rights. You agree not to: (a) modify, alter, or deface any of the trademarks, service marks, trade dress (collectively "Trademarks") or other intellectual property made available by us in connection with the Site; (b) hold yourself out as in any way sponsored by, affiliated with, or endorsed by us, or any of our affiliates or service providers; (c) use any of the Trademarks or other content accessible through the Site for any purpose other than the purpose for which we have made it available to you; (d) defame or disparage us, our Trademarks, or any aspect of the Site; and (e) adapt, translate, modify, decompile, disassemble, or reverse engineer the Site or any software or programs used in connection with it or its products and services. The framing, mirroring, scraping or data mining of the Site or any of its content in any form and by any method is expressly prohibited.</span>
+    </div>
+
+    <div>
+      <strong>8. INDEMNITY</strong> <br>
+      <span>By using the Site websites you agree to indemnify us and affiliated entities (collectively "Indemnities") and hold them harmless from any and all claims and expenses, including (without limitation) attorney's fees, arising from your use of the Site websites, your use of the Products and Services, or your submission of ideas and/or related materials to us or from any person's use of any ID, membership or password you maintain with any portion of the Site, regardless of whether such use is authorized by you.</span>
+    </div>
+
+    <div>
+      <strong>9. COPYRIGHT AND TRADEMARK NOTICE</strong> <br>
+      <span>Except our generated dummy copy, which is free to use for private and commercial use, all other text is copyrighted. generator.lorem-ipsum.info © 2013, all rights reserved.</span>
+    </div>
+
+    <div>
+      <strong>10. INTELLECTUAL PROPERTY INFRINGEMENT CLAIMS</strong> <br>
+      <span>It is our policy to respond expeditiously to claims of intellectual property infringement. We will promptly process and investigate notices of alleged infringement and will take appropriate actions under the Digital Millennium Copyright Act ("DMCA") and other applicable intellectual property laws. Notices of claimed infringement should be directed to: generator.lorem-ipsum.info 126 Electricov St. Kiev, Kiev 04176 Ukraine contact@lorem-ipsum.info</span>
+    </div>
+
+    <div>
+      <strong>11. PLACE OF PERFORMANCE</strong> <br>
+      <span>This Site is controlled, operated and administered by us from our office in Kiev, Ukraine. We make no representation that materials at this site are appropriate or available for use at other locations outside of the Ukraine and access to them from territories where their contents are illegal is prohibited. If you access this Site from a location outside of the Ukraine, you are responsible for compliance with all local laws.</span>
+    </div>
+    <div>
+      <strong>12. GENERAL</strong> <br>
+      <span>A. If any provision of these Terms and Conditions is held to be invalid or unenforceable, the provision shall be removed (or interpreted, if possible, in a manner as to be enforceable), and the remaining provisions shall be enforced. Headings are for reference purposes only and in no way define, limit, construe or describe the scope or extent of such section. Our failure to act with respect to a breach by you or others does not waive our right to act with respect to subsequent or similar breaches. These Terms and Conditions set forth the entire understanding and agreement between us with respect to the subject matter contained herein and supersede any other agreement, proposals and communications, written or oral, between our representatives and you with respect to the subject matter hereof, including any terms and conditions on any of customer's documents or purchase orders.</span>
+      <span> B. No Joint Venture, No Derogation of Rights.You agree that no joint venture, partnership, employment, or agency relationship exists between you and us as a result of these Terms and Conditions or your use of the Site. Our performance of these Terms and Conditions is subject to existing laws and legal process, and nothing contained herein is in derogation of our right to comply with governmental, court and law enforcement requests or requirements relating to your use of the Site or information provided to or gathered by us with respect to such use.</span>
+      </div>
+  </div>
+</div>
+
+`;
 
 const CampanySetting = () => {
   const dispatch = useDispatch();
@@ -57,9 +123,10 @@ const CampanySetting = () => {
     isSuccess: SuccessForEdit,
   } = useEditDocument();
   const [selectedImage, setSelectedImage] = useState(null);
+
   const CustomerU_change = useSelector(getDataRefetch);
   const [value, setValue] = React.useState(0);
-
+  const [termsText, setTermsText] = useState("");
   const handleChange = (newValue) => {
     setValue(newValue);
   };
@@ -72,11 +139,21 @@ const CampanySetting = () => {
   useEffect(() => {
     reFetchDataSetting();
   }, [CustomerU_change]);
+  useEffect(() => {
+    if (settingData) {
+      setTermsText(
+        settingData?.presentationSettings?.termsAndConditions?.length
+          ? settingData?.presentationSettings?.termsAndConditions
+          : termsCondition
+      );
+    }
+  }, [settingData]);
 
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
   };
+
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     showers: Yup.object().shape({
@@ -84,14 +161,12 @@ const CampanySetting = () => {
         .required("Max door width is required")
         .min(1, "Door width must be at least 1")
         .max(39, "Door width cannot exceed 39"),
-      // add validation for other nested fields if necessary
     }),
     wineCellars: Yup.object().shape({
       doorWidth: Yup.number()
         .required("Max door width is required")
         .min(1, "Door width must be at least 1")
         .max(39, "Door width cannot exceed 39"),
-      // add validation for other nested fields if necessary
     }),
   });
   const { getInputProps } = useDropzone({ onDrop });
@@ -150,14 +225,7 @@ const CampanySetting = () => {
         pricingFactor: settingData?.mirrors?.pricingFactor,
         hourlyRate: settingData?.mirrors?.hourlyRate,
         pricingFactorStatus: settingData?.mirrors?.pricingFactorStatus,
-        // floatingSmall: settingData?.mirrors?.floatingSmall,
-        // floatingMedium: settingData?.mirrors?.floatingMedium,
-        // floatingLarge: settingData?.mirrors?.floatingLarge,
-        // sandBlastingMultiplier: settingData?.mirrors?.sandBlastingMultiplier,
-        // bevelStrip: settingData?.mirrors?.bevelStrip,
-        // safetyBacking: settingData?.mirrors?.safetyBacking,
         holeMultiplier: settingData?.mirrors?.holeMultiplier ?? 0,
-        // outletMultiplier: settingData?.mirrors?.outletMultiplier,
         lightHoleMultiplier: settingData?.mirrors?.lightHoleMultiplier ?? 0,
         notchMultiplier: settingData?.mirrors?.notchMultiplier ?? 0,
         singleOutletCutoutMultiplier:
@@ -168,9 +236,6 @@ const CampanySetting = () => {
           settingData?.mirrors?.tripleOutletCutoutMultiplier ?? 0,
         quadOutletCutoutMultiplier:
           settingData?.mirrors?.quadOutletCutoutMultiplier ?? 0,
-        // singleDuplexMultiplier: settingData?.mirrors?.singleDuplexMultiplier,
-        // doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
-        // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
         glassTypesForComparison:
           settingData?.mirrors?.glassTypesForComparison || [],
       },
@@ -259,6 +324,7 @@ const CampanySetting = () => {
           description:
             settingData?.presentationSettings?.wineCellar?.description ?? "",
         },
+        termsAndConditions: termsText ?? termsCondition,
       },
     },
     enableReinitialize: true,
@@ -269,16 +335,6 @@ const CampanySetting = () => {
     },
   });
 
-  // const fileInputRef = useRef(null);
-
-  // const handleFileUpload = () => {
-  //   fileInputRef.current.click();
-  // };
-
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   setSelectedImage(URL.createObjectURL(file));
-  // };
   const handleEditSetting = (props) => {
     const formData = new FormData();
     if (props?.image) {
@@ -367,10 +423,6 @@ const CampanySetting = () => {
           flexDirection: "column",
           gap: 3,
           backgroundColor: "#F6F5FF",
-          // height: "98vh",
-          // paddingLeft: 3.5,
-          // pr: 3.5,
-          // pt: 2.4,
         }}
       >
         {/* setting */}
@@ -455,11 +507,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Box sx={{ height: 60 }}>
-                        <img
-                          width={60}
-                          src={InputImageIcon}
-                          alt="icon of input image"
-                        />
+                        <img width={60} src={InputImageIcon} alt="not found" />
                       </Box>
                       <span
                         style={{
@@ -637,35 +685,18 @@ const CampanySetting = () => {
               Presentation Settings
             </Button>
           </Box>
-          {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
-            "& .MuiTab-root.Mui-selected": {
-              color: '#8477DA'
-            }, "& .MuiTabs-indicator": {
-              backgroundColor: "#8477DA",
-              height: 3,
-            },
-          }}>
-            <Tab label="Showers" sx={{
-              fontSize: '15px', fontWeight: 600
-            }} {...a11yProps(0)} />
-            <Tab label="Mirrors" sx={{ fontSize: '15px', fontWeight: 600 }} {...a11yProps(1)} />
-          </Tabs> */}
         </Box>
         {/** end */}
         {/** Showers tab */}
         <CustomTabPanel value={value} index={0}>
           <Box
             sx={{
-              // borderTop: "1px solid #EAECF0",
-              // borderBottom: "1px solid #EAECF0",
-              // paddingTop: 0,
               paddingY: 1,
               display: "flex",
               flexDirection: "column",
               gap: 2,
             }}
           >
-            {/* <Typography variant="h6">Max Door Width</Typography> */}
             <Box
               sx={{
                 display: "flex",
@@ -793,8 +824,6 @@ const CampanySetting = () => {
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              // maxHeight: "38vh",
-              // overflowY: "scroll",
               pt: 1,
             }}
           >
@@ -1238,7 +1267,6 @@ const CampanySetting = () => {
                     <TextField
                       {...params}
                       className="custom-textfield"
-                      // label="Select Glass Type"
                       placeholder={
                         formik.values.showers.glassTypesForComparison?.length >
                         0
@@ -1257,7 +1285,6 @@ const CampanySetting = () => {
         <CustomTabPanel value={value} index={1}>
           <Box
             sx={{
-              // borderTop: "1px solid #EAECF0",
               borderBottom: "1px solid #EAECF0",
               paddingY: 1,
               display: "flex",
@@ -1345,172 +1372,9 @@ const CampanySetting = () => {
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              // maxHeight: "38vh",
-              // overflowY: "scroll",
               paddingY: 1,
             }}
           >
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Floating Small</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.floatingSmall"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.floatingSmall
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Floating Medium</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.floatingMedium"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.floatingMedium
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Floating Large</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.floatingLarge"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.floatingLarge
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Sand Blasting</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.sandBlastingMultiplier"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.sandBlastingMultiplier
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Bevel Strip</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.bevelStrip"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.bevelStrip
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Bevel Strip</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.bevelStrip"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.bevelStrip
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Safety Backing</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.safetyBacking"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.safetyBacking
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
             <Box
               sx={{
                 display: "flex",
@@ -1536,29 +1400,6 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box>
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Outlet</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.outletMultiplier"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.outletMultiplier
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
             <Box
               sx={{
                 display: "flex",
@@ -1730,7 +1571,7 @@ const CampanySetting = () => {
                   )}
                   onChange={(event, newValue) =>
                     handleChangeGlass("mirrors", newValue)
-                  } // Pass 'mirrors' here
+                  }
                   renderTags={(value, getTagProps) =>
                     value.map((option, index) => (
                       <Chip
@@ -1748,7 +1589,6 @@ const CampanySetting = () => {
                     <TextField
                       {...params}
                       className="custom-textfield"
-                      // label="Select Glass Type"
                       placeholder={
                         formik.values.mirrors.glassTypesForComparison?.length >
                         0
@@ -1760,75 +1600,6 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box>
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Single Duplex</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.singleDuplexMultiplier"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.singleDuplexMultiplier
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Double Duplex</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.doubleDuplexMultiplier"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.doubleDuplexMultiplier
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Triple Duplex</Typography>
-              <Box mr={19}>
-                <CustomInputField
-                  type="number"
-                  inputProps={{
-                    min: 0
-                  }}
-                  name="mirrors.tripleDuplexMultiplier"
-                  size="small"
-                  value={
-                    formik.values?.mirrors?.tripleDuplexMultiplier
-                  }
-                  onChange={formik.handleChange}
-                />
-              </Box>
-            </Box> */}
           </Box>
         </CustomTabPanel>
         {/** end */}
@@ -1837,16 +1608,12 @@ const CampanySetting = () => {
         <CustomTabPanel value={value} index={2}>
           <Box
             sx={{
-              // borderTop: "1px solid #EAECF0",
-              // borderBottom: "1px solid #EAECF0",
-              // paddingTop: 0,
               paddingY: 1,
               display: "flex",
               flexDirection: "column",
               gap: 2,
             }}
           >
-            {/* <Typography variant="h6">Max Door Width</Typography> */}
             <Box
               sx={{
                 display: "flex",
@@ -1979,8 +1746,6 @@ const CampanySetting = () => {
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              // maxHeight: "38vh",
-              // overflowY: "scroll",
               pt: 1,
             }}
           >
@@ -2405,7 +2170,7 @@ const CampanySetting = () => {
                   )}
                   onChange={(event, newValue) =>
                     handleChangeGlass("wineCellars", newValue)
-                  } // Pass 'wineCellars' here
+                  }
                   renderTags={(value, getTagProps) =>
                     value.map((option, index) => (
                       <Chip
@@ -2423,7 +2188,6 @@ const CampanySetting = () => {
                     <TextField
                       {...params}
                       className="custom-textfield"
-                      // label="Select Glass Type"
                       placeholder={
                         formik.values.wineCellars.glassTypesForComparison
                           ?.length > 0
@@ -2439,142 +2203,6 @@ const CampanySetting = () => {
         </CustomTabPanel>
         {/** Pdf Setting tab */}
         <CustomTabPanel value={value} index={3}>
-          {/* <Box
-            sx={{
-              // borderTop: "1px solid #EAECF0",
-              // borderBottom: "1px solid #EAECF0",
-              // paddingTop: 0,
-              paddingY: 1,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          > */}
-          {/* <Typography variant="h6">Max Door Width</Typography> */}
-          {/* <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Max Door Width</Typography>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <p className="explain">
-                  Door width value must be in range between 1-39{" "}
-                </p>
-                <CustomInputField
-                  type="number"
-                  name="wineCellars.doorWidth"
-                  size="small"
-                  value={formik.values?.wineCellars?.doorWidth}
-                  onChange={(e) => {
-                    if (e.target.value.length <= 2) {
-                      formik.handleChange(e);
-                    }
-                  }}
-                  inputProps={{
-                    min: 1,
-                    max: 39,
-                    step: "any",
-                    style: { width: "200px" },
-                  }}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched?.wineCellars?.doorWidth &&
-                    Boolean(formik.errors?.wineCellars?.doorWidth)
-                  }
-                  helperText={
-                    formik.touched?.wineCellars?.doorWidth &&
-                    formik.errors?.wineCellars?.doorWidth
-                  }
-                />
-              </Box>
-            </Box> */}
-          {/* </Box> */}
-          {/* <Box
-            sx={{
-              borderTop: "1px solid #EAECF0",
-              borderBottom: "1px solid #EAECF0",
-              paddingY: 1,
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            <Typography variant="h6">Misc. Pricing</Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Pricing factor</Typography>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <p className="explain">Factor to multiply price </p>
-                <CustomInputField
-                  type="number"
-                  name="wineCellars.miscPricing.pricingFactor"
-                  size="small"
-                  value={formik.values?.wineCellars?.miscPricing?.pricingFactor}
-                  InputProps={{
-                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
-                  }}
-                  onChange={(e) => {
-                    if (e.target.value.length <= inputLength) {
-                      formik.handleChange(e);
-                    }
-                  }}
-                />
-
-                <Box sx={{ ml: 2 }}>
-                  <CustomToggle
-                    name="wineCellars.miscPricing.pricingFactorStatus"
-                    checked={
-                      formik.values?.wineCellars?.miscPricing
-                        ?.pricingFactorStatus || false
-                    }
-                    onChange={formik.handleChange}
-                  />
-                </Box>
-              </Box>
-            </Box>
-
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography>Default Hourly rate</Typography>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Typography>
-                  Hourly rates to be used for labour price
-                </Typography>
-                <CustomInputField
-                  type="number"
-                  name="wineCellars.miscPricing.hourlyRate"
-                  size="small"
-                  value={formik.values?.wineCellars?.miscPricing?.hourlyRate}
-                  InputProps={{
-                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
-                  }}
-                  onChange={(e) => {
-                    if (e.target.value.length <= inputLength) {
-                      formik.handleChange(e);
-                    }
-                  }}
-                />
-                <FormControlLabel
-                  sx={{ visibility: "hidden" }}
-                  control={<Switch color="success" />}
-                  label={"active"}
-                />
-              </Box>
-            </Box>
-          </Box> */}
           <Typography variant="h6" sx={{ paddingTop: 1 }}>
             Pdf Settings
           </Typography>
@@ -2583,8 +2211,6 @@ const CampanySetting = () => {
               display: "flex",
               flexDirection: "column",
               gap: 2,
-              // maxHeight: "38vh",
-              // overflowY: "scroll",
               pt: 1,
             }}
           >
@@ -2787,7 +2413,6 @@ const CampanySetting = () => {
                     gap: 1,
                     border: "1px solid #ccc",
                     width: "65%",
-                    // background:'white'
                   }}
                 >
                   <Grid
@@ -3189,6 +2814,24 @@ const CampanySetting = () => {
                     }
                     onChange={formik.handleChange}
                   />
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+              <Typography variant="h5" fontWeight={"bold"}>
+                Terms & Conditions
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  pt: 1.5,
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
+                <Box sx={{ width: "100%" }}>
+                  <TextEditor text={termsText} setText={setTermsText} />
                 </Box>
               </Box>
             </Box>

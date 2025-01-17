@@ -2,11 +2,13 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import "./style.scss";
 import GlassServeice from "../../Assets/CustomerLandingImages/Mantanance.jpeg";
-import TimerLogo from "@/Assets/CustomerLandingImages/12.png";
-import DailyLog from "@/Assets/CustomerLandingImages/13.png";
-import Routine from "@/Assets/CustomerLandingImages/14.png";
+import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import ManageHistoryOutlinedIcon from "@mui/icons-material/ManageHistoryOutlined";
 
 const ManainanceSection = ({ data }) => {
+  const primaryColor = data?.content?.colorSection?.primary;
+  const secondaryColor = data?.content?.colorSection?.secondary;
   return (
     <Box
       sx={{
@@ -25,15 +27,15 @@ const ManainanceSection = ({ data }) => {
         <Box sx={{ width: "100%", display: "flex", gap: 3 }}>
           <Box sx={{ width: "50%" }}>
             <Box>
-              <Typography className="maintainTxt">Maintenance</Typography>
+              <Typography className="maintainTxt" sx={{color:primaryColor,borderColor:primaryColor}}>Maintenance</Typography>
             </Box>
-            <Typography className="maintainHead" sx={{ pt: 0.5 }}>
+            <Typography className="maintainHead" sx={{ pt: 0.5,color:secondaryColor }}>
               Glass & shower maintenance
             </Typography>
           </Box>
           <Box sx={{ width: "50%", display: "flex", justifyContent: "end" }}>
             <Box sx={{ width: "75%" }}>
-              <Typography className="maintainDesc">
+              <Typography className="maintainDesc" sx={{ color:secondaryColor }}>
                 Please note, acid etched/frosted glass is extremely susceptible
                 to fingerprints and spotting due to the oil on your hands and
                 other environmental factors such as steam.
@@ -62,17 +64,30 @@ const ManainanceSection = ({ data }) => {
                 gap: "12px",
               }}
             >
-              <Box sx={{ textAlign: "center" }}>
-                <img
+              <Box
+                sx={{
+                  borderRadius: "50%",
+                  background:primaryColor,
+                  height: "53px",
+                  width: "54px",
+                  padding: "14px",
+                  alignSelf: "center",
+                  textAlign: "center",
+                }}
+              >
+                <AccessTimeOutlinedIcon
+                  sx={{ fontSize: "50px", color:secondaryColor }}
+                />
+                {/* <img
                   src={TimerLogo}
                   alt="not"
                   style={{
                     borderRadius: "50%",
-                    background: "#F95500",
+                    background:primaryColor,
                     height: "60px",
                     padding: "4px",
                   }}
-                />
+                /> */}
               </Box>
               <Typography className="maintaainCardTitle" sx={{ px: 4 }}>
                 {data?.content?.section7?.card1?.text1 ??
@@ -96,15 +111,21 @@ const ManainanceSection = ({ data }) => {
                 gap: "12px",
               }}
             >
-              <Box sx={{ textAlign: "center" }}>
-                <img
-                  src={DailyLog}
-                  alt="not"
-                  style={{
-                    borderRadius: "50%",
-                    background: "#F95500",
-                    height: "60px",
-                    padding: "14px",
+              <Box
+                sx={{
+                  borderRadius: "50%",
+                  background:primaryColor,
+                  height: "53px",
+                  width: "54px",
+                  padding: "14px",
+                  alignSelf: "center",
+                  textAlign: "center",
+                }}
+              >
+                <ManageHistoryOutlinedIcon
+                  sx={{
+                    fontSize: "50px",
+                    color:secondaryColor,
                   }}
                 />
               </Box>
@@ -129,16 +150,20 @@ const ManainanceSection = ({ data }) => {
                 gap: "12px",
               }}
             >
-              <Box sx={{ textAlign: "center" }}>
-                <img
-                  src={Routine}
-                  alt="not"
-                  style={{
-                    borderRadius: "50%",
-                    background: "#F95500",
-                    height: "60px",
-                    padding: "14px",
-                  }}
+              <Box
+                sx={{
+                  borderRadius: "50%",
+                  background:primaryColor,
+                  height: "53px",
+                  width: "54px",
+                  padding: "14px",
+                  alignSelf: "center",
+                  textAlign: "center",
+                }}
+              >
+               
+                <EventAvailableOutlinedIcon
+                  sx={{ fontSize: "50px", color:secondaryColor }}
                 />
               </Box>
               <Typography className="maintaainCardTitle" sx={{ px: 4 }}>

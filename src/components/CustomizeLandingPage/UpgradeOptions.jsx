@@ -6,6 +6,7 @@ import Imag2 from "../../Assets/CustomerLandingImages/3.png";
 import { backendURL } from "@/utilities/common";
 
 const UpgradeOPtions = ({ data }) => {
+  const primaryColor = data?.content?.colorSection?.primary;
   return (
     <Container maxWidth="lg" sx={{ pb: 8, pt: 8 }}>
       <Typography className="optionHeading" sx={{ width: "60%" }}>
@@ -32,7 +33,7 @@ const UpgradeOPtions = ({ data }) => {
               gap: 5,
             }}
           >
-            <Typography className="optionHead">
+            <Typography className="optionHead" sx={{ color: primaryColor }}>
               {data?.content?.section8?.product?.title ??
                 "GCS ARMOR THE ULTIMATE GLASS PROTECTION SOLUTION"}{" "}
             </Typography>

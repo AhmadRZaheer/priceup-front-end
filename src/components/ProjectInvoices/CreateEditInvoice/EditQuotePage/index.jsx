@@ -41,7 +41,7 @@ import Imag2 from "@/Assets/CustomerLandingImages/3.png";
 import LimitationImg from "@/Assets/CustomerLandingImages/LimitationImg.svg";
 import infoBgHeaderImage from "@/Assets/CustomerLandingImages/WhyChoice.svg";
 import TextEditor from "./TextEditor";
-import RichTextEditor from "react-rte";
+import CustomToggle from "@/components/ui-components/Toggle";
 
 const accordionDefaultData = [
   {
@@ -91,7 +91,7 @@ const claimDefaultData = [
     desc: "1970 17th Avenue (831) 353-6486 | santacruz@gcs.glass",
   },
 ];
-const  WarrantyText = `
+const WarrantyText = `
           <h2 style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 700; line-height: 24px; color: white; padding-bottom: 32px; padding-top: 40px;">
             What Our Warranty Covers
           </h2>
@@ -115,8 +115,7 @@ const  WarrantyText = `
           <p style="font-family: 'Poppins', sans-serif; font-size: 24px; line-height: 24px; font-weight: 700; color: white; padding-top: 16px;">
             Note: This warranty is non-transferable unless otherwise specified.
           </p>
-        `
-
+        `;
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -140,7 +139,9 @@ const EditQuoteInvoice = () => {
     refetch: logsRefetch,
     isFetching: logsFetching,
   } = useFetchAllDocuments(`${backendURL}/logs?resource_id=${selectedItemId}`);
-    const [warrantyText, setWarrantyText] = useState(singleItemData?.content?.section4?.description ?? WarrantyText);
+  const [warrantyText, setWarrantyText] = useState(
+    singleItemData?.content?.section4?.description ?? WarrantyText
+  );
   const WinelistData = useSelector(getWineCellarsHardware);
   const MirrorsHardwareList = useSelector(getMirrorsHardware);
   const ShowerHardwareList = useSelector(getListData);
@@ -158,7 +159,6 @@ const EditQuoteInvoice = () => {
   const [claimData, setClaimData] = useState(
     singleItemData?.content?.section6?.claimData ?? claimDefaultData
   );
- 
   const [copyLink, setCopyLink] = useState(false);
   const handleCopyPreview = (value) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -179,28 +179,6 @@ const EditQuoteInvoice = () => {
         });
     } else {
       alert(`Unsecure Connection:\nPlease copy the below url \n${value ?? ""}`);
-      // Fallback for older browsers
-      // const textarea = document.createElement("textarea");
-      // textarea.value = value ?? "";
-      // textarea.style.position = "fixed"; // Prevent scrolling
-      // document.body.appendChild(textarea);
-      // textarea.focus();
-      // textarea.select();
-
-      // try {
-      //   document.execCommand("copy");
-      //   setCopyLink(true);
-      //   dispatch(
-      //     showSnackbar({ message: "Link Copied", severity: "success" })
-      //   );
-      //   setTimeout(() => {
-      //     setCopyLink(false);
-      //   }, 6000);
-      // } catch (err) {
-      //   console.error("Fallback: Failed to copy text using execCommand:", err);
-      // } finally {
-      //   document.body.removeChild(textarea);
-      // }
     }
   };
 
@@ -217,7 +195,9 @@ const EditQuoteInvoice = () => {
       setClaimData(
         singleItemData?.content?.section6?.claimData ?? claimDefaultData
       );
-      setWarrantyText(singleItemData?.content?.section4?.description ?? WarrantyText)
+      setWarrantyText(
+        singleItemData?.content?.section4?.description ?? WarrantyText
+      );
     }
   }, [singleItemData]);
 
@@ -294,6 +274,12 @@ const EditQuoteInvoice = () => {
             [],
         },
       },
+      colorSection: {
+        primary: singleItemData?.content?.colorSection?.primary ?? "#F95500",
+        secondary:
+          singleItemData?.content?.colorSection?.secondary ?? "#FFFFFF",
+        default: singleItemData?.content?.colorSection?.default ?? "#000000",
+      },
       section1: {
         text1:
           singleItemData?.content?.section1?.text1 ||
@@ -308,18 +294,22 @@ const EditQuoteInvoice = () => {
           description:
             singleItemData?.content?.section2?.shower?.description ??
             locationPresentationSettings?.shower?.description,
+          status: singleItemData?.content?.section2?.shower?.status ?? false,
         },
         mirror: {
           images: singleItemData?.content?.section2?.mirror?.images ?? [],
           description:
             singleItemData?.content?.section2?.mirror?.description ??
             locationPresentationSettings?.mirror?.description,
+          status: singleItemData?.content?.section2?.mirror?.status ?? false,
         },
         wineCellar: {
           images: singleItemData?.content?.section2?.wineCellar?.images ?? [],
           description:
             singleItemData?.content?.section2?.wineCellar?.description ??
             locationPresentationSettings?.wineCellar?.description,
+          status:
+            singleItemData?.content?.section2?.wineCellar?.status ?? false,
         },
       },
       section3: {
@@ -332,6 +322,7 @@ const EditQuoteInvoice = () => {
           singleItemData?.content?.section3?.description ||
           "Founded in 2013 in Phoenix Arizona, GCS has had a tremendous amount of success due to our “can do it” attitude along with our innovative approach to every aspect of the business.",
         bgimage: singleItemData?.content?.section3?.bgimage,
+        status: singleItemData?.content?.section3?.status ?? false,
         card1: {
           text1:
             singleItemData?.content?.section3?.card1?.text1 ||
@@ -369,9 +360,11 @@ const EditQuoteInvoice = () => {
         subheading:
           singleItemData?.content?.section4?.subheading ||
           "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction.",
+        status: singleItemData?.content?.section4?.status ?? false,
       },
       section5: {
         image: singleItemData?.content?.section5?.image,
+        status: singleItemData?.content?.section5?.status ?? false,
       },
       section6: {
         heading:
@@ -382,8 +375,10 @@ const EditQuoteInvoice = () => {
         bottomtext:
           singleItemData?.content?.section6?.bottomtext ||
           "At GCS Glass & Mirror, we value your trust and strive to provide only the highest-quality products and services. Thank you for choosing us to transform your spaces!",
+        status: singleItemData?.content?.section6?.status ?? false,
       },
       section7: {
+        status: singleItemData?.content?.section7?.status ?? false,
         card1: {
           text1:
             singleItemData?.content?.section7?.card1?.text1 ||
@@ -410,6 +405,7 @@ const EditQuoteInvoice = () => {
         },
       },
       section8: {
+        status: singleItemData?.content?.section8?.status ?? false,
         product: {
           title:
             singleItemData?.content?.section8?.product?.title ||
@@ -423,6 +419,12 @@ const EditQuoteInvoice = () => {
         },
         image1: singleItemData?.content?.section8?.image1,
         image2: singleItemData?.content?.section8?.image2,
+      },
+      section9: {
+        status: singleItemData?.content?.section9?.status ?? false,
+      },
+      section10: {
+        status: singleItemData?.content?.section10?.status ?? false,
       },
     },
     validationSchema,
@@ -450,6 +452,11 @@ const EditQuoteInvoice = () => {
       additionalUpgrades: values.additionalUpgrades,
       content: {
         ...singleItemData?.content,
+        colorSection: {
+          primary: values.colorSection?.primary ?? "#F95500",
+          secondary: values.colorSection?.secondary ?? "#FFFFFF",
+          default: values.colorSection?.default ?? "#000000",
+        },
         section1: {
           ...singleItemData?.content?.section1,
           text1: values.section1?.text1,
@@ -459,14 +466,17 @@ const EditQuoteInvoice = () => {
           shower: {
             ...singleItemData?.content?.section2?.shower,
             description: values?.section2?.shower?.description,
+            status: values?.section2?.shower?.status,
           },
           mirror: {
             ...singleItemData?.content?.section2?.mirror,
             description: values?.section2?.mirror?.description,
+            status: values?.section2?.mirror?.status,
           },
           wineCellar: {
             ...singleItemData?.content?.section2?.wineCellar,
             description: values?.section2?.wineCellar?.description,
+            status: values?.section2?.wineCellar?.status,
           },
         },
         section3: {
@@ -490,15 +500,18 @@ const EditQuoteInvoice = () => {
           heading: values.section3?.heading,
           subheading: values.section3?.subheading,
           description: values.section3?.description,
+          status: values.section3?.status,
         },
         section4: {
           ...singleItemData?.content?.section4,
           heading: values.section4?.heading,
           subheading: values.section4?.subheading,
-          description : warrantyText
+          description: warrantyText,
+          status: values.section4?.status,
         },
         section7: {
           ...singleItemData?.content?.section7,
+          status: values.section7?.status,
           card1: {
             text1: values.section7?.card1?.text1,
             text2: values.section7?.card1?.text2,
@@ -514,6 +527,7 @@ const EditQuoteInvoice = () => {
         },
         section8: {
           ...singleItemData?.content?.section8,
+          status: values.section8?.status,
           product: {
             title: values.section8.product.title,
             desc1: values.section8.product.desc1,
@@ -522,6 +536,7 @@ const EditQuoteInvoice = () => {
         },
         section5: {
           ...singleItemData?.content?.section5,
+          status: values.section5?.status,
           faqs: accordionData,
         },
         section6: {
@@ -529,6 +544,13 @@ const EditQuoteInvoice = () => {
           heading: values.section6?.heading,
           subheading: values.section6?.subheading,
           bottomtext: values.section6?.bottomtext,
+          status: values.section6?.status,
+        },
+        section9: {
+          status: values.section9?.status,
+        },
+        section10: {
+          status: values.section10?.status,
         },
       },
     };
@@ -576,7 +598,7 @@ const EditQuoteInvoice = () => {
   };
 
   const handleUploadEstimatesImage = async (event, key) => {
-    const image = event.target.files[0]; // Get the selected files
+    const image = event.target.files[0];
     const formData = new FormData();
     if (image) {
       formData.append("image", image);
@@ -1453,6 +1475,95 @@ const EditQuoteInvoice = () => {
                 {/* section 1 */}
                 <Box sx={{ p: 2 }}>
                   <Typography variant="h5" fontWeight={"bold"}>
+                    Theme Colors
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      width: "100%",
+                      gap: 1.5,
+                      border: "1px solid #ccc",
+                      p: 1.5,
+                      mt: 1,
+                    }}
+                  >
+                    <Box sx={{ width: "10%" }}>
+                      <Typography
+                        sx={{ fontSize: "14px", fontWeight: 500, pb: "8px" }}
+                      >
+                        Primary
+                      </Typography>
+                      <input
+                        type="color"
+                        value={formik.values.colorSection.primary}
+                        onChange={(e) =>
+                          formik.setFieldValue(
+                            "colorSection.primary",
+                            e.target.value
+                          )
+                        }
+                        style={{
+                          margin: 0,
+                          cursor: "pointer",
+                          padding: "2px",
+                          width: "100%",
+                          height: "40px",
+                        }}
+                      />
+                    </Box>
+                    <Box sx={{ width: "10%" }}>
+                      <Typography
+                        sx={{ fontSize: "14px", fontWeight: 500, pb: "8px" }}
+                      >
+                        Secondary
+                      </Typography>
+                      <input
+                        type="color"
+                        value={formik.values.colorSection.secondary}
+                        onChange={(e) =>
+                          formik.setFieldValue(
+                            "colorSection.secondary",
+                            e.target.value
+                          )
+                        }
+                        style={{
+                          width: "100%",
+                          height: "40px",
+                          margin: 0,
+                          cursor: "pointer",
+                          padding: "2px",
+                        }}
+                      />
+                    </Box>
+                    <Box sx={{ width: "10%" }}>
+                      <Typography
+                        sx={{ fontSize: "14px", fontWeight: 500, pb: "8px" }}
+                      >
+                        Background
+                      </Typography>
+                      <input
+                        type="color"
+                        value={formik.values.colorSection.default}
+                        onChange={(e) =>
+                          formik.setFieldValue(
+                            "colorSection.default",
+                            e.target.value
+                          )
+                        }
+                        style={{
+                          width: "100%",
+                          height: "40px",
+                          margin: 0,
+                          cursor: "pointer",
+                          padding: "2px",
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+                {/* section 1 */}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
                     Hero Section
                   </Typography>
                   <Box sx={{ border: "1px solid #ccc", p: 1.5, mt: 1 }}>
@@ -1538,26 +1649,21 @@ const EditQuoteInvoice = () => {
                             display: "flex",
                             flexDirection: "column",
                             gap: 1,
-                            // justifyContent: "center",
-                            // alignItems: "center",
                           }}
                         >
                           <Box
                             sx={{
                               display: "flex",
-                              // justifyContent: "center",
-                              // alignItems: "center",
-                              // padding: 3,
                               cursor: "pointer",
                             }}
                             onClick={() =>
                               document
                                 .getElementById("image-upload-logo")
                                 .click()
-                            } // Trigger the file input click
+                            }
                           >
                             <input
-                              id="image-upload-logo" // Add an ID to target this input
+                              id="image-upload-logo"
                               type="file"
                               accept="image/*"
                               multiple
@@ -1601,7 +1707,7 @@ const EditQuoteInvoice = () => {
                                   }`}
                                   width={115}
                                   height={115}
-                                  alt="section image logo"
+                                  alt="section logo"
                                   style={{
                                     border: "1px solid  #ccc",
                                     borderRadius: "10px",
@@ -1612,7 +1718,7 @@ const EditQuoteInvoice = () => {
                                   src={GCSLogo}
                                   width={120}
                                   height={120}
-                                  alt="section image logo"
+                                  alt="section  logo"
                                   style={{
                                     border: "1px solid  #ccc",
                                     borderRadius: "10px",
@@ -1653,8 +1759,6 @@ const EditQuoteInvoice = () => {
                     <Box
                       sx={{
                         display: "flex",
-                        // justifyContent: "space-around",
-                        // py: 3,
                       }}
                     >
                       {/* section background image */}
@@ -1663,8 +1767,6 @@ const EditQuoteInvoice = () => {
                           display: "flex",
                           flexDirection: "column",
                           gap: 1,
-                          // justifyContent: "center",
-                          // alignItems: "center",
                         }}
                       >
                         <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
@@ -1675,18 +1777,15 @@ const EditQuoteInvoice = () => {
                           sx={{
                             width: "100%",
                             display: "flex",
-                            // justifyContent: "center",
-                            // alignItems: "center",
-                            // padding: 3,
                           }}
                           onClick={() =>
                             document
                               .getElementById("image-upload-background")
                               .click()
-                          } // Trigger the file input click
+                          }
                         >
                           <input
-                            id="image-upload-background" // Add an ID to target this input
+                            id="image-upload-background"
                             type="file"
                             accept="image/*"
                             multiple
@@ -1753,32 +1852,6 @@ const EditQuoteInvoice = () => {
                             )}
                           </Box>
                         </Box>
-
-                        {/* <Button
-                          disabled={isLoading}
-                          variant="contained"
-                          component="label"
-                          sx={{
-                            background: "#8477DA",
-                            ":hover": {
-                              background: "#8477DA",
-                            },
-                          }}
-                        >
-                          Upload background image
-                          <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            hidden
-                            onChange={(e) =>
-                              handleImageUploadBackgroundImage(
-                                e,
-                                "content.section1.backgroundImage"
-                              )
-                            }
-                          />
-                        </Button> */}
                       </Box>
                     </Box>
                   </Box>
@@ -1908,7 +1981,6 @@ const EditQuoteInvoice = () => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    // gap: 3,
                     width: "100%",
                     pt: 2,
                   }}
@@ -1917,9 +1989,27 @@ const EditQuoteInvoice = () => {
                     <Box
                       sx={{ background: "white", p: 2, borderRadius: "5px" }}
                     >
-                      <Typography variant="h5" fontWeight={"bold"}>
-                        Shower Gallery
-                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography variant="h5" fontWeight={"bold"}>
+                          Shower Gallery
+                        </Typography>
+                        <CustomToggle
+                          title={"Active Status"}
+                          isText={false}
+                          checked={formik.values.section2.shower.status}
+                          onChange={(e) => {
+                            formik.setFieldValue(
+                              "section2.shower.status",
+                              e.target.checked
+                            );
+                          }}
+                        />
+                      </Box>
                       <Box
                         sx={{
                           display: "flex",
@@ -1984,7 +2074,7 @@ const EditQuoteInvoice = () => {
                                     <img
                                       style={{ width: "100%", height: "100%" }}
                                       src={`${backendURL}/${_image}`}
-                                      alt="section image backgroundImage"
+                                      alt="section  backgroundImage"
                                     />
                                   </Box>
                                 )
@@ -2060,9 +2150,27 @@ const EditQuoteInvoice = () => {
                     <Box
                       sx={{ background: "white", p: 2, borderRadius: "5px" }}
                     >
-                      <Typography variant="h5" fontWeight={"bold"}>
-                        Mirror Gallery
-                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography variant="h5" fontWeight={"bold"}>
+                          Mirror Gallery
+                        </Typography>
+                        <CustomToggle
+                          title={"Active Status"}
+                          isText={false}
+                          checked={formik.values.section2.mirror.status}
+                          onChange={(e) => {
+                            formik.setFieldValue(
+                              "section2.mirror.status",
+                              e.target.checked
+                            );
+                          }}
+                        />
+                      </Box>
                       <Box
                         sx={{
                           display: "flex",
@@ -2127,7 +2235,7 @@ const EditQuoteInvoice = () => {
                                     <img
                                       style={{ width: "100%", height: "100%" }}
                                       src={`${backendURL}/${_image}`}
-                                      alt="section image backgroundImage"
+                                      alt="section  backgroundImage"
                                     />
                                   </Box>
                                 )
@@ -2203,9 +2311,27 @@ const EditQuoteInvoice = () => {
                     <Box
                       sx={{ background: "white", p: 2, borderRadius: "5px" }}
                     >
-                      <Typography variant="h5" fontWeight={"bold"}>
-                        Wine Cellar Gallery
-                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography variant="h5" fontWeight={"bold"}>
+                          Wine Cellar Gallery
+                        </Typography>
+                        <CustomToggle
+                          title={"Active Status"}
+                          isText={false}
+                          checked={formik.values.section2.wineCellar.status}
+                          onChange={(e) => {
+                            formik.setFieldValue(
+                              "section2.wineCellar.status",
+                              e.target.checked
+                            );
+                          }}
+                        />
+                      </Box>
                       <Box
                         sx={{
                           display: "flex",
@@ -2272,7 +2398,7 @@ const EditQuoteInvoice = () => {
                                     <img
                                       style={{ width: "100%", height: "100%" }}
                                       src={`${backendURL}/${_image}`}
-                                      alt="section image backgroundImage"
+                                      alt="section  backgroundImage"
                                     />
                                   </Box>
                                 )
@@ -2348,9 +2474,25 @@ const EditQuoteInvoice = () => {
                 </Box>
                 {/* section 3 */}
                 <Box sx={{ p: 2 }}>
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    Info Cards
-                  </Typography>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Info Cards
+                    </Typography>
+                    <CustomToggle
+                      title={"Active Status"}
+                      isText={false}
+                      checked={formik.values.section3.status}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          "section3.status",
+                          e.target.checked
+                        );
+                      }}
+                    />
+                  </Box>
+
                   <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
                     <Box sx={{ display: "flex", gap: 2, pb: 2 }}>
                       <Box
@@ -2786,10 +2928,10 @@ const EditQuoteInvoice = () => {
                           }}
                           onClick={() =>
                             document.getElementById("info-image-upload").click()
-                          } // Trigger the file input click
+                          }
                         >
                           <input
-                            id="info-image-upload" // Add an ID to target this input
+                            id="info-image-upload"
                             type="file"
                             accept="image/*"
                             multiple
@@ -2855,12 +2997,26 @@ const EditQuoteInvoice = () => {
                 </Box>
                 {/* section 4 */}{" "}
                 <Box sx={{ p: 2 }}>
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    Craftsmanship Warranty
-                  </Typography>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Craftsmanship Warranty
+                    </Typography>
+                    <CustomToggle
+                      title={"Active Status"}
+                      isText={false}
+                      checked={formik.values.section4.status}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          "section4.status",
+                          e.target.checked
+                        );
+                      }}
+                    />
+                  </Box>
                   <Box
                     sx={{
-                      // display: "flex",
                       gap: 1,
                       border: "1px solid #ccc",
                       mt: 2,
@@ -2928,16 +3084,34 @@ const EditQuoteInvoice = () => {
                         />
                       </Box>
                     </Box>
-                    <Box sx={{width:'100%'}}>
-                    <TextEditor text={warrantyText} setText={setWarrantyText} />
-                  </Box>
+                    <Box sx={{ width: "100%" }}>
+                      <TextEditor
+                        text={warrantyText}
+                        setText={setWarrantyText}
+                      />
+                    </Box>
                   </Box>
                 </Box>
                 {/* section 5 */}
                 <Box sx={{ p: 2 }}>
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    FAQs
-                  </Typography>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      FAQs
+                    </Typography>
+                    <CustomToggle
+                      title={"Active Status"}
+                      isText={false}
+                      checked={formik.values.section5.status}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          "section5.status",
+                          e.target.checked
+                        );
+                      }}
+                    />
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -2976,10 +3150,10 @@ const EditQuoteInvoice = () => {
                           }}
                           onClick={() =>
                             document.getElementById("faqs-image-upload").click()
-                          } // Trigger the file input click
+                          }
                         >
                           <input
-                            id="faqs-image-upload" // Add an ID to target this input
+                            id="faqs-image-upload"
                             type="file"
                             accept="image/*"
                             multiple
@@ -3045,9 +3219,24 @@ const EditQuoteInvoice = () => {
                 </Box>
                 {/* section 6 */}
                 <Box sx={{ p: 2 }}>
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    File a Claim
-                  </Typography>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      File a Claim
+                    </Typography>
+                    <CustomToggle
+                      title={"Active Status"}
+                      isText={false}
+                      checked={formik.values.section6.status}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          "section6.status",
+                          e.target.checked
+                        );
+                      }}
+                    />
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -3161,9 +3350,24 @@ const EditQuoteInvoice = () => {
                 </Box>
                 {/* section 7 */}
                 <Box sx={{ p: 2 }}>
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    Maintenance Cards
-                  </Typography>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Maintenance Cards
+                    </Typography>
+                    <CustomToggle
+                      title={"Active Status"}
+                      isText={false}
+                      checked={formik.values.section7.status}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          "section7.status",
+                          e.target.checked
+                        );
+                      }}
+                    />
+                  </Box>
                   <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
                     <Box
                       sx={{
@@ -3397,9 +3601,24 @@ const EditQuoteInvoice = () => {
                 </Box>
                 {/* section 8 */}
                 <Box sx={{ p: 2 }}>
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    Glass Upgrade Product
-                  </Typography>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Glass Upgrade Product
+                    </Typography>
+                    <CustomToggle
+                      title={"Active Status"}
+                      isText={false}
+                      checked={formik.values.section8.status}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          "section8.status",
+                          e.target.checked
+                        );
+                      }}
+                    />
+                  </Box>
                   <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
                     <Box
                       sx={{
@@ -3511,7 +3730,6 @@ const EditQuoteInvoice = () => {
                             display: "flex",
                             flexDirection: "column",
                             gap: 0.2,
-                            // width: "40%",
                           }}
                         >
                           <Typography
@@ -3535,10 +3753,10 @@ const EditQuoteInvoice = () => {
                                 document
                                   .getElementById("product-image-upload")
                                   .click()
-                              } // Trigger the file input click
+                              }
                             >
                               <input
-                                id="product-image-upload" // Add an ID to target this input
+                                id="product-image-upload"
                                 type="file"
                                 accept="image/*"
                                 multiple
@@ -3605,7 +3823,6 @@ const EditQuoteInvoice = () => {
                             display: "flex",
                             flexDirection: "column",
                             gap: 0.2,
-                            // width: "40%",
                           }}
                         >
                           <Typography
@@ -3629,10 +3846,10 @@ const EditQuoteInvoice = () => {
                                 document
                                   .getElementById("product-result-image-upload")
                                   .click()
-                              } // Trigger the file input click
+                              }
                             >
                               <input
-                                id="product-result-image-upload" // Add an ID to target this input
+                                id="product-result-image-upload"
                                 type="file"
                                 accept="image/*"
                                 multiple
@@ -3696,6 +3913,48 @@ const EditQuoteInvoice = () => {
                         </Box>
                       </Box>
                     </Box>
+                  </Box>
+                </Box>
+                {/* section 9 */}
+                <Box sx={{ p: 2 }}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Terms and Conditions
+                    </Typography>
+                    <CustomToggle
+                      title={"Active Status"}
+                      isText={false}
+                      checked={formik.values.section9.status}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          "section9.status",
+                          e.target.checked
+                        );
+                      }}
+                    />
+                  </Box>
+                </Box>
+                {/* section 10 */}
+                <Box sx={{ p: 2 }}>
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography variant="h5" fontWeight={"bold"}>
+                      Signature and Payment
+                    </Typography>
+                    <CustomToggle
+                      title={"Active Status"}
+                      isText={false}
+                      checked={formik.values.section10.status}
+                      onChange={(e) => {
+                        formik.setFieldValue(
+                          "section10.status",
+                          e.target.checked
+                        );
+                      }}
+                    />
                   </Box>
                 </Box>
               </Box>
