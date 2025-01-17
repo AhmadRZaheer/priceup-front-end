@@ -2,6 +2,7 @@ import {
   EstimateCategory,
   hardwareTypes,
   logActions,
+  logResourceType,
   quoteState,
   statusTypes,
 } from "@/utilities/constants";
@@ -885,44 +886,6 @@ const ShowerSummary = ({
             data?.sqftArea
           );
 
-    // let Estimatedata = {
-    //   ...selectedHardware,
-    //   pricing: { ...selectedHardware.pricing, totalPrice: totalPrice },
-    //   status: "approve",
-    // };
-    // Estimatedata.config.cost = totalPrice;
-
-    // if (selectedHardware?.glassType) {
-    //   Estimatedata.config.config.glassType = {
-    //     type: selectedHardware.glassType.type,
-    //     thickness: selectedHardware.glassType.thickness,
-    //   };
-    // }
-    // let selectedGlassAddons = [];
-    // selectedHardware.glassAddons.forEach((item) =>
-    //   selectedGlassAddons.push(item.type)
-    // );
-    // Estimatedata.config.config.glassAddons = selectedGlassAddons;
-
-    // if (data?.category !== EstimateCategory.MIRRORS) {
-    //   let selectedHardwareAddons = [];
-    //   selectedHardware.hardwareAddons.forEach((item) =>
-    //     selectedHardwareAddons.push({ type: item.type, count: item.count })
-    //   );
-    //   Estimatedata.config.config.hardwareAddons = selectedHardwareAddons;
-    //   Estimatedata.config.config.oneInchHoles = fabricationsCount.oneInchHoles;
-    //   Estimatedata.config.config.hingeCut = fabricationsCount.hingeCut;
-    //   Estimatedata.config.config.clampCut = fabricationsCount.clampCut;
-    //   Estimatedata.config.config.notch = fabricationsCount.notch;
-    //   Estimatedata.config.config.outages = fabricationsCount.outages;
-
-    //   Estimatedata.oneInchHoles = fabricationsCount.oneInchHoles;
-    //   Estimatedata.hingeCut = fabricationsCount.hingeCut;
-    //   Estimatedata.clampCut = fabricationsCount.clampCut;
-    //   Estimatedata.notch = fabricationsCount.notch;
-    //   Estimatedata.outages = fabricationsCount.outages;
-    // }
-
     await customerDecision({
       data: {
         approveEstimate: data?.selectedItem?._id,
@@ -936,16 +899,17 @@ const ShowerSummary = ({
     });
 
     const logData = {
-      title: `${data?.selectedItem?.customerData?.name} approved the project on ${formattedDateTime}.`,
-      performer_id: data?.selectedItem?.customerData?._id,
-      performer_name: data?.selectedItem?.customerData?.name,
+      // title: `${data?.selectedItem?.customerData?.name} approved the project on ${formattedDateTime}.`,
+      // performer_id: data?.selectedItem?.customerData?._id,
+      // performer_name: data?.selectedItem?.customerData?.name,
       action: logActions.APPROVEESTIMATE,
       resource_id: id,
-      company_id: data?.selectedItem?.customerData?.company_id,
+      resource_type: logResourceType.PREVIEWLINK,
+      // company_id: data?.selectedItem?.customerData?.company_id,
     };
     activityLog({
       data: logData,
-      apiRoute: `${backendURL}/logs/save`,
+      apiRoute: `${backendURL}/logs/customer`,
     });
 
     dispatch(
@@ -954,6 +918,7 @@ const ShowerSummary = ({
         status: statusTypes.CUSTOMER_APPROVED,
       })
     );
+    refetchData();
   };
 
   // useEffect(() => {

@@ -122,9 +122,12 @@ export const projectStatus = {
   APPROVED: "approved",
 };
 export const logActions = {
-  DOWNLOADPDF: "Download Pdf",
-  APPROVEESTIMATE: "Approve Estimate",
-  APPROVEPROJECT: "Approve Project",
+  DOWNLOADPDF: "download_pdf",
+  APPROVEESTIMATE: "approve_estimate",
+  APPROVEPROJECT: "approve_project",
+};
+export const logResourceType = {
+  PREVIEWLINK: "preview_link",
 };
 
 export const statusTypes = {

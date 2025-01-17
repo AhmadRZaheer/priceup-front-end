@@ -15,7 +15,7 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
@@ -24,18 +24,17 @@ import { initializeState } from "@/redux/customerEstimateCalculation";
 const CustomLandingPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [selectedDataLoading, setSelectedDataLoading] = useState(true);
   const {
     data,
     refetch: refetchData,
     isFetching,
     isFetched,
   } = useFetchSingleDocument(`${backendURL}/landing-page-preview/${id}`);
-  const {
-    data: hardwareData,
-    refetch: refetchHardwareData,
-  } = useFetchSingleDocument(
-    `${backendURL}/landing-page-preview-additional-hardware/${data?.company_id}`
-  );
+  const { data: hardwareData, refetch: refetchHardwareData } =
+    useFetchSingleDocument(
+      `${backendURL}/landing-page-preview-additional-hardware/${data?.company_id}`
+    );
 
   useEffect(() => {
     if (id) {
@@ -44,10 +43,13 @@ const CustomLandingPage = () => {
   }, [id, refetchData]);
 
   useEffect(() => {
-    if (data) {
-      refetchHardwareData();
+    if (isFetched) {
+      if (data) {
+        refetchHardwareData();
+      }
+      setSelectedDataLoading(false);
     }
-  }, [data, refetchHardwareData]);
+  }, [data, refetchHardwareData,isFetched]);
 
   useEffect(() => {
     if (hardwareData) {
@@ -59,13 +61,15 @@ const CustomLandingPage = () => {
               estimates: data.estimateDetailArray,
               showerHardwaresList: hardwareData.showersHardware,
               mirrorHardwaresList: hardwareData.mirrorsHardware,
-              wineCellarHardwaresList: hardwareData.wineCellarsHardware
+              wineCellarHardwaresList: hardwareData.wineCellarsHardware,
             })
           );
         }
         dispatch(setListData(hardwareData.showersHardware ?? {}));
         dispatch(setMirrorsHardware(hardwareData.mirrorsHardware ?? {}));
-        dispatch(setWineCellarsHardware(hardwareData.wineCellarsHardware ?? {}));
+        dispatch(
+          setWineCellarsHardware(hardwareData.wineCellarsHardware ?? {})
+        );
         dispatch(setLocationInfo(hardwareData.locationSettings ?? {}));
       };
       initializeHardware();
@@ -112,7 +116,7 @@ const CustomLandingPage = () => {
   const handleBack = () => {
     window.location.href = `${frontendURL}:3005`;
   };
-  return !isFetched ? (
+  return selectedDataLoading ? (
     <Box
       sx={{
         p: "24px 16px",
@@ -182,13 +186,13 @@ const CustomLandingPage = () => {
         refetchData={refetchData}
         isFetched={isFetched}
         isFetching={isFetching}
-      // showerHardwaresList={hardwareAndSettings?.showerHardware}
-      // mirrorHardwaresList={hardwareAndSettings?.mirrorHardware}
-      // wineCellarHardwaresList={hardwareAndSettings?.wineCellarHardware}
-      // wineCellarLocationSettings={hardwareAndSettings?.wineCallerSetting}
-      // mirrorsLocationSettings={hardwareAndSettings?.mirrorSetting}
-      // showersLocationSettings={hardwareAndSettings?.showerSetting}
-      // pdfSettings={hardwareAndSettings?.pdfSetting}
+        // showerHardwaresList={hardwareAndSettings?.showerHardware}
+        // mirrorHardwaresList={hardwareAndSettings?.mirrorHardware}
+        // wineCellarHardwaresList={hardwareAndSettings?.wineCellarHardware}
+        // wineCellarLocationSettings={hardwareAndSettings?.wineCallerSetting}
+        // mirrorsLocationSettings={hardwareAndSettings?.mirrorSetting}
+        // showersLocationSettings={hardwareAndSettings?.showerSetting}
+        // pdfSettings={hardwareAndSettings?.pdfSetting}
       />
     </Box>
   );
