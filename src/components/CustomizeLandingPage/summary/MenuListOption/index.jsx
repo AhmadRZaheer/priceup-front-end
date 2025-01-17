@@ -37,6 +37,7 @@ const MenuList = ({
   selectedContent,
   handleChange, 
   locationSettings,
+  colorData
 }) => {
   // const selectedContent = useSelector(getContent);
   const [anchorEl, setAnchorEl] = useState(true);
@@ -153,7 +154,7 @@ const MenuList = ({
               display: "flex",
               alignItems: "center",
               gap: 1,
-              color: { sm: "#000000  ", xs: "white" },
+              color: { sm: "#000000", xs: "white" },
               // alignSelf: "flex-end",
               // py: 1.5,
             }}
@@ -221,6 +222,7 @@ const MenuList = ({
                 selectedContent={selectedContent}
                 handleChange={handleChange}
                 locationSettings={locationSettings}
+                colorData={colorData}
               />
             ))
           )}

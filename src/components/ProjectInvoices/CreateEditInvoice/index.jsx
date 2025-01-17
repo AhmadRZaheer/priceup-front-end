@@ -253,6 +253,11 @@ const ProjectInvoiceComponent = ({
       estimates: estimatesList,
       company: compantDetail,
       content: {
+        colorSection: {
+          primary: "#F95500",
+          secondary: "#FFFFFF",
+          default: "#000000",
+        },
         section2: locationPresentationSettings,
       },
       additionalUpgrades: {
@@ -505,7 +510,9 @@ const ProjectInvoiceComponent = ({
                 <Box sx={{ display: "flex" }}>
                   <Button
                     sx={{ minWidth: "auto", p: "0px !important" }}
-                    onClick={() => navigate(`/projects/${selectedProject?._id}`)}
+                    onClick={() =>
+                      navigate(`/projects/${selectedProject?._id}`)
+                    }
                   >
                     <KeyboardArrowLeftIcon
                       sx={{ fontSize: "35px", color: "black" }}

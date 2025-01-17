@@ -35,6 +35,7 @@ import {
   calculateDiscount,
   calculateTotal,
   getDecryptedToken,
+  hexToRgba,
 } from "@/utilities/common";
 import { Add, Close, ExpandMore, Remove } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
@@ -128,6 +129,9 @@ const CustomizeLandingPage = ({
   const { id } = useParams();
   const [acceptTerms, setAcceptTerms] = useState(false);
   const signaturePadRef = useRef(null);
+  const secondaryColor = selectedData?.content?.colorSection?.secondary;
+  const primaryColor = selectedData?.content?.colorSection?.primary;
+  const backgroundColor = selectedData?.content?.colorSection?.default;
   const [totalSum, SetTotalSum] = useState(0);
   const [signatureURL, setSignatureURL] = useState(null);
   const [isPadOpen, setIsPadOpen] = useState(false);
@@ -153,6 +157,7 @@ const CustomizeLandingPage = ({
     setSignatureURL(null); // Reset the signature URL
     setIsPadOpen(false);
   };
+  console.log(secondaryColor,selectedData,'asasasasqwqwqwqw')
   // const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
   // const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
   // const showersLocationSettings = useSelector(getLocationShowerSettings);
@@ -533,6 +538,7 @@ const CustomizeLandingPage = ({
                     lineHeight: "36px",
                     textAlign: "start",
                     fontFamily: '"Poppins" !important',
+                    // color: backgroundColor
                   }}
                 >
                   {selectedData?.content?.section1?.text1 ??
@@ -550,7 +556,7 @@ const CustomizeLandingPage = ({
             <Box
               sx={{
                 display: "flex",
-                background: "rgba(0, 0, 0, 0.3)",
+                background: hexToRgba(backgroundColor,0.3),
                 backdropFilter: "blur(11.899999618530273px)",
                 px: "2.5rem",
                 py: "1.25rem",
@@ -563,7 +569,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontSize: "24px",
-                    color: "#FFFFFF",
+                    color: secondaryColor,
                     lineHeight: "36px",
                     fontWeight: 500,
                     fontFamily: '"Poppins" !important',
@@ -574,7 +580,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontSize: "16px",
-                    color: "white",
+                    color: secondaryColor,
                     lineHeight: "24px",
                     fontFamily: '"Poppins" !important',
                   }}
@@ -584,7 +590,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontSize: "16px",
-                    color: "white",
+                   color: secondaryColor,
                     lineHeight: "24px",
                     fontFamily: '"Poppins" !important',
                   }}
@@ -596,7 +602,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontSize: "24px",
-                    color: "#FFFFFF",
+                   color: secondaryColor,
                     lineHeight: "36px",
                     fontWeight: 500,
                     fontFamily: '"Poppins" !important',
@@ -607,7 +613,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontSize: "16px",
-                    color: "white",
+                    color: secondaryColor,
                     lineHeight: "24px",
                     fontFamily: '"Poppins" !important',
                   }}
@@ -617,7 +623,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontSize: "16px",
-                    color: "white",
+                    color: secondaryColor,
                     lineHeight: "24px",
                     fontFamily: '"Poppins" !important',
                   }}
@@ -769,7 +775,7 @@ const CustomizeLandingPage = ({
           </Box> */}
         </Box>
       </Box>
-      <Box sx={{ background: "#000000" }}>
+      <Box sx={{ background: backgroundColor }}>
         <Container maxWidth="lg" sx={{ pb: 4, pt: 8 }}>
           {/* <Payment stripePromise={stripePromise} /> */}
           {/* <Box
@@ -992,11 +998,11 @@ const CustomizeLandingPage = ({
                   fontSize: "44px",
                   fontWeight: 600,
                   lineHeight: "62px",
-                  color: "white",
+                  color: secondaryColor,
                 }}
               >
                 Hi {selectedData?.customer?.name}, we have{" "}
-                <Box component="span" sx={{ color: "#F95500" }}>
+                <Box component="span" sx={{ color: primaryColor }}>
                   {" "}
                   {selectedData?.estimates?.length || 0} estimates
                 </Box>{" "}
@@ -1137,23 +1143,23 @@ const CustomizeLandingPage = ({
                     fontFamily: '"Poppins" !important',
                     fontSize: "28px",
                     fontWeight: 600,
-                    color: "white",
+                    color: secondaryColor,
                   }}
                 >
                   Shower estimates:{" "}
-                  <Box component="span" sx={{ color: "#F95500" }}>
+                  <Box component="span" sx={{ color: primaryColor }}>
                     {estimateTotal?.totalShowers?.length}
                   </Box>
                 </Typography>
                 {selectedData?.content?.section2?.shower?.description
                   .length && (
                   <Typography
-                    sx={{ fontSize: "18px", fontWeight: 500, color: "white" }}
+                    sx={{ fontSize: "18px", fontWeight: 500, color:secondaryColor }}
                   >
                     {selectedData?.content?.section2?.shower?.description}
                   </Typography>
                 )}
-                <Box sx={{ color: "white" }}>
+                <Box sx={{ color:secondaryColor }}>
                   {isFetched ? (
                     estimateTotal?.totalShowers?.length > 0 &&
                     estimateTotal?.totalShowers?.map((data, index) => {
@@ -1169,6 +1175,7 @@ const CustomizeLandingPage = ({
                           UpgradeOPtions={
                             selectedData?.additionalUpgrades?.shower
                           }
+                          colorData = {selectedData?.content?.colorSection}
                           // showersLocationSettings={showersLocationSettings}
                           // mirrorsLocationSettings={mirrorsLocationSettings}
                           // wineCellarLocationSettings={
@@ -1186,12 +1193,14 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
-                {selectedData?.content?.section2?.shower && (
-                  <CustomSwiper
-                    data={selectedData?.content?.section2?.shower}
-                    category={EstimateCategory.SHOWERS}
-                  />
-                )}
+                {selectedData?.content?.section2?.shower &&
+                  selectedData?.content?.section2?.shower?.status && (
+                    <CustomSwiper
+                      data={selectedData?.content?.section2?.shower}
+                      category={EstimateCategory.SHOWERS}
+                      colorData = {selectedData?.content?.colorSection}
+                    />
+                  )}
               </>
             )}
             {estimateTotal?.totalMirrors?.length > 0 && (
@@ -1201,16 +1210,24 @@ const CustomizeLandingPage = ({
                     fontFamily: '"Poppins" !important',
                     fontSize: "28px",
                     fontWeight: 600,
-                    color: "white",
+                    color: secondaryColor,
                     pt: 2,
                   }}
                 >
                   Mirrors estimates:{" "}
-                  <Box component="span" sx={{ color: "#F95500" }}>
+                  <Box component="span" sx={{ color: primaryColor}}>
                     {estimateTotal?.totalMirrors?.length}
                   </Box>
                 </Typography>
-                <Box sx={{ color: "white" }}>
+                {selectedData?.content?.section2?.mirror?.description
+                  .length && (
+                  <Typography
+                    sx={{ fontSize: "18px", fontWeight: 500, color: secondaryColor }}
+                  >
+                    {selectedData?.content?.section2?.mirror?.description}
+                  </Typography>
+                )}
+                <Box sx={{ color: secondaryColor}}>
                   {isFetched ? (
                     estimateTotal?.totalMirrors?.length > 0 &&
                     estimateTotal?.totalMirrors?.map((data, index) => {
@@ -1226,6 +1243,7 @@ const CustomizeLandingPage = ({
                           UpgradeOPtions={
                             selectedData?.additionalUpgrades?.mirror
                           }
+                          colorData = {selectedData?.content?.colorSection}
                           // showersLocationSettings={showersLocationSettings}
                           // mirrorsLocationSettings={mirrorsLocationSettings}
                           // wineCellarLocationSettings={
@@ -1246,12 +1264,14 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
-                {selectedData?.content?.section2?.mirror && (
-                  <CustomSwiper
-                    data={selectedData?.content?.section2?.mirror}
-                    category={EstimateCategory.MIRRORS}
-                  />
-                )}
+                {selectedData?.content?.section2?.mirror &&
+                  selectedData?.content?.section2?.mirror?.status && (
+                    <CustomSwiper
+                      data={selectedData?.content?.section2?.mirror}
+                      category={EstimateCategory.MIRRORS}
+                      colorData = {selectedData?.content?.colorSection}
+                    />
+                  )}
               </>
             )}
             {estimateTotal?.totalWineCellar?.length > 0 && (
@@ -1262,12 +1282,12 @@ const CustomizeLandingPage = ({
                     fontSize: "28px",
                     fontWeight: 600,
                     // lineHeight: "62px",
-                    color: "white",
+                    color:secondaryColor,
                     pt: 2,
                   }}
                 >
                   WineCellar estimates:{" "}
-                  <Box component="span" sx={{ color: "#F95500" }}>
+                  <Box component="span" sx={{ color: primaryColor }}>
                     {estimateTotal?.totalWineCellar?.length}
                   </Box>
                 </Typography>
@@ -1277,7 +1297,7 @@ const CustomizeLandingPage = ({
                     sx={{
                       fontSize: "18px",
                       fontWeight: 500,
-                      color: "white",
+                      color: secondaryColor,
                       maxHeight: "159px",
                       overflowY: "auto",
                     }}
@@ -1285,7 +1305,7 @@ const CustomizeLandingPage = ({
                     {selectedData?.content?.section2?.wineCellar?.description}
                   </Typography>
                 )}
-                <Box sx={{ color: "white" }}>
+                <Box sx={{ color:secondaryColor}}>
                   {isFetched ? (
                     estimateTotal?.totalWineCellar?.length > 0 &&
                     estimateTotal?.totalWineCellar?.map((data, index) => {
@@ -1301,6 +1321,7 @@ const CustomizeLandingPage = ({
                           UpgradeOPtions={
                             selectedData?.additionalUpgrades?.wineCellar
                           }
+                          colorData = {selectedData?.content?.colorSection}
                           // showersLocationSettings={showersLocationSettings}
                           // mirrorsLocationSettings={mirrorsLocationSettings}
                           // wineCellarLocationSettings={
@@ -1318,12 +1339,14 @@ const CustomizeLandingPage = ({
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                   )}
                 </Box>
-                {selectedData?.content?.section2?.wineCellar && (
-                  <CustomSwiper
-                    data={selectedData?.content?.section2?.wineCellar}
-                    category={EstimateCategory.WINECELLARS}
-                  />
-                )}
+                {selectedData?.content?.section2?.wineCellar &&
+                  selectedData?.content?.section2?.wineCellar?.status && (
+                    <CustomSwiper
+                      data={selectedData?.content?.section2?.wineCellar}
+                      category={EstimateCategory.WINECELLARS}
+                      colorData = {selectedData?.content?.colorSection}
+                    />
+                  )}
               </>
             )}
 
@@ -1400,14 +1423,14 @@ const CustomizeLandingPage = ({
                   fontSize: "28px",
                   fontWeight: 600,
                   lineHeight: "62px",
-                  color: "white",
+                  color: secondaryColor,
                   textAlign: "end",
                 }}
               >
                 Total Price is{" "}
                 <Box
                   component="span"
-                  sx={{ color: "#F95500", fontSize: "34px !important" }}
+                  sx={{ color: primaryColor, fontSize: "34px !important" }}
                 >
                   $ {totalSum?.toFixed(2)}
                 </Box>
@@ -1416,18 +1439,32 @@ const CustomizeLandingPage = ({
           </Box>
         </Container>
       </Box>
-      <ChoiceGCS data={selectedData} />
+      {selectedData?.content?.section3?.status && (
+        <ChoiceGCS data={selectedData} />
+      )}
       {/* <ServiceSection /> */}
-      <WarrantySection data={selectedData} />
-      <LimitationsSection data={selectedData} />
-      <ClaimSection data={selectedData} />
-      <ManainanceSection data={selectedData} />
-      <UpgradeOPtions data={selectedData} />
-      <AggremantCondition
-        data={selectedData}
-        acceptTerms={acceptTerms}
-        setAcceptTerms={setAcceptTerms}
-      />
+      {selectedData?.content?.section4?.status && (
+        <WarrantySection data={selectedData} />
+      )}
+      {selectedData?.content?.section5?.status && (
+        <LimitationsSection data={selectedData} />
+      )}
+      {selectedData?.content?.section6?.status && (
+        <ClaimSection data={selectedData} />
+      )}
+      {selectedData?.content?.section7?.status && (
+        <ManainanceSection data={selectedData} />
+      )}
+      {selectedData?.content?.section8?.status && (
+        <UpgradeOPtions data={selectedData} />
+      )}
+      {selectedData?.content?.section9?.status && (
+        <AggremantCondition
+          data={selectedData}
+          acceptTerms={acceptTerms}
+          setAcceptTerms={setAcceptTerms}
+        />
+      )}
 
       {/* <Container maxWidth="xl" sx={{ pb: 4 }}> */}
       {/* <CustomEditor /> */}
@@ -1691,14 +1728,17 @@ const CustomizeLandingPage = ({
           )}
         </Box>
       </Container> */}
-      <SigntureSection
-        data={selectedData}
-        refetchData={refetchData}
-        estimatePdfs={estimatePdfs}
-        acceptTerms={acceptTerms}
-        totalSum={totalSum}
-      />
-      <Box sx={{ bgcolor: "#000000", width: "100%" }}>
+      {selectedData?.content?.section10?.status && (
+        <SigntureSection
+          data={selectedData}
+          refetchData={refetchData}
+          estimatePdfs={estimatePdfs}
+          acceptTerms={acceptTerms}
+          totalSum={totalSum}
+        />
+      )}
+
+      <Box sx={{ bgcolor: backgroundColor, width: "100%" }}>
         <Box
           sx={{
             width: "90%",
@@ -1710,7 +1750,7 @@ const CustomizeLandingPage = ({
         >
           <Typography
             sx={{
-              color: "white",
+              color: secondaryColor,
               fontFamily: '"Inter" !important',
               fontSize: "24px",
               lineHeight: "26px",

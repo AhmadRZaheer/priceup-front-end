@@ -9,13 +9,14 @@ import StopWatch from "../../Assets/CustomerLandingImages/Stopwatch-Icon.png";
 import { backendURL } from "@/utilities/common";
 
 const ChoiceGCS = ({ data }) => {
+  const primaryColor = data?.content?.colorSection?.primary;
   return (
     <>
       <Container maxWidth="lg" sx={{ pb: 2.5, pt: 3.5 }}>
-        <Typography className="choiceHead">
+        <Typography className="choiceHead" sx={{color:primaryColor}}>
           {data?.content?.section3?.heading ?? "Why Choose GCS?"}
         </Typography>
-        <Typography className="choiceSubHead">
+        <Typography className="choiceSubHead" >
           {data?.content?.section3?.subheading ??
             "The Highest Quality Residential Glass Services"}
         </Typography>

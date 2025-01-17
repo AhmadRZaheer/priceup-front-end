@@ -6,11 +6,12 @@ import "./style.scss";
 import { backendURL } from "@/utilities/common";
 
 const HeaderSection = ({ selectedData,authUser }) => {
+  const backgroundColor = selectedData?.content?.colorSection?.default;
   return (
     <>
       <Box
         sx={{
-          bgcolor: "#000000",
+          bgcolor: backgroundColor,
           width: "100%",
           display: "flex",
         }}

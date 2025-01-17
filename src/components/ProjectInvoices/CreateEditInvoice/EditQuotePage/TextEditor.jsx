@@ -45,7 +45,7 @@ Quill.register(Font, true);
 const Align = Quill.import("attributors/style/align");
 Quill.register(Align, true);
 
-const TextBlock = ({text,setText}) => {
+const TextEditor = ({text,setText}) => {
 
   const [formats, setFormats] = useState({});
   const [anchorPosition, setAnchorPosition] = useState(null);
@@ -59,9 +59,9 @@ const TextBlock = ({text,setText}) => {
   useEffect(() => {
     const quill = editorRef.current?.getEditor();
 
-    if (quill) {
-      quill.focus();
-    }
+    // if (quill) {
+    //   quill.focus();
+    // }
 
     if (quill) {
       quill.on("selection-change", (range) => {
@@ -70,8 +70,8 @@ const TextBlock = ({text,setText}) => {
           // Calculate the position for the popover relative to the editor
           const container = quill.root.getBoundingClientRect();
           setAnchorPosition({
-            top:
-              container.top + bounds.top + bounds.height + window.scrollY + 50,
+            // top:
+            //   container.top + bounds.top + bounds.height + window.scrollY + 50,
             left: container.left + bounds.left + window.scrollX - 240,
           });
           const currentFormats = quill.getFormat(range);
@@ -192,9 +192,9 @@ const TextBlock = ({text,setText}) => {
   console.log(text, "texttexttexttexttext");
   return (
     <>
-      <Box>
+      {/* <Box>
         <div dangerouslySetInnerHTML={{ __html: text }} />
-      </Box>
+      </Box> */}
       <Box sx={{ border: "1px solid rgb(204, 204, 204)" }}>
         <Box>
           <Box
@@ -204,7 +204,7 @@ const TextBlock = ({text,setText}) => {
               alignItems: "center",
               gap: 1,
               padding: 0.5,
-              pointerEvents: "auto", // Allow interactions within the popover
+              pointerEvents: "auto",
               backgroundColor: "none",
               position: "relative",
             }}
@@ -380,4 +380,4 @@ const TextBlock = ({text,setText}) => {
   );
 };
 
-export default TextBlock;
+export default TextEditor;

@@ -4,7 +4,7 @@ import {
   MenuItem as MuiMenuItem,
   Tooltip,
 } from "@mui/material";
-import { backendURL } from "@/utilities/common";
+import { backendURL, hexToRgba } from "@/utilities/common";
 import { Box, Typography } from "@mui/material";
 import OptionWithCounter from "./optionWithCounter";
 import { getActiveStatus } from "@/utilities/estimatorHelper";
@@ -23,8 +23,10 @@ const MenuItem = ({
   selectedContent,
   handleChange,
   locationSettings,
+  colorData,
 }) => {
-  console.log(selectedContent, "selectedContentselectedContent");
+  const primaryColor = colorData?.primary;
+  console.log(selectedContent, "selectedContentselectedContent",primaryColor);
   const thicknessPrice = useMemo(() => {
     const price = item?.options?.find(
       (option) => option.thickness === thickness
@@ -100,6 +102,8 @@ const MenuItem = ({
   //   )?.count;
   //   return value;
   // }, [selectedContent]);
+  const primaryRgba = hexToRgba(primaryColor,0.06);
+  console.log(primaryRgba,'primaryRgbaprimaryRgba')
 
   return (
     <Tooltip
@@ -134,7 +138,7 @@ const MenuItem = ({
           sx={{
             // width: "100%",
             borderRadius: "4px",
-            border: isSelected ? "1px solid #F95500" : "1px solid #D4DBDF",
+            border: isSelected ? `1px solid ${primaryColor}` : "1px solid #D4DBDF",
             // boxShadow:
             //   "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
             py: "3px",
@@ -146,7 +150,7 @@ const MenuItem = ({
             justifyContent: "space-between",
             backgroundColor:
               // status ?
-              isSelected ? "rgba(249, 85, 0, 0.06)" : "white",
+              isSelected ? primaryRgba : "white",
             // : "#f3f5f6",
             color:
               // status ?
@@ -169,7 +173,7 @@ const MenuItem = ({
                   ? locationSettings?.miscPricing?.pricingFactor
                   : 1)} */}
             </Typography>
-            <OptionInfoModel itemData={item} />
+            <OptionInfoModel itemData={item} colorData={colorData} />
           </Box>
           <Box>
             {type === "hardwareAddons" ? (
@@ -220,7 +224,7 @@ const MenuItem = ({
               isSelected && (
                 <CheckCircle
                   sx={{
-                    color: "#F95500",
+                    color: primaryColor,
                     width: "21px",
                     height: "21px",
                     mb: "-3.9px",

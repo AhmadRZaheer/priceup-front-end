@@ -4,11 +4,14 @@ import WarrantySectionImg from "../../Assets/CustomerLandingImages/WrrantyImg.sv
 import "./style.scss";
 
 const WarrantySection = ({ data }) => {
+  const primaryColor = data?.content?.colorSection?.primary;
+  const secondaryColor = data?.content?.colorSection?.secondary;
+
   return (
     <Container maxWidth="lg" sx={{ pt: 7 }}>
       <Box
         sx={{
-          background: "#F95500",
+          background: primaryColor,
           borderRadius: "9px",
           pl: 5,
           pr: 1.5,
@@ -18,11 +21,14 @@ const WarrantySection = ({ data }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={9}>
-            <Typography className="warrantyHead">
+            <Typography className="warrantyHead" sx={{ color: secondaryColor }}>
               {data?.content?.section4?.heading ??
                 "Lifetime Craftsmanship Warranty – Our Promise to You"}
             </Typography>
-            <Typography className="warrantySubHead" sx={{ pt: 3 }}>
+            <Typography
+              className="warrantySubHead"
+              sx={{ pt: 3, color: secondaryColor }}
+            >
               {data?.content?.section4?.subheading ??
                 "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction."}
             </Typography>
@@ -31,19 +37,26 @@ const WarrantySection = ({ data }) => {
             <img src={WarrantySectionImg} alt="not" />
           </Grid>
         </Grid>
-        <Box sx={{ width: "84%",pt:2 }}>
+        <Box sx={{ width: "84%", pt: 2 }}>
           {data?.content?.section4?.description?.length ? (
             <div
               dangerouslySetInnerHTML={{
-                __html: "<script>console.log(\'This will not run!\');</script>",
+                __html: data?.content?.section4?.description,
               }}
+              style={{ color: secondaryColor }}
             />
           ) : (
             <>
-              <Typography className="wrantyText" sx={{ pb: 4, pt: 5 }}>
+              <Typography
+                className="wrantyText"
+                sx={{ pb: 4, pt: 5, color: secondaryColor }}
+              >
                 What Our Warranty Covers
               </Typography>
-              <Typography className="warrantySubHead">
+              <Typography
+                className="warrantySubHead"
+                sx={{ color: secondaryColor }}
+              >
                 At GCS Glass & Mirror, we are dedicated to ensuring your peace
                 of mind. That’s why we offer a Limited Lifetime Craftsmanship
                 Warranty. This warranty guarantees:
@@ -56,15 +69,24 @@ const WarrantySection = ({ data }) => {
                     gap: "8px",
                   }}
                 >
-                  <li className="warrantySubHead">
+                  <li
+                    className="warrantySubHead"
+                    sx={{ color: secondaryColor }}
+                  >
                     Protection against defects in materials and workmanship
                     under normal use for as long as you own the product.
                   </li>
-                  <li className="warrantySubHead">
+                  <li
+                    className="warrantySubHead"
+                    sx={{ color: secondaryColor }}
+                  >
                     A promise to repair or replace defective products free of
                     charge if your claim is valid.
                   </li>
-                  <li className="warrantySubHead">
+                  <li
+                    className="warrantySubHead"
+                    sx={{ color: secondaryColor }}
+                  >
                     Assurance that we stand behind our superior products and
                     services.
                   </li>
@@ -76,7 +98,7 @@ const WarrantySection = ({ data }) => {
                   fontSize: "24px",
                   lineHeight: "24px",
                   fontWeight: 700,
-                  color: "white",
+                  color: secondaryColor,
                   pt: 2,
                 }}
               >
