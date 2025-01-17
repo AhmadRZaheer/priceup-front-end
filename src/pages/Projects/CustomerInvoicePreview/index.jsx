@@ -35,6 +35,7 @@ const CustomerInvoicePreview = () => {
   const showerHardwaresList = useSelector(getListData);
   const mirrorHardwaresList = useSelector(getMirrorsHardware);
   const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
+  const [selectedDataLoading, setSelectedDataLoading] = useState(true);
   const dispatch = useDispatch();
   // const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
   // const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
@@ -76,6 +77,7 @@ const CustomerInvoicePreview = () => {
 
   const handleClick = async () => {
     const projectId = decodedToken?.company_id;
+
     const customerPayLoad = {
       ...selectedData?.customerPreview,
       link: `${frontendURL}/customer-landing-page-preview/${id}`,
@@ -104,24 +106,41 @@ const CustomerInvoicePreview = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedData && showerHardwaresList && mirrorHardwaresList && wineCellarHardwaresList) {
+    if (isFetched) {
+      setSelectedDataLoading(false);
+    }
+  }, [isFetched, selectedData, refetchData]);
+
+  useEffect(() => {
+    if (
+      selectedData &&
+      showerHardwaresList &&
+      mirrorHardwaresList &&
+      wineCellarHardwaresList
+    ) {
       // Abstract repeated dispatch logic into a helper function
       const initializeHardware = () => {
         if (selectedData?.estimateDetailArray?.length) {
-          console.log(wineCellarHardwaresList,'sssssss')
+          console.log(wineCellarHardwaresList, "sssssss");
           dispatch(
             initializeState({
-              estimates:selectedData.estimateDetailArray,
+              estimates: selectedData.estimateDetailArray,
               showerHardwaresList,
               mirrorHardwaresList,
-              wineCellarHardwaresList
-        })
+              wineCellarHardwaresList,
+            })
           );
         }
       };
       initializeHardware();
     }
-  }, [selectedData, dispatch,showerHardwaresList, mirrorHardwaresList, wineCellarHardwaresList]);
+  }, [
+    selectedData,
+    dispatch,
+    showerHardwaresList,
+    mirrorHardwaresList,
+    wineCellarHardwaresList,
+  ]);
 
   return (
     // <CommonLayout>
@@ -230,21 +249,7 @@ const CustomerInvoicePreview = () => {
           pt: authUser ? "68px" : "0px",
         }}
       >
-        {!isFetching && isFetched ? (
-          <CustomizeLandingPage
-            selectedData={selectedData}
-            refetchData={refetchData}
-            isFetched={isFetched}
-            isFetching={isFetching}
-          // showerHardwaresList={showerHardwaresList}
-          // mirrorHardwaresList={mirrorHardwaresList}
-          // wineCellarHardwaresList={wineCellarHardwaresList}
-          // wineCellarLocationSettings={wineCellarLocationSettings}
-          // mirrorsLocationSettings={mirrorsLocationSettings}
-          // showersLocationSettings={showersLocationSettings}
-          // pdfSettings={pdfSettings}
-          />
-        ) : (
+        {selectedDataLoading ? (
           <Box
             sx={{
               display: "flex",
@@ -255,6 +260,20 @@ const CustomerInvoicePreview = () => {
           >
             <CircularProgress size={24} />
           </Box>
+        ) : (
+          <CustomizeLandingPage
+            selectedData={selectedData}
+            refetchData={refetchData}
+            isFetched={isFetched}
+            isFetching={isFetching}
+            // showerHardwaresList={showerHardwaresList}
+            // mirrorHardwaresList={mirrorHardwaresList}
+            // wineCellarHardwaresList={wineCellarHardwaresList}
+            // wineCellarLocationSettings={wineCellarLocationSettings}
+            // mirrorsLocationSettings={mirrorsLocationSettings}
+            // showersLocationSettings={showersLocationSettings}
+            // pdfSettings={pdfSettings}
+          />
         )}
       </Box>
     </Box>

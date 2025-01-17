@@ -23,7 +23,7 @@ import {
 } from "@/utilities/ApiHooks/common";
 import { backendURL, base64ToFile } from "@/utilities/common";
 import { useParams } from "react-router-dom";
-import { logActions } from "@/utilities/constants";
+import { logActions, logResourceType } from "@/utilities/constants";
 import { getEstimatesList } from "@/redux/customerEstimateCalculation";
 import { useSelector } from "react-redux";
 
@@ -159,16 +159,17 @@ const SigntureSection = ({
       const result = await blobPdf.toBlob();
       saveAs(result, "Priceup");
       const logData = {
-        title: `${data?.customer?.name} downloaded the PDF on ${formattedDateTime}.`,
-        performer_id: data?.customer_id,
-        performer_name: data?.customer?.name,
+        // title: `${data?.customer?.name} downloaded the PDF on ${formattedDateTime}.`,
+        // performer_id: data?.customer_id,
+        // performer_name: data?.customer?.name,
         action: logActions.DOWNLOADPDF,
         resource_id: id,
-        company_id: data?.company_id,
+        // company_id: data?.company_id,
+        resource_type: logResourceType.PREVIEWLINK,
       };
       activityLog({
         data: logData,
-        apiRoute: `${backendURL}/logs/save`,
+        apiRoute: `${backendURL}/logs/customer`,
       });
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -192,16 +193,17 @@ const SigntureSection = ({
     refetchData();
 
     const logData = {
-      title: `${data?.customer?.name} approved this project at ${formattedDateTime}`,
-      performer_id: data?.customer_id,
-      performer_name: data?.customer?.name,
-      action: logActions.DOWNLOADPDF,
+      // title: `${data?.customer?.name} approved this project at ${formattedDateTime}`,
+      // performer_id: data?.customer_id,
+      // performer_name: data?.customer?.name,
+      action: logActions.APPROVEPROJECT,
       resource_id: id,
-      company_id: data?.company_id,
+      resource_type: logResourceType.PREVIEWLINK,
+      // company_id: data?.company_id,
     };
     activityLog({
       data: logData,
-      apiRoute: `${backendURL}/logs/save`,
+      apiRoute: `${backendURL}/logs/customer`,
     });
   };
   const estimateStatus = useMemo(() => {
@@ -213,7 +215,7 @@ const SigntureSection = ({
       }
     });
     return status;
-  }, [data]);
+  }, [data,estimatesList]);
 
   return (
     <Box
@@ -574,7 +576,7 @@ const SigntureSection = ({
                       lineHeight: "26px",
                       "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
-                          background: primaryColor, color: secondaryColor,
+                          background: primaryColor,
                         },
                       mt: 1,
                     }}
@@ -621,7 +623,7 @@ const SigntureSection = ({
                         width: { sm: "100%", xs: "187px" },
                         "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
-                          background: primaryColor, color: secondaryColor,
+                          background: primaryColor, 
                         },
                         textTransform: "capitalize",
                         borderRadius: 1,
@@ -647,7 +649,7 @@ const SigntureSection = ({
                         width: { sm: "100%", xs: "187px" },
                         "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
-                          background: primaryColor, color: secondaryColor,
+                          background: primaryColor, 
                         },
                         textTransform: "capitalize",
                         borderRadius: 1,
@@ -674,7 +676,6 @@ const SigntureSection = ({
                     borderRadius: "12px",
                     fontSize: "24px",
                     fontWeight: 700,
-                    // backgroundColor: "#F95500",
                     color: primaryColor,
                     lineHeight: "26px",
                     borderColor: primaryColor,
@@ -685,7 +686,6 @@ const SigntureSection = ({
                     },
                     "&.Mui-disabled": {
                       background: primaryColor,
-                      color: secondaryColor,
                     },
                   }}
                 >

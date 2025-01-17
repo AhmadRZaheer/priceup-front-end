@@ -212,7 +212,7 @@ const AggremantCondition = ({ data, acceptTerms, setAcceptTerms }) => {
           {acceptTerms || data?.status === "approve" ? (
             <Typography
               className="contionHead"
-              sx={{ pt: 3, pb: 2, color: "#f95500", textAlign: "center" }}
+              sx={{ pt: 3, pb: 2, color: primaryColor, textAlign: "center" }}
             >
               {" "}
               Terms and Conditions Accepted

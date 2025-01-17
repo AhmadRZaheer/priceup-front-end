@@ -138,11 +138,12 @@ const CreateInvoice = () => {
   };
 
   const handleCustomerUnSelect = (event) => {
+    if(event)
     event.stopPropagation();
     setSelectedCustomer(null);
     formik.setFieldValue("customer", "");
     handleProjectUnSelect(event);
-    handlePreviewUnSelect();
+    handlePreviewUnSelect(event);
   };
 
   const handleCustomerSelect = (item) => {
@@ -167,10 +168,11 @@ const CreateInvoice = () => {
   };
 
   const handleProjectUnSelect = (event) => {
+    if(event)
     event.stopPropagation();
     setSelectedProject(null);
     formik.setFieldValue("project", "");
-    handlePreviewUnSelect();
+    handlePreviewUnSelect(event);
   };
 
   const handlePreviewSelect = (item) => {
@@ -180,6 +182,7 @@ const CreateInvoice = () => {
   };
 
   const handlePreviewUnSelect = (event) => {
+    if(event)
     event.stopPropagation();
     setSelectedPreview(null);
     formik.setFieldValue("preview", "");
@@ -557,13 +560,13 @@ const CreateInvoice = () => {
                         color="neutral"
                         minRows={5}
                         maxRows={19}
-                        id="notes"
-                        name="notes"
+                        id="description"
+                        name="description"
                         placeholder="Enter Description"
                         size="large"
                         variant="outlined"
                         sx={{ padding: "10px" }}
-                        value={formik.values.notes}
+                        value={formik.values.description}
                         onChange={formik.handleChange}
                       />
                     </Box>

@@ -46,7 +46,7 @@ const SelectItemModal = ({
     };
     const handleSubmit = () => {
         setSelectedItem(item);
-        handleClose();
+        // handleClose();
     }
     useEffect(() => {
         if (itemsList && itemsList?.length) {
