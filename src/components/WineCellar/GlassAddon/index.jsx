@@ -225,8 +225,8 @@ const WineGlassAddonComponent = () => {
 
   const actionColumn = [
     {
-      field: "Cost per square inch",
-      headerName: "Cost per square inch",
+      field: "Cost per square foot",
+      headerName: "Cost per square foot",
       headerClassName: "showerHardwareHeader",
       renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 1.5,
