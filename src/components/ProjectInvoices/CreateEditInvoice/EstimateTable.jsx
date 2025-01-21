@@ -6,7 +6,6 @@ import { backendURL } from "@/utilities/common";
 import { Box, Grid, Tooltip, Typography } from "@mui/material";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { EstimateCategory } from "@/utilities/constants";
-import Pagination from "@/components/Pagination";
 
 const columns = [
   {
@@ -251,7 +250,6 @@ const columns = [
                 width: "100%",
                 display: "flex",
                 pl: 0.4,
-                // justifyContent: "center",
               }}
             >
               ---
@@ -262,8 +260,6 @@ const columns = [
     },
   },
 ];
-
-const paginationModel = { page: 0, pageSize: 5 };
 
 export default function EstimateDataList({
   projectId,
@@ -286,16 +282,10 @@ export default function EstimateDataList({
 
   // Handle row selection
   const handleSelectionChange = (selectedRowIds) => {
-    // Find the full objects of the selected rows
     const selectedData =
       estimatesList?.filter((row) => selectedRowIds.includes(row._id)) || [];
     setSelectedEstimateRows(selectedData);
-    console.log("Selected row data:", selectedData); // Log the full object
   };
-
-  const [page, setPage] = React.useState(1);
-  const itemsPerPage = 10;
-  console.log(selectedEstimateRows, "selectedEstimateRows");
 
   return (
     <>
@@ -308,23 +298,13 @@ export default function EstimateDataList({
             getRowId={(row) => row._id}
             rows={isFetched && estimatesList}
             columns={columns}
-            // initialState={{ pagination: { paginationModel } }}
-            // pageSizeOptions={[5, 10]}
             checkboxSelection
             rowHeight={70}
             sx={{ border: 0 }}
             hideFooter
             disableColumnMenu
-            onRowSelectionModelChange={handleSelectionChange} // Pass handler here
+            onRowSelectionModelChange={handleSelectionChange}
           />
-          {/* <Pagination
-            totalRecords={
-              estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
-            }
-            itemsPerPage={itemsPerPage}
-            page={page}
-            setPage={setPage}
-          /> */}
         </Paper>
       ) : (
         <Box
@@ -334,7 +314,6 @@ export default function EstimateDataList({
             overflow: "hidden",
             border: "1px solid #D0D5DD",
             m: "auto",
-            //   boxShadow:1
           }}
         >
           <Typography

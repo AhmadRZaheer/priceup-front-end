@@ -20,7 +20,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import {
-  Add,
   ContentCopy,
   DoneOutlined,
   HelpOutline as HelpOutlineIcon,
@@ -35,7 +34,6 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
@@ -49,7 +47,6 @@ export default function InvoicePage() {
 
 function InvoiceDetails() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { data, refetch, isSuccess } = useFetchSingleDocument(
     `${backendURL}/invoices/${id}`
   );
@@ -103,21 +100,8 @@ function InvoiceDetails() {
       setCopyLink(false);
     }, 50000);
   }, [copyLink]);
-  // const handleCopyPreview = (value) => {
-  //   navigator.clipboard
-  //     .writeText(value ?? "")
-  //     .then(() => {
-  //       setCopyLink(true);
-  //       showSnackbar({
-  //         message: "Link Copied",
-  //         severity: "info",
-  //       });
-  //     })
-  //     .catch((err) => console.error("Failed to copy text: ", err));
-  // };
   const handleCopyPreview = (value) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      // Modern clipboard API
       navigator.clipboard
         .writeText(value ?? "")
         .then(() => {
@@ -128,10 +112,9 @@ function InvoiceDetails() {
           console.error("Failed to copy text using clipboard API:", err);
         });
     } else {
-      // Fallback for older browsers
       const textarea = document.createElement("textarea");
       textarea.value = value ?? "";
-      textarea.style.position = "fixed"; // Prevent scrolling
+      textarea.style.position = "fixed"; 
       document.body.appendChild(textarea);
       textarea.focus();
       textarea.select();
@@ -161,19 +144,36 @@ function InvoiceDetails() {
     showers: showerHardwareList,
     mirrors: mirrorsHardwareList,
     wineCellars: wineCellarHardwareList,
-};
-const estimateListData = useMemo(() => {
+  };
+  const estimateListData = useMemo(() => {
     let result = [];
-    if (data?.estimateDetailArray?.length > 0 && hardwaresList.showers && hardwaresList.mirrors && hardwaresList.wineCellars) {
-        const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
-            data?.estimateDetailArray ?? [],
-            hardwaresList,
-            companySettings
-        );
-        result = EstimateDeatilsData ?? [];
+    if (
+      data?.estimateDetailArray?.length > 0 &&
+      hardwaresList.showers &&
+      hardwaresList.mirrors &&
+      hardwaresList.wineCellars
+    ) {
+      const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
+        data?.estimateDetailArray ?? [],
+        hardwaresList,
+        companySettings
+      );
+      result = EstimateDeatilsData ?? [];
     }
     return result;
-}, [data]);
+  }, [data]);
+
+  const InvoiceTotal = useMemo(() => {
+    return estimateListData.reduce((total, data) => {
+      if (!data.pricing) return total; 
+      const price = data.pricing.discountTotal > 0
+        ? data.pricing.discountTotal
+        : data.pricing.totalPrice;
+      return total + (price || 0);
+    }, 0);
+  }, [estimateListData,data]);
+
+  console.log(estimateListData, data, "datadatadatadatadatadatadata");
 
   return (
     <Card sx={{ pb: 4 }}>
@@ -250,28 +250,8 @@ const estimateListData = useMemo(() => {
           ) : (
             ""
           )}
-          {/* {data?.customerPreview?.link ? (
-            <Button
-              onClick={() => navigate(`customer-preview`)}
-              variant="text"
-              sx={{ color: "#978CC8",  }}
-              startIcon={<VisibilityIcon />}
-            >
-              View Quoted Landing Page
-            </Button>
-          ) : (
-            <Button
-              variant="text"
-              onClick={() => navigate(`customer-preview`)}
-              sx={{ color: "#978CC8", }}
-              startIcon={<Add />}
-            >
-              Generate Quoted Landing Page
-            </Button>
-          )} */}
         </div>
       </Box>
-      {/* <hr style={{ border: "1px solid rgb(209, 212, 219)" }} /> */}
       {/* Company and Customer Info */}
       <Box
         sx={{
@@ -293,7 +273,6 @@ const estimateListData = useMemo(() => {
               {data?.source?.companyName}
             </Box>
           </Typography>
-          {/* <Typography>License: {companyInfo.license}</Typography> */}
           {data?.source?.companyAddress && (
             <Typography sx={{ fontWeight: 500 }}>
               Company Address:
@@ -302,11 +281,7 @@ const estimateListData = useMemo(() => {
               </Box>
             </Typography>
           )}
-          {/* <Typography>{companyInfo.phone}</Typography>
-          <Typography>{companyInfo.email}</Typography>
-          <Typography>{companyInfo.website}</Typography> */}
         </Box>
-
         <Box>
           <Typography variant="h6" gutterBottom>
             Customer & Project Information
@@ -366,9 +341,6 @@ const estimateListData = useMemo(() => {
           ) : (
             ""
           )}
-          <Typography>
-            {/* Project Address: {customerInfo.projectAddress} */}
-          </Typography>
         </Box>
       </Box>
       <hr style={{ border: "1px solid rgb(209, 212, 219)" }} />
@@ -390,7 +362,7 @@ const estimateListData = useMemo(() => {
           >
             <Box>
               <Typography variant="h6" gutterBottom>
-                Description {/* <IconButton sx={{p:0.5}}> */}
+                Description
                 {editNotes ? (
                   <BorderColorOutlinedIcon
                     fontSize="20px"
@@ -417,12 +389,10 @@ const estimateListData = useMemo(() => {
                     padding: "10px",
                     borderColor: "#cccc",
                     borderRadius: "5px",
-                    // border: "none",
                     width: "60%",
                   }}
                   className="custom-textfield"
                   color="neutral"
-                  // cols={isMobile ? 38 : 50}
                   minRows={2}
                   maxRows={10}
                   id="notes"
@@ -435,9 +405,6 @@ const estimateListData = useMemo(() => {
                   onChange={handleNotesChange}
                 />
               )}
-              {/* <Typography sx={{ fontSize: "14px", pr: 4 }}>
-                {notes || ""}
-              </Typography> */}
             </Box>
             <Box>
               <Typography variant="h6" gutterBottom>
@@ -489,8 +456,8 @@ const estimateListData = useMemo(() => {
                         id="demo-select-small"
                         size="small"
                         sx={{ height: "40px" }}
-                        value={status} // Bind state to the value
-                        onChange={handleStatusChange} // Call the handler on change
+                        value={status} 
+                        onChange={handleStatusChange} 
                         fullWidth
                       >
                         <MenuItem
@@ -600,45 +567,74 @@ const estimateListData = useMemo(() => {
             <TableHead>
               <TableRow>
                 <TableCell>Category</TableCell>
+                <TableCell>Layout</TableCell>
                 <TableCell>Labor Cost</TableCell>
                 <TableCell>Glass Cost</TableCell>
                 <TableCell>Glass Addon Cost</TableCell>
                 <TableCell>Fabrication Cost</TableCell>
                 <TableCell>Hardware Cost</TableCell>
+                <TableCell>Discount</TableCell>
+                <TableCell>Profit</TableCell>
                 <TableCell align="right">Item Total</TableCell>
                 {/* <TableCell align="center"></TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
-              {estimateListData?.map((item, index) => (
-                <TableRow key={index}>
-                  <TableCell sx={{ textTransform: "capitalize" }}>
-                    {item?.category}
-                  </TableCell>
-                  <TableCell>
-                    $
-                    {(
-                      (item.pricing?.laborPrice ?? 0) +
-                      (item.pricing?.doorLaborPrice ?? 0)
-                    )?.toFixed(2) || 0}
-                  </TableCell>
-                  <TableCell>
-                    ${item.pricing?.glassPrice?.toFixed(2) || 0}
-                  </TableCell>
-                  <TableCell>
-                    ${item.pricing?.glassAddonPrice?.toFixed(2) || 0}
-                  </TableCell>
-                  <TableCell>
-                    ${item.pricing?.fabricationPrice?.toFixed(2) || 0}
-                  </TableCell>
-                  <TableCell>
-                    ${item.pricing?.hardwarePrice?.toFixed(2) || 0}
-                  </TableCell>
-                  <TableCell align="right">
-                    ${item.pricing?.totalPrice?.toFixed(2) || 0}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {estimateListData?.map((item, index) => {
+                const discountValue =
+                  item?.config?.config?.discount?.value > 0
+                    ? item?.config?.config?.discount?.value
+                    : 0;
+                const discountUnit =
+                  item?.config?.config?.discount?.unit ??
+                  item?.config?.config?.discount?.unit;
+                return (
+                  <TableRow key={index}>
+                    <TableCell sx={{ textTransform: "capitalize" }}>
+                      {item?.category}
+                    </TableCell>
+                    <TableCell sx={{ textTransform: "capitalize" }}>
+                      {item?.layout}
+                    </TableCell>
+                    <TableCell>
+                      $
+                      {(
+                        (item.pricing?.laborPrice ?? 0) +
+                        (item.pricing?.doorLaborPrice ?? 0)
+                      )?.toFixed(2) || 0}
+                    </TableCell>
+                    <TableCell>
+                      ${item.pricing?.glassPrice?.toFixed(2) || 0}
+                    </TableCell>
+                    <TableCell>
+                      ${item.pricing?.glassAddonPrice?.toFixed(2) || 0}
+                    </TableCell>
+                    <TableCell>
+                      ${item.pricing?.fabricationPrice?.toFixed(2) || 0}
+                    </TableCell>
+                    <TableCell>
+                      ${item.pricing?.hardwarePrice?.toFixed(2) || 0}
+                    </TableCell>
+                    <TableCell>
+                      {discountValue > 0
+                        ? `${discountUnit === "$" ? "$" : ""}${discountValue}${
+                            discountUnit === "%" ? "%" : ""
+                          }`
+                        : "---"}
+                    </TableCell>
+                    <TableCell>
+                      {item.pricing?.profit?.toFixed(2) || 0}%
+                    </TableCell>
+                    <TableCell align="right">
+                      $
+                      {(item.pricing?.discountTotal > 0
+                        ? item.pricing?.discountTotal
+                        : item.pricing?.totalPrice
+                      )?.toFixed(2) || 0}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
@@ -652,56 +648,11 @@ const estimateListData = useMemo(() => {
           }}
         >
           <div style={{ width: "300px" }}>
-            {/* <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography>Company Labor Costs:</Typography>
-              <Typography>${totals.laborCosts.toLocaleString()}</Typography>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography>Company Material Costs:</Typography>
-              <Typography>${totals.materialCosts.toLocaleString()}</Typography>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography>Other Company Costs:</Typography>
-              <Typography>${totals.otherCosts.toLocaleString()}</Typography>
-            </div> */}
-            {/* <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                borderTop: "1px solid #ccc",
-                paddingTop: "8px",
-                marginTop: "8px",
-              }}
-            >
-              <Typography>Total Company Costs:</Typography>
-              <Typography>${totals.totalCosts.toLocaleString()}</Typography>
-            </div>
             <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
-                color: "green",
-                fontWeight: "bold",
-              }}
-            >
-              <Typography>Estimated Gross Profit:</Typography>
-              <Typography>
-                ${totals.estimatedProfit.toLocaleString()}
-              </Typography>
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography>
-                Tax ({(totals.taxRate * 100).toFixed(0)}%):
-              </Typography>
-              <Typography>${totals.taxAmount.toLocaleString()}</Typography>
-            </div> */}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                // borderTop: "1px solid #ccc",
                 paddingTop: "8px",
-                // marginTop: "8px",
                 fontSize: "1.2em",
                 fontWeight: "bold",
               }}

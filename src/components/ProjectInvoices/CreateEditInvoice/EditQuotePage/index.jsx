@@ -129,9 +129,21 @@ const validationSchema = yup.object({
 
 const EditQuoteInvoice = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const selectedItemId = searchParams.get("item_id");
   const apiPath = `${backendURL}/projects/landing-page-preview/${selectedItemId}`;
+  const [uploadLoading, setUploadLoading] = useState({
+    logo: false,
+    background: false,
+    "content.section3.bgimage": false,
+    "content.section5.image": false,
+    "content.section8.image1": false,
+    "content.section8.image2": false,
+    "content.section2.shower.images": false,
+    "content.section2.mirror.images": false,
+    "content.section2.wineCellar.images": false,
+  });
   const { data: singleItemData, refetch: refetchSingleItem } =
     useFetchSingleDocument(apiPath);
   const {
@@ -204,8 +216,6 @@ const EditQuoteInvoice = () => {
   useEffect(() => {
     logsRefetch();
   }, []);
-
-  console.log(singleItemData, "singleItemData?.project?.projectName");
 
   const filterByShowInUpgrades = (list, key) =>
     list?.[key]?.filter((item) => item.showInUpgrades === true) || [];
@@ -378,6 +388,12 @@ const EditQuoteInvoice = () => {
         status: singleItemData?.content?.section6?.status ?? false,
       },
       section7: {
+        heading:
+          singleItemData?.content?.section7?.heading ??
+          "Glass & shower maintenance",
+        description:
+          singleItemData?.content?.section7?.description ??
+          "Please note, acid etched/frosted glass is extremely susceptible to fingerprints and spotting due to the oil on your hands and other environmental factors such as steam.",
         status: singleItemData?.content?.section7?.status ?? false,
         card1: {
           text1:
@@ -511,6 +527,8 @@ const EditQuoteInvoice = () => {
         },
         section7: {
           ...singleItemData?.content?.section7,
+          heading: values.section7?.heading,
+          description: values.section7?.description,
           status: values.section7?.status,
           card1: {
             text1: values.section7?.card1?.text1,
@@ -554,9 +572,8 @@ const EditQuoteInvoice = () => {
         },
       },
     };
-    console.log(data, "datadatadata");
     try {
-      const response = await EditInvoice({
+      await EditInvoice({
         data: data,
         apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
       });
@@ -568,49 +585,128 @@ const EditQuoteInvoice = () => {
   const handleImageUploadLogo = async (event, key) => {
     const image = event.target.files[0];
 
-    const formData = new FormData();
     if (image) {
-      formData.append("image", image);
-    }
-    formData.append("key", key);
+      setUploadLoading((prevState) => ({
+        ...prevState,
+        logo: true,
+      }));
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(image);
 
-    await EditInvoice({
-      apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
-      data: formData,
-    });
-    refetchSingleItem();
+      img.onload = async () => {
+        // Check if image dimensions are less than or equal to 100x100
+        if (img.width <= 110 && img.height <= 110) {
+          const formData = new FormData();
+          formData.append("image", image);
+          formData.append("key", key);
+
+          await EditInvoice({
+            apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
+            data: formData,
+          });
+          refetchSingleItem();
+        } else {
+          dispatch(
+            showSnackbar({
+              message: "Image dimensions must not exceed 100x100 pixels.",
+              severity: "error",
+            })
+          );
+        }
+        URL.revokeObjectURL(objectUrl);
+        setUploadLoading((prev) => ({ ...prev, logo: false }));
+      };
+
+      img.src = objectUrl;
+    }
   };
 
   const handleImageUploadBackgroundImage = async (event, key) => {
     const image = event.target.files[0];
 
-    const formData = new FormData();
     if (image) {
-      formData.append("image", image);
-    }
-    formData.append("key", key);
+      setUploadLoading((prevState) => ({
+        ...prevState,
+        background: true,
+      }));
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(image);
 
-    await EditInvoice({
-      apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
-      data: formData,
-    });
-    refetchSingleItem();
+      img.onload = async () => {
+        // Check if image dimensions are at least 700x400
+        if (img.width >= 700 && img.height >= 400) {
+          const formData = new FormData();
+          formData.append("image", image);
+          formData.append("key", key);
+
+          await EditInvoice({
+            apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
+            data: formData,
+          });
+          refetchSingleItem();
+        } else {
+          dispatch(
+            showSnackbar({
+              message: "Image dimensions must be at least 700x400 pixels.",
+              severity: "error",
+            })
+          );
+        }
+        URL.revokeObjectURL(objectUrl);
+        setUploadLoading((prevState) => ({
+          ...prevState,
+          background: false,
+        }));
+      };
+      img.src = objectUrl;
+    }
   };
 
-  const handleUploadEstimatesImage = async (event, key) => {
+  const handleUploadEstimatesImage = async (
+    event,
+    key,
+    dimension = { height: 400, width: 700 }
+  ) => {
     const image = event.target.files[0];
-    const formData = new FormData();
-    if (image) {
-      formData.append("image", image);
-    }
-    formData.append("key", key);
 
-    await EditInvoice({
-      apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
-      data: formData,
-    });
-    refetchSingleItem();
+    if (image) {
+      setUploadLoading((prevState) => ({
+        ...prevState,
+        [key]: true,
+      }));
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(image);
+
+      img.onload = async () => {
+        // Check if image dimensions are within the max dimension
+        if (img.width >= dimension.width && img.height >= dimension.height) {
+          const formData = new FormData();
+          formData.append("image", image);
+          formData.append("key", key);
+
+          await EditInvoice({
+            apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
+            data: formData,
+          });
+          refetchSingleItem();
+        } else {
+          dispatch(
+            showSnackbar({
+              message: `Image dimensions should be at least ${dimension.width}x${dimension.height} pixels to proceed.`,
+              severity: "error",
+            })
+          );
+        }
+        URL.revokeObjectURL(objectUrl);
+        setUploadLoading((prevState) => ({
+          ...prevState,
+          [key]: false,
+        }));
+      };
+      img.src = objectUrl;
+    }
   };
+
   const handleDeleteImageFromEstimate = async (
     gallery,
     removeGalleryImage,
@@ -619,17 +715,27 @@ const EditQuoteInvoice = () => {
     const galleryFiltered = gallery?.filter(
       (item) => item !== removeGalleryImage
     );
-    await EditInvoice({
-      apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
-      data: {
-        key,
-        gallery: galleryFiltered ?? [],
-        removeGalleryImage,
-      },
-    });
-    refetchSingleItem();
+    if (galleryFiltered) {
+      setUploadLoading((prevState) => ({
+        ...prevState,
+        [key]: true,
+      }));
+      await EditInvoice({
+        apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
+        data: {
+          key,
+          gallery: galleryFiltered ?? [],
+          removeGalleryImage,
+        },
+      });
+      refetchSingleItem();
+    }
+    setUploadLoading((prevState) => ({
+      ...prevState,
+      [key]: false,
+    }));
   };
-  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -641,12 +747,21 @@ const EditQuoteInvoice = () => {
     >
       <Box>
         <Box>
-          <form onSubmit={formik.handleSubmit} style={{}}>
+          <form
+            onSubmit={formik.handleSubmit}
+            style={{ position: "relative", paddingTop: "70px" }}
+          >
             <Box
               sx={{
-                p: { sm: "0px 0px 20px 0px", xs: "20px 0px 20px 0px" },
+                p: { sm: "22px 0px 20px 0px", xs: "20px 0px 20px 0px" },
                 display: "flex",
                 justifyContent: "space-between",
+                position: "fixed",
+                top: "70px",
+                width: "-webkit-fill-available",
+                marginRight: "22px",
+                zIndex: 100,
+                background: "#F6F5FF",
               }}
             >
               <Box sx={{ display: "flex" }}>
@@ -1109,7 +1224,7 @@ const EditQuoteInvoice = () => {
                           onChange={(event, newValue) => {
                             formik.setFieldValue(
                               "additionalUpgrades.shower.glassTypes",
-                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                              newValue.map((item) => item._id)
                             );
                           }}
                           renderTags={(value, getTagProps) =>
@@ -1157,7 +1272,7 @@ const EditQuoteInvoice = () => {
                           onChange={(event, newValue) => {
                             formik.setFieldValue(
                               "additionalUpgrades.shower.glassAddons",
-                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                              newValue.map((item) => item._id)
                             );
                           }}
                           renderTags={(value, getTagProps) =>
@@ -1201,7 +1316,7 @@ const EditQuoteInvoice = () => {
                           onChange={(event, newValue) => {
                             formik.setFieldValue(
                               "additionalUpgrades.shower.hardwareAddons",
-                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                              newValue.map((item) => item._id)
                             );
                           }}
                           renderTags={(value, getTagProps) =>
@@ -1251,7 +1366,7 @@ const EditQuoteInvoice = () => {
                           onChange={(event, newValue) => {
                             formik.setFieldValue(
                               "additionalUpgrades.mirror.glassTypes",
-                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                              newValue.map((item) => item._id)
                             );
                           }}
                           renderTags={(value, getTagProps) =>
@@ -1295,7 +1410,7 @@ const EditQuoteInvoice = () => {
                           onChange={(event, newValue) => {
                             formik.setFieldValue(
                               "additionalUpgrades.mirror.glassAddons",
-                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                              newValue.map((item) => item._id)
                             );
                           }}
                           renderTags={(value, getTagProps) =>
@@ -1345,7 +1460,7 @@ const EditQuoteInvoice = () => {
                           onChange={(event, newValue) => {
                             formik.setFieldValue(
                               "additionalUpgrades.wineCellar.glassTypes",
-                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                              newValue.map((item) => item._id)
                             );
                           }}
                           renderTags={(value, getTagProps) =>
@@ -1392,7 +1507,7 @@ const EditQuoteInvoice = () => {
                           onChange={(event, newValue) => {
                             formik.setFieldValue(
                               "additionalUpgrades.wineCellar.glassAddons",
-                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                              newValue.map((item) => item._id)
                             );
                           }}
                           renderTags={(value, getTagProps) =>
@@ -1436,7 +1551,7 @@ const EditQuoteInvoice = () => {
                           onChange={(event, newValue) => {
                             formik.setFieldValue(
                               "additionalUpgrades.wineCellar.hardwareAddons",
-                              newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                              newValue.map((item) => item._id)
                             );
                           }}
                           renderTags={(value, getTagProps) =>
@@ -1470,7 +1585,6 @@ const EditQuoteInvoice = () => {
                   )}
                 </Box>
               </Box>
-
               <Box>
                 {/* section 1 */}
                 <Box sx={{ p: 2 }}>
@@ -1480,7 +1594,6 @@ const EditQuoteInvoice = () => {
                   <Box
                     sx={{
                       display: "flex",
-                      width: "100%",
                       gap: 1.5,
                       border: "1px solid #ccc",
                       p: 1.5,
@@ -1595,6 +1708,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
+                          maxLength={28}
                           value={formik.values.section1.text1 || ""}
                           onChange={formik.handleChange}
                         />
@@ -1626,6 +1740,7 @@ const EditQuoteInvoice = () => {
                           size="large"
                           variant="outlined"
                           name="section1.text2"
+                          maxLength={90}
                           value={formik.values.section1.text2 || ""}
                           onChange={formik.handleChange}
                         />
@@ -1685,6 +1800,7 @@ const EditQuoteInvoice = () => {
                                 }}
                               >
                                 <IconButton
+                                  disabled={uploadLoading.logo}
                                   sx={{
                                     background: "#8477DA",
                                     color: "white",
@@ -1696,6 +1812,28 @@ const EditQuoteInvoice = () => {
                                 >
                                   <Edit sx={{ fontSize: "20px" }} />
                                 </IconButton>
+                              </Box>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  height: "100%",
+                                  width: "100%",
+                                  position: "absolute",
+                                  zIndex: 3,
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <Box>
+                                  {uploadLoading.logo ? (
+                                    <CircularProgress
+                                      sx={{ color: "#8477DA" }}
+                                      size={24}
+                                    />
+                                  ) : (
+                                    ""
+                                  )}
+                                </Box>
                               </Box>
 
                               {singleItemData?.content?.section1?.logo ||
@@ -1711,6 +1849,7 @@ const EditQuoteInvoice = () => {
                                   style={{
                                     border: "1px solid  #ccc",
                                     borderRadius: "10px",
+                                    opacity: uploadLoading.logo ? 0.3 : 1,
                                   }}
                                 />
                               ) : (
@@ -1722,37 +1861,12 @@ const EditQuoteInvoice = () => {
                                   style={{
                                     border: "1px solid  #ccc",
                                     borderRadius: "10px",
+                                    opacity: uploadLoading.logo ? 0.3 : 1,
                                   }}
                                 />
                               )}
                             </Box>
                           </Box>
-
-                          {/* <Button
-                            disabled={isLoading}
-                            variant="contained"
-                            component="label"
-                            sx={{
-                              background: "#8477DA",
-                              ":hover": {
-                                background: "#8477DA",
-                              },
-                            }}
-                          >
-                            Upload logo
-                            <input
-                              type="file"
-                              accept="image/*"
-                              multiple
-                              hidden
-                              onChange={(e) =>
-                                handleImageUploadLogo(
-                                  e,
-                                  "content.section1.logo"
-                                )
-                              }
-                            />
-                          </Button> */}
                         </Box>
                       </Box>
                     </Box>
@@ -1807,6 +1921,7 @@ const EditQuoteInvoice = () => {
                               }}
                             >
                               <IconButton
+                                disabled={uploadLoading.background}
                                 sx={{
                                   background: "#8477DA",
                                   color: "white",
@@ -1819,6 +1934,29 @@ const EditQuoteInvoice = () => {
                                 <Edit sx={{ fontSize: "20px" }} />
                               </IconButton>
                             </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                height: "100%",
+                                width: "100%",
+                                position: "absolute",
+                                zIndex: 3,
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box>
+                                {uploadLoading.background ? (
+                                  <CircularProgress
+                                    sx={{ color: "#8477DA" }}
+                                    size={32}
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </Box>
+                            </Box>
+
                             {singleItemData?.content?.section1
                               ?.backgroundImage ||
                             uploadedImageBackgroundImage?.content?.section1
@@ -1836,6 +1974,7 @@ const EditQuoteInvoice = () => {
                                 style={{
                                   border: "1px solid  #ccc",
                                   borderRadius: "10px",
+                                  opacity: uploadLoading.background ? 0.3 : 1,
                                 }}
                               />
                             ) : (
@@ -1847,6 +1986,7 @@ const EditQuoteInvoice = () => {
                                 style={{
                                   border: "1px solid  #ccc",
                                   borderRadius: "10px",
+                                  opacity: uploadLoading.background ? 0.3 : 1,
                                 }}
                               />
                             )}
@@ -1855,128 +1995,7 @@ const EditQuoteInvoice = () => {
                       </Box>
                     </Box>
                   </Box>
-                </Box>
-                {/* section 2 */}
-                {/* <Box sx={{ p: 2 }}>
-                  <Typography variant="h5" fontWeight={"bold"}>
-                    Dynamic Estimates
-                  </Typography>
-
-                  <Typography fontWeight={"bold"} sx={{ pt: 1 }}>
-                    Estimates Images
-                  </Typography>
-
-                  {singleItemData?.estimates?.map((item, index) => (
-                    <Box
-                      key={item._id}
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        border: "1px solid #ccc",
-                        mt: 2,
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          px: 3,
-                          pt: 2,
-                          textTransform: "capitalize",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {item?.category + "-" + item?.layout} - Estimate
-                      </Typography>
-                      <Grid
-                        container
-                        sx={{
-                          width: "100%",
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: "10px",
-                        }}
-                      >
-                        {console.log(item?.gallery, "item?.gallerydfgh")}
-                        {item?.gallery !== undefined ? (
-                          item?.gallery?.map((_image) => (
-                            <Box
-                              sx={{
-                                width: "200px",
-                                height: "200px",
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                px: 3,
-                                py: 1.5,
-                                position: "relative",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  position: "absolute",
-                                  right: "18px",
-                                  top: "3px",
-                                  color: "red",
-                                  cursor: "pointer",
-                                }}
-                                onClick={() =>
-                                  handleDeleteImageFromEstimate(
-                                    item?.gallery,
-                                    _image,
-                                    `estimates.${index}.gallery`
-                                  )
-                                }
-                              >
-                                <Delete />
-                              </Box>
-                              <img
-                                style={{ width: "100%", height: "100%" }}
-                                src={`${backendURL}/${_image}`}
-                                alt="section image backgroundImage"
-                              />
-                            </Box>
-                          ))
-                        ) : (
-                          <Typography
-                            sx={{
-                              height: "150px",
-                              textAlign: "center",
-                              width: "100%",
-                              alignContent: "center",
-                            }}
-                          >
-                            No Image Selected!
-                          </Typography>
-                        )}
-                      </Grid>
-                      <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                        <Button
-                          variant="contained"
-                          component="label"
-                          sx={{
-                            background: "#8477DA",
-                            ":hover": {
-                              background: "#8477DA",
-                            },
-                          }}
-                        >
-                          Upload image
-                          <input
-                            type="file"
-                            accept="image/*"
-                            hidden
-                            onChange={(e) =>
-                              handleUploadEstimatesImage(
-                                e,
-                                `estimates.${index}.gallery`
-                              )
-                            }
-                          />
-                        </Button>
-                      </Box>
-                    </Box>
-                  ))}
-                </Box> */}
+                </Box>               
                 <Box
                   sx={{
                     display: "flex",
@@ -2026,8 +2045,34 @@ const EditQuoteInvoice = () => {
                             gap: 1,
                             border: "1px solid #ccc",
                             width: "65%",
+                            position: "relative",
                           }}
                         >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              height: "100%",
+                              width: "100%",
+                              position: "absolute",
+                              zIndex: 3,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              pointerEvents: "none",
+                            }}
+                          >
+                            <Box>
+                              {uploadLoading[
+                                "content.section2.shower.images"
+                              ] ? (
+                                <CircularProgress
+                                  sx={{ color: "#8477DA" }}
+                                  size={42}
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </Box>
+                          </Box>
                           <Grid
                             container
                             sx={{
@@ -2035,6 +2080,11 @@ const EditQuoteInvoice = () => {
                               display: "flex",
                               flexWrap: "wrap",
                               gap: "10px",
+                              opacity: uploadLoading[
+                                "content.section2.shower.images"
+                              ]
+                                ? 0.3
+                                : 1,
                             }}
                           >
                             {formik.values.section2.shower.images.length &&
@@ -2065,7 +2115,7 @@ const EditQuoteInvoice = () => {
                                         handleDeleteImageFromEstimate(
                                           formik.values.section2.shower.images,
                                           _image,
-                                          `content.section2.shower.images`
+                                          "content.section2.shower.images"
                                         )
                                       }
                                     >
@@ -2099,21 +2149,30 @@ const EditQuoteInvoice = () => {
                               sx={{
                                 background: "#8477DA",
                                 ":hover": {
-                                  background: "#8477DA",
+                                  background: uploadLoading[
+                                    "content.section2.shower.images"
+                                  ]
+                                    ? "#8477DA"
+                                    : "#6a5bc5",
                                 },
                               }}
+                              disabled={
+                                uploadLoading["content.section2.shower.images"]
+                              }
                             >
                               Upload image
                               <input
                                 type="file"
                                 accept="image/*"
                                 hidden
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   handleUploadEstimatesImage(
                                     e,
-                                    `content.section2.shower.images`
-                                  )
-                                }
+                                    "content.section2.shower.images",
+                                    { height: 200, width: 200 }
+                                  );
+                                  e.target.value = "";
+                                }}
                               />
                             </Button>
                           </Box>
@@ -2187,8 +2246,34 @@ const EditQuoteInvoice = () => {
                             gap: 1,
                             border: "1px solid #ccc",
                             width: "65%",
+                            position: "relative",
                           }}
                         >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              height: "100%",
+                              width: "100%",
+                              position: "absolute",
+                              zIndex: 3,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              pointerEvents: "none",
+                            }}
+                          >
+                            <Box>
+                              {uploadLoading[
+                                "content.section2.mirror.images"
+                              ] ? (
+                                <CircularProgress
+                                  sx={{ color: "#8477DA" }}
+                                  size={42}
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </Box>
+                          </Box>
                           <Grid
                             container
                             sx={{
@@ -2196,6 +2281,11 @@ const EditQuoteInvoice = () => {
                               display: "flex",
                               flexWrap: "wrap",
                               gap: "10px",
+                              opacity: uploadLoading[
+                                "content.section2.mirror.images"
+                              ]
+                                ? 0.3
+                                : 1,
                             }}
                           >
                             {formik.values.section2.mirror.images.length &&
@@ -2226,7 +2316,7 @@ const EditQuoteInvoice = () => {
                                         handleDeleteImageFromEstimate(
                                           formik.values.section2.mirror.images,
                                           _image,
-                                          `content.section2.mirror.images`
+                                          "content.section2.mirror.images"
                                         )
                                       }
                                     >
@@ -2235,7 +2325,7 @@ const EditQuoteInvoice = () => {
                                     <img
                                       style={{ width: "100%", height: "100%" }}
                                       src={`${backendURL}/${_image}`}
-                                      alt="section  backgroundImage"
+                                      alt="section backgroundImage"
                                     />
                                   </Box>
                                 )
@@ -2260,21 +2350,30 @@ const EditQuoteInvoice = () => {
                               sx={{
                                 background: "#8477DA",
                                 ":hover": {
-                                  background: "#8477DA",
+                                  background: uploadLoading[
+                                    "content.section2.mirror.images"
+                                  ]
+                                    ? "#8477DA"
+                                    : "#6a5bc5",
                                 },
                               }}
+                              disabled={
+                                uploadLoading["content.section2.mirror.images"]
+                              }
                             >
                               Upload image
                               <input
                                 type="file"
                                 accept="image/*"
                                 hidden
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   handleUploadEstimatesImage(
                                     e,
-                                    `content.section2.mirror.images`
-                                  )
-                                }
+                                    "content.section2.mirror.images",
+                                    { height: 200, width: 200 }
+                                  );
+                                  e.target.value = "";
+                                }}
                               />
                             </Button>
                           </Box>
@@ -2348,8 +2447,34 @@ const EditQuoteInvoice = () => {
                             gap: 1,
                             border: "1px solid #ccc",
                             width: "65%",
+                            position: "relative",
                           }}
                         >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              height: "100%",
+                              width: "100%",
+                              position: "absolute",
+                              zIndex: 3,
+                              justifyContent: "center",
+                              alignItems: "center",
+                              pointerEvents: "none",
+                            }}
+                          >
+                            <Box>
+                              {uploadLoading[
+                                "content.section2.wineCellar.images"
+                              ] ? (
+                                <CircularProgress
+                                  sx={{ color: "#8477DA" }}
+                                  size={42}
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </Box>
+                          </Box>
                           <Grid
                             container
                             sx={{
@@ -2357,6 +2482,11 @@ const EditQuoteInvoice = () => {
                               display: "flex",
                               flexWrap: "wrap",
                               gap: "10px",
+                              opacity: uploadLoading[
+                                "content.section2.wineCellar.images"
+                              ]
+                                ? 0.3
+                                : 1,
                             }}
                           >
                             {formik.values.section2.wineCellar.images.length &&
@@ -2423,21 +2553,32 @@ const EditQuoteInvoice = () => {
                               sx={{
                                 background: "#8477DA",
                                 ":hover": {
-                                  background: "#8477DA",
+                                  background: uploadLoading[
+                                    "content.section2.wineCellar.images"
+                                  ]
+                                    ? "#8477DA"
+                                    : "#6a5bc5",
                                 },
                               }}
+                              disabled={
+                                uploadLoading[
+                                  "content.section2.wineCellar.images"
+                                ]
+                              }
                             >
                               Upload image
                               <input
                                 type="file"
                                 accept="image/*"
                                 hidden
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   handleUploadEstimatesImage(
                                     e,
-                                    `content.section2.wineCellar.images`
-                                  )
-                                }
+                                    "content.section2.wineCellar.images",
+                                    { height: 200, width: 200 }
+                                  );
+                                  e.target.value = "";
+                                }}
                               />
                             </Button>
                           </Box>
@@ -2520,7 +2661,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          // maxLength={20}
+                          maxLength={15}
                           value={formik.values.section3.heading || ""}
                           onChange={formik.handleChange}
                         />
@@ -2550,7 +2691,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          // maxLength={20}
+                          maxLength={49}
                           value={formik.values.section3.subheading || ""}
                           onChange={formik.handleChange}
                         />
@@ -2580,7 +2721,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          // maxLength={20}
+                          maxLength={196}
                           value={formik.values.section3.description || ""}
                           onChange={formik.handleChange}
                         />
@@ -2661,7 +2802,7 @@ const EditQuoteInvoice = () => {
                             size="large"
                             variant="outlined"
                             name="section3.card1.text2"
-                            maxLength={138}
+                            maxLength={50}
                             value={formik.values.section3.card1.text2 || ""}
                             onChange={formik.handleChange}
                           />
@@ -2709,7 +2850,7 @@ const EditQuoteInvoice = () => {
                             placeholder="Enter Text"
                             size="large"
                             variant="outlined"
-                            maxLength={20}
+                            maxLength={13}
                             value={formik.values.section3.card2.text1 || ""}
                             onChange={formik.handleChange}
                           />
@@ -2741,7 +2882,7 @@ const EditQuoteInvoice = () => {
                             size="large"
                             variant="outlined"
                             name="section3.card2.text2"
-                            maxLength={138}
+                            maxLength={127}
                             value={formik.values.section3.card2.text2 || ""}
                             onChange={formik.handleChange}
                           />
@@ -2789,7 +2930,7 @@ const EditQuoteInvoice = () => {
                             placeholder="Enter Text"
                             size="large"
                             variant="outlined"
-                            maxLength={20}
+                            maxLength={12}
                             value={formik.values.section3.card3.text1 || ""}
                             onChange={formik.handleChange}
                           />
@@ -2821,7 +2962,7 @@ const EditQuoteInvoice = () => {
                             size="large"
                             variant="outlined"
                             name="section3.card3.text2"
-                            maxLength={138}
+                            maxLength={50}
                             value={formik.values.section3.card3.text2 || ""}
                             onChange={formik.handleChange}
                           />
@@ -2869,7 +3010,7 @@ const EditQuoteInvoice = () => {
                             placeholder="Enter Text"
                             size="large"
                             variant="outlined"
-                            maxLength={20}
+                            maxLength={12}
                             value={formik.values.section3.card4.text1 || ""}
                             onChange={formik.handleChange}
                           />
@@ -2901,7 +3042,7 @@ const EditQuoteInvoice = () => {
                             size="large"
                             variant="outlined"
                             name="section3.card4.text2"
-                            maxLength={138}
+                            maxLength={50}
                             value={formik.values.section3.card4.text2 || ""}
                             onChange={formik.handleChange}
                           />
@@ -2936,12 +3077,14 @@ const EditQuoteInvoice = () => {
                             accept="image/*"
                             multiple
                             hidden
-                            onChange={(e) =>
+                            onChange={(e) => {
                               handleUploadEstimatesImage(
                                 e,
-                                "content.section3.bgimage"
-                              )
-                            }
+                                "content.section3.bgimage",
+                                { height: 400, width: 700 }
+                              );
+                              e.target.value = "";
+                            }}
                           />
                           <Box sx={{ position: "relative" }}>
                             <Box
@@ -2953,6 +3096,9 @@ const EditQuoteInvoice = () => {
                               }}
                             >
                               <IconButton
+                                disabled={
+                                  uploadLoading["content.section3.bgimage"]
+                                }
                                 sx={{
                                   background: "#8477DA",
                                   color: "white",
@@ -2965,6 +3111,28 @@ const EditQuoteInvoice = () => {
                                 <Edit sx={{ fontSize: "20px" }} />
                               </IconButton>
                             </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                height: "100%",
+                                width: "100%",
+                                position: "absolute",
+                                zIndex: 3,
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box>
+                                {uploadLoading["content.section3.bgimage"] ? (
+                                  <CircularProgress
+                                    sx={{ color: "#8477DA" }}
+                                    size={32}
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </Box>
+                            </Box>
 
                             {formik.values.section3?.bgimage ? (
                               <img
@@ -2975,6 +3143,11 @@ const EditQuoteInvoice = () => {
                                 style={{
                                   border: "1px solid  #ccc",
                                   borderRadius: "10px",
+                                  opacity: uploadLoading[
+                                    "content.section3.bgimage"
+                                  ]
+                                    ? 0.3
+                                    : 1,
                                 }}
                               />
                             ) : (
@@ -2986,6 +3159,11 @@ const EditQuoteInvoice = () => {
                                 style={{
                                   border: "1px solid  #ccc",
                                   borderRadius: "10px",
+                                  opacity: uploadLoading[
+                                    "content.section3.bgimage"
+                                  ]
+                                    ? 0.3
+                                    : 1,
                                 }}
                               />
                             )}
@@ -3050,6 +3228,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
+                          maxLength={69}
                           value={formik.values.section4.heading || ""}
                           onChange={formik.handleChange}
                         />
@@ -3079,6 +3258,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
+                          maxLength={154}
                           value={formik.values.section4.subheading || ""}
                           onChange={formik.handleChange}
                         />
@@ -3158,12 +3338,14 @@ const EditQuoteInvoice = () => {
                             accept="image/*"
                             multiple
                             hidden
-                            onChange={(e) =>
+                            onChange={(e) => {
                               handleUploadEstimatesImage(
                                 e,
-                                "content.section5.image"
-                              )
-                            }
+                                "content.section5.image",
+                                { height: 380, width: 380 }
+                              );
+                              e.target.value = "";
+                            }}
                           />
                           <Box sx={{ position: "relative" }}>
                             <Box
@@ -3175,6 +3357,9 @@ const EditQuoteInvoice = () => {
                               }}
                             >
                               <IconButton
+                                disabled={
+                                  uploadLoading["content.section5.image"]
+                                }
                                 sx={{
                                   background: "#8477DA",
                                   color: "white",
@@ -3187,6 +3372,28 @@ const EditQuoteInvoice = () => {
                                 <Edit sx={{ fontSize: "20px" }} />
                               </IconButton>
                             </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                height: "100%",
+                                width: "100%",
+                                position: "absolute",
+                                zIndex: 3,
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box>
+                                {uploadLoading["content.section5.image"] ? (
+                                  <CircularProgress
+                                    sx={{ color: "#8477DA" }}
+                                    size={24}
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </Box>
+                            </Box>
 
                             {formik.values.section5?.image ? (
                               <img
@@ -3197,6 +3404,11 @@ const EditQuoteInvoice = () => {
                                 style={{
                                   border: "1px solid  #ccc",
                                   borderRadius: "10px",
+                                  opacity: uploadLoading[
+                                    "content.section5.image"
+                                  ]
+                                    ? 0.3
+                                    : 1,
                                 }}
                               />
                             ) : (
@@ -3208,6 +3420,11 @@ const EditQuoteInvoice = () => {
                                 style={{
                                   border: "1px solid  #ccc",
                                   borderRadius: "10px",
+                                  opacity: uploadLoading[
+                                    "content.section5.image"
+                                  ]
+                                    ? 0.3
+                                    : 1,
                                 }}
                               />
                             )}
@@ -3274,7 +3491,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          // maxLength={20}
+                          maxLength={20}
                           value={formik.values.section6.heading || ""}
                           onChange={formik.handleChange}
                         />
@@ -3304,7 +3521,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          // maxLength={20}
+                          maxLength={142}
                           value={formik.values.section6.subheading || ""}
                           onChange={formik.handleChange}
                         />
@@ -3340,7 +3557,7 @@ const EditQuoteInvoice = () => {
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          // maxLength={20}
+                          maxLength={197}
                           value={formik.values.section6.bottomtext || ""}
                           onChange={formik.handleChange}
                         />
@@ -3369,30 +3586,17 @@ const EditQuoteInvoice = () => {
                     />
                   </Box>
                   <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        pb: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        fontWeight={"bold"}
-                        sx={{ alignContent: "center" }}
-                      >
-                        Card 1 :{" "}
-                      </Typography>
+                    <Box sx={{ display: "flex", gap: 2, pb: 2 }}>
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
                           gap: 0.2,
-                          width: "30%",
+                          width: "33%",
                         }}
                       >
                         <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 1
+                          Heading
                         </Typography>
                         <TextareaAutosize
                           style={{
@@ -3404,26 +3608,25 @@ const EditQuoteInvoice = () => {
                           color="neutral"
                           minRows={3}
                           maxRows={4}
-                          name="section7.card1.text1"
+                          name="section7.heading"
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          maxLength={23}
-                          value={formik.values.section7.card1.text1 || ""}
+                          maxLength={26}
+                          value={formik.values.section7.heading || ""}
                           onChange={formik.handleChange}
                         />
-                      </Box>
-
+                      </Box>{" "}
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
                           gap: 0.2,
-                          width: "30%",
+                          width: "33%",
                         }}
                       >
                         <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 2
+                          Description
                         </Typography>
                         <TextareaAutosize
                           style={{
@@ -3435,166 +3638,254 @@ const EditQuoteInvoice = () => {
                           color="neutral"
                           minRows={3}
                           maxRows={4}
+                          name="section7.description"
                           placeholder="Enter Text"
                           size="large"
                           variant="outlined"
-                          name="section7.card1.text2"
-                          maxLength={139}
-                          value={formik.values.section7.card1.text2 || ""}
+                          maxLength={181}
+                          value={formik.values.section7.description || ""}
                           onChange={formik.handleChange}
                         />
-                      </Box>
-                    </Box>{" "}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        pb: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        fontWeight={"bold"}
-                        sx={{ alignContent: "center" }}
-                      >
-                        Card 2 :{" "}
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 0.2,
-                          width: "30%",
-                        }}
-                      >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 1
-                        </Typography>
-                        <TextareaAutosize
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
-                          }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={3}
-                          maxRows={4}
-                          name="section7.card2.text1"
-                          placeholder="Enter Text"
-                          size="large"
-                          variant="outlined"
-                          maxLength={23}
-                          value={formik.values.section7.card2.text1 || ""}
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 0.2,
-                          width: "30%",
-                        }}
-                      >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 2
-                        </Typography>
-                        <TextareaAutosize
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
-                          }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={3}
-                          maxRows={4}
-                          placeholder="Enter Text"
-                          size="large"
-                          variant="outlined"
-                          name="section7.card2.text2"
-                          maxLength={258}
-                          value={formik.values.section7.card2.text2 || ""}
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
+                      </Box>{" "}
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 2,
-                        pb: 2,
-                      }}
-                    >
-                      <Typography
-                        variant="h5"
-                        fontWeight={"bold"}
-                        sx={{ alignContent: "center" }}
-                      >
-                        Card 3 :{" "}
-                      </Typography>
+                    <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
-                          gap: 0.2,
-                          width: "30%",
+                          gap: 2,
+                          pb: 2,
+                          width: "33%",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 1
+                        <Typography
+                          variant="h5"
+                          fontWeight={"bold"}
+                          sx={{ alignContent: "center" }}
+                        >
+                          Card 1 :{" "}
                         </Typography>
-                        <TextareaAutosize
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
                           }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={3}
-                          maxRows={4}
-                          name="section7.card3.text1"
-                          placeholder="Enter Text"
-                          size="large"
-                          variant="outlined"
-                          maxLength={23}
-                          value={formik.values.section7.card3.text1 || ""}
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 1
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            name="section7.card1.text1"
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            maxLength={23}
+                            value={formik.values.section7.card1.text1 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 2
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section7.card1.text2"
+                            maxLength={139}
+                            value={formik.values.section7.card1.text2 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                      </Box>{" "}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 2,
+                          pb: 2,
+                          width: "33%",
+                        }}
+                      >
+                        <Typography
+                          variant="h5"
+                          fontWeight={"bold"}
+                          sx={{ alignContent: "center" }}
+                        >
+                          Card 2 :{" "}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 1
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            name="section7.card2.text1"
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            maxLength={23}
+                            value={formik.values.section7.card2.text1 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
 
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 2
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section7.card2.text2"
+                            maxLength={258}
+                            value={formik.values.section7.card2.text2 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                      </Box>
                       <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
-                          gap: 0.2,
-                          width: "30%",
+                          gap: 2,
+                          pb: 2,
+                          width: "33%",
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                          Text 2
+                        <Typography
+                          variant="h5"
+                          fontWeight={"bold"}
+                          sx={{ alignContent: "center" }}
+                        >
+                          Card 3 :{" "}
                         </Typography>
-                        <TextareaAutosize
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
                           }}
-                          className="custom-textfield"
-                          color="neutral"
-                          minRows={3}
-                          maxRows={4}
-                          placeholder="Enter Text"
-                          size="large"
-                          variant="outlined"
-                          name="section7.card3.text2"
-                          maxLength={500}
-                          value={formik.values.section7.card3.text2 || ""}
-                          onChange={formik.handleChange}
-                        />
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 1
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            name="section7.card3.text1"
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            maxLength={23}
+                            value={formik.values.section7.card3.text1 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 0.2,
+                          }}
+                        >
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500 }}
+                          >
+                            Text 2
+                          </Typography>
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            placeholder="Enter Text"
+                            size="large"
+                            variant="outlined"
+                            name="section7.card3.text2"
+                            maxLength={500}
+                            value={formik.values.section7.card3.text2 || ""}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
@@ -3654,7 +3945,7 @@ const EditQuoteInvoice = () => {
                             placeholder="Enter Text"
                             size="large"
                             variant="outlined"
-                            // maxLength={23}
+                            maxLength={62}
                             value={formik.values.section8.product.title || ""}
                             onChange={formik.handleChange}
                           />
@@ -3686,7 +3977,7 @@ const EditQuoteInvoice = () => {
                             size="large"
                             variant="outlined"
                             name="section8.product.desc1"
-                            // maxLength={139}
+                            maxLength={276}
                             value={formik.values.section8.product.desc1 || ""}
                             onChange={formik.handleChange}
                           />
@@ -3718,7 +4009,7 @@ const EditQuoteInvoice = () => {
                             size="large"
                             variant="outlined"
                             name="section8.product.desc2"
-                            // maxLength={139}
+                            maxLength={184}
                             value={formik.values.section8.product.desc2 || ""}
                             onChange={formik.handleChange}
                           />
@@ -3761,12 +4052,14 @@ const EditQuoteInvoice = () => {
                                 accept="image/*"
                                 multiple
                                 hidden
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   handleUploadEstimatesImage(
                                     e,
-                                    "content.section8.image1"
-                                  )
-                                }
+                                    "content.section8.image1",
+                                    { height: 380, width: 296 }
+                                  );
+                                  e.target.value = "";
+                                }}
                               />
                               <Box sx={{ position: "relative" }}>
                                 <Box
@@ -3778,6 +4071,9 @@ const EditQuoteInvoice = () => {
                                   }}
                                 >
                                   <IconButton
+                                    disabled={
+                                      uploadLoading["content.section8.image1"]
+                                    }
                                     sx={{
                                       background: "#8477DA",
                                       color: "white",
@@ -3789,8 +4085,31 @@ const EditQuoteInvoice = () => {
                                   >
                                     <Edit sx={{ fontSize: "20px" }} />
                                   </IconButton>
+                                </Box>{" "}
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    height: "100%",
+                                    width: "100%",
+                                    position: "absolute",
+                                    zIndex: 3,
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Box>
+                                    {uploadLoading[
+                                      "content.section8.image1"
+                                    ] ? (
+                                      <CircularProgress
+                                        sx={{ color: "#8477DA" }}
+                                        size={24}
+                                      />
+                                    ) : (
+                                      ""
+                                    )}
+                                  </Box>
                                 </Box>
-
                                 {formik.values.section8?.image1 ? (
                                   <img
                                     src={`${backendURL}/${formik.values.section8?.image1}`}
@@ -3800,6 +4119,11 @@ const EditQuoteInvoice = () => {
                                     style={{
                                       border: "1px solid  #ccc",
                                       borderRadius: "10px",
+                                      opacity: uploadLoading[
+                                        "content.section8.image1"
+                                      ]
+                                        ? 0.3
+                                        : 1,
                                     }}
                                   />
                                 ) : (
@@ -3811,6 +4135,11 @@ const EditQuoteInvoice = () => {
                                     style={{
                                       border: "1px solid  #ccc",
                                       borderRadius: "10px",
+                                      opacity: uploadLoading[
+                                        "content.section8.image1"
+                                      ]
+                                        ? 0.3
+                                        : 1,
                                     }}
                                   />
                                 )}
@@ -3854,12 +4183,14 @@ const EditQuoteInvoice = () => {
                                 accept="image/*"
                                 multiple
                                 hidden
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   handleUploadEstimatesImage(
                                     e,
-                                    "content.section8.image2"
-                                  )
-                                }
+                                    "content.section8.image2",
+                                    { height: 380, width: 442 }
+                                  );
+                                  e.target.value = "";
+                                }}
                               />
                               <Box sx={{ position: "relative" }}>
                                 <Box
@@ -3871,6 +4202,9 @@ const EditQuoteInvoice = () => {
                                   }}
                                 >
                                   <IconButton
+                                    disabled={
+                                      uploadLoading["content.section8.image2"]
+                                    }
                                     sx={{
                                       background: "#8477DA",
                                       color: "white",
@@ -3883,6 +4217,30 @@ const EditQuoteInvoice = () => {
                                     <Edit sx={{ fontSize: "20px" }} />
                                   </IconButton>
                                 </Box>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    height: "100%",
+                                    width: "100%",
+                                    position: "absolute",
+                                    zIndex: 3,
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <Box>
+                                    {uploadLoading[
+                                      "content.section8.image2"
+                                    ] ? (
+                                      <CircularProgress
+                                        sx={{ color: "#8477DA" }}
+                                        size={24}
+                                      />
+                                    ) : (
+                                      ""
+                                    )}
+                                  </Box>
+                                </Box>
 
                                 {formik.values.section8?.image2 ? (
                                   <img
@@ -3893,6 +4251,11 @@ const EditQuoteInvoice = () => {
                                     style={{
                                       border: "1px solid  #ccc",
                                       borderRadius: "10px",
+                                      opacity: uploadLoading[
+                                        "content.section8.image2"
+                                      ]
+                                        ? 0.3
+                                        : 1,
                                     }}
                                   />
                                 ) : (
@@ -3904,6 +4267,11 @@ const EditQuoteInvoice = () => {
                                     style={{
                                       border: "1px solid  #ccc",
                                       borderRadius: "10px",
+                                      opacity: uploadLoading[
+                                        "content.section8.image2"
+                                      ]
+                                        ? 0.3
+                                        : 1,
                                     }}
                                   />
                                 )}

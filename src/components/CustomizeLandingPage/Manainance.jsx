@@ -27,18 +27,28 @@ const ManainanceSection = ({ data }) => {
         <Box sx={{ width: "100%", display: "flex", gap: 3 }}>
           <Box sx={{ width: "50%" }}>
             <Box>
-              <Typography className="maintainTxt" sx={{color:primaryColor,borderColor:primaryColor}}>Maintenance</Typography>
+              <Typography
+                className="maintainTxt"
+                sx={{ color: primaryColor, borderColor: primaryColor }}
+              >
+                Maintenance
+              </Typography>
             </Box>
-            <Typography className="maintainHead" sx={{ pt: 0.5,color:secondaryColor }}>
-              Glass & shower maintenance
+            <Typography
+              className="maintainHead"
+              sx={{ pt: 0.5, color: secondaryColor }}
+            >
+              {data?.content?.section7?.heading ?? "Glass & shower maintenance"}
             </Typography>
           </Box>
           <Box sx={{ width: "50%", display: "flex", justifyContent: "end" }}>
             <Box sx={{ width: "75%" }}>
-              <Typography className="maintainDesc" sx={{ color:secondaryColor }}>
-                Please note, acid etched/frosted glass is extremely susceptible
-                to fingerprints and spotting due to the oil on your hands and
-                other environmental factors such as steam.
+              <Typography
+                className="maintainDesc"
+                sx={{ color: secondaryColor }}
+              >
+                {data?.content?.section7?.description ??
+                  "Please note, acid etched/frosted glass is extremely susceptible  to fingerprints and spotting due to the oil on your hands and other environmental factors such as steam."}
               </Typography>
             </Box>
           </Box>
@@ -67,7 +77,7 @@ const ManainanceSection = ({ data }) => {
               <Box
                 sx={{
                   borderRadius: "50%",
-                  background:primaryColor,
+                  background: primaryColor,
                   height: "53px",
                   width: "54px",
                   padding: "14px",
@@ -76,7 +86,7 @@ const ManainanceSection = ({ data }) => {
                 }}
               >
                 <AccessTimeOutlinedIcon
-                  sx={{ fontSize: "50px", color:secondaryColor }}
+                  sx={{ fontSize: "50px", color: secondaryColor }}
                 />
                 {/* <img
                   src={TimerLogo}
@@ -114,7 +124,7 @@ const ManainanceSection = ({ data }) => {
               <Box
                 sx={{
                   borderRadius: "50%",
-                  background:primaryColor,
+                  background: primaryColor,
                   height: "53px",
                   width: "54px",
                   padding: "14px",
@@ -125,7 +135,7 @@ const ManainanceSection = ({ data }) => {
                 <ManageHistoryOutlinedIcon
                   sx={{
                     fontSize: "50px",
-                    color:secondaryColor,
+                    color: secondaryColor,
                   }}
                 />
               </Box>
@@ -153,7 +163,7 @@ const ManainanceSection = ({ data }) => {
               <Box
                 sx={{
                   borderRadius: "50%",
-                  background:primaryColor,
+                  background: primaryColor,
                   height: "53px",
                   width: "54px",
                   padding: "14px",
@@ -161,9 +171,8 @@ const ManainanceSection = ({ data }) => {
                   textAlign: "center",
                 }}
               >
-               
                 <EventAvailableOutlinedIcon
-                  sx={{ fontSize: "50px", color:secondaryColor }}
+                  sx={{ fontSize: "50px", color: secondaryColor }}
                 />
               </Box>
               <Typography className="maintaainCardTitle" sx={{ px: 4 }}>

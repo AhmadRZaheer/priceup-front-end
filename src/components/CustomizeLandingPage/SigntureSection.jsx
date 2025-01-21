@@ -159,12 +159,8 @@ const SigntureSection = ({
       const result = await blobPdf.toBlob();
       saveAs(result, "Priceup");
       const logData = {
-        // title: `${data?.customer?.name} downloaded the PDF on ${formattedDateTime}.`,
-        // performer_id: data?.customer_id,
-        // performer_name: data?.customer?.name,
         action: logActions.DOWNLOADPDF,
         resource_id: id,
-        // company_id: data?.company_id,
         resource_type: logResourceType.PREVIEWLINK,
       };
       activityLog({
@@ -193,13 +189,9 @@ const SigntureSection = ({
     refetchData();
 
     const logData = {
-      // title: `${data?.customer?.name} approved this project at ${formattedDateTime}`,
-      // performer_id: data?.customer_id,
-      // performer_name: data?.customer?.name,
       action: logActions.APPROVEPROJECT,
       resource_id: id,
       resource_type: logResourceType.PREVIEWLINK,
-      // company_id: data?.company_id,
     };
     activityLog({
       data: logData,
@@ -316,37 +308,6 @@ const SigntureSection = ({
                 </Box>
               ) : (
                 <Box>
-                  {/* <Stack
-                    sx={{ mb: 1.2 }}
-                    direction={"row"}
-                    justifyContent={"end"}
-                  >
-                    <Button
-                      variant="outlined"
-                      onClick={handleClearSignature}
-                      sx={{
-                        border: "1px solid #8477DA",
-                        // mr: 1,
-                        height: "38px",
-                        color: "#8477DA",
-                      }}
-                    >
-                      Clear
-                    </Button>
-                    <Button
-                      onClick={handleAddSignature}
-                      variant="contained"
-                      sx={{
-                        background: "#8477DA",
-                        height: "38px",
-                        ":hover": {
-                          background: "#8477DA",
-                        },
-                      }}
-                    >
-                      Save
-                    </Button> 
-                  </Stack> */}
                   <SignatureCanvas
                     ref={signaturePadRef}
                     penColor="darkblue"
@@ -363,104 +324,7 @@ const SigntureSection = ({
                   />
                 </Box>
               )}
-
-              {/* {signatureURL && data?.status !== "approve" && (
-                <Box sx={{ pt: 2 }}>
-                  <img
-                    src={signatureURL}
-                    alt="Signature"
-                    width="100%"
-                    height={150}
-                    style={{
-                      objectFit: "contain",
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                      border: "1px solid #E3E8EF",
-                      borderRadius: "4px",
-                    }}
-                  />
-                </Box>
-              )} */}
-
-              {/* <Box sx={{ pt: 2 }}>
-                <ButtonBase
-                  onClick={handleUploadClick}
-                  sx={{
-                    width: "100%",
-                    border: "1px dashed",
-                    borderRadius: 2,
-                    cursor: "pointer",
-                    backgroundColor: "#F8FAFC",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    display: "flex",
-                    borderColor: "#1849D6",
-                    p: "24px",
-                  }}
-                >
-                  <Stack
-                    direction={"column"}
-                    sx={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      display: "flex",
-                      gap: "12px",
-                    }}
-                  >
-                    <Box>
-                      <CloudUploadOutlined
-                        sx={{ width: "36px", color: "#1849D6" }}
-                      />
-                    </Box>
-                    <Typography
-                      sx={{
-                        color: "#0B0B0B",
-                        lineHeight: "20px",
-                        fontSize: "14px",
-                        fontFamily: '"Inter" !important',
-                      }}
-                    >
-                      Drag your file(s) or{" "}
-                      <Box
-                        component="span"
-                        sx={{ color: "#1849D6 !important" }}
-                      >
-                        browse
-                      </Box>
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: "#6D6D6D",
-                        lineHeight: "20px",
-                        fontSize: "14px",
-                        fontFamily: '"Inter" !important',
-                      }}
-                    >
-                      Max 10 MB files are allowed
-                    </Typography>
-                  </Stack>
-                </ButtonBase>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                  // accept=".jpg,.jpeg,.png,.gif,.bmp,.webp"
-                  accept="image/*"
-                  capture={false}
-                />
-              </Box> */}
-              {/* <Typography
-                sx={{
-                  py: 2,
-                  color: "#6D6D6D",
-                  lineHeight: "20px",
-                  fontSize: "14px",
-                  fontFamily: '"Inter" !important',
-                }}
-              >
-                Only support .jpg, .png and .svg and zip files
-              </Typography> */}
+            
               <Divider sx={{ color: "#6D6D6D" }}>OR</Divider>
               <Box
                 sx={{
@@ -495,27 +359,6 @@ const SigntureSection = ({
                       backgroundColor: "white",
                       height: "52px",
                     },
-                    // endAdornment: (
-                    //   <InputAdornment position="end">
-                    //     <Button
-                    //       variant="outlined"
-                    //       aria-label="toggle password visibility"
-                    //       // onClick={handleClickShowPassword}
-                    //       sx={{
-                    //         fontWeight: `${600} !important`,
-                    //         fontSize: "12px !important",
-                    //         lineHeight: "18px !important",
-                    //         height: "35px",
-                    //         borderRadius: "8px !important",
-                    //         color: "#6D6D6D",
-                    //         borderColor: "#CECECE",
-                    //         fontFamily: '"Inter" !important',
-                    //       }}
-                    //     >
-                    //       {true ? "Done" : "Edit"}
-                    //     </Button>
-                    //   </InputAdornment>
-                    // ),
                   }}
                   sx={{
                     color: { sm: "black", xs: "white" },
@@ -589,7 +432,6 @@ const SigntureSection = ({
                   </Button>
                 </Box>
               )}
-              {/* {data?.status === "approve" && ( */}
               <Box>
                 <Typography
                   sx={{
@@ -639,7 +481,6 @@ const SigntureSection = ({
                     </Button>
                     <Button
                       fullWidth
-                      // onClick={handleAddSignature}
                       disabled={!estimateStatus}
                       variant="contained"
                       sx={{
