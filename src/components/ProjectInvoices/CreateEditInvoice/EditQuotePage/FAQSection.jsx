@@ -1,41 +1,26 @@
 import CustomInputField from "@/components/ui-components/CustomInput";
 import { Box, Button, TextareaAutosize, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close"; // Import the Close icon
+import CloseIcon from "@mui/icons-material/Close";
 import React, { useState } from "react";
 
 const FAQSection = ({ accordionData, setAccordionData }) => {
-  // State for dynamically added question/answer fields
   const [fields, setFields] = useState([]);
-
-  // State for controlling whether to show fields or not
   const [showFields, setShowFields] = useState(false);
-
-  // Function to handle adding a new pair of question/answer fields
   const handleAddFields = () => {
     setShowFields(true);
     setFields([...fields, { title: "", desc: "" }]);
   };
-
-  // Function to handle input changes
   const handleFieldChange = (index, event) => {
     const values = [...fields];
     values[index][event.target.name] = event.target.value;
     setFields(values);
   };
-
-  // Function to handle form submission (API call can go here)
   const handleSubmit = () => {
-    // API call logic here (e.g., POST request)
-    console.log("Submit data:", fields);
-
-    // Optionally, you can add the new items to the accordion data
     setAccordionData([...accordionData, ...fields]);
 
-    // Reset fields after submission
     setFields([]);
     setShowFields(false);
   };
-
   const handleDeleteAccordionItem = (index) => {
     const updatedData = accordionData.filter((_, i) => i !== index);
     setAccordionData(updatedData);
@@ -43,7 +28,6 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
 
   return (
     <>
-      {/* Display existing FAQ data */}
       <div>
         {accordionData &&
           accordionData.length > 0 &&
@@ -51,10 +35,10 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
             <Box
               sx={{
                 pb: 1,
-                position: "relative", // Ensure that the icon is positioned relative to the parent container
+                position: "relative",
                 "&:hover": {
                   "& .delete-icon": {
-                    opacity: 1, // Show the close icon on hover
+                    opacity: 1,
                   },
                 },
               }}
@@ -64,17 +48,14 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
                 <h3>{index + 1})</h3>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
                   <h3>{item.title}</h3>
-                  {/* Add the close (delete) icon */}
                   <IconButton
                     className="delete-icon"
                     sx={{
-                      color: "#FF0000", // red color for delete icon
+                      color: "#FF0000",
                       padding: 0,
-                      opacity: 0, // Initially hide the icon
-                      // position: "absolute", // Position it absolutely relative to the parent
-                      // right: 0, // Align to the right of the parent
+                      opacity: 0,
                     }}
-                    onClick={() => handleDeleteAccordionItem(index)} // Function to delete
+                    onClick={() => handleDeleteAccordionItem(index)}
                   >
                     <CloseIcon />
                   </IconButton>
@@ -85,7 +66,6 @@ const FAQSection = ({ accordionData, setAccordionData }) => {
           ))}
       </div>
 
-      {/* Button to toggle fields visibility */}
       {!showFields && (
         <Box sx={{ textAlign: "center" }}>
           <Button

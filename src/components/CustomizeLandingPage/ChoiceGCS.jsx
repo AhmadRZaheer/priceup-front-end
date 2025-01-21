@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import React from "react";
 import "./style.scss";
 import bgHeaderImage from "../../Assets/CustomerLandingImages/WhyChoice.svg";
@@ -13,10 +13,10 @@ const ChoiceGCS = ({ data }) => {
   return (
     <>
       <Container maxWidth="lg" sx={{ pb: 2.5, pt: 3.5 }}>
-        <Typography className="choiceHead" sx={{color:primaryColor}}>
+        <Typography className="choiceHead" sx={{ color: primaryColor }}>
           {data?.content?.section3?.heading ?? "Why Choose GCS?"}
         </Typography>
-        <Typography className="choiceSubHead" >
+        <Typography className="choiceSubHead">
           {data?.content?.section3?.subheading ??
             "The Highest Quality Residential Glass Services"}
         </Typography>

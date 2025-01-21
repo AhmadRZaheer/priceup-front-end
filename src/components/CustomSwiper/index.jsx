@@ -8,7 +8,7 @@ import "swiper/css/navigation";
 import Bulb from "@/Assets/CustomerLandingImages/blubImg.png";
 import { EstimateCategory } from "@/utilities/constants";
 
-const CustomSwiper = ({ data,category ,colorData}) => {
+const CustomSwiper = ({ data, category, colorData }) => {
   const detailDesc =
     category === EstimateCategory.SHOWERS
       ? "Shower"
@@ -17,6 +17,20 @@ const CustomSwiper = ({ data,category ,colorData}) => {
       : "Wine Cellar";
   return (
     <Box>
+      <style>
+        {`.swiper-button-next,
+      .swiper-button-prev {
+      color: ${colorData?.secondary} !important; 
+      background-color: ${colorData?.primary} !important;
+      padding: 8px;
+      }
+      .swiper-button-next:hover,
+      .swiper-button-prev:hover {
+      color: ${colorData?.secondary} !important;
+      background-color: ${colorData?.primary};
+      padding: 8px;
+      }`}
+      </style>
       <Box sx={{ display: "flex", py: 4, justifyContent: "center" }}>
         <img src={Bulb} alt="not" style={{ height: "50px" }} />
         <Typography
@@ -27,14 +41,14 @@ const CustomSwiper = ({ data,category ,colorData}) => {
             lineHeight: "35px",
             alignSelf: "end",
             borderBottom: "1px solid",
-            borderColor:colorData?.primary,
+            borderColor: colorData?.primary,
             color: colorData?.secondary,
           }}
         >
           <Box component="span" sx={{ color: colorData?.primary }}>
             Similar
           </Box>{" "}
-         {detailDesc} projects that we’ve worked on:
+          {detailDesc} projects that we’ve worked on:
         </Typography>
       </Box>
       <Container sx={{ px: "0px !important" }}>
@@ -60,8 +74,6 @@ const CustomSwiper = ({ data,category ,colorData}) => {
                 "--swiper-navigation-color": "#fff !important",
                 "--swiper-pagination-color": "#fff !important",
                 "--swiper-navigation-size": "28px",
-                // paddingLeft: "40px",
-                // paddingRight: "40px",
               }}
             >
               {data?.images?.length > 0 ? (
@@ -94,15 +106,6 @@ const CustomSwiper = ({ data,category ,colorData}) => {
               )}
             </Swiper>
           </Box>
-          {/* <Box sx={{ width: "25%" }}>
-            {data?.description.length && (
-              <Typography
-                sx={{ fontSize: "18px", fontWeight: 500, color: "white" }}
-              >
-                {data?.description}
-              </Typography>
-            )}
-          </Box> */}
         </Box>
       </Container>
     </Box>

@@ -15,9 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import {
-    useFetchDataSetting,
-} from "@/utilities/ApiHooks/setting";
+import { useFetchDataSetting } from "@/utilities/ApiHooks/setting";
 import { backendURL } from "@/utilities/common";
 
 import CustomToggle from "../ui-components/Toggle";
@@ -118,7 +116,7 @@ const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
   const {
-    mutate: editSetting,
+    mutateAsync: editSetting,
     isLoading: editLoading,
     isSuccess: SuccessForEdit,
   } = useEditDocument();
@@ -127,6 +125,12 @@ const CampanySetting = () => {
   const CustomerU_change = useSelector(getDataRefetch);
   const [value, setValue] = React.useState(0);
   const [termsText, setTermsText] = useState("");
+  const [uploadLoading, setUploadLoading] = useState({
+    "presentationSettings.shower.images": false,
+    "presentationSettings.mirror.images": false,
+    "presentationSettings.wineCellar.images": false,
+  });
+  console.log(uploadLoading, "uploadLoadinguploadLoading");
   const handleChange = (newValue) => {
     setValue(newValue);
   };
@@ -335,7 +339,7 @@ const CampanySetting = () => {
     },
   });
 
-  const handleEditSetting = (props) => {
+  const handleEditSetting = async (props) => {
     const formData = new FormData();
     if (props?.image) {
       formData.append("image", props.image);
@@ -345,7 +349,7 @@ const CampanySetting = () => {
       delete props?.image;
     }
     formData.append("data", JSON.stringify(props));
-    editSetting({
+    await editSetting({
       data: formData,
       apiRoute: `${backendURL}/companies/${settingData._id}`,
     });
@@ -373,21 +377,25 @@ const CampanySetting = () => {
     });
   };
   // Preview images
-  const handleUploadPreviewImage = (event, images, key) => {
+  const handleUploadPreviewImage = async (event, images, key) => {
     if (images?.length < 5) {
       const image = event.target.files[0];
-      const formData = new FormData();
       if (image) {
+        setUploadLoading((prevState) => ({
+          ...prevState,
+          [key]: true,
+        }));
+        const formData = new FormData();
         formData.append("image", image);
+        // formData.append("key", key);
+        formData.append("data", JSON.stringify({ key }));
+        // Make the API call
+        await editSetting({
+          data: formData,
+          apiRoute: `${backendURL}/companies/${settingData._id}`,
+        });
+        reFetchDataSetting();
       }
-      // formData.append("key", key);
-      formData.append("data", JSON.stringify({ key }));
-      // Make the API call
-      editSetting({
-        data: formData,
-        apiRoute: `${backendURL}/companies/${settingData._id}`,
-      });
-      reFetchDataSetting();
     } else {
       dispatch(
         showSnackbar({
@@ -396,23 +404,41 @@ const CampanySetting = () => {
         })
       );
     }
+    setUploadLoading((prevState) => ({
+      ...prevState,
+      [key]: false,
+    }));
   };
 
-  const handleDeleteImageFromPrevew = (gallery, removeGalleryImage, key) => {
+  const handleDeleteImageFromPrevew = async (
+    gallery,
+    removeGalleryImage,
+    key
+  ) => {
     const galleryFiltered = gallery?.filter(
       (item) => item !== removeGalleryImage
     );
-    const deletItem = JSON.stringify({
-      key,
-      gallery: galleryFiltered ?? [],
-      removeGalleryImage,
-    });
+    if (galleryFiltered) {
+      setUploadLoading((prevState) => ({
+        ...prevState,
+        [key]: true,
+      }));
+      const deletItem = JSON.stringify({
+        key,
+        gallery: galleryFiltered ?? [],
+        removeGalleryImage,
+      });
 
-    editSetting({
-      data: { data: deletItem },
-      apiRoute: `${backendURL}/companies/${settingData._id}`,
-    });
-    reFetchDataSetting();
+      await editSetting({
+        data: { data: deletItem },
+        apiRoute: `${backendURL}/companies/${settingData._id}`,
+      });
+      reFetchDataSetting();
+    }
+    setUploadLoading((prevState) => ({
+      ...prevState,
+      [key]: false,
+    }));
   };
 
   return (
@@ -2413,8 +2439,29 @@ const CampanySetting = () => {
                     gap: 1,
                     border: "1px solid #ccc",
                     width: "65%",
+                    position: "relative",
                   }}
                 >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      height: "100%",
+                      width: "100%",
+                      position: "absolute",
+                      zIndex: 3,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <Box>
+                      {uploadLoading["presentationSettings.shower.images"] ? (
+                        <CircularProgress sx={{ color: "#8477DA" }} size={42} />
+                      ) : (
+                        ""
+                      )}
+                    </Box>
+                  </Box>
                   <Grid
                     container
                     sx={{
@@ -2422,6 +2469,11 @@ const CampanySetting = () => {
                       display: "flex",
                       flexWrap: "wrap",
                       gap: "10px",
+                      opacity: uploadLoading[
+                        "presentationSettings.shower.images"
+                      ]
+                        ? 0.3
+                        : 1,
                     }}
                   >
                     {formik.values.presentationSettings.shower.images.length >
@@ -2487,22 +2539,30 @@ const CampanySetting = () => {
                       sx={{
                         background: "#8477DA",
                         ":hover": {
-                          background: "#8477DA",
+                          background: uploadLoading[
+                            "presentationSettings.shower.images"
+                          ]
+                            ? "#8477DA"
+                            : "#6a5bc5",
                         },
                       }}
+                      disabled={
+                        uploadLoading["presentationSettings.shower.images"]
+                      }
                     >
                       Upload image
                       <input
                         type="file"
                         accept="image/*"
                         hidden
-                        onChange={(e) =>
+                        onChange={(e) => {
                           handleUploadPreviewImage(
                             e,
                             formik.values.presentationSettings.shower.images,
-                            `presentationSettings.shower.images`
-                          )
-                        }
+                            "presentationSettings.shower.images"
+                          );
+                          e.target.value = "";
+                        }}
                       />
                     </Button>
                   </Box>
@@ -2554,8 +2614,30 @@ const CampanySetting = () => {
                     gap: 1,
                     border: "1px solid #ccc",
                     width: "65%",
+                    position: "relative",
                   }}
                 >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      height: "100%",
+                      width: "100%",
+                      position: "absolute",
+                      zIndex: 3,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <Box>
+                      {uploadLoading["presentationSettings.mirror.images"] ? (
+                        <CircularProgress sx={{ color: "#8477DA" }} size={42} />
+                      ) : (
+                        ""
+                      )}
+                    </Box>
+                  </Box>
+
                   <Grid
                     container
                     sx={{
@@ -2563,6 +2645,11 @@ const CampanySetting = () => {
                       display: "flex",
                       flexWrap: "wrap",
                       gap: "10px",
+                      opacity: uploadLoading[
+                        "presentationSettings.mirror.images"
+                      ]
+                        ? 0.3
+                        : 1,
                     }}
                   >
                     {formik.values.presentationSettings.mirror.images.length >
@@ -2628,22 +2715,30 @@ const CampanySetting = () => {
                       sx={{
                         background: "#8477DA",
                         ":hover": {
-                          background: "#8477DA",
+                          background: uploadLoading[
+                            "presentationSettings.mirror.images"
+                          ]
+                            ? "#8477DA"
+                            : "#6a5bc5",
                         },
                       }}
+                      disabled={
+                        uploadLoading["presentationSettings.mirror.images"]
+                      }
                     >
                       Upload image
                       <input
                         type="file"
                         accept="image/*"
                         hidden
-                        onChange={(e) =>
+                        onChange={(e) => {
                           handleUploadPreviewImage(
                             e,
                             formik.values.presentationSettings.mirror.images,
-                            `presentationSettings.mirror.images`
-                          )
-                        }
+                            "presentationSettings.mirror.images"
+                          );
+                          e.target.value = "";
+                        }}
                       />
                     </Button>
                   </Box>
@@ -2695,8 +2790,31 @@ const CampanySetting = () => {
                     gap: 1,
                     border: "1px solid #ccc",
                     width: "65%",
+                    position: "relative",
                   }}
                 >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      height: "100%",
+                      width: "100%",
+                      position: "absolute",
+                      zIndex: 3,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <Box>
+                      {uploadLoading[
+                        "presentationSettings.wineCellar.images"
+                      ] ? (
+                        <CircularProgress sx={{ color: "#8477DA" }} size={42} />
+                      ) : (
+                        ""
+                      )}
+                    </Box>
+                  </Box>
                   <Grid
                     container
                     sx={{
@@ -2704,6 +2822,11 @@ const CampanySetting = () => {
                       display: "flex",
                       flexWrap: "wrap",
                       gap: "10px",
+                      opacity: uploadLoading[
+                        "presentationSettings.wineCellar.images"
+                      ]
+                        ? 0.3
+                        : 1,
                     }}
                   >
                     {formik.values.presentationSettings.wineCellar.images
@@ -2769,23 +2892,31 @@ const CampanySetting = () => {
                       sx={{
                         background: "#8477DA",
                         ":hover": {
-                          background: "#8477DA",
+                          background: uploadLoading[
+                            "presentationSettings.wineCellar.images"
+                          ]
+                            ? "#8477DA"
+                            : "#6a5bc5",
                         },
                       }}
+                      disabled={
+                        uploadLoading["presentationSettings.wineCellar.images"]
+                      }
                     >
                       Upload image
                       <input
                         type="file"
                         accept="image/*"
                         hidden
-                        onChange={(e) =>
+                        onChange={(e) => {
                           handleUploadPreviewImage(
                             e,
                             formik.values.presentationSettings.wineCellar
                               .images,
-                            `presentationSettings.wineCellar.images`
-                          )
-                        }
+                            "presentationSettings.wineCellar.images"
+                          );
+                          e.target.value = "";
+                        }}
                       />
                     </Button>
                   </Box>

@@ -12,9 +12,6 @@ const FooterSection = () => {
       <Container maxWidth="xl">
         <Grid
           container
-        //   sx={{
-        //     gap: { lg: 6, md: 15, sm: 10, xs: 8 },
-        //   }}
         spacing={3}
         >
           <Grid item xs={4} >

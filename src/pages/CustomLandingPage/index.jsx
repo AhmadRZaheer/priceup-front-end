@@ -3,10 +3,7 @@ import { setListData } from "@/redux/estimateCalculations";
 import { setLocationInfo } from "@/redux/locationSlice";
 import { setMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { setWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import {
-  useFetchAllDocuments,
-  useFetchSingleDocument,
-} from "@/utilities/ApiHooks/common";
+import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
 import { backendURL, frontendURL } from "@/utilities/common";
 import {
   Box,
@@ -15,7 +12,7 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
@@ -49,11 +46,10 @@ const CustomLandingPage = () => {
       }
       setSelectedDataLoading(false);
     }
-  }, [data, refetchHardwareData,isFetched]);
+  }, [data, refetchHardwareData, isFetched]);
 
   useEffect(() => {
     if (hardwareData) {
-      // Abstract repeated dispatch logic into a helper function
       const initializeHardware = () => {
         if (data?.estimateDetailArray?.length) {
           dispatch(
@@ -75,43 +71,6 @@ const CustomLandingPage = () => {
       initializeHardware();
     }
   }, [hardwareData, data, dispatch]);
-
-  // const hardwareAndSettings = useMemo(() => {
-  //   return {
-  //     showerHardware: hardwareData?.showersHardware,
-  //     mirrorHardware: hardwareData?.mirrorsHardware ?? {},
-  //     wineCellarHardware: hardwareData?.wineCellarsHardware ?? {},
-  //     wineCallerSetting: hardwareData?.locationSettings?.wineCellars ?? {},
-  //     mirrorSetting: hardwareData?.locationSettings?.mirrors ?? {},
-  //     showerSetting: hardwareData?.locationSettings?.showers ?? {},
-  //     pdfSetting: hardwareData?.locationSettings?.pdfSettings ?? {},
-  //   };
-  // }, [hardwareData]);
-
-  // console.log(
-  //   data,
-  //   "datadatadatadatadatadatadatadatadatadatadata",
-  //   hardwareData
-  // );
-  // useEffect(() => {
-  //   if (data?.location) {
-  //     dispatch(setLocationInfo(data?.location));
-  //   }
-  //   if (data?.mirrorsHardware) {
-  //     dispatch(setMirrorsHardware(data?.mirrorsHardware));
-  //   }
-  //   if (data?.showersHardware) {
-  //     dispatch(setListData(data?.showersHardware));
-  //   }
-  //   if (data?.wineCellarsHardware) {
-  //     dispatch(setWineCellarsHardware(data?.wineCellarsHardware));
-  //   }
-  // }, [
-  //   data?.location,
-  //   data?.mirrorsHardware,
-  //   data?.showersHardware,
-  //   data?.wineCellarsHardware,
-  // ]);
 
   const handleBack = () => {
     window.location.href = `${frontendURL}:3005`;
@@ -186,13 +145,6 @@ const CustomLandingPage = () => {
         refetchData={refetchData}
         isFetched={isFetched}
         isFetching={isFetching}
-        // showerHardwaresList={hardwareAndSettings?.showerHardware}
-        // mirrorHardwaresList={hardwareAndSettings?.mirrorHardware}
-        // wineCellarHardwaresList={hardwareAndSettings?.wineCellarHardware}
-        // wineCellarLocationSettings={hardwareAndSettings?.wineCallerSetting}
-        // mirrorsLocationSettings={hardwareAndSettings?.mirrorSetting}
-        // showersLocationSettings={hardwareAndSettings?.showerSetting}
-        // pdfSettings={hardwareAndSettings?.pdfSetting}
       />
     </Box>
   );

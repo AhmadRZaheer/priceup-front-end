@@ -28,7 +28,6 @@ const claimDefaultData = [
 
 const ClaimSection = ({ data }) => {
   const primaryColor = data?.content?.colorSection?.primary;
-  const secondaryColor = data?.content?.colorSection?.secondary;
   const claimData = useMemo(() => {
     const Faqs = data?.content?.section6?.claimData ?? claimDefaultData;
     return Faqs;
@@ -37,7 +36,7 @@ const ClaimSection = ({ data }) => {
     <Container maxWidth="lg" sx={{ pt: 5 }}>
       <Box
         sx={{
-          background: hexToRgba(primaryColor,0.04),
+          background: hexToRgba(primaryColor, 0.04),
           pt: 5.5,
           pb: 4,
           px: "32px !important",
@@ -63,7 +62,11 @@ const ClaimSection = ({ data }) => {
           {claimData?.map((data, index) => (
             <Box sx={{ width: "100%" }} key={index}>
               <Typography className="claimText">
-                <Box component="span" className="spanColorText" sx={{color:primaryColor}}>
+                <Box
+                  component="span"
+                  className="spanColorText"
+                  sx={{ color: primaryColor }}
+                >
                   {data?.title}:
                 </Box>{" "}
                 {data?.desc}
