@@ -31,11 +31,11 @@ export default function ProjectInvoices() {
 
   const handleDateChange = (newDate) => {
     if (newDate) {
-      const adjustedDate = dayjs(newDate)
-        .hour(12)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
+      const adjustedDate = dayjs(newDate);
+        // .hour(12)
+        // .minute(0)
+        // .second(0)
+        // .millisecond(0);
       setSelectedDate(adjustedDate);
     } else {
       setSelectedDate(null);

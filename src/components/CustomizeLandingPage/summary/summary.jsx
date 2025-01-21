@@ -124,7 +124,6 @@ const ShowerSummary = ({
       }
       console.log(upgradeGlassList);
     }
-
     const glassTypedata = upgradeGlassList?.map((item) => {
       const price =
         item?.options?.find(
@@ -317,16 +316,18 @@ const ShowerSummary = ({
 
   const handleChangeHardware = (type, value) => {
     if (type === hardwareTypes.HARDWAREADDONS) {
-      const item = { ...value.item };
-      if ("modifiedName" in item) delete item.modifiedName;
-      dispatch(
-        setCounter({
-          type,
-          item,
-          counter: value.counter,
-          estimateId: data?.selectedItem?._id,
-        })
-      );
+      if (value.counter !== undefined) {
+        const item = { ...value.item };
+        if ("modifiedName" in item) delete item.modifiedName;
+        dispatch(
+          setCounter({
+            type,
+            item,
+            counter: value.counter,
+            estimateId: data?.selectedItem?._id,
+          })
+        );
+      }
     } else {
       const item = { ...value };
       if ("modifiedName" in item) delete item.modifiedName;

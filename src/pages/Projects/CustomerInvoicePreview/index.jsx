@@ -183,6 +183,7 @@ const CustomerInvoicePreview = () => {
               textTransform: "capitalize",
               borderRadius: 1,
               fontSize: { lg: 16, md: 15, xs: 12 },
+              opacity:0,
               padding: {
                 sm: "10px 16px  !important",
                 xs: "5px 5px !important",
