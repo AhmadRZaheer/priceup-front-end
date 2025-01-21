@@ -12,7 +12,12 @@ import {
   hexToRgba,
 } from "@/utilities/common";
 import { useSelector } from "react-redux";
-import { EstimateCategory, quoteState, userRoles } from "@/utilities/constants";
+import {
+  EstimateCategory,
+  previewStatus,
+  quoteState,
+  userRoles,
+} from "@/utilities/constants";
 import {
   calculateTotal as mirrorTotal,
   generateObjectForPDFPreview as generateObjectForMirrorPDFPreview,
@@ -32,9 +37,7 @@ import {
   getLocationWineCellarSettings,
 } from "@/redux/locationSlice";
 import { useParams } from "react-router-dom";
-import {
-  useEditDocument,
-} from "@/utilities/ApiHooks/common";
+import { useEditDocument } from "@/utilities/ApiHooks/common";
 import { loadStripe } from "@stripe/stripe-js";
 import WarrantySection from "./WarrantySection";
 import MultipleImageUpload from "./MultipleImageUpload";
@@ -49,6 +52,7 @@ import SigntureSection from "./SigntureSection";
 import SingleAccordian from "./SingleAccordian";
 import { getEstimatesList } from "@/redux/customerEstimateCalculation";
 import CustomSwiper from "../CustomSwiper";
+import ScrollToTop from "../ScrollToTop";
 
 const CustomizeLandingPage = ({
   selectedData,
@@ -255,7 +259,9 @@ const CustomizeLandingPage = ({
   const imageUrl = selectedData?.content?.section1?.backgroundImage
     ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
     : bgHeaderImage;
-  console.log(imageUrl, "imageUrlimageUrl");
+  const checkPreviewStatus =
+    selectedData?.status === previewStatus.APPROVE ||
+    selectedData?.status === previewStatus.PREVIEW2;
 
   return (
     <>
@@ -669,14 +675,14 @@ const CustomizeLandingPage = ({
       {selectedData?.content?.section8?.status && (
         <UpgradeOPtions data={selectedData} />
       )}
-      {selectedData?.content?.section9?.status && (
+      {selectedData?.content?.section9?.status && checkPreviewStatus && (
         <AggremantCondition
           data={selectedData}
           acceptTerms={acceptTerms}
           setAcceptTerms={setAcceptTerms}
         />
       )}
-      {selectedData?.content?.section10?.status && (
+      {selectedData?.content?.section10?.status && checkPreviewStatus && (
         <SigntureSection
           data={selectedData}
           refetchData={refetchData}
@@ -709,6 +715,8 @@ const CustomizeLandingPage = ({
           </Typography>
         </Box>
       </Box>
+      {/*Scroll Button */}
+      <ScrollToTop color={secondaryColor} background={primaryColor} />
     </>
   );
 };

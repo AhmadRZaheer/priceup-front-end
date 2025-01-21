@@ -88,10 +88,7 @@ const ProjectInvoiceComponent = ({
     "hardwareAddons"
   );
   const navigate = useNavigate();
-  const {
-    mutateAsync: createInvoice,
-    isLoading,
-  } = useCreateDocument();
+  const { mutateAsync: createInvoice, isLoading } = useCreateDocument();
   const formik = useFormik({
     initialValues: {
       customer: selectedCustomer?.name || "",
@@ -121,16 +118,11 @@ const ProjectInvoiceComponent = ({
       handleCraete(values);
     },
   });
-  const {
-    data: customerList,
-    refetch,
-  } = useFetchDataCustomer();
-  const {
-    data: projectsList,
-    refetch: refetchProjectsList,
-  } = useFetchAllDocuments(
-    `${backendURL}/projects/by-customer/${selectedCustomer?._id}`
-  );
+  const { data: customerList, refetch } = useFetchDataCustomer();
+  const { data: projectsList, refetch: refetchProjectsList } =
+    useFetchAllDocuments(
+      `${backendURL}/projects/by-customer/${selectedCustomer?._id}`
+    );
 
   useEffect(() => {
     refetch();
@@ -194,7 +186,44 @@ const ProjectInvoiceComponent = ({
           secondary: "#FFFFFF",
           default: "#000000",
         },
-        section2: locationPresentationSettings,
+        section2: {
+          shower: {
+            ...locationPresentationSettings?.shower,
+            status: true,
+          },
+          mirror: {
+            ...locationPresentationSettings?.mirror,
+            status: true,
+          },
+          wineCellar: {
+            ...locationPresentationSettings?.wineCellar,
+            status: true,
+          },
+        },
+        section3: {
+          status: true,
+        },
+        section4: {
+          status: true,
+        },
+        section5: {
+          status: true,
+        },
+        section6: {
+          status: true,
+        },
+        section7: {
+          status: true,
+        },
+        section8: {
+          status: true,
+        },
+        section9: {
+          status: true,
+        },
+        section10: {
+          status: true,
+        },
       },
       additionalUpgrades: {
         shower: {

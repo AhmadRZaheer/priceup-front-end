@@ -39,7 +39,6 @@ import MirrorsEdgeWork from "@/pages/Mirrors/EdgeWorks";
 import MirrorsGlassType from "@/pages/Mirrors/GlassTypes";
 import MirrorsGlassAddon from "@/pages/Mirrors/GlassAddons";
 import MirrorsHardware from "@/pages/Mirrors/Hardwares";
-
 import EstimateCategory from "@/pages/EstimateCategory";
 import EstimateLayouts from "@/pages/EstimateLayouts";
 import EstimateDimensions from "@/pages/EstimateDimensions";
@@ -64,8 +63,6 @@ import Invoices from "@/pages/Invoices";
 import ProjectInvoiceCreate from "@/pages/Invoices/Create";
 import ProjectInvoiceDetail from "@/pages/Invoices/Detail";
 import CreateNewInvoice from "@/pages/Invoices/CreateNewInvoice";
-import CreateLandingInvoice from "../ProjectInvoices/CreateInvoice";
-import EditQuoteInvoice from "../ProjectInvoices/CreateEditInvoice/EditQuotePage";
 import ProjectInvoiceEdit from "@/pages/Invoices/Edit";
 
 const AppRoutes = () => {
