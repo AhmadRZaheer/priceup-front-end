@@ -62,6 +62,7 @@ function InvoiceDetails() {
   const [dueDate, setDueDate] = useState(dayjs(data?.dueDate));
   const [isEdit, setIsEdit] = useState(false);
   const [copyLink, setCopyLink] = useState(false);
+  const [estimateListData, setEstimateListData] = useState([]);
   const wineCellarHardwareList = useSelector(getWineCellarsHardware);
   const mirrorsHardwareList = useSelector(getMirrorsHardware);
   const showerHardwareList = useSelector(getListData);
@@ -133,47 +134,53 @@ function InvoiceDetails() {
   useEffect(() => {
     setDueDate(dayjs(data?.dueDate));
     setStatus(data?.status);
-    setNotes(data?.notes);
+    setNotes(data?.description);
   }, [isSuccess]);
 
   useEffect(() => {
     refetch();
   }, []);
 
-  const hardwaresList = {
-    showers: showerHardwareList,
-    mirrors: mirrorsHardwareList,
-    wineCellars: wineCellarHardwareList,
-  };
-  const estimateListData = useMemo(() => {
-    let result = [];
-    if (
-      data?.estimateDetailArray?.length > 0 &&
-      hardwaresList.showers &&
-      hardwaresList.mirrors &&
-      hardwaresList.wineCellars
-    ) {
-      const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
-        data?.estimateDetailArray ?? [],
-        hardwaresList,
-        companySettings
-      );
-      result = EstimateDeatilsData ?? [];
-    }
-    return result;
-  }, [data]);
+  const hardwaresList = useMemo(
+    () => ({
+      showers: showerHardwareList,
+      mirrors: mirrorsHardwareList,
+      wineCellars: wineCellarHardwareList,
+    }),
+    [showerHardwareList, mirrorsHardwareList, wineCellarHardwareList]
+  );
+  useEffect(() => {
+    const fetchEstimateDetails = async () => {
+      if (
+        data?.estimateDetailArray?.length > 0 &&
+        hardwaresList.showers &&
+        hardwaresList.mirrors &&
+        hardwaresList.wineCellars
+      ) {
+        const estimateDetailsData = await generateInvoiceItemsFromEstimates(
+          data?.estimateDetailArray,
+          hardwaresList,
+          companySettings
+        );
+        setEstimateListData(estimateDetailsData);
+      } else {
+        setEstimateListData([]);
+      }
+    };
+  
+    fetchEstimateDetails();
+  }, [data?.estimateDetailArray,hardwaresList]);
 
   const InvoiceTotal = useMemo(() => {
-    return estimateListData.reduce((total, data) => {
+    console.log(estimateListData,data,'data.pricing')
+    return estimateListData?.reduce((total, data) => {
       if (!data.pricing) return total; 
-      const price = data.pricing.discountTotal > 0
+      const price = data.config.config.discount.value > 0
         ? data.pricing.discountTotal
         : data.pricing.totalPrice;
       return total + (price || 0);
     }, 0);
   }, [estimateListData,data]);
-
-  console.log(estimateListData, data, "datadatadatadatadatadatadata");
 
   return (
     <Card sx={{ pb: 4 }}>
@@ -659,7 +666,8 @@ function InvoiceDetails() {
             >
               <Typography>Invoice Total:</Typography>
               <Typography sx={{ pr: 2 }}>
-                ${data?.grandTotal?.toLocaleString()}
+                {/* ${data?.grandTotal?.toLocaleString()} */}
+                ${InvoiceTotal.toFixed(2)}
               </Typography>
             </div>
           </div>

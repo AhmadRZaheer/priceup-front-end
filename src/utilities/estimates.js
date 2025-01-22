@@ -842,14 +842,13 @@ export const generateObjForMirrorPDFRuntime = (
   };
 };
 
-export const generateInvoiceItemsFromEstimates = (
+export const generateInvoiceItemsFromEstimates = async (
   estimatesList,
   hardwaresList,
   companySettings
 ) => {
   let items = [];
-  estimatesList.forEach(async (estimate) => {
-    console.log(estimate,'wqwqwddwdwertw');
+  for (const estimate of estimatesList) {
     switch (estimate.category) {
       case EstimateCategory.SHOWERS:
         const showerResp = await generateInvoiceItemForShowers(
@@ -878,7 +877,8 @@ export const generateInvoiceItemsFromEstimates = (
       default:
         break;
     }
-  });
+  }
+  
   return items;
 };
 
