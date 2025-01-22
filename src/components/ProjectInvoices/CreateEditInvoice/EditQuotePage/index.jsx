@@ -270,7 +270,7 @@ const EditQuoteInvoice = () => {
       dueDate: dayjs(singleItemData?.customerPreview?.expiresAt) || null,
       notes: singleItemData?.description || "",
       status: singleItemData?.status || "pending",
-      additionalUpgrades: {
+      additionalUpgrades: { 
         shower: {
           glassTypes:
             singleItemData?.additionalUpgrades?.shower?.glassTypes ?? [],
@@ -1731,7 +1731,7 @@ const EditQuoteInvoice = () => {
                   </Box>
                 </Box>
                 <Box>
-                  {/* section 1 */}
+                  {/* section 0 */}
                   <Box sx={{ p: 2 }}>
                     <Typography variant="h5" fontWeight={"bold"}>
                       Theme Colors
