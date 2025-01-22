@@ -24,7 +24,11 @@ import {
   useFetchAllDocuments,
   useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
-import { backendURL, estimateTotalWithCategory, frontendURL } from "@/utilities/common";
+import {
+  backendURL,
+  estimateTotalWithCategory,
+  frontendURL,
+} from "@/utilities/common";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
@@ -746,20 +750,35 @@ const EditQuoteInvoice = () => {
   const checkPreviewStatus =
     singleItemData?.status === previewStatus.PENDING ||
     singleItemData?.status === previewStatus.PREVIEW1;
-   
-    const getHumanReadableDate = (date) => {
-      const newDate = new Date(date);
-      const formattedDateTime = newDate.toLocaleString("en-US", {
-        weekday: "long", // Full weekday name
-        month: "long", // Full month name
-        day: "numeric", // Numeric day
-        year: "numeric", // Full year
-        hour: "numeric", // Hour
-        minute: "2-digit", // Minute
-        hour12: true, // 12-hour format
-      });
-      return formattedDateTime;
+
+  const getHumanReadableDate = (date) => {
+    const newDate = new Date(date);
+    const formattedDateTime = newDate.toLocaleString("en-US", {
+      weekday: "long", // Full weekday name
+      month: "long", // Full month name
+      day: "numeric", // Numeric day
+      year: "numeric", // Full year
+      hour: "numeric", // Hour
+      minute: "2-digit", // Minute
+      hour12: true, // 12-hour format
+    });
+    return formattedDateTime;
+  };
+  //Scroll Shadow
+  const [scrollShadow, setScrollShadow] = useState(false);
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setScrollShadow(true);
+      } else {
+        setScrollShadow(false);
+      }
     };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <>
@@ -787,6 +806,9 @@ const EditQuoteInvoice = () => {
                   width: "-webkit-fill-available",
                   marginRight: "22px",
                   zIndex: 100,
+                  boxShadow: scrollShadow
+                    ? "0px 3px 1px -1px rgba(0,0,0,0.2),0px 0px 0px 0px rgba(0,0,0,0.14),0px 0px 0px 0px rgba(0,0,0,0.12)"
+                    : "none",
                   background: "#F6F5FF",
                 }}
               >
@@ -1285,11 +1307,9 @@ const EditQuoteInvoice = () => {
                               <FiberManualRecordIcon
                                 sx={{ color: "#8477DA", fontSize: "15px" }}
                               />
-                              <Typography
-                                sx={{ fontSize: 16 }}
-                                key={index}
-                              >
-                                {data?.title + getHumanReadableDate(data?.createdAt)}
+                              <Typography sx={{ fontSize: 16 }} key={index}>
+                                {data?.title +
+                                  getHumanReadableDate(data?.createdAt)}
                               </Typography>
                             </Box>
                           ))
@@ -4515,7 +4535,7 @@ const EditQuoteInvoice = () => {
                     </Box>
                   </Box>
                   {/* section 10 */}
-                  <Box sx={{ px: 2,pb:6 }}>
+                  <Box sx={{ px: 2, pb: 6 }}>
                     <Box
                       sx={{ display: "flex", justifyContent: "space-between" }}
                     >
@@ -4546,7 +4566,7 @@ const EditQuoteInvoice = () => {
           </Box>
         </Box>
       </Box>
-      <ScrollToTop color={"#fff"} background={'#8477DA'} />
+      <ScrollToTop color={"#fff"} background={"#8477DA"} />
     </>
   );
 };
