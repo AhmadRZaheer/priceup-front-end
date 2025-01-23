@@ -1,10 +1,11 @@
-import { parseJwt } from "@/components/ProtectedRoute/authVerify";
+import { parseJwt } from '@/components/ProtectedRoute/authVerify';
+
 import {
   EstimateCategory,
   layoutVariants,
   thicknessTypes,
   weightMultiplier,
-} from "./constants";
+} from './constants';
 
 export const generateId = () => {
   return Date.now() + "";
@@ -1395,9 +1396,9 @@ export const estimateTotalWithCategory = (estimatelist) => {
   };
 };
 
-export const hexToRgba = (hex, alpha = 1) => {
+export const hexToRgba = (hex='#fff', alpha = 1) => {
   // Remove the hash at the start if it's there
-  hex = hex.replace(/^#/, "");
+  hex = hex?.replace(/^#/, "");
 
   // Parse the hex color
   let r = parseInt(hex.substring(0, 2), 16);

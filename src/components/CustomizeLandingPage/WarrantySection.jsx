@@ -1,7 +1,16 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
-import React from "react";
-import WarrantySectionImg from "../../Assets/CustomerLandingImages/WrrantyImg.svg";
-import "./style.scss";
+import './style.scss';
+
+import React from 'react';
+
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+} from '@mui/material';
+
+import WarrantySectionImg
+  from '../../Assets/CustomerLandingImages/WrrantyImg.svg';
 
 const WarrantySection = ({ data }) => {
   const primaryColor = data?.content?.colorSection?.primary;
@@ -29,7 +38,7 @@ const WarrantySection = ({ data }) => {
               className="warrantySubHead"
               sx={{ pt: 3, color: secondaryColor }}
             >
-              {data?.content?.section4?.subheading ??
+              {data?.content?.section4?.subHeading ??
                 "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction."}
             </Typography>
           </Grid>

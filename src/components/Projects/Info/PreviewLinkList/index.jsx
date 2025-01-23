@@ -1,29 +1,40 @@
-import { Close, ContentCopy, DoneOutlined } from "@mui/icons-material";
-import DeleteIcon from "@/Assets/Delete-Icon.svg";
-import EditIcon from "@/Assets/d.svg";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import DeleteModal from '@/components/Modal/deleteModal';
+import { showSnackbar } from '@/redux/snackBarSlice';
 import {
   useDeleteDocument,
   useFetchAllDocuments,
-} from "@/utilities/ApiHooks/common";
-import { backendURL } from "@/utilities/common";
-import DeleteModal from "@/components/Modal/deleteModal";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import { useDispatch } from "react-redux";
+} from '@/utilities/ApiHooks/common';
+import { backendURL } from '@/utilities/common';
+import {
+  Close,
+  ContentCopy,
+  DoneOutlined,
+} from '@mui/icons-material';
+import DeleteForeverOutlinedIcon
+  from '@mui/icons-material/DeleteForeverOutlined';
+import ModeEditOutlineOutlinedIcon
+  from '@mui/icons-material/ModeEditOutlineOutlined';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import {
   Box,
-  Typography,
-  Modal,
   IconButton,
+  Modal,
   Table,
-  TableRow,
-  TableCell,
   TableBody,
+  TableCell,
   TableHead,
+  TableRow,
   Tooltip,
-} from "@mui/material";
+  Typography,
+} from '@mui/material';
 
 const style = {
   position: "absolute",
@@ -233,11 +244,12 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                               sx={{ width: 20, height: 20 }}
                               onClick={() => handleOpenDeleteModal(row?._id)}
                             >
-                              <img
+                              {/* <img
                                 src={DeleteIcon}
                                 alt="delete icon"
                                 style={{ width: "20px", height: "20px" }}
-                              />
+                              /> */}
+                              <DeleteForeverOutlinedIcon sx={{ fontSize: "24px" , color:'#e22a2d'}} />
                             </IconButton>
                           </Tooltip>}
                           <Tooltip placement="top" title="Edit">
@@ -245,11 +257,12 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                               sx={{ width: 20, height: 20 }}
                               onClick={() => handleEditItem(row?._id)}
                             >
-                              <img
+                              {/* <img
                                 src={EditIcon}
                                 alt="delete icon"
                                 style={{ width: "20px", height: "20px" }}
-                              />
+                              /> */}
+                              <ModeEditOutlineOutlinedIcon sx={{ fontSize: "24px" }} />
                             </IconButton>
                           </Tooltip>
 

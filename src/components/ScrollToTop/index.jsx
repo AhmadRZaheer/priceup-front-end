@@ -1,6 +1,13 @@
-import { Button, IconButton, Tooltip } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import {
+  Button,
+  Tooltip,
+} from '@mui/material';
 
 const ScrollToTop = ({ background, color }) => {
   const [showButton, setShowButton] = useState(false);
@@ -48,13 +55,14 @@ const ScrollToTop = ({ background, color }) => {
               height: "48px",
               cursor: "pointer",
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              minWidth:'55px',
               fontSize: "18px",
               ":hover": {
                 backgroundColor: background,
               },
             }}
           >
-            <KeyboardArrowUpIcon sx={{fontSize:'42px'}} />
+            <KeyboardArrowUpIcon sx={{fontSize:'38px'}} />
           </Button>
         </Tooltip>
       )}

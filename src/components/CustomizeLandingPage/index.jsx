@@ -1,8 +1,23 @@
-import { Box, CircularProgress, Container, Typography } from "@mui/material";
-import "./style.scss";
-import React, { useEffect, useMemo, useState } from "react";
-import bgHeaderImage from "../../Assets/CustomerLandingImages/BannerHeadImg.png";
+import './style.scss';
 
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { useSelector } from 'react-redux';
+
+import { getEstimatesList } from '@/redux/customerEstimateCalculation';
+import { getListData } from '@/redux/estimateCalculations';
+import {
+  getLocationMirrorSettings,
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+  getLocationWineCellarSettings,
+} from '@/redux/locationSlice';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
 import {
   backendURL,
   calculateAreaAndPerimeter,
@@ -10,49 +25,44 @@ import {
   calculateTotal,
   getDecryptedToken,
   hexToRgba,
-} from "@/utilities/common";
-import { useSelector } from "react-redux";
+} from '@/utilities/common';
 import {
   EstimateCategory,
   previewStatus,
   quoteState,
   userRoles,
-} from "@/utilities/constants";
+} from '@/utilities/constants';
+import {
+  generateObjectForPDFPreview,
+  renderMeasurementSides,
+} from '@/utilities/estimates';
 import {
   calculateTotal as mirrorTotal,
   generateObjectForPDFPreview as generateObjectForMirrorPDFPreview,
   renderMeasurementSides as mirrorRenderSides,
-} from "@/utilities/mirrorEstimates";
+} from '@/utilities/mirrorEstimates';
 import {
-  generateObjectForPDFPreview,
-  renderMeasurementSides,
-} from "@/utilities/estimates";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getListData } from "@/redux/estimateCalculations";
-import {
-  getLocationMirrorSettings,
-  getLocationPdfSettings,
-  getLocationShowerSettings,
-  getLocationWineCellarSettings,
-} from "@/redux/locationSlice";
-import { useParams } from "react-router-dom";
-import { useEditDocument } from "@/utilities/ApiHooks/common";
-import { loadStripe } from "@stripe/stripe-js";
-import WarrantySection from "./WarrantySection";
-import MultipleImageUpload from "./MultipleImageUpload";
-import ManainanceSection from "./Manainance";
-import HeaderSection from "./HeaderSection";
-import ChoiceGCS from "./ChoiceGCS";
-import LimitationsSection from "./Limitations";
-import ClaimSection from "./ClaimSection";
-import UpgradeOPtions from "./UpgradeOptions";
-import AggremantCondition from "./AggremantCondition";
-import SigntureSection from "./SigntureSection";
-import SingleAccordian from "./SingleAccordian";
-import { getEstimatesList } from "@/redux/customerEstimateCalculation";
-import CustomSwiper from "../CustomSwiper";
-import ScrollToTop from "../ScrollToTop";
+  Box,
+  CircularProgress,
+  Container,
+  Typography,
+} from '@mui/material';
+import { loadStripe } from '@stripe/stripe-js';
+
+import bgHeaderImage
+  from '../../Assets/CustomerLandingImages/BannerHeadImg.png';
+import CustomSwiper from '../CustomSwiper';
+import ScrollToTop from '../ScrollToTop';
+import AggremantCondition from './AggremantCondition';
+import ChoiceGCS from './ChoiceGCS';
+import ClaimSection from './ClaimSection';
+import HeaderSection from './HeaderSection';
+import LimitationsSection from './Limitations';
+import ManainanceSection from './Manainance';
+import SigntureSection from './SigntureSection';
+import SingleAccordian from './SingleAccordian';
+import UpgradeOPtions from './UpgradeOptions';
+import WarrantySection from './WarrantySection';
 
 const CustomizeLandingPage = ({
   selectedData,

@@ -1,5 +1,42 @@
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+import { useFormik } from 'formik';
+import { useDropzone } from 'react-dropzone';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import * as Yup from 'yup';
+
+import Imag1 from '@/Assets/CustomerLandingImages/2.png';
+import Imag2 from '@/Assets/CustomerLandingImages/3.png';
+import bgHeaderImage from '@/Assets/CustomerLandingImages/BannerHeadImg.png';
+import LimitationImg from '@/Assets/CustomerLandingImages/LimitationImg.svg';
+import infoBgHeaderImage from '@/Assets/CustomerLandingImages/WhyChoice.svg';
+import GCSLogo from '@/Assets/GCS-logo.png';
+import InputImageIcon from '@/Assets/imageUploader.svg';
+import CustomTabPanel from '@/components/CustomTabPanel';
+import { getListData } from '@/redux/estimateCalculations';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { setLocationSettingsRefetch } from '@/redux/refetch';
+import { showSnackbar } from '@/redux/snackBarSlice';
+import { getDataRefetch } from '@/redux/staff';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import { useEditDocument } from '@/utilities/ApiHooks/common';
+import { useFetchDataSetting } from '@/utilities/ApiHooks/setting';
+import { backendURL } from '@/utilities/common';
+import {
+  inputLength,
+  inputMaxValue,
+} from '@/utilities/constants';
+import {
+  Delete,
+  Edit,
+} from '@mui/icons-material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
   Autocomplete,
   Box,
@@ -13,35 +50,15 @@ import {
   TextareaAutosize,
   TextField,
   Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useFetchDataSetting } from "@/utilities/ApiHooks/setting";
-import { backendURL } from "@/utilities/common";
-import GCSLogo from "@/Assets/GCS-logo.png";
-import bgHeaderImage from "@/Assets/CustomerLandingImages/BannerHeadImg.png";
-import CustomToggle from "../ui-components/Toggle";
-import CustomInputField from "../ui-components/CustomInput";
-import { useDropzone } from "react-dropzone";
-import InputImageIcon from "@/Assets/imageUploader.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { getDataRefetch } from "@/redux/staff";
-import CustomTabPanel from "@/components/CustomTabPanel";
-import { setLocationSettingsRefetch } from "@/redux/refetch";
-import { inputLength, inputMaxValue } from "@/utilities/constants";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { getListData } from "@/redux/estimateCalculations";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { Delete, Edit } from "@mui/icons-material";
-import { useEditDocument } from "@/utilities/ApiHooks/common";
-import TextEditor from "../ProjectInvoices/CreateEditInvoice/EditQuotePage/TextEditor";
-import infoBgHeaderImage from "@/Assets/CustomerLandingImages/WhyChoice.svg";
-import LimitationImg from "@/Assets/CustomerLandingImages/LimitationImg.svg";
-import FAQSection from "../ProjectInvoices/CreateEditInvoice/EditQuotePage/FAQSection";
-import Imag1 from "@/Assets/CustomerLandingImages/2.png";
-import Imag2 from "@/Assets/CustomerLandingImages/3.png";
-import ScrollToTop from "../ScrollToTop";
+} from '@mui/material';
+
+import FAQSection
+  from '../ProjectInvoices/CreateEditInvoice/EditQuotePage/FAQSection';
+import TextEditor
+  from '../ProjectInvoices/CreateEditInvoice/EditQuotePage/TextEditor';
+import ScrollToTop from '../ScrollToTop';
+import CustomInputField from '../ui-components/CustomInput';
+import CustomToggle from '../ui-components/Toggle';
 
 const termsCondition = `<div style="font-family: 'Roboto', sans-serif; font-size: 17px; font-weight: 500; line-height: 25.5px; color: #6b6b6b; padding-right: 5px;">
   <div>Last Revised: December 16, 2013</div>
@@ -208,7 +225,7 @@ const CampanySetting = () => {
   const [uploadLoading, setUploadLoading] = useState({
     "presentationSettings.section1.logo": false,
     "presentationSettings.section1.backgroundImage": false,
-    "presentationSettings.section3.bgimage": false,
+    "presentationSettings.section3.backgroundImage": false,
     "presentationSettings.section5.image": false,
     "presentationSettings.section8.image1": false,
     "presentationSettings.section8.image2": false,
@@ -225,7 +242,6 @@ const CampanySetting = () => {
   const [claimData, setClaimData] = useState(
     settingData?.presentationSettings?.section6?.claimData ?? claimDefaultData
   );
-  console.log(uploadLoading, "uploadLoadinguploadLoading");
   const handleChange = (newValue) => {
     setValue(newValue);
   };
@@ -235,9 +251,11 @@ const CampanySetting = () => {
       dispatch(setLocationSettingsRefetch());
     }
   }, [SuccessForEdit]);
+
   useEffect(() => {
     reFetchDataSetting();
   }, [CustomerU_change]);
+
   useEffect(() => {
     if (settingData) {
       setTermsText(
@@ -259,9 +277,19 @@ const CampanySetting = () => {
     }
   }, [settingData]);
 
-  const onDrop = (acceptedFiles) => {
-    setSelectedImage(acceptedFiles[0]);
-    formik.setFieldValue("image", acceptedFiles[0]);
+  const onDrop = async (acceptedFiles) => {
+    const image = acceptedFiles[0];
+    if (image) {
+      setSelectedImage(image);
+      // formik.setFieldValue("image", image);
+      const formData = new FormData();
+      formData.append("image", image);
+      formData.append("data", JSON.stringify({}));
+      await editSetting({
+        data: formData,
+        apiRoute: `${backendURL}/companies/${settingData._id}`,
+      });
+    }
   };
 
   const validationSchema = Yup.object().shape({
@@ -437,28 +465,38 @@ const CampanySetting = () => {
           text2:
             settingData?.presentationSettings?.section1?.text2 ||
             "Turning your Vision into reality– Get a Precise Estimate for Your Next Project Today!",
+          logo: settingData?.presentationSettings?.section1?.logo,
+          backgroundImage:
+            settingData?.presentationSettings?.section1?.backgroundImage,
         },
         section2: {
           shower: {
-            images: settingData?.presentationSettings?.shower?.images ?? [],
+            images:
+              settingData?.presentationSettings?.section2?.shower?.images ?? [],
             description:
-              settingData?.presentationSettings?.shower?.description ?? "",
+              settingData?.presentationSettings?.section2?.shower
+                ?.description ?? "",
             status:
               settingData?.presentationSettings?.section2?.shower?.status ??
               true,
           },
           mirror: {
-            images: settingData?.presentationSettings?.mirror?.images ?? [],
+            images:
+              settingData?.presentationSettings?.section2?.mirror?.images ?? [],
             description:
-              settingData?.presentationSettings?.mirror?.description ?? "",
+              settingData?.presentationSettings?.section2?.mirror
+                ?.description ?? "",
             status:
               settingData?.presentationSettings?.section2?.mirror?.status ??
               true,
           },
           wineCellar: {
-            images: settingData?.presentationSettings?.wineCellar?.images ?? [],
+            images:
+              settingData?.presentationSettings?.section2?.wineCellar?.images ??
+              [],
             description:
-              settingData?.presentationSettings?.wineCellar?.description ?? "",
+              settingData?.presentationSettings?.section2?.wineCellar
+                ?.description ?? "",
             status:
               settingData?.presentationSettings?.section2?.wineCellar?.status ??
               true,
@@ -468,13 +506,14 @@ const CampanySetting = () => {
           heading:
             settingData?.presentationSettings?.section3?.heading ||
             "Why Choose GCS?",
-          subheading:
-            settingData?.presentationSettings?.section3?.subheading ||
+          subHeading:
+            settingData?.presentationSettings?.section3?.subHeading ||
             "The Highest Quality Residential Glass Services",
           description:
             settingData?.presentationSettings?.section3?.description ||
             "Founded in 2013 in Phoenix Arizona, GCS has had a tremendous amount of success due to our “can do it” attitude along with our innovative approach to every aspect of the business.",
-          bgimage: settingData?.presentationSettings?.section3?.bgimage,
+          backgroundImage:
+            settingData?.presentationSettings?.section3?.backgroundImage,
           status: settingData?.presentationSettings?.section3?.status ?? true,
           card1: {
             text1:
@@ -513,26 +552,29 @@ const CampanySetting = () => {
           heading:
             settingData?.presentationSettings?.section4?.heading ||
             "Lifetime Craftsmanship Warranty – Our Promise to You",
-          subheading:
-            settingData?.presentationSettings?.section4?.subheading ||
+          subHeading:
+            settingData?.presentationSettings?.section4?.subHeading ||
             "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction.",
           status: settingData?.presentationSettings?.section4?.status ?? true,
+          description: warrantyText ?? WarrantyText,
         },
         section5: {
           image: settingData?.presentationSettings?.section5?.image,
           status: settingData?.presentationSettings?.status ?? true,
+          faqs: accordionData ?? accordionDefaultData,
         },
         section6: {
           heading:
             settingData?.presentationSettings?.section6?.heading ||
             "How to File a Claim",
-          subheading:
-            settingData?.presentationSettings?.section6?.subheading ||
+          subHeading:
+            settingData?.presentationSettings?.section6?.subHeading ||
             "Submitting a warranty claim is easy! Simply contact your local GCS Glass & Mirror location to begin the process:",
-          bottomtext:
-            settingData?.presentationSettings?.section6?.bottomtext ||
+          bottomText:
+            settingData?.presentationSettings?.section6?.bottomText ||
             "At GCS Glass & Mirror, we value your trust and strive to provide only the highest-quality products and services. Thank you for choosing us to transform your spaces!",
           status: settingData?.presentationSettings?.section6?.status ?? true,
+          claimData: claimData ?? claimDefaultData,
         },
         section7: {
           heading:
@@ -573,11 +615,13 @@ const CampanySetting = () => {
             title:
               settingData?.presentationSettings?.section8?.product?.title ||
               "GCS ARMOR THE ULTIMATE GLASS PROTECTION SOLUTION",
-            desc1:
-              settingData?.presentationSettings?.section8?.product?.desc1 ||
+            description1:
+              settingData?.presentationSettings?.section8?.product
+                ?.description1 ||
               "Glass is naturally porous, allowing water and contaminants to seep in, but GCS Armor's hydrophobic nano coating fills and seals these pores, leaving surfaces smooth and protected. Backed by a 10-year warranty, it ensures long-lasting durability.",
-            desc2:
-              settingData?.presentationSettings?.section8?.product?.desc2 ||
+            description2:
+              settingData?.presentationSettings?.section8?.product
+                ?.description2 ||
               "Ask about our GCS Armor Bath Kit for easy maintenance, and experience the next level of glass protection today. Contact us to get started!",
           },
           image1: settingData?.presentationSettings?.section8?.image1,
@@ -596,7 +640,7 @@ const CampanySetting = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values, "editedData");
-      // handleEditSetting(values);
+      handleEditSetting(values);
     },
   });
 
@@ -3175,7 +3219,9 @@ const CampanySetting = () => {
                     }}
                   >
                     <Box>
-                      {uploadLoading["presentationSettings.shower.images"] ? (
+                      {uploadLoading[
+                        "presentationSettings.section2.shower.images"
+                      ] ? (
                         <CircularProgress sx={{ color: "#8477DA" }} size={42} />
                       ) : (
                         ""
@@ -3797,14 +3843,14 @@ const CampanySetting = () => {
                       color="neutral"
                       minRows={3}
                       maxRows={4}
-                      name="presentationSettings.section3.subheading"
+                      name="presentationSettings.section3.subHeading"
                       placeholder="Enter Text"
                       size="large"
                       variant="outlined"
                       maxLength={49}
                       value={
                         formik.values.presentationSettings.section3
-                          .subheading || ""
+                          .subHeading || ""
                       }
                       onChange={formik.handleChange}
                     />
@@ -4188,8 +4234,9 @@ const CampanySetting = () => {
                     </Typography>
                     <Box
                       sx={{
+                        width: "100%",
                         display: "flex",
-                        cursor: "pointer",
+                        // cursor: "pointer",
                       }}
                       onClick={() =>
                         document.getElementById("info-image-upload").click()
@@ -4205,7 +4252,7 @@ const CampanySetting = () => {
                           handleUploadPreviewImage(
                             e,
                             [],
-                            "presentationSettings.section3.bgimage"
+                            "presentationSettings.section3.backgroundImage"
                             // { height: 400, width: 700 }
                           );
                           e.target.value = "";
@@ -4221,7 +4268,11 @@ const CampanySetting = () => {
                           }}
                         >
                           <IconButton
-                            disabled={uploadLoading["presentationSettings.section3.bgimage"]}
+                            disabled={
+                              uploadLoading[
+                                "presentationSettings.section3.backgroundImage"
+                              ]
+                            }
                             sx={{
                               background: "#8477DA",
                               color: "white",
@@ -4246,7 +4297,9 @@ const CampanySetting = () => {
                           }}
                         >
                           <Box>
-                            {uploadLoading["presentationSettings.section3.bgimage"] ? (
+                            {uploadLoading[
+                              "presentationSettings.section3.backgroundImage"
+                            ] ? (
                               <CircularProgress
                                 sx={{ color: "#8477DA" }}
                                 size={32}
@@ -4258,16 +4311,18 @@ const CampanySetting = () => {
                         </Box>
 
                         {formik.values.presentationSettings.section3
-                          ?.bgimage ? (
+                          ?.backgroundImage ? (
                           <img
-                            src={`${backendURL}/${formik.values.presentationSettings.section3?.bgimage}`}
+                            src={`${backendURL}/${formik.values.presentationSettings.section3?.backgroundImage}`}
                             width="400"
                             height={380}
                             alt="not found"
                             style={{
                               border: "1px solid  #ccc",
                               borderRadius: "10px",
-                              opacity: uploadLoading["presentationSettings.section3.bgimage"]
+                              opacity: uploadLoading[
+                                "presentationSettings.section3.backgroundImage"
+                              ]
                                 ? 0.3
                                 : 1,
                             }}
@@ -4281,7 +4336,9 @@ const CampanySetting = () => {
                             style={{
                               border: "1px solid  #ccc",
                               borderRadius: "10px",
-                              opacity: uploadLoading["presentationSettings.section3.bgimage"]
+                              opacity: uploadLoading[
+                                "presentationSettings.section3.backgroundImage"
+                              ]
                                 ? 0.3
                                 : 1,
                             }}
@@ -4375,14 +4432,14 @@ const CampanySetting = () => {
                       color="neutral"
                       minRows={3}
                       maxRows={4}
-                      name="presentationSettings.section4.subheading"
+                      name="presentationSettings.section4.subHeading"
                       placeholder="Enter Text"
                       size="large"
                       variant="outlined"
                       maxLength={154}
                       value={
                         formik.values.presentationSettings.section4
-                          .subheading || ""
+                          .subHeading || ""
                       }
                       onChange={formik.handleChange}
                     />
@@ -4477,7 +4534,11 @@ const CampanySetting = () => {
                           }}
                         >
                           <IconButton
-                            disabled={uploadLoading["presentationSettings.section5.image"]}
+                            disabled={
+                              uploadLoading[
+                                "presentationSettings.section5.image"
+                              ]
+                            }
                             sx={{
                               background: "#8477DA",
                               color: "white",
@@ -4502,7 +4563,9 @@ const CampanySetting = () => {
                           }}
                         >
                           <Box>
-                            {uploadLoading["presentationSettings.section5.image"] ? (
+                            {uploadLoading[
+                              "presentationSettings.section5.image"
+                            ] ? (
                               <CircularProgress
                                 sx={{ color: "#8477DA" }}
                                 size={24}
@@ -4522,7 +4585,9 @@ const CampanySetting = () => {
                             style={{
                               border: "1px solid  #ccc",
                               borderRadius: "10px",
-                              opacity: uploadLoading["presentationSettings.section5.image"]
+                              opacity: uploadLoading[
+                                "presentationSettings.section5.image"
+                              ]
                                 ? 0.3
                                 : 1,
                             }}
@@ -4536,7 +4601,9 @@ const CampanySetting = () => {
                             style={{
                               border: "1px solid  #ccc",
                               borderRadius: "10px",
-                              opacity: uploadLoading["presentationSettings.section5.image"]
+                              opacity: uploadLoading[
+                                "presentationSettings.section5.image"
+                              ]
                                 ? 0.3
                                 : 1,
                             }}
@@ -4632,14 +4699,14 @@ const CampanySetting = () => {
                       color="neutral"
                       minRows={3}
                       maxRows={4}
-                      name="presentationSettings.section6.subheading"
+                      name="presentationSettings.section6.subHeading"
                       placeholder="Enter Text"
                       size="large"
                       variant="outlined"
                       maxLength={142}
                       value={
                         formik.values.presentationSettings.section6
-                          .subheading || ""
+                          .subHeading || ""
                       }
                       onChange={formik.handleChange}
                     />
@@ -4671,14 +4738,14 @@ const CampanySetting = () => {
                       color="neutral"
                       minRows={3}
                       maxRows={4}
-                      name="presentationSettings.section6.bottomtext"
+                      name="presentationSettings.section6.bottomText"
                       placeholder="Enter Text"
                       size="large"
                       variant="outlined"
                       maxLength={197}
                       value={
                         formik.values.presentationSettings.section6
-                          .bottomtext || ""
+                          .bottomText || ""
                       }
                       onChange={formik.handleChange}
                     />
@@ -5100,11 +5167,11 @@ const CampanySetting = () => {
                         placeholder="Enter Text"
                         size="large"
                         variant="outlined"
-                        name="presentationSettings.section8.product.desc1"
+                        name="presentationSettings.section8.product.description1"
                         maxLength={276}
                         value={
                           formik.values.presentationSettings.section8.product
-                            .desc1 || ""
+                            .description1 || ""
                         }
                         onChange={formik.handleChange}
                       />
@@ -5133,11 +5200,11 @@ const CampanySetting = () => {
                         placeholder="Enter Text"
                         size="large"
                         variant="outlined"
-                        name="presentationSettings.section8.product.desc2"
+                        name="presentationSettings.section8.product.description2"
                         maxLength={184}
                         value={
                           formik.values.presentationSettings.section8.product
-                            .desc2 || ""
+                            .description2 || ""
                         }
                         onChange={formik.handleChange}
                       />
@@ -5205,7 +5272,9 @@ const CampanySetting = () => {
                             >
                               <IconButton
                                 disabled={
-                                  uploadLoading["presentationSettings.section8.image1"]
+                                  uploadLoading[
+                                    "presentationSettings.section8.image1"
+                                  ]
                                 }
                                 sx={{
                                   background: "#8477DA",
@@ -5231,7 +5300,9 @@ const CampanySetting = () => {
                               }}
                             >
                               <Box>
-                                {uploadLoading["presentationSettings.section8.image1"] ? (
+                                {uploadLoading[
+                                  "presentationSettings.section8.image1"
+                                ] ? (
                                   <CircularProgress
                                     sx={{ color: "#8477DA" }}
                                     size={24}
@@ -5340,7 +5411,9 @@ const CampanySetting = () => {
                             >
                               <IconButton
                                 disabled={
-                                  uploadLoading["presentationSettings.section8.image2"]
+                                  uploadLoading[
+                                    "presentationSettings.section8.image2"
+                                  ]
                                 }
                                 sx={{
                                   background: "#8477DA",
@@ -5366,7 +5439,9 @@ const CampanySetting = () => {
                               }}
                             >
                               <Box>
-                                {uploadLoading["presentationSettings.section8.image2"] ? (
+                                {uploadLoading[
+                                  "presentationSettings.section8.image2"
+                                ] ? (
                                   <CircularProgress
                                     sx={{ color: "#8477DA" }}
                                     size={24}
