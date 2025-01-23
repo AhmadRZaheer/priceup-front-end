@@ -1,12 +1,20 @@
-import { Box, Container, Typography } from "@mui/material";
-import React from "react";
-import "./style.scss";
-import bgHeaderImage from "../../Assets/CustomerLandingImages/WhyChoice.svg";
-import Diamond from "../../Assets/CustomerLandingImages/Diamond-Icon.png";
-import EyeIcon from "../../Assets/CustomerLandingImages/Eye-Icon.png";
-import PersonHeart from "../../Assets/CustomerLandingImages/Person-with-Heart-Icon.png";
-import StopWatch from "../../Assets/CustomerLandingImages/Stopwatch-Icon.png";
-import { backendURL } from "@/utilities/common";
+import './style.scss';
+
+import React from 'react';
+
+import { backendURL } from '@/utilities/common';
+import {
+  Box,
+  Container,
+  Typography,
+} from '@mui/material';
+
+import Diamond from '../../Assets/CustomerLandingImages/Diamond-Icon.png';
+import EyeIcon from '../../Assets/CustomerLandingImages/Eye-Icon.png';
+import PersonHeart
+  from '../../Assets/CustomerLandingImages/Person-with-Heart-Icon.png';
+import StopWatch from '../../Assets/CustomerLandingImages/Stopwatch-Icon.png';
+import bgHeaderImage from '../../Assets/CustomerLandingImages/WhyChoice.svg';
 
 const ChoiceGCS = ({ data }) => {
   const primaryColor = data?.content?.colorSection?.primary;
@@ -17,7 +25,7 @@ const ChoiceGCS = ({ data }) => {
           {data?.content?.section3?.heading ?? "Why Choose GCS?"}
         </Typography>
         <Typography className="choiceSubHead">
-          {data?.content?.section3?.subheading ??
+          {data?.content?.section3?.subHeading ??
             "The Highest Quality Residential Glass Services"}
         </Typography>
         <Typography className="choiceDesc">
@@ -29,8 +37,8 @@ const ChoiceGCS = ({ data }) => {
         sx={{
           backgroundImage: {
             md: `url(${
-              data?.content?.section3?.bgimage
-                ? `${backendURL}/${data?.content?.section3?.bgimage}`
+              data?.content?.section3?.backgroundImage
+                ? `${backendURL}/${data?.content?.section3?.backgroundImage}`
                 : bgHeaderImage
             })`,
             xs: "none",

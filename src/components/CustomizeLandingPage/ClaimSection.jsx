@@ -1,7 +1,13 @@
-import { Box, Container, Typography } from "@mui/material";
-import React, { useMemo } from "react";
-import "./style.scss";
-import { hexToRgba } from "@/utilities/common";
+import './style.scss';
+
+import React, { useMemo } from 'react';
+
+import { hexToRgba } from '@/utilities/common';
+import {
+  Box,
+  Container,
+  Typography,
+} from '@mui/material';
 
 const claimDefaultData = [
   {
@@ -47,7 +53,7 @@ const ClaimSection = ({ data }) => {
           {data?.content?.section6?.heading ?? "How to File a Claim"}{" "}
         </Typography>
         <Typography className="claimSubHead" sx={{ py: 3.5, width: "90%" }}>
-          {data?.content?.section6?.subheading ??
+          {data?.content?.section6?.subHeading ??
             "Submitting a warranty claim is easy! Simply contact your local GCS Glass & Mirror location to begin the process:"}
         </Typography>
         <Box
@@ -103,7 +109,7 @@ const ClaimSection = ({ data }) => {
           pb: 8,
         }}
       >
-        {data?.content?.section6?.bottomtext ??
+        {data?.content?.section6?.bottomText ??
           "At GCS Glass & Mirror, we value your trust and strive to provide only the highest-quality products and services. Thank you for choosing us to transform your spaces!"}
       </Typography>
     </Container>

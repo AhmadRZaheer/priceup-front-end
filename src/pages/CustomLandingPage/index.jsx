@@ -1,22 +1,27 @@
-import CustomizeLandingPage from "@/components/CustomizeLandingPage";
-import { setListData } from "@/redux/estimateCalculations";
-import { setLocationInfo } from "@/redux/locationSlice";
-import { setMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { setWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
-import { backendURL, frontendURL } from "@/utilities/common";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import CustomizeLandingPage from '@/components/CustomizeLandingPage';
+import { initializeState } from '@/redux/customerEstimateCalculation';
+import { setListData } from '@/redux/estimateCalculations';
+import { setLocationInfo } from '@/redux/locationSlice';
+import { setMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { setWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import { useFetchSingleDocument } from '@/utilities/ApiHooks/common';
+import { backendURL } from '@/utilities/common';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import {
   Box,
   Button,
   CircularProgress,
   Container,
   Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
-import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
-import { initializeState } from "@/redux/customerEstimateCalculation";
+} from '@mui/material';
 
 const CustomLandingPage = () => {
   const { id } = useParams();
@@ -32,7 +37,6 @@ const CustomLandingPage = () => {
     useFetchSingleDocument(
       `${backendURL}/landing-page-preview-additional-hardware/${data?.company_id}`
     );
-
   useEffect(() => {
     if (id) {
       refetchData();
@@ -73,7 +77,7 @@ const CustomLandingPage = () => {
   }, [hardwareData, data, dispatch]);
 
   const handleBack = () => {
-    window.location.href = `${frontendURL}:3005`;
+    window.location.href = `http://3.219.213.248:3005`;
   };
   return selectedDataLoading ? (
     <Box

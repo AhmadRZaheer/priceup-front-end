@@ -1,3 +1,9 @@
+import React, {
+  useMemo,
+  useState,
+} from 'react';
+
+import { Search } from '@mui/icons-material';
 import {
   Box,
   CircularProgress,
@@ -6,14 +12,13 @@ import {
   Popover,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
-import SingleUser from "./SingleUser";
-import { parseJwt } from "../ProtectedRoute/authVerify";
-import { Search } from "@mui/icons-material";
-import BackIcon from "../../Assets/back.svg";
-import { userRoles } from "../../utilities/constants";
-import CustomInputField from "./CustomInput";
+} from '@mui/material';
+
+import BackIcon from '../../Assets/back.svg';
+import { userRoles } from '../../utilities/constants';
+import { parseJwt } from '../ProtectedRoute/authVerify';
+import CustomInputField from './CustomInput';
+import SingleUser from './SingleUser';
 
 const SwitchLocationPopup = ({
   isSwitching,
@@ -39,7 +44,7 @@ const SwitchLocationPopup = ({
 
     const result = data?.filter((admin) =>
       isAdmin_SuperAdmin
-        ? admin?.company?.name.toLowerCase().includes(lowercasedQuery)
+        ? admin?.company?.name?.toLowerCase().includes(lowercasedQuery)
         : admin?.name?.toLowerCase().includes(lowercasedQuery)
     );
 

@@ -1,6 +1,42 @@
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
+import { useFormik } from 'formik';
+import { useDropzone } from 'react-dropzone';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import * as Yup from 'yup';
+
+import Imag1 from '@/Assets/CustomerLandingImages/2.png';
+import Imag2 from '@/Assets/CustomerLandingImages/3.png';
+import bgHeaderImage from '@/Assets/CustomerLandingImages/BannerHeadImg.png';
+import LimitationImg from '@/Assets/CustomerLandingImages/LimitationImg.svg';
+import infoBgHeaderImage from '@/Assets/CustomerLandingImages/WhyChoice.svg';
+import GCSLogo from '@/Assets/GCS-logo.png';
+import InputImageIcon from '@/Assets/imageUploader.svg';
+import CustomTabPanel from '@/components/CustomTabPanel';
+import { getListData } from '@/redux/estimateCalculations';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { setLocationSettingsRefetch } from '@/redux/refetch';
+import { showSnackbar } from '@/redux/snackBarSlice';
+import { getDataRefetch } from '@/redux/staff';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import { useEditDocument } from '@/utilities/ApiHooks/common';
+import { useFetchDataSetting } from '@/utilities/ApiHooks/setting';
+import { backendURL } from '@/utilities/common';
+import {
+  inputLength,
+  inputMaxValue,
+} from '@/utilities/constants';
+import {
+  Delete,
+  Edit,
+} from '@mui/icons-material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import {
   Autocomplete,
   Box,
@@ -9,32 +45,20 @@ import {
   CircularProgress,
   FormControlLabel,
   Grid,
+  IconButton,
   Switch,
   TextareaAutosize,
   TextField,
   Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useFetchDataSetting } from "@/utilities/ApiHooks/setting";
-import { backendURL } from "@/utilities/common";
+} from '@mui/material';
 
-import CustomToggle from "../ui-components/Toggle";
-import CustomInputField from "../ui-components/CustomInput";
-import { useDropzone } from "react-dropzone";
-import InputImageIcon from "@/Assets/imageUploader.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { getDataRefetch } from "@/redux/staff";
-import CustomTabPanel from "@/components/CustomTabPanel";
-import { setLocationSettingsRefetch } from "@/redux/refetch";
-import { inputLength, inputMaxValue } from "@/utilities/constants";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { getListData } from "@/redux/estimateCalculations";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { Delete } from "@mui/icons-material";
-import { useEditDocument } from "@/utilities/ApiHooks/common";
-import TextEditor from "../ProjectInvoices/CreateEditInvoice/EditQuotePage/TextEditor";
+import FAQSection
+  from '../ProjectInvoices/CreateEditInvoice/EditQuotePage/FAQSection';
+import TextEditor
+  from '../ProjectInvoices/CreateEditInvoice/EditQuotePage/TextEditor';
+import ScrollToTop from '../ScrollToTop';
+import CustomInputField from '../ui-components/CustomInput';
+import CustomToggle from '../ui-components/Toggle';
 
 const termsCondition = `<div style="font-family: 'Roboto', sans-serif; font-size: 17px; font-weight: 500; line-height: 25.5px; color: #6b6b6b; padding-right: 5px;">
   <div>Last Revised: December 16, 2013</div>
@@ -105,8 +129,81 @@ const termsCondition = `<div style="font-family: 'Roboto', sans-serif; font-size
       </div>
   </div>
 </div>
-
 `;
+
+const accordionDefaultData = [
+  {
+    title: "Products Not Purchased Through GCS Glass & Mirror",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Damage After Installation",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Tile Cracks During Installation",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Frameless Shower Limitations",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Natural Wear and Tear",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Third-Party Coatings",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+];
+const claimDefaultData = [
+  {
+    title: "Phoenix, AZ",
+    desc: "20634 N. 28th Street, Ste. 150 (602) 828-8276 | phoenix@gcs.glass",
+  },
+  {
+    title: "Austin, TXn",
+    desc: "10509 Circle Drive, Unit 1440 (512) 480-9585 | austin@gcs.glass",
+  },
+  {
+    title: "Denver, CO",
+    desc: "10500 E. 54th Ave, Unit H (720) 601-1124 | denver@gcs.glass",
+  },
+  {
+    title: "Long Island, NY",
+    desc: "1347 Lincoln Avenue, Unit 7 (516) 400-2514 | longisland@gcs.glass",
+  },
+  {
+    title: "Santa Cruz, CA",
+    desc: "1970 17th Avenue (831) 353-6486 | santacruz@gcs.glass",
+  },
+];
+const WarrantyText = `
+          <h2 style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 700; line-height: 24px; color: white; padding-bottom: 32px; padding-top: 40px;">
+            What Our Warranty Covers
+          </h2>
+          <br>
+          <p style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 400; line-height: 24px; color: white;">
+            At GCS Glass & Mirror, we are dedicated to ensuring your peace of mind. That’s why we offer a Limited Lifetime Craftsmanship Warranty. This warranty guarantees:
+          </p>
+          <div style="padding-top: 1.6rem;">
+            <ul style="display: flex; flex-direction: column; gap: 8px;">
+              <li style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 400; line-height: 24px; color: white;">
+                Protection against defects in materials and workmanship under normal use for as long as you own the product.
+              </li>
+              <li style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 400; line-height: 24px; color: white;">
+                A promise to repair or replace defective products free of charge if your claim is valid.
+              </li>
+              <li style="font-family: 'Poppins', sans-serif; font-size: 24px; font-weight: 400; line-height: 24px; color: white;">
+                Assurance that we stand behind our superior products and services.
+              </li>
+            </ul>
+          </div>
+          <p style="font-family: 'Poppins', sans-serif; font-size: 24px; line-height: 24px; font-weight: 700; color: white; padding-top: 16px;">
+            Note: This warranty is non-transferable unless otherwise specified.
+          </p>
+        `;
 
 const CampanySetting = () => {
   const dispatch = useDispatch();
@@ -126,11 +223,25 @@ const CampanySetting = () => {
   const [value, setValue] = React.useState(0);
   const [termsText, setTermsText] = useState("");
   const [uploadLoading, setUploadLoading] = useState({
-    "presentationSettings.shower.images": false,
-    "presentationSettings.mirror.images": false,
-    "presentationSettings.wineCellar.images": false,
+    "presentationSettings.section1.logo": false,
+    "presentationSettings.section1.backgroundImage": false,
+    "presentationSettings.section3.backgroundImage": false,
+    "presentationSettings.section5.image": false,
+    "presentationSettings.section8.image1": false,
+    "presentationSettings.section8.image2": false,
+    "presentationSettings.section2.shower.images": false,
+    "presentationSettings.section2.mirror.images": false,
+    "presentationSettings.section2.wineCellar.images": false,
   });
-  console.log(uploadLoading, "uploadLoadinguploadLoading");
+  const [warrantyText, setWarrantyText] = useState(
+    settingData?.presentationSettings?.section4?.description ?? WarrantyText
+  );
+  const [accordionData, setAccordionData] = useState(
+    settingData?.presentationSettings?.section5?.faqs ?? accordionDefaultData
+  );
+  const [claimData, setClaimData] = useState(
+    settingData?.presentationSettings?.section6?.claimData ?? claimDefaultData
+  );
   const handleChange = (newValue) => {
     setValue(newValue);
   };
@@ -140,22 +251,45 @@ const CampanySetting = () => {
       dispatch(setLocationSettingsRefetch());
     }
   }, [SuccessForEdit]);
+
   useEffect(() => {
     reFetchDataSetting();
   }, [CustomerU_change]);
+
   useEffect(() => {
     if (settingData) {
       setTermsText(
-        settingData?.presentationSettings?.termsAndConditions?.length
-          ? settingData?.presentationSettings?.termsAndConditions
+        settingData?.presentationSettings?.section9?.termsAndConditions?.length
+          ? settingData?.presentationSettings?.section9?.termsAndConditions
           : termsCondition
+      );
+      setAccordionData(
+        settingData?.presentationSettings?.section5?.faqs ??
+          accordionDefaultData
+      );
+      setClaimData(
+        settingData?.presentationSettings?.section6?.claimData ??
+          claimDefaultData
+      );
+      setWarrantyText(
+        settingData?.presentationSettings?.section4?.description ?? WarrantyText
       );
     }
   }, [settingData]);
 
-  const onDrop = (acceptedFiles) => {
-    setSelectedImage(acceptedFiles[0]);
-    formik.setFieldValue("image", acceptedFiles[0]);
+  const onDrop = async (acceptedFiles) => {
+    const image = acceptedFiles[0];
+    if (image) {
+      setSelectedImage(image);
+      // formik.setFieldValue("image", image);
+      const formData = new FormData();
+      formData.append("image", image);
+      formData.append("data", JSON.stringify({}));
+      await editSetting({
+        data: formData,
+        apiRoute: `${backendURL}/companies/${settingData._id}`,
+      });
+    }
   };
 
   const validationSchema = Yup.object().shape({
@@ -313,22 +447,193 @@ const CampanySetting = () => {
         apiKey: settingData?.highlevelSettings?.apiKey ?? "",
       },
       presentationSettings: {
-        shower: {
-          images: settingData?.presentationSettings?.shower?.images ?? [],
-          description:
-            settingData?.presentationSettings?.shower?.description ?? "",
+        colorSection: {
+          primary:
+            settingData?.presentationSettings?.colorSection?.primary ??
+            "#F95500",
+          secondary:
+            settingData?.presentationSettings?.colorSection?.secondary ??
+            "#FFFFFF",
+          default:
+            settingData?.presentationSettings?.colorSection?.default ??
+            "#000000",
         },
-        mirror: {
-          images: settingData?.presentationSettings?.mirror?.images ?? [],
-          description:
-            settingData?.presentationSettings?.mirror?.description ?? "",
+        section1: {
+          text1:
+            settingData?.presentationSettings?.section1?.text1 ||
+            "Your GCS Estimate Presentation",
+          text2:
+            settingData?.presentationSettings?.section1?.text2 ||
+            "Turning your Vision into reality– Get a Precise Estimate for Your Next Project Today!",
+          logo: settingData?.presentationSettings?.section1?.logo,
+          backgroundImage:
+            settingData?.presentationSettings?.section1?.backgroundImage,
         },
-        wineCellar: {
-          images: settingData?.presentationSettings?.wineCellar?.images ?? [],
-          description:
-            settingData?.presentationSettings?.wineCellar?.description ?? "",
+        section2: {
+          shower: {
+            images:
+              settingData?.presentationSettings?.section2?.shower?.images ?? [],
+            description:
+              settingData?.presentationSettings?.section2?.shower
+                ?.description ?? "",
+            status:
+              settingData?.presentationSettings?.section2?.shower?.status ??
+              true,
+          },
+          mirror: {
+            images:
+              settingData?.presentationSettings?.section2?.mirror?.images ?? [],
+            description:
+              settingData?.presentationSettings?.section2?.mirror
+                ?.description ?? "",
+            status:
+              settingData?.presentationSettings?.section2?.mirror?.status ??
+              true,
+          },
+          wineCellar: {
+            images:
+              settingData?.presentationSettings?.section2?.wineCellar?.images ??
+              [],
+            description:
+              settingData?.presentationSettings?.section2?.wineCellar
+                ?.description ?? "",
+            status:
+              settingData?.presentationSettings?.section2?.wineCellar?.status ??
+              true,
+          },
         },
-        termsAndConditions: termsText ?? termsCondition,
+        section3: {
+          heading:
+            settingData?.presentationSettings?.section3?.heading ||
+            "Why Choose GCS?",
+          subHeading:
+            settingData?.presentationSettings?.section3?.subHeading ||
+            "The Highest Quality Residential Glass Services",
+          description:
+            settingData?.presentationSettings?.section3?.description ||
+            "Founded in 2013 in Phoenix Arizona, GCS has had a tremendous amount of success due to our “can do it” attitude along with our innovative approach to every aspect of the business.",
+          backgroundImage:
+            settingData?.presentationSettings?.section3?.backgroundImage,
+          status: settingData?.presentationSettings?.section3?.status ?? true,
+          card1: {
+            text1:
+              settingData?.presentationSettings?.section3?.card1?.text1 ||
+              "Lasting Impressions",
+            text2:
+              settingData?.presentationSettings?.section3?.card1?.text2 ||
+              "Replacing just the glass in your shower will give your bathroom a million-dollar look.",
+          },
+          card2: {
+            text1:
+              settingData?.presentationSettings?.section3?.card2?.text1 ||
+              "Customer Care",
+            text2:
+              settingData?.presentationSettings?.section3?.card2?.text2 ||
+              "When you work with us, it’s an experience you will love from the initial contact to the final install.",
+          },
+          card3: {
+            text1:
+              settingData?.presentationSettings?.section3?.card3?.text1 ||
+              "Fast Response",
+            text2:
+              settingData?.presentationSettings?.section3?.card3?.text2 ||
+              "Schedule today and let us help you design and install your next project.",
+          },
+          card4: {
+            text1:
+              settingData?.presentationSettings?.section3?.card4?.text1 ||
+              "High Clarity",
+            text2:
+              settingData?.presentationSettings?.section3?.card4?.text2 ||
+              "Don’t forget to ask about our starphire ultra-clear glass. It will change your life.",
+          },
+        },
+        section4: {
+          heading:
+            settingData?.presentationSettings?.section4?.heading ||
+            "Lifetime Craftsmanship Warranty – Our Promise to You",
+          subHeading:
+            settingData?.presentationSettings?.section4?.subHeading ||
+            "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction.",
+          status: settingData?.presentationSettings?.section4?.status ?? true,
+          description: warrantyText ?? WarrantyText,
+        },
+        section5: {
+          image: settingData?.presentationSettings?.section5?.image,
+          status: settingData?.presentationSettings?.status ?? true,
+          faqs: accordionData ?? accordionDefaultData,
+        },
+        section6: {
+          heading:
+            settingData?.presentationSettings?.section6?.heading ||
+            "How to File a Claim",
+          subHeading:
+            settingData?.presentationSettings?.section6?.subHeading ||
+            "Submitting a warranty claim is easy! Simply contact your local GCS Glass & Mirror location to begin the process:",
+          bottomText:
+            settingData?.presentationSettings?.section6?.bottomText ||
+            "At GCS Glass & Mirror, we value your trust and strive to provide only the highest-quality products and services. Thank you for choosing us to transform your spaces!",
+          status: settingData?.presentationSettings?.section6?.status ?? true,
+          claimData: claimData ?? claimDefaultData,
+        },
+        section7: {
+          heading:
+            settingData?.presentationSettings?.section7?.heading ??
+            "Glass & shower maintenance",
+          description:
+            settingData?.presentationSettings?.section7?.description ??
+            "Please note, acid etched/frosted glass is extremely susceptible to fingerprints and spotting due to the oil on your hands and other environmental factors such as steam.",
+          status: settingData?.presentationSettings?.section7?.status ?? true,
+          card1: {
+            text1:
+              settingData?.presentationSettings?.section7?.card1?.text1 ||
+              "WAIT BEFORE FIRST USE",
+            text2:
+              settingData?.presentationSettings?.section7?.card1?.text2 ||
+              "If silicone was used on your project, give your silicone at least 24 hours to completely dry before first use",
+          },
+          card2: {
+            text1:
+              settingData?.presentationSettings?.section7?.card2?.text1 ||
+              "DAILY MAINTENANCE",
+            text2:
+              settingData?.presentationSettings?.section7?.card2?.text2 ||
+              "Crack your door after use or keep a squeegee handy to dry the inside of the shower to help with mold/mildew buildup. If your bathroom has a vent fan, use it when showering to keep the area as dry as possible. Wipe away moisture from your mirrors to maximize the life of the silver backing",
+          },
+          card3: {
+            text1:
+              settingData?.presentationSettings?.section7?.card3?.text1 ||
+              "ROUTINE CLEANING",
+            text2:
+              settingData?.presentationSettings?.section7?.card3?.text2 ||
+              "Never use aggressive cleaning materials (razorblades, steel wool, abrasives, etc.) to clean glass. Always use non-ammonia glass cleaner and/or alcohol to clean glass. Never use products containing hydrofluoric acid, fluorine, chlorine, or ammonia derivatives. They can damage the surface of the glass. Always clean the full surface of the glass. Spot cleaning might create halos. Never try to remove impurities with a dry or dirty cloth, as this may cause scratches or scuffs on the glass surface.",
+          },
+        },
+        section8: {
+          status: settingData?.presentationSettings?.section8?.status ?? true,
+          product: {
+            title:
+              settingData?.presentationSettings?.section8?.product?.title ||
+              "GCS ARMOR THE ULTIMATE GLASS PROTECTION SOLUTION",
+            description1:
+              settingData?.presentationSettings?.section8?.product
+                ?.description1 ||
+              "Glass is naturally porous, allowing water and contaminants to seep in, but GCS Armor's hydrophobic nano coating fills and seals these pores, leaving surfaces smooth and protected. Backed by a 10-year warranty, it ensures long-lasting durability.",
+            description2:
+              settingData?.presentationSettings?.section8?.product
+                ?.description2 ||
+              "Ask about our GCS Armor Bath Kit for easy maintenance, and experience the next level of glass protection today. Contact us to get started!",
+          },
+          image1: settingData?.presentationSettings?.section8?.image1,
+          image2: settingData?.presentationSettings?.section8?.image2,
+        },
+        section9: {
+          status: settingData?.presentationSettings?.section9?.status ?? true,
+          termsAndConditions: termsText ?? termsCondition,
+        },
+        section10: {
+          status: settingData?.presentationSettings?.section10?.status ?? true,
+        },
       },
     },
     enableReinitialize: true,
@@ -1629,7 +1934,6 @@ const CampanySetting = () => {
           </Box>
         </CustomTabPanel>
         {/** end */}
-
         {/** Wine Caller tab */}
         <CustomTabPanel value={value} index={2}>
           <Box
@@ -2323,6 +2627,7 @@ const CampanySetting = () => {
             </Box>
           </Box>
         </CustomTabPanel>
+        {/** High Level Setting tab */}
         <CustomTabPanel value={value} index={4}>
           <Box
             sx={{
@@ -2409,371 +2714,479 @@ const CampanySetting = () => {
             </Box>
           </Box>
         </CustomTabPanel>
+        {/** Presentation Setting tab */}
         <CustomTabPanel value={value} index={5}>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
-              // gap: 3,
               width: "100%",
-              pt: 2,
+              background: "white",
             }}
           >
-            <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+            {/*Section 0 */}
+            <Box sx={{ p: 2 }}>
               <Typography variant="h5" fontWeight={"bold"}>
-                Shower Gallery
+                Theme Colors
               </Typography>
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  pt: 1.5,
-                  gap: 2,
-                  width: "100%",
+                  gap: 1.5,
+                  border: "1px solid #ccc",
+                  p: 1.5,
+                  mt: 1,
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                    border: "1px solid #ccc",
-                    width: "65%",
-                    position: "relative",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      height: "100%",
-                      width: "100%",
-                      position: "absolute",
-                      zIndex: 3,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      pointerEvents: "none",
-                    }}
+                <Box sx={{ width: "10%" }}>
+                  <Typography
+                    sx={{ fontSize: "14px", fontWeight: 500, pb: "8px" }}
                   >
-                    <Box>
-                      {uploadLoading["presentationSettings.shower.images"] ? (
-                        <CircularProgress sx={{ color: "#8477DA" }} size={42} />
-                      ) : (
-                        ""
-                      )}
-                    </Box>
-                  </Box>
-                  <Grid
-                    container
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "10px",
-                      opacity: uploadLoading[
-                        "presentationSettings.shower.images"
-                      ]
-                        ? 0.3
-                        : 1,
-                    }}
-                  >
-                    {formik.values.presentationSettings.shower.images.length >
-                    0 ? (
-                      formik.values.presentationSettings.shower.images?.map(
-                        (_image) => (
-                          <Box
-                            sx={{
-                              width: "200px",
-                              height: "200px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              px: 3,
-                              py: 1.5,
-                              position: "relative",
-                            }}
-                          >
-                            <Box
-                              sx={{
-                                position: "absolute",
-                                right: "18px",
-                                top: "3px",
-                                color: "red",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                handleDeleteImageFromPrevew(
-                                  formik.values.presentationSettings.shower
-                                    .images,
-                                  _image,
-                                  "presentationSettings.shower.images"
-                                )
-                              }
-                            >
-                              <Delete />
-                            </Box>
-                            <img
-                              style={{ width: "100%", height: "100%" }}
-                              src={`${backendURL}/${_image}`}
-                              alt="not found"
-                            />
-                          </Box>
-                        )
-                      )
-                    ) : (
-                      <Typography
-                        sx={{
-                          height: "150px",
-                          textAlign: "center",
-                          width: "100%",
-                          alignContent: "center",
-                        }}
-                      >
-                        No Image Selected!
-                      </Typography>
-                    )}
-                  </Grid>
-                  <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                    <Button
-                      variant="contained"
-                      component="label"
-                      sx={{
-                        background: "#8477DA",
-                        ":hover": {
-                          background: uploadLoading[
-                            "presentationSettings.shower.images"
-                          ]
-                            ? "#8477DA"
-                            : "#6a5bc5",
-                        },
-                      }}
-                      disabled={
-                        uploadLoading["presentationSettings.shower.images"]
-                      }
-                    >
-                      Upload image
-                      <input
-                        type="file"
-                        accept="image/*"
-                        hidden
-                        onChange={(e) => {
-                          handleUploadPreviewImage(
-                            e,
-                            formik.values.presentationSettings.shower.images,
-                            "presentationSettings.shower.images"
-                          );
-                          e.target.value = "";
-                        }}
-                      />
-                    </Button>
-                  </Box>
-                </Box>
-                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
-                  <TextareaAutosize
-                    fullWidth
-                    style={{
-                      padding: "10px",
-                      borderColor: "#cccc",
-                      borderRadius: "5px",
-                      width: "100%",
-                    }}
-                    className="custom-textfield"
-                    color="neutral"
-                    minRows={7}
-                    maxRows={10}
-                    id="presentationSettings.shower.description"
-                    name="presentationSettings.shower.description"
-                    placeholder="Enter Shower Description"
-                    size="large"
-                    variant="outlined"
-                    sx={{ padding: "10px" }}
+                    Primary
+                  </Typography>
+                  <input
+                    type="color"
                     value={
-                      formik.values.presentationSettings.shower.description
+                      formik.values.presentationSettings.colorSection.primary
                     }
-                    onChange={formik.handleChange}
+                    onChange={(e) =>
+                      formik.setFieldValue(
+                        "presentationSettings.colorSection.primary",
+                        e.target.value
+                      )
+                    }
+                    style={{
+                      margin: 0,
+                      cursor: "pointer",
+                      padding: "2px",
+                      width: "100%",
+                      height: "40px",
+                    }}
+                  />
+                </Box>
+                <Box sx={{ width: "10%" }}>
+                  <Typography
+                    sx={{ fontSize: "14px", fontWeight: 500, pb: "8px" }}
+                  >
+                    Secondary
+                  </Typography>
+                  <input
+                    type="color"
+                    value={
+                      formik.values.presentationSettings.colorSection.secondary
+                    }
+                    onChange={(e) =>
+                      formik.setFieldValue(
+                        "presentationSettings.colorSection.secondary",
+                        e.target.value
+                      )
+                    }
+                    style={{
+                      width: "100%",
+                      height: "40px",
+                      margin: 0,
+                      cursor: "pointer",
+                      padding: "2px",
+                    }}
+                  />
+                </Box>
+                <Box sx={{ width: "10%" }}>
+                  <Typography
+                    sx={{ fontSize: "14px", fontWeight: 500, pb: "8px" }}
+                  >
+                    Background
+                  </Typography>
+                  <input
+                    type="color"
+                    value={
+                      formik.values.presentationSettings.colorSection.default
+                    }
+                    onChange={(e) =>
+                      formik.setFieldValue(
+                        "presentationSettings.colorSection.default",
+                        e.target.value
+                      )
+                    }
+                    style={{
+                      width: "100%",
+                      height: "40px",
+                      margin: 0,
+                      cursor: "pointer",
+                      padding: "2px",
+                    }}
                   />
                 </Box>
               </Box>
             </Box>
-            <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+            {/*Section 1 */}
+            <Box sx={{ p: 2 }}>
               <Typography variant="h5" fontWeight={"bold"}>
-                Mirror Gallery
+                Hero Section
               </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  pt: 1.5,
-                  gap: 2,
-                  width: "100%",
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                    border: "1px solid #ccc",
-                    width: "65%",
-                    position: "relative",
-                  }}
-                >
+              <Box sx={{ border: "1px solid #ccc", p: 1.5, mt: 1 }}>
+                <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
                   <Box
                     sx={{
                       display: "flex",
-                      height: "100%",
-                      width: "100%",
-                      position: "absolute",
-                      zIndex: 3,
-                      justifyContent: "center",
-                      alignItems: "center",
-                      pointerEvents: "none",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "39%",
                     }}
                   >
-                    <Box>
-                      {uploadLoading["presentationSettings.mirror.images"] ? (
-                        <CircularProgress sx={{ color: "#8477DA" }} size={42} />
-                      ) : (
-                        ""
-                      )}
-                    </Box>
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                    >
+                      Text 1
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={5}
+                      maxRows={7}
+                      name="presentationSettings.section1.text1"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={28}
+                      value={
+                        formik.values.presentationSettings.section1.text1 || ""
+                      }
+                      onChange={formik.handleChange}
+                    />
                   </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "39%",
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                    >
+                      Text 2
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={5}
+                      maxRows={7}
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      name="presentationSettings.section1.text2"
+                      maxLength={90}
+                      value={
+                        formik.values.presentationSettings.section1.text2 || ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "20%",
+                    }}
+                  >
+                    {/* section logo */}
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                    >
+                      Company Logo
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          cursor: "pointer",
+                        }}
+                        onClick={() =>
+                          document.getElementById("image-upload-logo").click()
+                        }
+                      >
+                        <input
+                          id="image-upload-logo"
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          hidden
+                          onChange={(e) =>
+                            handleUploadPreviewImage(
+                              e,
+                              [],
+                              "presentationSettings.section1.logo"
+                            )
+                          }
+                        />
+                        <Box sx={{ position: "relative" }}>
+                          <Box
+                            sx={{
+                              position: "absolute",
+                              top: "-10px",
+                              zIndex: 3,
+                              right: "-5px",
+                            }}
+                          >
+                            <IconButton
+                              disabled={
+                                uploadLoading[
+                                  "presentationSettings.section1.logo"
+                                ]
+                              }
+                              sx={{
+                                background: "#8477DA",
+                                color: "white",
+                                p: "5px",
+                                ":hover": {
+                                  background: "#8477DA",
+                                },
+                              }}
+                            >
+                              <Edit sx={{ fontSize: "20px" }} />
+                            </IconButton>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              height: "100%",
+                              width: "100%",
+                              position: "absolute",
+                              zIndex: 3,
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <Box>
+                              {uploadLoading[
+                                "presentationSettings.section1.logo"
+                              ] ? (
+                                <CircularProgress
+                                  sx={{ color: "#8477DA" }}
+                                  size={24}
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </Box>
+                          </Box>
 
-                  <Grid
-                    container
-                    sx={{
-                      width: "100%",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "10px",
-                      opacity: uploadLoading[
-                        "presentationSettings.mirror.images"
-                      ]
-                        ? 0.3
-                        : 1,
-                    }}
-                  >
-                    {formik.values.presentationSettings.mirror.images.length >
-                    0 ? (
-                      formik.values.presentationSettings.mirror.images?.map(
-                        (_image) => (
-                          <Box
-                            sx={{
-                              width: "200px",
-                              height: "200px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              px: 3,
-                              py: 1.5,
-                              position: "relative",
-                            }}
-                          >
-                            <Box
-                              sx={{
-                                position: "absolute",
-                                right: "18px",
-                                top: "3px",
-                                color: "red",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                handleDeleteImageFromPrevew(
-                                  formik.values.presentationSettings.mirror
-                                    .images,
-                                  _image,
-                                  "presentationSettings.mirror.images"
-                                )
-                              }
-                            >
-                              <Delete />
-                            </Box>
+                          {formik.values.presentationSettings?.section1
+                            ?.logo ? (
                             <img
-                              style={{ width: "100%", height: "100%" }}
-                              src={`${backendURL}/${_image}`}
-                              alt="not found"
+                              src={`${backendURL}/${formik.values.presentationSettings.section1?.logo}`}
+                              width={115}
+                              height={115}
+                              alt="section logo"
+                              style={{
+                                border: "1px solid  #ccc",
+                                borderRadius: "10px",
+                                opacity: uploadLoading[
+                                  "presentationSettings.section1.logo"
+                                ]
+                                  ? 0.3
+                                  : 1,
+                              }}
                             />
-                          </Box>
-                        )
-                      )
-                    ) : (
-                      <Typography
-                        sx={{
-                          height: "150px",
-                          textAlign: "center",
-                          width: "100%",
-                          alignContent: "center",
-                        }}
-                      >
-                        No Image Selected!
-                      </Typography>
-                    )}
-                  </Grid>
-                  <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
-                    <Button
-                      variant="contained"
-                      component="label"
-                      sx={{
-                        background: "#8477DA",
-                        ":hover": {
-                          background: uploadLoading[
-                            "presentationSettings.mirror.images"
-                          ]
-                            ? "#8477DA"
-                            : "#6a5bc5",
-                        },
-                      }}
-                      disabled={
-                        uploadLoading["presentationSettings.mirror.images"]
-                      }
-                    >
-                      Upload image
-                      <input
-                        type="file"
-                        accept="image/*"
-                        hidden
-                        onChange={(e) => {
-                          handleUploadPreviewImage(
-                            e,
-                            formik.values.presentationSettings.mirror.images,
-                            "presentationSettings.mirror.images"
-                          );
-                          e.target.value = "";
-                        }}
-                      />
-                    </Button>
+                          ) : (
+                            <img
+                              src={GCSLogo}
+                              width={120}
+                              height={120}
+                              alt="section  logo"
+                              style={{
+                                border: "1px solid  #ccc",
+                                borderRadius: "10px",
+                                opacity: uploadLoading[
+                                  "presentationSettings.section1.logo"
+                                ]
+                                  ? 0.3
+                                  : 1,
+                              }}
+                            />
+                          )}
+                        </Box>
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
-                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
-                  <TextareaAutosize
-                    fullWidth
-                    style={{
-                      padding: "10px",
-                      borderColor: "#cccc",
-                      borderRadius: "5px",
-                      width: "100%",
+                <Box
+                  sx={{
+                    display: "flex",
+                  }}
+                >
+                  {/* section background image */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
                     }}
-                    className="custom-textfield"
-                    color="neutral"
-                    minRows={7}
-                    maxRows={10}
-                    id="presentationSettings.mirror.description"
-                    name="presentationSettings.mirror.description"
-                    placeholder="Enter Mirror Description"
-                    size="large"
-                    variant="outlined"
-                    sx={{ padding: "10px" }}
-                    value={
-                      formik.values.presentationSettings.mirror.description
-                    }
-                    onChange={formik.handleChange}
-                  />
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Background Image
+                    </Typography>
+
+                    <Box
+                      sx={{
+                        width: "100%",
+                        display: "flex",
+                      }}
+                      onClick={() =>
+                        document
+                          .getElementById("image-upload-background")
+                          .click()
+                      }
+                    >
+                      <input
+                        id="image-upload-background"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        hidden
+                        onChange={(e) =>
+                          handleUploadPreviewImage(
+                            e,
+                            [],
+                            "presentationSettings.section1.backgroundImage"
+                          )
+                        }
+                      />
+                      <Box sx={{ position: "relative" }}>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: "-10px",
+                            zIndex: 3,
+                            right: "-5px",
+                          }}
+                        >
+                          <IconButton
+                            disabled={
+                              uploadLoading[
+                                "presentationSettings.section1.backgroundImage"
+                              ]
+                            }
+                            sx={{
+                              background: "#8477DA",
+                              color: "white",
+                              p: "5px",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            <Edit sx={{ fontSize: "20px" }} />
+                          </IconButton>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            height: "100%",
+                            width: "100%",
+                            position: "absolute",
+                            zIndex: 3,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box>
+                            {uploadLoading[
+                              "presentationSettings.section1.backgroundImage"
+                            ] ? (
+                              <CircularProgress
+                                sx={{ color: "#8477DA" }}
+                                size={32}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </Box>
+                        </Box>
+
+                        {formik.values.presentationSettings.section1
+                          ?.backgroundImage ? (
+                          <img
+                            src={`${backendURL}/${formik.values.presentationSettings.section1.backgroundImage}`}
+                            width="100%"
+                            height={400}
+                            alt="section backgroundImage"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "presentationSettings.section1.backgroundImage"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={bgHeaderImage}
+                            width="100%"
+                            height={400}
+                            alt="section logo"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "presentationSettings.section1.backgroundImage"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
             </Box>
+            {/* section 2 */}
             <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
-              <Typography variant="h5" fontWeight={"bold"}>
-                Wine Cellar Gallery
-              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Shower Gallery
+                </Typography>
+                <CustomToggle
+                  title={"Shower Gallery Status"}
+                  isText={false}
+                  checked={
+                    formik.values.presentationSettings.section2.shower.status
+                  }
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section2.shower.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
               <Box
                 sx={{
                   display: "flex",
@@ -2807,7 +3220,7 @@ const CampanySetting = () => {
                   >
                     <Box>
                       {uploadLoading[
-                        "presentationSettings.wineCellar.images"
+                        "presentationSettings.section2.shower.images"
                       ] ? (
                         <CircularProgress sx={{ color: "#8477DA" }} size={42} />
                       ) : (
@@ -2823,15 +3236,15 @@ const CampanySetting = () => {
                       flexWrap: "wrap",
                       gap: "10px",
                       opacity: uploadLoading[
-                        "presentationSettings.wineCellar.images"
+                        "presentationSettings.shower.images"
                       ]
                         ? 0.3
                         : 1,
                     }}
                   >
-                    {formik.values.presentationSettings.wineCellar.images
+                    {formik.values.presentationSettings.section2.shower.images
                       .length > 0 ? (
-                      formik.values.presentationSettings.wineCellar.images?.map(
+                      formik.values.presentationSettings.section2.shower.images?.map(
                         (_image) => (
                           <Box
                             sx={{
@@ -2855,10 +3268,10 @@ const CampanySetting = () => {
                               }}
                               onClick={() =>
                                 handleDeleteImageFromPrevew(
-                                  formik.values.presentationSettings.wineCellar
-                                    .images,
+                                  formik.values.presentationSettings.section2
+                                    .shower.images,
                                   _image,
-                                  "presentationSettings.wineCellar.images"
+                                  "presentationSettings.section2.shower.images"
                                 )
                               }
                             >
@@ -2893,14 +3306,16 @@ const CampanySetting = () => {
                         background: "#8477DA",
                         ":hover": {
                           background: uploadLoading[
-                            "presentationSettings.wineCellar.images"
+                            "presentationSettings.section2.shower.images"
                           ]
                             ? "#8477DA"
                             : "#6a5bc5",
                         },
                       }}
                       disabled={
-                        uploadLoading["presentationSettings.wineCellar.images"]
+                        uploadLoading[
+                          "presentationSettings.section2.shower.images"
+                        ]
                       }
                     >
                       Upload image
@@ -2911,9 +3326,9 @@ const CampanySetting = () => {
                         onChange={(e) => {
                           handleUploadPreviewImage(
                             e,
-                            formik.values.presentationSettings.wineCellar
+                            formik.values.presentationSettings.section2.shower
                               .images,
-                            "presentationSettings.wineCellar.images"
+                            "presentationSettings.section2.shower.images"
                           );
                           e.target.value = "";
                         }}
@@ -2934,14 +3349,15 @@ const CampanySetting = () => {
                     color="neutral"
                     minRows={7}
                     maxRows={10}
-                    id="presentationSettings.wineCellar.description"
-                    name="presentationSettings.wineCellar.description"
-                    placeholder="Enter WineCellar Description"
+                    id="presentationSettings.section2.shower.description"
+                    name="presentationSettings.section2.shower.description"
+                    placeholder="Enter Shower Description"
                     size="large"
                     variant="outlined"
                     sx={{ padding: "10px" }}
                     value={
-                      formik.values.presentationSettings.wineCellar.description
+                      formik.values.presentationSettings.section2.shower
+                        .description
                     }
                     onChange={formik.handleChange}
                   />
@@ -2949,9 +3365,2152 @@ const CampanySetting = () => {
               </Box>
             </Box>
             <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
-              <Typography variant="h5" fontWeight={"bold"}>
-                Terms & Conditions
-              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Mirror Gallery
+                </Typography>
+                <CustomToggle
+                  title={"Mirror Gallery Status"}
+                  isText={false}
+                  checked={
+                    formik.values.presentationSettings.section2.mirror.status
+                  }
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section2.mirror.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  pt: 1.5,
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    border: "1px solid #ccc",
+                    width: "65%",
+                    position: "relative",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      height: "100%",
+                      width: "100%",
+                      position: "absolute",
+                      zIndex: 3,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <Box>
+                      {uploadLoading[
+                        "presentationSettings.section2.mirror.images"
+                      ] ? (
+                        <CircularProgress sx={{ color: "#8477DA" }} size={42} />
+                      ) : (
+                        ""
+                      )}
+                    </Box>
+                  </Box>
+
+                  <Grid
+                    container
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                      opacity: uploadLoading[
+                        "presentationSettings.section2.mirror.images"
+                      ]
+                        ? 0.3
+                        : 1,
+                    }}
+                  >
+                    {formik.values.presentationSettings.section2.mirror.images
+                      .length > 0 ? (
+                      formik.values.presentationSettings.section2.mirror.images?.map(
+                        (_image) => (
+                          <Box
+                            sx={{
+                              width: "200px",
+                              height: "200px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              px: 3,
+                              py: 1.5,
+                              position: "relative",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                right: "18px",
+                                top: "3px",
+                                color: "red",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleDeleteImageFromPrevew(
+                                  formik.values.presentationSettings.section2
+                                    .mirror.images,
+                                  _image,
+                                  "presentationSettings.section2.mirror.images"
+                                )
+                              }
+                            >
+                              <Delete />
+                            </Box>
+                            <img
+                              style={{ width: "100%", height: "100%" }}
+                              src={`${backendURL}/${_image}`}
+                              alt="not found"
+                            />
+                          </Box>
+                        )
+                      )
+                    ) : (
+                      <Typography
+                        sx={{
+                          height: "150px",
+                          textAlign: "center",
+                          width: "100%",
+                          alignContent: "center",
+                        }}
+                      >
+                        No Image Selected!
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{
+                        background: "#8477DA",
+                        ":hover": {
+                          background: uploadLoading[
+                            "presentationSettings.section2.mirror.images"
+                          ]
+                            ? "#8477DA"
+                            : "#6a5bc5",
+                        },
+                      }}
+                      disabled={
+                        uploadLoading[
+                          "presentationSettings.section2.mirror.images"
+                        ]
+                      }
+                    >
+                      Upload image
+                      <input
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={(e) => {
+                          handleUploadPreviewImage(
+                            e,
+                            formik.values.presentationSettings.section2.mirror
+                              .images,
+                            "presentationSettings.section2.mirror.images"
+                          );
+                          e.target.value = "";
+                        }}
+                      />
+                    </Button>
+                  </Box>
+                </Box>
+                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                  <TextareaAutosize
+                    fullWidth
+                    style={{
+                      padding: "10px",
+                      borderColor: "#cccc",
+                      borderRadius: "5px",
+                      width: "100%",
+                    }}
+                    className="custom-textfield"
+                    color="neutral"
+                    minRows={7}
+                    maxRows={10}
+                    id="presentationSettings.section2.mirror.description"
+                    name="presentationSettings.section2.mirror.description"
+                    placeholder="Enter Mirror Description"
+                    size="large"
+                    variant="outlined"
+                    sx={{ padding: "10px" }}
+                    value={
+                      formik.values.presentationSettings.section2.mirror
+                        .description
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Wine Cellar Gallery
+                </Typography>
+                <CustomToggle
+                  title={"Wine Cellar Gallery Status"}
+                  isText={false}
+                  checked={
+                    formik.values.presentationSettings.section2.wineCellar
+                      .status
+                  }
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section2.wineCellar.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  pt: 1.5,
+                  gap: 2,
+                  width: "100%",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    border: "1px solid #ccc",
+                    width: "65%",
+                    position: "relative",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      height: "100%",
+                      width: "100%",
+                      position: "absolute",
+                      zIndex: 3,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <Box>
+                      {uploadLoading[
+                        "presentationSettings.section2.wineCellar.images"
+                      ] ? (
+                        <CircularProgress sx={{ color: "#8477DA" }} size={42} />
+                      ) : (
+                        ""
+                      )}
+                    </Box>
+                  </Box>
+                  <Grid
+                    container
+                    sx={{
+                      width: "100%",
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: "10px",
+                      opacity: uploadLoading[
+                        "presentationSettings.section2.wineCellar.images"
+                      ]
+                        ? 0.3
+                        : 1,
+                    }}
+                  >
+                    {formik.values.presentationSettings.section2.wineCellar
+                      .images.length > 0 ? (
+                      formik.values.presentationSettings.section2.wineCellar.images?.map(
+                        (_image) => (
+                          <Box
+                            sx={{
+                              width: "200px",
+                              height: "200px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              px: 3,
+                              py: 1.5,
+                              position: "relative",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                right: "18px",
+                                top: "3px",
+                                color: "red",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleDeleteImageFromPrevew(
+                                  formik.values.presentationSettings.section2
+                                    .wineCellar.images,
+                                  _image,
+                                  "presentationSettings.section2.wineCellar.images"
+                                )
+                              }
+                            >
+                              <Delete />
+                            </Box>
+                            <img
+                              style={{ width: "100%", height: "100%" }}
+                              src={`${backendURL}/${_image}`}
+                              alt="not found"
+                            />
+                          </Box>
+                        )
+                      )
+                    ) : (
+                      <Typography
+                        sx={{
+                          height: "150px",
+                          textAlign: "center",
+                          width: "100%",
+                          alignContent: "center",
+                        }}
+                      >
+                        No Image Selected!
+                      </Typography>
+                    )}
+                  </Grid>
+                  <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      sx={{
+                        background: "#8477DA",
+                        ":hover": {
+                          background: uploadLoading[
+                            "presentationSettings.section2.wineCellar.images"
+                          ]
+                            ? "#8477DA"
+                            : "#6a5bc5",
+                        },
+                      }}
+                      disabled={
+                        uploadLoading[
+                          "presentationSettings.section2.wineCellar.images"
+                        ]
+                      }
+                    >
+                      Upload image
+                      <input
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={(e) => {
+                          handleUploadPreviewImage(
+                            e,
+                            formik.values.presentationSettings.section2
+                              .wineCellar.images,
+                            "presentationSettings.section2.wineCellar.images"
+                          );
+                          e.target.value = "";
+                        }}
+                      />
+                    </Button>
+                  </Box>
+                </Box>
+                <Box sx={{ width: "35%", display: "flex", gap: 1 }}>
+                  <TextareaAutosize
+                    fullWidth
+                    style={{
+                      padding: "10px",
+                      borderColor: "#cccc",
+                      borderRadius: "5px",
+                      width: "100%",
+                    }}
+                    className="custom-textfield"
+                    color="neutral"
+                    minRows={7}
+                    maxRows={10}
+                    id="presentationSettings.section2.wineCellar.description"
+                    name="presentationSettings.section2.wineCellar.description"
+                    placeholder="Enter WineCellar Description"
+                    size="large"
+                    variant="outlined"
+                    sx={{ padding: "10px" }}
+                    value={
+                      formik.values.presentationSettings.section2.wineCellar
+                        .description
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
+              </Box>
+            </Box>
+            {/* section 3 */}
+            <Box sx={{ p: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Info Cards
+                </Typography>
+                <CustomToggle
+                  title={"Info Cards Status"}
+                  isText={false}
+                  checked={formik.values.presentationSettings.section3.status}
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section3.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
+                <Box sx={{ display: "flex", gap: 2, pb: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Heading
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section3.heading"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={15}
+                      value={
+                        formik.values.presentationSettings.section3.heading ||
+                        ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>{" "}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Sub Heading
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section3.subHeading"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={49}
+                      value={
+                        formik.values.presentationSettings.section3
+                          .subHeading || ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>{" "}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Description
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section3.description"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={196}
+                      value={
+                        formik.values.presentationSettings.section3
+                          .description || ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>
+                </Box>
+                <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                      pb: 2,
+                      width: "25%",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontWeight={"bold"}
+                      sx={{ alignContent: "center" }}
+                    >
+                      Card 1:{" "}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 1
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        name="presentationSettings.section3.card1.text1"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        maxLength={20}
+                        value={
+                          formik.values.presentationSettings.section3.card1
+                            .text1 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 2
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section3.card1.text2"
+                        maxLength={50}
+                        value={
+                          formik.values.presentationSettings.section3.card1
+                            .text2 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                  </Box>{" "}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      pb: 2,
+                      flexDirection: "column",
+                      width: "25%",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontWeight={"bold"}
+                      sx={{ alignContent: "center" }}
+                    >
+                      Card 2:{" "}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 1
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        name="presentationSettings.section3.card2.text1"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        maxLength={13}
+                        value={
+                          formik.values.presentationSettings.section3.card2
+                            .text1 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 2
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section3.card2.text2"
+                        maxLength={127}
+                        value={
+                          formik.values.presentationSettings.section3.card2
+                            .text2 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      pb: 2,
+                      flexDirection: "column",
+                      width: "25%",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontWeight={"bold"}
+                      sx={{ alignContent: "center" }}
+                    >
+                      Card 3:{" "}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 1
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        name="presentationSettings.section3.card3.text1"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        maxLength={12}
+                        value={
+                          formik.values.presentationSettings.section3.card3
+                            .text1 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 2
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section3.card3.text2"
+                        maxLength={50}
+                        value={
+                          formik.values.presentationSettings.section3.card3
+                            .text2 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      pb: 2,
+                      flexDirection: "column",
+                      width: "25%",
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      fontWeight={"bold"}
+                      sx={{ alignContent: "center" }}
+                    >
+                      Card 4:{" "}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 1
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        name="presentationSettings.section3.card4.text1"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        maxLength={12}
+                        value={
+                          formik.values.presentationSettings.section3.card4
+                            .text1 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 2
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section3.card4.text2"
+                        maxLength={50}
+                        value={
+                          formik.values.presentationSettings.section3.card4
+                            .text2 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                    >
+                      Image
+                    </Typography>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        display: "flex",
+                        // cursor: "pointer",
+                      }}
+                      onClick={() =>
+                        document.getElementById("info-image-upload").click()
+                      }
+                    >
+                      <input
+                        id="info-image-upload"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        hidden
+                        onChange={(e) => {
+                          handleUploadPreviewImage(
+                            e,
+                            [],
+                            "presentationSettings.section3.backgroundImage"
+                            // { height: 400, width: 700 }
+                          );
+                          e.target.value = "";
+                        }}
+                      />
+                      <Box sx={{ position: "relative" }}>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: "-10px",
+                            zIndex: 3,
+                            right: "-5px",
+                          }}
+                        >
+                          <IconButton
+                            disabled={
+                              uploadLoading[
+                                "presentationSettings.section3.backgroundImage"
+                              ]
+                            }
+                            sx={{
+                              background: "#8477DA",
+                              color: "white",
+                              p: "5px",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            <Edit sx={{ fontSize: "20px" }} />
+                          </IconButton>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            height: "100%",
+                            width: "100%",
+                            position: "absolute",
+                            zIndex: 3,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box>
+                            {uploadLoading[
+                              "presentationSettings.section3.backgroundImage"
+                            ] ? (
+                              <CircularProgress
+                                sx={{ color: "#8477DA" }}
+                                size={32}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </Box>
+                        </Box>
+
+                        {formik.values.presentationSettings.section3
+                          ?.backgroundImage ? (
+                          <img
+                            src={`${backendURL}/${formik.values.presentationSettings.section3?.backgroundImage}`}
+                            width="400"
+                            height={380}
+                            alt="not found"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "presentationSettings.section3.backgroundImage"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={infoBgHeaderImage}
+                            width="100%"
+                            height={380}
+                            alt="not found"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "presentationSettings.section3.backgroundImage"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            {/* section 4 */}{" "}
+            <Box sx={{ p: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Craftsmanship Warranty
+                </Typography>
+                <CustomToggle
+                  title={"Craftsmanship Warranty Status"}
+                  isText={false}
+                  checked={formik.values.presentationSettings.section4.status}
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section4.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  gap: 1,
+                  border: "1px solid #ccc",
+                  mt: 2,
+                  px: 3,
+                  py: 2,
+                }}
+              >
+                <Box sx={{ display: "flex", gap: 2, pb: 2, width: "100%" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Heading
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section4.heading"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={69}
+                      value={
+                        formik.values.presentationSettings.section4.heading ||
+                        ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>{" "}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Sub Heading
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section4.subHeading"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={154}
+                      value={
+                        formik.values.presentationSettings.section4
+                          .subHeading || ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>
+                </Box>
+                <Box sx={{ width: "100%" }}>
+                  <TextEditor text={warrantyText} setText={setWarrantyText} />
+                </Box>
+              </Box>
+            </Box>
+            {/* section 5 */}
+            <Box sx={{ p: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  FAQs
+                </Typography>
+                <CustomToggle
+                  title={"FAQs Status"}
+                  isText={false}
+                  checked={formik.values.presentationSettings.section5.status}
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section5.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 1,
+                  border: "1px solid #ccc",
+                  mt: 2,
+                  px: 3,
+                  py: 2,
+                }}
+              >
+                {" "}
+                <Box sx={{ width: "70%" }}>
+                  {" "}
+                  <FAQSection
+                    accordionData={accordionData}
+                    setAccordionData={setAccordionData}
+                  />
+                </Box>
+                <Box sx={{ width: "30%" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                    >
+                      Image
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        cursor: "pointer",
+                      }}
+                      onClick={() =>
+                        document.getElementById("faqs-image-upload").click()
+                      }
+                    >
+                      <input
+                        id="faqs-image-upload"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        hidden
+                        onChange={(e) => {
+                          handleUploadPreviewImage(
+                            e,
+                            [],
+                            "presentationSettings.section5.image"
+                            // { height: 380, width: 380 }
+                          );
+                          e.target.value = "";
+                        }}
+                      />
+                      <Box sx={{ position: "relative" }}>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: "-10px",
+                            zIndex: 3,
+                            right: "-5px",
+                          }}
+                        >
+                          <IconButton
+                            disabled={
+                              uploadLoading[
+                                "presentationSettings.section5.image"
+                              ]
+                            }
+                            sx={{
+                              background: "#8477DA",
+                              color: "white",
+                              p: "5px",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            <Edit sx={{ fontSize: "20px" }} />
+                          </IconButton>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            height: "100%",
+                            width: "100%",
+                            position: "absolute",
+                            zIndex: 3,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box>
+                            {uploadLoading[
+                              "presentationSettings.section5.image"
+                            ] ? (
+                              <CircularProgress
+                                sx={{ color: "#8477DA" }}
+                                size={24}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </Box>
+                        </Box>
+
+                        {formik.values.presentationSettings.section5?.image ? (
+                          <img
+                            src={`${backendURL}/${formik.values.presentationSettings.section5?.image}`}
+                            width="100%"
+                            height={380}
+                            alt="not found"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "presentationSettings.section5.image"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={LimitationImg}
+                            width="100%"
+                            height={380}
+                            alt="not found"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "presentationSettings.section5.image"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            {/* section 6 */}
+            <Box sx={{ p: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  File a Claim
+                </Typography>
+                <CustomToggle
+                  title={"File a Claim Status"}
+                  isText={false}
+                  checked={formik.values.presentationSettings.section6.status}
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section6.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  border: "1px solid #ccc",
+                  mt: 2,
+                  px: 3,
+                  py: 2,
+                }}
+              >
+                <Box sx={{ display: "flex", gap: 2, pb: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Heading
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section6.heading"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={20}
+                      value={
+                        formik.values.presentationSettings.section6.heading ||
+                        ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>{" "}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Sub Heading
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section6.subHeading"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={142}
+                      value={
+                        formik.values.presentationSettings.section6
+                          .subHeading || ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>{" "}
+                </Box>{" "}
+                <FAQSection
+                  accordionData={claimData}
+                  setAccordionData={setClaimData}
+                />
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Bottom Text
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section6.bottomText"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={197}
+                      value={
+                        formik.values.presentationSettings.section6
+                          .bottomText || ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>{" "}
+                </Box>
+              </Box>
+            </Box>
+            {/* section 7 */}
+            <Box sx={{ p: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Maintenance Cards
+                </Typography>
+                <CustomToggle
+                  title={"Maintenance Cards Status"}
+                  isText={false}
+                  checked={formik.values.presentationSettings.section7.status}
+                  onChange={(e) => {
+                    formik.setFieldValue("section7.status", e.target.checked);
+                  }}
+                />
+              </Box>
+              <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
+                <Box sx={{ display: "flex", gap: 2, pb: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Heading
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section7.heading"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={26}
+                      value={
+                        formik.values.presentationSettings.section7.heading ||
+                        ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>{" "}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Description
+                    </Typography>
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      minRows={3}
+                      maxRows={4}
+                      name="presentationSettings.section7.description"
+                      placeholder="Enter Text"
+                      size="large"
+                      variant="outlined"
+                      maxLength={181}
+                      value={
+                        formik.values.presentationSettings.section7
+                          .description || ""
+                      }
+                      onChange={formik.handleChange}
+                    />
+                  </Box>{" "}
+                </Box>
+                <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
+                      pb: 2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      fontWeight={"bold"}
+                      sx={{ alignContent: "center" }}
+                    >
+                      Card 1 :{" "}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 1
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        name="presentationSettings.section7.card1.text1"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        maxLength={23}
+                        value={
+                          formik.values.presentationSettings.section7.card1
+                            .text1 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 2
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section7.card1.text2"
+                        maxLength={139}
+                        value={
+                          formik.values.presentationSettings.section7.card1
+                            .text2 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                  </Box>{" "}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
+                      pb: 2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      fontWeight={"bold"}
+                      sx={{ alignContent: "center" }}
+                    >
+                      Card 2 :{" "}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 1
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        name="presentationSettings.section7.card2.text1"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        maxLength={23}
+                        value={
+                          formik.values.presentationSettings.section7.card2
+                            .text1 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 2
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section7.card2.text2"
+                        maxLength={258}
+                        value={
+                          formik.values.presentationSettings.section7.card2
+                            .text2 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 2,
+                      pb: 2,
+                      width: "33%",
+                    }}
+                  >
+                    <Typography
+                      variant="h5"
+                      fontWeight={"bold"}
+                      sx={{ alignContent: "center" }}
+                    >
+                      Card 3 :{" "}
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 1
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        name="presentationSettings.section7.card3.text1"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        maxLength={23}
+                        value={
+                          formik.values.presentationSettings.section7.card3
+                            .text1 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 2
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={3}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section7.card3.text2"
+                        maxLength={500}
+                        value={
+                          formik.values.presentationSettings.section7.card3
+                            .text2 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ p: 2 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Glass Upgrade Product
+                </Typography>
+                <CustomToggle
+                  title={"Glass Upgrade Product Status"}
+                  isText={false}
+                  checked={formik.values.presentationSettings.section8.status}
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section8.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
+              <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
+                <Box
+                  sx={{
+                    gap: 2,
+                    pb: 2,
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                        width: "30%",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Product Title
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={4}
+                        maxRows={4}
+                        name="presentationSettings.section8.product.title"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        maxLength={62}
+                        value={
+                          formik.values.presentationSettings.section8.product
+                            .title || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                        width: "30%",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Product Description
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={4}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section8.product.description1"
+                        maxLength={276}
+                        value={
+                          formik.values.presentationSettings.section8.product
+                            .description1 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                        width: "30%",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Result Description
+                      </Typography>
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={4}
+                        maxRows={4}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
+                        name="presentationSettings.section8.product.description2"
+                        maxLength={184}
+                        value={
+                          formik.values.presentationSettings.section8.product
+                            .description2 || ""
+                        }
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: "flex", gap: 3, pt: 1.5 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          pb: 0.8,
+                        }}
+                      >
+                        Product image
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            document
+                              .getElementById("product-image-upload")
+                              .click()
+                          }
+                        >
+                          <input
+                            id="product-image-upload"
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            hidden
+                            onChange={(e) => {
+                              handleUploadPreviewImage(
+                                e,
+                                [],
+                                "presentationSettings.section8.image1"
+                                // { height: 380, width: 296 }
+                              );
+                              e.target.value = "";
+                            }}
+                          />
+                          <Box sx={{ position: "relative" }}>
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                top: "-10px",
+                                zIndex: 3,
+                                right: "-5px",
+                              }}
+                            >
+                              <IconButton
+                                disabled={
+                                  uploadLoading[
+                                    "presentationSettings.section8.image1"
+                                  ]
+                                }
+                                sx={{
+                                  background: "#8477DA",
+                                  color: "white",
+                                  p: "5px",
+                                  ":hover": {
+                                    background: "#8477DA",
+                                  },
+                                }}
+                              >
+                                <Edit sx={{ fontSize: "20px" }} />
+                              </IconButton>
+                            </Box>{" "}
+                            <Box
+                              sx={{
+                                display: "flex",
+                                height: "100%",
+                                width: "100%",
+                                position: "absolute",
+                                zIndex: 3,
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box>
+                                {uploadLoading[
+                                  "presentationSettings.section8.image1"
+                                ] ? (
+                                  <CircularProgress
+                                    sx={{ color: "#8477DA" }}
+                                    size={24}
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </Box>
+                            </Box>
+                            {formik.values.presentationSettings.section8
+                              ?.image1 ? (
+                              <img
+                                src={`${backendURL}/${formik.values.presentationSettings.section8?.image1}`}
+                                width="100%"
+                                height={380}
+                                alt="not found"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                  opacity: uploadLoading[
+                                    "presentationSettings.section8.image1"
+                                  ]
+                                    ? 0.3
+                                    : 1,
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={Imag1}
+                                width="100%"
+                                height={380}
+                                alt="not found"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                  opacity: uploadLoading[
+                                    "presentationSettings.section8.image1"
+                                  ]
+                                    ? 0.3
+                                    : 1,
+                                }}
+                              />
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          pb: 0.8,
+                        }}
+                      >
+                        Result Image
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            document
+                              .getElementById("product-result-image-upload")
+                              .click()
+                          }
+                        >
+                          <input
+                            id="product-result-image-upload"
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            hidden
+                            onChange={(e) => {
+                              handleUploadPreviewImage(
+                                e,
+                                [],
+                                "presentationSettings.section8.image2"
+                                // { height: 380, width: 442 }
+                              );
+                              e.target.value = "";
+                            }}
+                          />
+                          <Box sx={{ position: "relative" }}>
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                top: "-10px",
+                                zIndex: 3,
+                                right: "-5px",
+                              }}
+                            >
+                              <IconButton
+                                disabled={
+                                  uploadLoading[
+                                    "presentationSettings.section8.image2"
+                                  ]
+                                }
+                                sx={{
+                                  background: "#8477DA",
+                                  color: "white",
+                                  p: "5px",
+                                  ":hover": {
+                                    background: "#8477DA",
+                                  },
+                                }}
+                              >
+                                <Edit sx={{ fontSize: "20px" }} />
+                              </IconButton>
+                            </Box>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                height: "100%",
+                                width: "100%",
+                                position: "absolute",
+                                zIndex: 3,
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <Box>
+                                {uploadLoading[
+                                  "presentationSettings.section8.image2"
+                                ] ? (
+                                  <CircularProgress
+                                    sx={{ color: "#8477DA" }}
+                                    size={24}
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </Box>
+                            </Box>
+
+                            {formik.values.presentationSettings.section8
+                              ?.image2 ? (
+                              <img
+                                src={`${backendURL}/${formik.values.presentationSettings.section8?.image2}`}
+                                width="100%"
+                                height={380}
+                                alt="not found"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                  opacity: uploadLoading[
+                                    "presentationSettings.section8.image2"
+                                  ]
+                                    ? 0.3
+                                    : 1,
+                                }}
+                              />
+                            ) : (
+                              <img
+                                src={Imag2}
+                                width="100%"
+                                height={380}
+                                alt="not found"
+                                style={{
+                                  border: "1px solid  #ccc",
+                                  borderRadius: "10px",
+                                  opacity: uploadLoading[
+                                    "presentationSettings.section8.image2"
+                                  ]
+                                    ? 0.3
+                                    : 1,
+                                }}
+                              />
+                            )}
+                          </Box>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+            <Box sx={{ background: "white", p: 2, borderRadius: "5px" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Terms and Conditions
+                </Typography>
+                <CustomToggle
+                  title={"Status"}
+                  isText={false}
+                  checked={formik.values.presentationSettings.section9.status}
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section9.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
               <Box
                 sx={{
                   display: "flex",
@@ -2966,7 +5525,26 @@ const CampanySetting = () => {
                 </Box>
               </Box>
             </Box>
+            <Box sx={{ px: 2, pb: 6 }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  Signature and Payment
+                </Typography>
+                <CustomToggle
+                  title={"Status"}
+                  isText={false}
+                  checked={formik.values.presentationSettings.section10.status}
+                  onChange={(e) => {
+                    formik.setFieldValue(
+                      "presentationSettings.section10.status",
+                      e.target.checked
+                    );
+                  }}
+                />
+              </Box>
+            </Box>
           </Box>
+          <ScrollToTop color={"#fff"} background={"#8477DA"} />
         </CustomTabPanel>
         {/** end */}
       </Box>

@@ -1,4 +1,34 @@
 import {
+  useEffect,
+  useState,
+} from 'react';
+
+import dayjs from 'dayjs';
+import { useFormik } from 'formik';
+import { useSelector } from 'react-redux';
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+import * as yup from 'yup';
+
+import { getListData } from '@/redux/estimateCalculations';
+import { getLocationPresentationSettings } from '@/redux/locationSlice';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import {
+  useCreateDocument,
+  useFetchAllDocuments,
+} from '@/utilities/ApiHooks/common';
+import { useFetchDataCustomer } from '@/utilities/ApiHooks/customer';
+import {
+  backendURL,
+  frontendURL,
+} from '@/utilities/common';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import {
   Box,
   Button,
   CircularProgress,
@@ -6,28 +36,10 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { useEffect, useState } from "react";
-import {
-  useCreateDocument,
-  useFetchAllDocuments,
-} from "@/utilities/ApiHooks/common";
-import { backendURL, frontendURL } from "@/utilities/common";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
-import { useFetchDataCustomer } from "@/utilities/ApiHooks/customer";
-import { useSelector } from "react-redux";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getListData } from "@/redux/estimateCalculations";
-import dayjs from "dayjs";
-import EstimateDataList from "./EstimateTable";
-import { getLocationPresentationSettings } from "@/redux/locationSlice";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+} from '@mui/material';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+
+import EstimateDataList from './EstimateTable';
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -49,6 +61,7 @@ const ProjectInvoiceComponent = ({
   const locationPresentationSettings = useSelector(
     getLocationPresentationSettings
   );
+  console.log(locationPresentationSettings,'locationPresentationSettings')
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedEstimateRows, setSelectedEstimateRows] = useState([]);
@@ -181,49 +194,7 @@ const ProjectInvoiceComponent = ({
       estimates: estimatesList,
       company: compantDetail,
       content: {
-        colorSection: {
-          primary: "#F95500",
-          secondary: "#FFFFFF",
-          default: "#000000",
-        },
-        section2: {
-          shower: {
-            ...locationPresentationSettings?.shower,
-            status: true,
-          },
-          mirror: {
-            ...locationPresentationSettings?.mirror,
-            status: true,
-          },
-          wineCellar: {
-            ...locationPresentationSettings?.wineCellar,
-            status: true,
-          },
-        },
-        section3: {
-          status: true,
-        },
-        section4: {
-          status: true,
-        },
-        section5: {
-          status: true,
-        },
-        section6: {
-          status: true,
-        },
-        section7: {
-          status: true,
-        },
-        section8: {
-          status: true,
-        },
-        section9: {
-          status: true,
-        },
-        section10: {
-          status: true,
-        },
+        ...locationPresentationSettings ?? {}
       },
       additionalUpgrades: {
         shower: {
@@ -254,7 +225,7 @@ const ProjectInvoiceComponent = ({
       console.log(error);
     }
   };
-
+console.log(locationPresentationSettings,'locationPresentationSettingslocationPresentationSettings')
   useEffect(() => {
     if (customerID && projectID) {
       const customer = customerList?.find((data) => data?._id === customerID);

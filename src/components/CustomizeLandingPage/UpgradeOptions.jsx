@@ -1,9 +1,17 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
-import React from "react";
-import "./style.scss";
-import Imag1 from "../../Assets/CustomerLandingImages/2.png";
-import Imag2 from "../../Assets/CustomerLandingImages/3.png";
-import { backendURL } from "@/utilities/common";
+import './style.scss';
+
+import React from 'react';
+
+import { backendURL } from '@/utilities/common';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+} from '@mui/material';
+
+import Imag1 from '../../Assets/CustomerLandingImages/2.png';
+import Imag2 from '../../Assets/CustomerLandingImages/3.png';
 
 const UpgradeOPtions = ({ data }) => {
   const primaryColor = data?.content?.colorSection?.primary;
@@ -38,7 +46,7 @@ const UpgradeOPtions = ({ data }) => {
                 "GCS ARMOR THE ULTIMATE GLASS PROTECTION SOLUTION"}{" "}
             </Typography>
             <Typography className="optionSubHead" sx={{ pr: 3 }}>
-              {data?.content?.section8.product?.desc1 ??
+              {data?.content?.section8.product?.description1 ??
                 "Glass is naturally porous, allowing water and contaminants to seep in, but GCS Armor's hydrophobic nano coating fills and seals these pores, leaving surfaces smooth and protected. Backed by a 10-year warranty, it ensures long-lasting durability."}
             </Typography>
           </Box>
@@ -54,7 +62,7 @@ const UpgradeOPtions = ({ data }) => {
             }}
           >
             <Typography className="optionSubHead" sx={{ pr: 3 }}>
-              {data?.content?.section8.product?.desc1 ??
+              {data?.content?.section8.product?.description2 ??
                 "Ask about our GCS Armor Bath Kit for easy maintenance, and experience the next level of glass protection today. Contact us to get started!"}
             </Typography>
           </Box>

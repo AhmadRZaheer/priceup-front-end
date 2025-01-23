@@ -1,8 +1,15 @@
-import { IconButton } from "@mui/material";
-import React, { useState, useEffect } from "react";
-import NorthIcon from '@mui/icons-material/North';
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
-const ScrollToTop = ({background,color}) => {
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import {
+  Button,
+  Tooltip,
+} from '@mui/material';
+
+const ScrollToTop = ({ background, color }) => {
   const [showButton, setShowButton] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -33,28 +40,31 @@ const ScrollToTop = ({background,color}) => {
   return (
     <>
       {showButton && (
-        <IconButton
-          onClick={scrollToTop}
-          sx={{
-            position: "fixed",
-            bottom: "20px",
-            right: "20px",           
-            color: color,
-            backgroundColor: background,
-            border: "none",
-            borderRadius: "50%",
-            width: "50px",
-            height: "50px",
-            cursor: "pointer",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-            fontSize: "18px",
-            ':hover':{
+        <Tooltip title="Scroll To Top" placement="top">
+          <Button
+            onClick={scrollToTop}
+            sx={{
+              position: "fixed",
+              bottom: "20px",
+              right: "20px",
+              color: color,
+              backgroundColor: background,
+              border: "none",
+              // borderRadius: "50%",
+              width: "48px",
+              height: "48px",
+              cursor: "pointer",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              minWidth:'55px',
+              fontSize: "18px",
+              ":hover": {
                 backgroundColor: background,
-            }
-          }}
-        >
-          <NorthIcon />
-        </IconButton>
+              },
+            }}
+          >
+            <KeyboardArrowUpIcon sx={{fontSize:'38px'}} />
+          </Button>
+        </Tooltip>
       )}
     </>
   );

@@ -1,4 +1,54 @@
 import {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import dayjs from 'dayjs';
+import { useFormik } from 'formik';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+import * as yup from 'yup';
+
+import Imag1 from '@/Assets/CustomerLandingImages/2.png';
+import Imag2 from '@/Assets/CustomerLandingImages/3.png';
+import bgHeaderImage from '@/Assets/CustomerLandingImages/BannerHeadImg.png';
+import LimitationImg from '@/Assets/CustomerLandingImages/LimitationImg.svg';
+import infoBgHeaderImage from '@/Assets/CustomerLandingImages/WhyChoice.svg';
+import GCSLogo from '@/Assets/GCS-logo.png';
+import ScrollToTop from '@/components/ScrollToTop';
+import CustomToggle from '@/components/ui-components/Toggle';
+import { getListData } from '@/redux/estimateCalculations';
+import { getLocationPresentationSettings } from '@/redux/locationSlice';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { showSnackbar } from '@/redux/snackBarSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import {
+  useEditDocument,
+  useFetchAllDocuments,
+  useFetchSingleDocument,
+} from '@/utilities/ApiHooks/common';
+import {
+  backendURL,
+  estimateTotalWithCategory,
+  frontendURL,
+} from '@/utilities/common';
+import { previewStatus } from '@/utilities/constants';
+import {
+  ContentCopy,
+  Delete,
+  DoneOutlined,
+  Edit,
+} from '@mui/icons-material';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import {
   Autocomplete,
   Box,
   Button,
@@ -14,44 +64,12 @@ import {
   TextField,
   Tooltip,
   Typography,
-} from "@mui/material";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { useEffect, useMemo, useState } from "react";
-import {
-  useEditDocument,
-  useFetchAllDocuments,
-  useFetchSingleDocument,
-} from "@/utilities/ApiHooks/common";
-import {
-  backendURL,
-  estimateTotalWithCategory,
-  frontendURL,
-} from "@/utilities/common";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import EditEstimateTable from "./EditEstimateTable";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { ContentCopy, Delete, DoneOutlined, Edit } from "@mui/icons-material";
-import bgHeaderImage from "@/Assets/CustomerLandingImages/BannerHeadImg.png";
-import GCSLogo from "@/Assets/GCS-logo.png";
-import FAQSection from "./FAQSection";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getListData } from "@/redux/estimateCalculations";
-import { getLocationPresentationSettings } from "@/redux/locationSlice";
-import Imag1 from "@/Assets/CustomerLandingImages/2.png";
-import Imag2 from "@/Assets/CustomerLandingImages/3.png";
-import LimitationImg from "@/Assets/CustomerLandingImages/LimitationImg.svg";
-import infoBgHeaderImage from "@/Assets/CustomerLandingImages/WhyChoice.svg";
-import TextEditor from "./TextEditor";
-import CustomToggle from "@/components/ui-components/Toggle";
-import { previewStatus } from "@/utilities/constants";
-import ScrollToTop from "@/components/ScrollToTop";
+} from '@mui/material';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+
+import EditEstimateTable from './EditEstimateTable';
+import FAQSection from './FAQSection';
+import TextEditor from './TextEditor';
 
 const accordionDefaultData = [
   {
@@ -146,7 +164,7 @@ const EditQuoteInvoice = () => {
   const [uploadLoading, setUploadLoading] = useState({
     logo: false,
     background: false,
-    "content.section3.bgimage": false,
+    "content.section3.backgroundImage": false,
     "content.section5.image": false,
     "content.section8.image1": false,
     "content.section8.image2": false,
@@ -335,13 +353,13 @@ const EditQuoteInvoice = () => {
       section3: {
         heading:
           singleItemData?.content?.section3?.heading || "Why Choose GCS?",
-        subheading:
-          singleItemData?.content?.section3?.subheading ||
+        subHeading:
+          singleItemData?.content?.section3?.subHeading ||
           "The Highest Quality Residential Glass Services",
         description:
           singleItemData?.content?.section3?.description ||
           "Founded in 2013 in Phoenix Arizona, GCS has had a tremendous amount of success due to our “can do it” attitude along with our innovative approach to every aspect of the business.",
-        bgimage: singleItemData?.content?.section3?.bgimage,
+        backgroundImage: singleItemData?.content?.section3?.backgroundImage,
         status: singleItemData?.content?.section3?.status ?? true,
         card1: {
           text1:
@@ -377,8 +395,8 @@ const EditQuoteInvoice = () => {
         heading:
           singleItemData?.content?.section4?.heading ||
           "Lifetime Craftsmanship Warranty – Our Promise to You",
-        subheading:
-          singleItemData?.content?.section4?.subheading ||
+        subHeading:
+          singleItemData?.content?.section4?.subHeading ||
           "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction.",
         status: singleItemData?.content?.section4?.status ?? true,
       },
@@ -389,11 +407,11 @@ const EditQuoteInvoice = () => {
       section6: {
         heading:
           singleItemData?.content?.section6?.heading || "How to File a Claim",
-        subheading:
-          singleItemData?.content?.section6?.subheading ||
+        subHeading:
+          singleItemData?.content?.section6?.subHeading ||
           "Submitting a warranty claim is easy! Simply contact your local GCS Glass & Mirror location to begin the process:",
-        bottomtext:
-          singleItemData?.content?.section6?.bottomtext ||
+        bottomText:
+          singleItemData?.content?.section6?.bottomText ||
           "At GCS Glass & Mirror, we value your trust and strive to provide only the highest-quality products and services. Thank you for choosing us to transform your spaces!",
         status: singleItemData?.content?.section6?.status ?? true,
       },
@@ -436,11 +454,11 @@ const EditQuoteInvoice = () => {
           title:
             singleItemData?.content?.section8?.product?.title ||
             "GCS ARMOR THE ULTIMATE GLASS PROTECTION SOLUTION",
-          desc1:
-            singleItemData?.content?.section8?.product?.desc1 ||
+          description1:
+            singleItemData?.content?.section8?.product?.description1 ||
             "Glass is naturally porous, allowing water and contaminants to seep in, but GCS Armor's hydrophobic nano coating fills and seals these pores, leaving surfaces smooth and protected. Backed by a 10-year warranty, it ensures long-lasting durability.",
-          desc2:
-            singleItemData?.content?.section8?.product?.desc2 ||
+          description2:
+            singleItemData?.content?.section8?.product?.description2 ||
             "Ask about our GCS Armor Bath Kit for easy maintenance, and experience the next level of glass protection today. Contact us to get started!",
         },
         image1: singleItemData?.content?.section8?.image1,
@@ -526,14 +544,14 @@ const EditQuoteInvoice = () => {
             text2: values.section3?.card4?.text2,
           },
           heading: values.section3?.heading,
-          subheading: values.section3?.subheading,
+          subHeading: values.section3?.subHeading,
           description: values.section3?.description,
           status: values.section3?.status,
         },
         section4: {
           ...singleItemData?.content?.section4,
           heading: values.section4?.heading,
-          subheading: values.section4?.subheading,
+          subHeading: values.section4?.subHeading,
           description: warrantyText,
           status: values.section4?.status,
         },
@@ -560,8 +578,8 @@ const EditQuoteInvoice = () => {
           status: values.section8?.status,
           product: {
             title: values.section8.product.title,
-            desc1: values.section8.product.desc1,
-            desc2: values.section8.product.desc2,
+            description1: values.section8.product.description1,
+            description2: values.section8.product.description2,
           },
         },
         section5: {
@@ -572,8 +590,8 @@ const EditQuoteInvoice = () => {
         section6: {
           claimData: claimData,
           heading: values.section6?.heading,
-          subheading: values.section6?.subheading,
-          bottomtext: values.section6?.bottomtext,
+          subHeading: values.section6?.subHeading,
+          bottomText: values.section6?.bottomText,
           status: values.section6?.status,
         },
         section9: {
@@ -1016,9 +1034,20 @@ const EditQuoteInvoice = () => {
                               <Typography>
                                 {singleItemData?.customer?.name}
                               </Typography>
-                              <Typography>
-                                {singleItemData?.customer?.email}
-                              </Typography>
+                              <Tooltip
+                                title={singleItemData?.customer?.email}
+                                placement="top"
+                                arrow
+                              >
+                                <Typography
+                                  sx={{
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                  }}
+                                >
+                                  {singleItemData?.customer?.email}
+                                </Typography>
+                              </Tooltip>
                               <Typography>
                                 {singleItemData?.customer?.address}
                               </Typography>
@@ -1731,7 +1760,7 @@ const EditQuoteInvoice = () => {
                   </Box>
                 </Box>
                 <Box>
-                  {/* section 1 */}
+                  {/* section 0 */}
                   <Box sx={{ p: 2 }}>
                     <Typography variant="h5" fontWeight={"bold"}>
                       Theme Colors
@@ -2856,12 +2885,12 @@ const EditQuoteInvoice = () => {
                             color="neutral"
                             minRows={3}
                             maxRows={4}
-                            name="section3.subheading"
+                            name="section3.subHeading"
                             placeholder="Enter Text"
                             size="large"
                             variant="outlined"
                             maxLength={49}
-                            value={formik.values.section3.subheading || ""}
+                            value={formik.values.section3.subHeading || ""}
                             onChange={formik.handleChange}
                           />
                         </Box>{" "}
@@ -3253,7 +3282,7 @@ const EditQuoteInvoice = () => {
                               onChange={(e) => {
                                 handleUploadEstimatesImage(
                                   e,
-                                  "content.section3.bgimage",
+                                  "content.section3.backgroundImage",
                                   { height: 400, width: 700 }
                                 );
                                 e.target.value = "";
@@ -3270,7 +3299,9 @@ const EditQuoteInvoice = () => {
                               >
                                 <IconButton
                                   disabled={
-                                    uploadLoading["content.section3.bgimage"]
+                                    uploadLoading[
+                                      "content.section3.backgroundImage"
+                                    ]
                                   }
                                   sx={{
                                     background: "#8477DA",
@@ -3296,7 +3327,9 @@ const EditQuoteInvoice = () => {
                                 }}
                               >
                                 <Box>
-                                  {uploadLoading["content.section3.bgimage"] ? (
+                                  {uploadLoading[
+                                    "content.section3.backgroundImage"
+                                  ] ? (
                                     <CircularProgress
                                       sx={{ color: "#8477DA" }}
                                       size={32}
@@ -3307,9 +3340,9 @@ const EditQuoteInvoice = () => {
                                 </Box>
                               </Box>
 
-                              {formik.values.section3?.bgimage ? (
+                              {formik.values.section3?.backgroundImage ? (
                                 <img
-                                  src={`${backendURL}/${formik.values.section3?.bgimage}`}
+                                  src={`${backendURL}/${formik.values.section3?.backgroundImage}`}
                                   width="400"
                                   height={380}
                                   alt="not found"
@@ -3317,7 +3350,7 @@ const EditQuoteInvoice = () => {
                                     border: "1px solid  #ccc",
                                     borderRadius: "10px",
                                     opacity: uploadLoading[
-                                      "content.section3.bgimage"
+                                      "content.section3.backgroundImage"
                                     ]
                                       ? 0.3
                                       : 1,
@@ -3333,7 +3366,7 @@ const EditQuoteInvoice = () => {
                                     border: "1px solid  #ccc",
                                     borderRadius: "10px",
                                     opacity: uploadLoading[
-                                      "content.section3.bgimage"
+                                      "content.section3.backgroundImage"
                                     ]
                                       ? 0.3
                                       : 1,
@@ -3433,12 +3466,12 @@ const EditQuoteInvoice = () => {
                             color="neutral"
                             minRows={3}
                             maxRows={4}
-                            name="section4.subheading"
+                            name="section4.subHeading"
                             placeholder="Enter Text"
                             size="large"
                             variant="outlined"
                             maxLength={154}
-                            value={formik.values.section4.subheading || ""}
+                            value={formik.values.section4.subHeading || ""}
                             onChange={formik.handleChange}
                           />
                         </Box>
@@ -3702,12 +3735,12 @@ const EditQuoteInvoice = () => {
                             color="neutral"
                             minRows={3}
                             maxRows={4}
-                            name="section6.subheading"
+                            name="section6.subHeading"
                             placeholder="Enter Text"
                             size="large"
                             variant="outlined"
                             maxLength={142}
-                            value={formik.values.section6.subheading || ""}
+                            value={formik.values.section6.subHeading || ""}
                             onChange={formik.handleChange}
                           />
                         </Box>{" "}
@@ -3740,12 +3773,12 @@ const EditQuoteInvoice = () => {
                             color="neutral"
                             minRows={3}
                             maxRows={4}
-                            name="section6.bottomtext"
+                            name="section6.bottomText"
                             placeholder="Enter Text"
                             size="large"
                             variant="outlined"
                             maxLength={197}
-                            value={formik.values.section6.bottomtext || ""}
+                            value={formik.values.section6.bottomText || ""}
                             onChange={formik.handleChange}
                           />
                         </Box>{" "}
@@ -4167,9 +4200,12 @@ const EditQuoteInvoice = () => {
                               placeholder="Enter Text"
                               size="large"
                               variant="outlined"
-                              name="section8.product.desc1"
+                              name="section8.product.description1"
                               maxLength={276}
-                              value={formik.values.section8.product.desc1 || ""}
+                              value={
+                                formik.values.section8.product.description1 ||
+                                ""
+                              }
                               onChange={formik.handleChange}
                             />
                           </Box>
@@ -4199,9 +4235,12 @@ const EditQuoteInvoice = () => {
                               placeholder="Enter Text"
                               size="large"
                               variant="outlined"
-                              name="section8.product.desc2"
+                              name="section8.product.description2"
                               maxLength={184}
-                              value={formik.values.section8.product.desc2 || ""}
+                              value={
+                                formik.values.section8.product.description2 ||
+                                ""
+                              }
                               onChange={formik.handleChange}
                             />
                           </Box>

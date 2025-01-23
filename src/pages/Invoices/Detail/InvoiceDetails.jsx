@@ -1,45 +1,58 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
 import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
+
+import { getListData } from '@/redux/estimateCalculations';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { showSnackbar } from '@/redux/snackBarSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import {
+  useEditDocument,
+  useFetchSingleDocument,
+} from '@/utilities/ApiHooks/common';
+import {
+  backendURL,
+  frontendURL,
+} from '@/utilities/common';
+import { generateInvoiceItemsFromEstimates } from '@/utilities/estimates';
+import {
+  ContentCopy,
+  DoneOutlined,
+  HelpOutline as HelpOutlineIcon,
+  KeyboardArrowLeft,
+} from '@mui/icons-material';
+import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
+import {
+  Box,
   Button,
   Card,
-  Typography,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Select,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  IconButton,
-  Box,
   TextareaAutosize,
-  FormControl,
-  Select,
-  MenuItem,
   TextField,
-  CircularProgress,
   Tooltip,
-} from "@mui/material";
-import {
-  ContentCopy,
-  DoneOutlined,
-  HelpOutline as HelpOutlineIcon,
-} from "@mui/icons-material";
-import {
-  useEditDocument,
-  useFetchSingleDocument,
-} from "@/utilities/ApiHooks/common";
-import { backendURL, frontendURL } from "@/utilities/common";
-import { useNavigate, useParams } from "react-router-dom";
-import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
-import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getListData } from "@/redux/estimateCalculations";
-import { generateInvoiceItemsFromEstimates } from "@/utilities/estimates";
-import { useSelector } from "react-redux";
+  Typography,
+} from '@mui/material';
+import { DesktopDatePicker } from '@mui/x-date-pickers';
 
 export default function InvoicePage() {
   return <InvoiceDetails />;
@@ -47,6 +60,7 @@ export default function InvoicePage() {
 
 function InvoiceDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, refetch, isSuccess } = useFetchSingleDocument(
     `${backendURL}/invoices/${id}`
   );
@@ -195,7 +209,15 @@ function InvoiceDetails() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <Typography variant="h5">Invoice {data?.invoiceId || ""}</Typography>
+      
+          <Typography variant="h5">   <Button
+                  sx={{ minWidth: "auto", p: "0px !important" }}
+                  onClick={() => navigate(`/invoices`)}
+                >
+                  <KeyboardArrowLeft
+                    sx={{ fontSize: "35px", color: "black" }}
+                  />
+                </Button> Invoice {data?.invoiceId || ""}</Typography>
           <IconButton size="small">
             <HelpOutlineIcon />
           </IconButton>
