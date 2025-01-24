@@ -4,8 +4,11 @@ import {
   notificationsVariant,
   quoteState,
   thicknessTypes,
-} from "@/utilities/constants";
-import { getWineHardwareSpecificFabrication } from "@/utilities/hardwarefabrication";
+} from '@/utilities/constants';
+import {
+  getWineHardwareSpecificFabrication,
+} from '@/utilities/hardwarefabrication';
+
 const { createSlice } = require("@reduxjs/toolkit");
 
 export const getWineProjectId = (state) => state.wineCellar.projectId;
@@ -116,22 +119,27 @@ const initialState = {
     handles: {
       item: null,
       count: 0,
+      cost:0
     },
     doorLock: {
       item: null,
       count: 0,
+      cost:0
     },
     hinges: {
       item: null,
       count: 0,
+      cost:0
     },
     mountingChannel: {
       item: null,
       count: 0,
+      cost:0
     },
     glassType: {
       item: null,
       thickness: thicknessTypes.THREEBYEIGHT,
+      cost:0
     },
     glassAddons: [],
     oneInchHoles: 0,
@@ -702,15 +710,27 @@ const wineCellarSlice = createSlice({
       handleType = state.listData?.handles?.find(
         (item) => item._id === layoutData?.settings?.handles?.handleType
       );
+      let handleTypeCost = null;
+      handleTypeCost = state.listData?.handles?.find(
+        (item) => item._id === layoutData?.settings?.handles?.handleType
+      )?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id );
+
       let doorLockType = null;
       doorLockType = state.listData?.type?.find(
         (item) => item._id === layoutData?.settings?.type?.handleType
       );
-
+      let doorLockCost = null;
+      doorLockCost = state.listData?.type?.find(
+        (item) => item._id === layoutData?.settings?.type?.handleType
+      )?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id );
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
         (item) => item._id === layoutData?.settings?.hinges?.hingesType
       );
+      let hingesCost = null;
+      hingesCost = state.listData?.hinges?.find(
+        (item) => item._id === layoutData?.settings?.hinges?.hingesType
+      )?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id);
 
       // let slidingDoorSystemType = null;
       // slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
@@ -729,6 +749,9 @@ const wineCellarSlice = createSlice({
       let glassThickness =
         layoutData?.settings?.glassType?.thickness ||
         thicknessTypes.THREEBYEIGHT;
+        
+      let glassCost = null;
+      glassCost = glassType?.options?.find((option) => option?.thickness === glassThickness)?.cost; 
 
       // let glassAddon = null;
       // glassAddon = state.listData?.glassAddons?.find(
@@ -811,14 +834,17 @@ const wineCellarSlice = createSlice({
         handles: {
           item: handleType || null,
           count: layoutData?.settings?.handles?.count,
+          cost : handleTypeCost
         },
         doorLock: {
           item: doorLockType || null,
           count: layoutData?.settings?.type?.count,
+          cost:doorLockCost
         },
         hinges: {
           item: hingesType || null,
           count: layoutData?.settings?.hinges?.count,
+          cost : hingesCost
         },
         // header: {
         //   item: headerType || null,
@@ -831,6 +857,7 @@ const wineCellarSlice = createSlice({
         glassType: {
           item: glassType || null,
           thickness: glassThickness,
+          cost : glassCost
         },
         mountingChannel: {
           item: channelItem || null,

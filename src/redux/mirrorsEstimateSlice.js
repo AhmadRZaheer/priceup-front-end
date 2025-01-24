@@ -1,9 +1,12 @@
 import {
   mirrorHardwareTypes,
   notificationsVariant,
-} from "@/utilities/constants";
-import { generateContentForMirrorEdit } from "@/utilities/generateEstimateCalculationContent";
-import { createSlice } from "@reduxjs/toolkit";
+} from '@/utilities/constants';
+import {
+  generateContentForMirrorEdit,
+} from '@/utilities/generateEstimateCalculationContent';
+import { createSlice } from '@reduxjs/toolkit';
+
 export const getEstimateMeasurements = (state) =>
   state.mirrorsEstimate.measurements;
 export const getEstimateState = (state) => state.mirrorsEstimate.estimateState;
@@ -122,6 +125,8 @@ const mirrorsEstimateSlice = createSlice({
     },
     setCounters: (state, action) => {
       const { type, value, item } = action.payload;
+      let hardwareCost = 0 ;
+      hardwareCost = item?.options[0]?.cost;
       if (["hardwares"].includes(type)) {
         let existing = state.content.hardwares;
         const foundIndex = existing.findIndex(
@@ -134,7 +139,7 @@ const mirrorsEstimateSlice = createSlice({
             existing[foundIndex].count = value;
           }
         } else {
-          existing.push({ item: item, count: value });
+          existing.push({ item: item, count: value ,cost : hardwareCost });
         }
         state.content = {
           ...state.content,
@@ -173,19 +178,22 @@ const mirrorsEstimateSlice = createSlice({
     },
     setSelectedContent: (state, action) => {
       const { type, item } = action.payload;
+      console.log(type, item,'type, item')
       if (
         [
           mirrorHardwareTypes.GLASSADDONS,
           mirrorHardwareTypes.HARDWARES,
         ].includes(type)
       ) {
+        let glassAddonCost = 0 ;
+        glassAddonCost = item?.options[0]?.cost;
         const foundIndex = state.content[type]?.findIndex(
           (row) => row.slug === item.slug
         );
         if (foundIndex !== -1) {
           state.content[type].splice(foundIndex, 1);
         } else {
-          state.content[type].push(item);
+          state.content[type].push({item : item ,cost : glassAddonCost});
         }
       } else if (["additionalFields"].includes(type)) {
         state.content = {
@@ -193,11 +201,14 @@ const mirrorsEstimateSlice = createSlice({
           additionalFields: item,
         };
       } else {
+        let cost = null;
+        cost = item?.options?.find((option) => option?.thickness === state.content.glassType.thickness)?.cost; 
         state.content = {
           ...state.content,
           [type]: {
             ...state.content[type],
             item: item,
+            cost: cost
           },
         };
       }

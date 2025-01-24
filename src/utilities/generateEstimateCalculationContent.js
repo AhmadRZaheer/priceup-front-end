@@ -484,6 +484,7 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
       mountingChannel: {
         item: channelItem || null,
         count: channelItem ? 1 : 0,
+        
       },
       mountingState:
         wallClampArray?.length ||
@@ -550,6 +551,7 @@ export const generateEstimatePayloadForShower = (
     return {
       type: row.item._id,
       count: row.count,
+      cost : row.cost ?? 0
     };
   });
   const wallClampArray = selectedContent?.mountingClamps?.wallClamp?.map(
@@ -557,6 +559,7 @@ export const generateEstimatePayloadForShower = (
       return {
         type: row.item._id,
         count: row.count,
+        cost : row.cost ?? 0
       };
     }
   );
@@ -565,6 +568,7 @@ export const generateEstimatePayloadForShower = (
       return {
         type: row.item._id,
         count: row.count,
+        cost : row.cost ?? 0
       };
     }
   );
@@ -579,6 +583,7 @@ export const generateEstimatePayloadForShower = (
       return {
         type: row.item._id,
         count: row.count,
+        cost : row.cost ?? 0
       };
     }
   );
@@ -587,6 +592,7 @@ export const generateEstimatePayloadForShower = (
       return {
         type: row.item._id,
         count: row.count,
+        cost : row.cost ?? 0
       };
     });
   const cornerSleeveOverArray =
@@ -594,6 +600,7 @@ export const generateEstimatePayloadForShower = (
       return {
         type: row.item._id,
         count: row.count,
+        cost : row.cost ?? 0
       };
     });
   const cornerGlassToGlassArray =
@@ -601,6 +608,7 @@ export const generateEstimatePayloadForShower = (
       return {
         type: row.item._id,
         count: row.count,
+        cost : row.cost ?? 0
       };
     });
   const glassAddonsArray = selectedContent?.glassAddons?.map(
@@ -614,10 +622,12 @@ export const generateEstimatePayloadForShower = (
     handles: {
       type: selectedContent?.handles?.item?._id,
       count: selectedContent?.handles?.count,
+      cost: selectedContent?.handles?.cost ?? 0,
     },
     hinges: {
       type: selectedContent?.hinges?.item?._id,
       count: selectedContent?.hinges?.count,
+      cost: selectedContent?.hinges?.cost ?? 0,
     },
     mountingClamps: {
       wallClamp: [...wallClampArray],
@@ -629,19 +639,24 @@ export const generateEstimatePayloadForShower = (
       sleeveOver: [...cornerSleeveOverArray],
       glassToGlass: [...cornerGlassToGlassArray],
     },
-    mountingChannel: selectedContent?.mountingChannel?.item?._id || null,
+    mountingChannel: { type : selectedContent?.mountingChannel?.item?._id || null ,
+    cost :  selectedContent?.mountingChannel?.cost ?? 0
+  },
     glassType: {
       type: selectedContent?.glassType?.item?._id,
       thickness: selectedContent?.glassType?.thickness,
+      cost: selectedContent?.glassType?.cost ?? 0,
     },
     glassAddons: [...glassAddonsArray],
     slidingDoorSystem: {
       type: selectedContent?.slidingDoorSystem?.item?._id,
       count: selectedContent?.slidingDoorSystem?.count,
+      cost: selectedContent?.slidingDoorSystem?.cost ?? 0,
     },
     header: {
       type: selectedContent?.header?.item?._id,
       count: selectedContent?.header?.count,
+      cost: selectedContent?.header?.cost ?? 0,
     },
     oneInchHoles: selectedContent?.oneInchHoles,
     hingeCut: selectedContent?.hingeCut,
@@ -692,6 +707,7 @@ export const generateEstimatePayloadForMirror = (
     return {
       type: row.item._id,
       count: row.count,
+      cost: row.cost ?? 0
     };
   });
   const filteredFields = selectedContent.additionalFields?.filter(
@@ -709,10 +725,12 @@ export const generateEstimatePayloadForMirror = (
     glassType: {
       type: selectedContent?.glassType?.item?._id,
       thickness: selectedContent?.glassType?.thickness,
+      cost : selectedContent?.glassType?.cost ?? 0
     },
     edgeWork: {
       type: selectedContent?.edgeWork?.item?._id,
       thickness: selectedContent?.edgeWork?.thickness,
+      cost: selectedContent?.edgeWork?.cost ?? 0,
     },
     glassAddons: [...glassAddonsArray],
     hardwares: [...hardwaresArray],
@@ -777,6 +795,7 @@ export const generateEstimatePayloadForWineCellar = (
     return {
       type: row.item._id,
       count: row.count,
+      cost: row.cost ?? 0,
     };
   });
   const wallClampArray = selectedContent?.mountingClamps?.wallClamp?.map(
@@ -784,6 +803,7 @@ export const generateEstimatePayloadForWineCellar = (
       return {
         type: row.item._id,
         count: row.count,
+        cost: row.cost ?? 0,
       };
     }
   );
@@ -792,6 +812,7 @@ export const generateEstimatePayloadForWineCellar = (
       return {
         type: row.item._id,
         count: row.count,
+        cost: row.cost ?? 0,
       };
     }
   );
@@ -808,6 +829,7 @@ export const generateEstimatePayloadForWineCellar = (
       return {
         type: row.item._id,
         count: row.count,
+        cost: row.cost ?? 0,
       };
     }
   );
@@ -816,6 +838,7 @@ export const generateEstimatePayloadForWineCellar = (
       return {
         type: row.item._id,
         count: row.count,
+        cost: row.cost ?? 0,
       };
     });
   const cornerSleeveOverArray =
@@ -823,6 +846,7 @@ export const generateEstimatePayloadForWineCellar = (
       return {
         type: row.item._id,
         count: row.count,
+        cost: row.cost ?? 0,
       };
     });
   const cornerGlassToGlassArray =
@@ -830,6 +854,7 @@ export const generateEstimatePayloadForWineCellar = (
       return {
         type: row.item._id,
         count: row.count,
+        cost: row.cost ?? 0,
       };
     });
   const glassAddonsArray = selectedContent?.glassAddons?.map(
@@ -845,14 +870,17 @@ export const generateEstimatePayloadForWineCellar = (
     handles: {
       type: selectedContent?.handles?.item?._id,
       count: selectedContent?.handles?.count,
+      cost: selectedContent?.handles?.cost ?? 0,
     },
     doorLock: {
       type: selectedContent?.doorLock?.item?._id || null,
       count: selectedContent?.doorLock?.count,
+      cost: selectedContent?.doorLock?.cost ?? 0,
     },
     hinges: {
       type: selectedContent?.hinges?.item?._id,
       count: selectedContent?.hinges?.count,
+      cost: selectedContent?.hinges?.cost ?? 0,
     },
     mountingClamps: {
       wallClamp: [...wallClampArray],
@@ -864,19 +892,25 @@ export const generateEstimatePayloadForWineCellar = (
       sleeveOver: [...cornerSleeveOverArray],
       glassToGlass: [...cornerGlassToGlassArray],
     },
-    mountingChannel: selectedContent?.mountingChannel?.item?._id || null,
+    mountingChannel: {
+      type : selectedContent?.mountingChannel?.item?._id || null,
+      cost : selectedContent?.mountingChannel?.cost ?? 0
+    },
     glassType: {
       type: selectedContent?.glassType?.item?._id,
       thickness: selectedContent?.glassType?.thickness,
+      cost: selectedContent?.glassType?.cost ?? 0,
     },
     glassAddons: [...glassAddonsArray],
     slidingDoorSystem: {
       type: selectedContent?.slidingDoorSystem?.item?._id,
       count: selectedContent?.slidingDoorSystem?.count,
+      cost: selectedContent?.slidingDoorSystem?.cost ?? 0,
     },
     header: {
       type: selectedContent?.header?.item?._id,
       count: selectedContent?.header?.count,
+      cost: selectedContent?.header?.cost ?? 0,
     },
     oneInchHoles: selectedContent?.oneInchHoles,
     hingeCut: selectedContent?.hingeCut,

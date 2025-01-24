@@ -1,14 +1,17 @@
-import { calculateAreaAndPerimeter } from "@/utilities/common";
+import { calculateAreaAndPerimeter } from '@/utilities/common';
 import {
-    hardwareTypes,
-    layoutVariants,
-    notificationsVariant,
-    quoteState,
-    thicknessTypes,
-  } from "@/utilities/constants";
-import { generateContentForWineCellarEdit } from "@/utilities/generateEstimateCalculationContent";
-import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
-  // import { getWineHardwareSpecificFabrication } from "@/utilities/hardwarefabrication";
+  hardwareTypes,
+  layoutVariants,
+  notificationsVariant,
+  quoteState,
+  thicknessTypes,
+} from '@/utilities/constants';
+import {
+  generateContentForWineCellarEdit,
+} from '@/utilities/generateEstimateCalculationContent';
+import { getHardwareSpecificFabrication } from '@/utilities/WineCellarEstimate';
+
+// import { getWineHardwareSpecificFabrication } from "@/utilities/hardwarefabrication";
   const { createSlice } = require("@reduxjs/toolkit");
   
 //   export const getWineProjectId = (state) => state.wineCellarsEstimate.projectId;
@@ -141,14 +144,17 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
       handles: {
         item: null,
         count: 0,
+        cost:0
       },
       doorLock: {
         item: null,
         count: 0,
+        cost:0
       },
       hinges: {
         item: null,
         count: 0,
+        cost:0
       },
       mountingClamps: {
         wallClamp: [],
@@ -163,18 +169,22 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
       mountingChannel: {
         item: null,
         count: 0,
+        cost:0
       },
       header: {
         item: null,
         count: 0,
+        cost:0
       },
       slidingDoorSystem: {
         item: null,
         count: 0,
+        cost:0
       },
       glassType: {
         item: null,
         thickness: thicknessTypes.THREEBYEIGHT,
+        cost:0
       },
       glassAddons: [],
       oneInchHoles: 0,
@@ -829,7 +839,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
       },
 
   
-      initializeStateForCreateQuote: (state, action) => {
+      initializeStateForCreateQuote: (state, action) => { 
         const { layoutData, hardwaresList } = action.payload;
         let notifications = state.notifications;
         let hardwareFinishes = null;
@@ -841,25 +851,36 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
         handleType = hardwaresList?.handles?.find(
           (item) => item._id === layoutData?.settings?.handles?.handleType
         );
+        let handleTypeCost = null;
+        handleTypeCost = handleType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id )?.cost;
+
         let doorLockType = null;
         doorLockType = hardwaresList?.doorLocks?.find(
           (item) => item._id === layoutData?.settings?.doorLock?.type
         );
-  
+        let doorLockCost = null;
+         doorLockCost = doorLockType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id )?.cost;
+
         let hingesType = null;
         hingesType = hardwaresList?.hinges?.find(
           (item) => item._id === layoutData?.settings?.hinges?.hingesType
         );
+        let hingesCost = null;
+      hingesCost = hingesType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
         let slidingDoorSystemType = null;
         slidingDoorSystemType = hardwaresList?.slidingDoorSystem?.find(
           (item) => item._id === layoutData?.settings?.slidingDoorSystem?.type
         );
-  
+        let slidingDoorSystemCost = null;
+        slidingDoorSystemCost = slidingDoorSystemType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
         let headerType = null;
         headerType = hardwaresList?.header?.find(
           (item) => item._id === layoutData?.settings?.header
         );
+        let headerCost = null;
+         headerCost = headerType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
   
         let glassType = null;
         glassType = hardwaresList?.glassType?.find(
@@ -868,12 +889,16 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
         let glassThickness =
           layoutData?.settings?.glassType?.thickness ||
           thicknessTypes.THREEBYEIGHT;
+          let glassCost = null;
+          glassCost = glassType?.options?.find((option) => option?.thickness === glassThickness)?.cost; 
   
         let glassAddon = null;
         glassAddon = hardwaresList?.glassAddons?.find(
           (item) => item._id === layoutData?.settings?.glassAddon
         );
-
+        let glassAddonCost = null;
+        glassAddonCost = glassAddon?.options?.[0]?.cost;
+ 
         let clampCutOut = 0;
         let wallClampItem,
           sleeveOverItem,
@@ -890,6 +915,13 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
           cornerGlassToGlassItem =
           channelItem =
             null;
+            let wallClampCost = 0;
+            let sleeveOverCost = 0;
+            let glassToGlassCost = 0;
+            let  cornerWallClampCost = 0;
+            let  cornerSleeveOverCost = 0;
+            let  cornerGlassToGlassCost = 0;
+            let  channelCost = 0;
             if (
               ![
                 layoutVariants.DOOR,
@@ -900,36 +932,43 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
               wallClampItem = hardwaresList?.wallClamp?.find(
                 (item) => item._id === layoutData?.settings?.wallClamp?.wallClampType
               );
-      
+              wallClampCost = wallClampItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
               sleeveOverItem = hardwaresList?.sleeveOver?.find(
                 (item) =>
                   item._id === layoutData?.settings?.sleeveOver?.sleeveOverType
               );
-      
+              sleeveOverCost = sleeveOverItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
               glassToGlassItem = hardwaresList?.glassToGlass?.find(
                 (item) =>
                   item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
               );
-      
+              glassToGlassCost = glassToGlassItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
               cornerWallClampItem = hardwaresList?.cornerWallClamp?.find(
                 (item) =>
                   item._id === layoutData?.settings?.cornerWallClamp?.wallClampType
               );
-      
+              cornerWallClampCost = cornerWallClampItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
               cornerSleeveOverItem = hardwaresList?.cornerSleeveOver?.find(
                 (item) =>
                   item._id === layoutData?.settings?.cornerSleeveOver?.sleeveOverType
               );
-      
+              cornerSleeveOverCost = cornerSleeveOverItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
               cornerGlassToGlassItem = hardwaresList?.cornerGlassToGlass?.find(
                 (item) =>
                   item._id ===
                   layoutData?.settings?.cornerGlassToGlass?.glassToGlassType
               );
-      
+              cornerGlassToGlassCost = cornerGlassToGlassItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
               channelItem = hardwaresList?.mountingChannel?.find(
                 (item) => item._id === layoutData?.settings?.mountingChannel
               );
+              channelCost = channelItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
               clampCutOut =
                 layoutData?.settings?.wallClamp?.count +
                 layoutData?.settings?.sleeveOver?.count +
@@ -956,30 +995,37 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
           handles: {
             item: handleType || null,
             count: layoutData?.settings?.handles?.count,
+            cost : handleTypeCost
           },
           doorLock: {
             item: doorLockType || null,
             count: layoutData?.settings?.doorLock?.count,
+            cost: doorLockCost
           },
           hinges: {
             item: hingesType || null,
             count: layoutData?.settings?.hinges?.count,
+              cost : hingesCost
           },
           header: {
             item: headerType || null,
             count: headerType ? 1 : 0,
+            cost : headerCost
           },
           slidingDoorSystem: {
             item: slidingDoorSystemType || null,
             count: layoutData?.settings?.slidingDoorSystem?.count ?? 0,
+            cost : slidingDoorSystemCost
           },
           glassType: {
             item: glassType || null,
             thickness: glassThickness,
+            cost : glassCost
           },
           mountingChannel: {
             item: channelItem || null,
             count: channelItem ? 1 : 0,
+            cost: channelCost || 0
           },
           mountingClamps: {
             wallClamp: wallClampItem
@@ -987,6 +1033,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
                   {
                     item: wallClampItem,
                     count: layoutData?.settings?.wallClamp?.count,
+                    cost: wallClampCost,
                   },
                 ]
               : [],
@@ -995,6 +1042,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
                   {
                     item: sleeveOverItem,
                     count: layoutData?.settings?.sleeveOver?.count,
+                    cost: sleeveOverCost,
                   },
                 ]
               : [],
@@ -1003,6 +1051,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
                   {
                     item: glassToGlassItem,
                     count: layoutData?.settings?.glassToGlass?.count,
+                    cost: glassToGlassCost
                   },
                 ]
               : [],
@@ -1013,6 +1062,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
                   {
                     item: cornerWallClampItem,
                     count: layoutData?.settings?.cornerWallClamp?.count,
+                    cost: cornerWallClampCost
                   },
                 ]
               : [],
@@ -1021,6 +1071,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
                   {
                     item: cornerSleeveOverItem,
                     count: layoutData?.settings?.cornerSleeveOver?.count,
+                    cost: cornerSleeveOverCost,
                   },
                 ]
               : [],
@@ -1029,6 +1080,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
                   {
                     item: cornerGlassToGlassItem,
                     count: layoutData?.settings?.cornerGlassToGlass?.count,
+                    cost: cornerGlassToGlassCost,
                   },
                 ]
               : [],
@@ -1042,7 +1094,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
           laborHoursForDoor: state.doorQuantity > 1 ? layoutData?.settings?.noOfHoursToCompleteSingleDoor : 0,
           outages: layoutData?.settings?.outages,
           notch: layoutData?.settings?.notch,
-          glassAddons: glassAddon ? [glassAddon] : [noGlassAddon],
+          glassAddons: glassAddon ? [{item:glassAddon , cost: glassAddonCost }] : [{item: noGlassAddon ,cost:0}],
           hingeCut: layoutData?.settings?.hinges?.count,
           oneInchHoles: layoutData?.settings?.handles?.count * 2,
           clampCut: clampCutOut,
@@ -1341,21 +1393,27 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
           }
         }
         if ([hardwareTypes.CHANNEL].includes(type)) {
+          let itemCost = 0;
+          itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
           const found = item?._id === state.content.mountingChannel.item?._id;
           state.content = {
             ...state.content,
             mountingChannel: {
               item: found ? null : item,
               count: found ? 0 : 1,
+              cost : itemCost ?? 0
             },
           };
         } else if ([hardwareTypes.DOORLOCK].includes(type)) {
+          let itemCost = 0;
+          itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost; 
           const found = item?._id === state.content.doorLock.item?._id;
           state.content = {
             ...state.content,
             doorLock: {
               item: found ? null : item,
               count: found ? 0 : 1,
+              cost : itemCost ?? 0
             },
           };
         } else if (["hardwareFinishes"].includes(type)) {
@@ -1366,11 +1424,13 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
         } else if (["hardwareAddons"].includes(type)) {
           console.log("Nice Try.");
         } else if (["glassAddons"].includes(type)) {
+          let glassAddonCost = 0 ;
+        glassAddonCost = item?.options?.[0]?.cost;
           if (item.slug === "no-treatment") {
             const noGlassAddon = listdata.glassAddons?.find(
               (item) => item.slug === "no-treatment"
             );
-            state.content.glassAddons = [noGlassAddon];
+            state.content.glassAddons = [{item : noGlassAddon ,cost : 0}];
           } else {
             const foundIndex = state.content.glassAddons?.findIndex(
               (row) => row.slug === item.slug
@@ -1378,7 +1438,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
             if (foundIndex !== -1) {
               state.content.glassAddons.splice(foundIndex, 1);
             } else {
-              state.content.glassAddons.push(item);
+              state.content.glassAddons.push({ item: item, cost : glassAddonCost });
             }
             const indexOfNoTreatment = state.content.glassAddons?.findIndex(
               (row) => row.slug === "no-treatment"
@@ -1393,17 +1453,21 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
             [type]: item,
           };
         } else {
+          let itemCost = 0;
+          itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost; 
           state.content = {
             ...state.content,
             [type]: {
               ...state.content[type],
               item: item,
+              cost : itemCost
             },
           };
         }
       },
       setCounters: (state, action) => {
         const { type, value, item } = action.payload;
+        console.log(type, value, item ,'type, value, item')
         /** Calculate and modify fabrication values according to current hardware selected or unselected  */
         const fabricationsCount = {
           oneInchHoles: state.content.oneInchHoles,
@@ -1509,6 +1573,8 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
     
           if (allClamps.includes(type) || allCorners.includes(type)) {
             let existing;
+            let cornerCost = 0 ;
+            cornerCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes?._id)?.cost
             if (allClamps.includes(type)) {
               existing = state.content.mountingClamps[type];
             } else {
@@ -1525,7 +1591,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
                 existing[foundIndex].count = value;
               }
             } else {
-              existing.push({ item: item, count: value });
+              existing.push({ item: item, count: value , cost : cornerCost  });
             }
     
             if (allClamps.includes(type)) {
@@ -1542,6 +1608,8 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
           } else if (["hardwareAddons"].includes(type)) {
             console.log('dfdfdfdfdf');
             let existing = state.content.hardwareAddons;
+            let hardwareAddonCost = 0 ;
+            hardwareAddonCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
             const foundIndex = existing.findIndex(
               (row) => row?.item?.slug === item.slug
             );
@@ -1552,18 +1620,21 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
                 existing[foundIndex].count = value;
               }
             } else {
-              existing.push({ item: item, count: value });
+              existing.push({ item: item, count: value,cost : hardwareAddonCost  });
             }
             state.content = {
               ...state.content,
               hardwareAddons: [...existing],
             };
           } else {
+            let itemCost = 0;
+            itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost; 
             state.content = {
               ...state.content,
               [type]: {
                 ...state.content[type],
                 count: value,
+                cost : itemCost
               },
             };
           }        

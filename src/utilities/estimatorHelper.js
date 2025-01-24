@@ -1,5 +1,12 @@
-import { convertArrayKeysToObject } from "./common";
-import { defaultNotificationState, hardwareTypes, notificationsVariant, panelOverWeightAmount, standardDoorWidth, thicknessTypes } from "./constants";
+import { convertArrayKeysToObject } from './common';
+import {
+  defaultNotificationState,
+  hardwareTypes,
+  notificationsVariant,
+  panelOverWeightAmount,
+  standardDoorWidth,
+  thicknessTypes,
+} from './constants';
 
 export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type) => {
  switch(type){
@@ -18,7 +25,7 @@ export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type
     case hardwareTypes.GLASSTYPE:
       return selectedItem?.options?.find((item)=>item.thickness===activeFinishOrThickness)?.status;
     case hardwareTypes.GLASSADDONS:
-      return selectedItem?.slug === 'no-treatment' ? true : selectedItem?.options?.[0]?.status;
+      return selectedItem?.item?.slug === 'no-treatment' ? true : selectedItem?.item?.options?.[0]?.status;
     case hardwareTypes.CHANNEL:
       return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
     case hardwareTypes.WALLCLAMP:
@@ -281,7 +288,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       let selectedDisableNames = '';
     selectedContent.glassAddons.forEach(element => {
       if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
-        selectedDisableNames += `${element.name}, `;
+        selectedDisableNames += `${element.item.name}, `;
       }
     });
     if(selectedDisableNames.length){
