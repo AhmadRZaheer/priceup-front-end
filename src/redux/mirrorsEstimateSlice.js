@@ -178,7 +178,6 @@ const mirrorsEstimateSlice = createSlice({
     },
     setSelectedContent: (state, action) => {
       const { type, item } = action.payload;
-      console.log(type, item,'type, item')
       if (
         [
           mirrorHardwareTypes.GLASSADDONS,

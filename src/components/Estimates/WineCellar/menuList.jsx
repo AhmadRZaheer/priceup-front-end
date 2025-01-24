@@ -39,7 +39,6 @@ const MenuList = ({
   thickness,
   currentItem,
 }) => {
-  console.log(menuOptions,'menuOptionsmenuOptions',title);
   const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
   const selectedContent = useSelector(getContent);
   const [anchorEl, setAnchorEl] = useState(false);

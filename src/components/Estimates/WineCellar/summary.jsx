@@ -225,7 +225,6 @@ const Summary = ({ setStep }) => {
     selectedContent?.glassType?.thickness,
     selectedContent?.glassType?.item?._id
   );
-  console.log('Glass Addons:',selectedContent)
   return (
     <>
       <Box

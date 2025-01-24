@@ -21,11 +21,6 @@ const MenuItem = ({
   selectedItem,
   selectedContent,
 }) => {
-  console.log(item,
-    handleItemSelect,
-    type,
-    selectedItem,
-    selectedContent,'SAveasasasas')
   const activeFinishOrThickness =
     type === hardwareTypes.GLASSTYPE
       ? selectedContent.glassType.thickness
@@ -35,7 +30,6 @@ const MenuItem = ({
   const status = getActiveStatus(item, activeFinishOrThickness, type);
   const [showToolTip, setShowTooltip] = useState(false);
   const handleItemClick = () => {
-    console.log('qwerty')
     if (status || type === hardwareTypes.GLASSADDONS) {
       handleItemSelect(item);
     }

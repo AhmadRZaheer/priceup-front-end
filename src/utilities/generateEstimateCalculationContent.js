@@ -484,7 +484,6 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
       mountingChannel: {
         item: channelItem || null,
         count: channelItem ? 1 : 0,
-        
       },
       mountingState:
         wallClampArray?.length ||
