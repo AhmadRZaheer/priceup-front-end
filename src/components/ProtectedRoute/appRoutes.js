@@ -64,6 +64,7 @@ import ProjectInvoiceCreate from "@/pages/Invoices/Create";
 import ProjectInvoiceDetail from "@/pages/Invoices/Detail";
 import CreateNewInvoice from "@/pages/Invoices/CreateNewInvoice";
 import ProjectInvoiceEdit from "@/pages/Invoices/Edit";
+import ActivityLogs from "@/pages/ActivityLogs";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -169,6 +170,8 @@ const AppRoutes = () => {
             <Route path="*" element={<WineCellarHardware />} />
           </Route>
           {/** End */}
+          <Route path="logs" element={<ActivityLogs />}></Route>
+
           <Route path="*" element={<Overview />}></Route>
         </Route>
       ) : isStaff(decodedToken) && decodedToken?.company_id === "" ? (

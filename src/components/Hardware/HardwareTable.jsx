@@ -113,7 +113,7 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
     if (value.length <= inputLength) {
       setFinishes((prevFinishes) =>
         prevFinishes.map((item) =>
-          item._id === id ? { ...item, cost: value } : item
+          item._id === id ? { ...item, cost: Number(value)  } : item
         )
       );
     }
