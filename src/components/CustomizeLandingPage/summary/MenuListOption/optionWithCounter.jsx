@@ -1,7 +1,5 @@
 import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { setCounters } from "@/redux/estimateCalculations";
 import { useEffect, useState } from "react";
 
 const OptionWithCounter = ({
@@ -17,7 +15,6 @@ const OptionWithCounter = ({
     event.stopPropagation();
     if (newVal >= 0 && newVal <= 100 && status) {
       setCount(newVal);
-      // disaptch(setCounters({ item: item, type: type, value: newVal }));
       handleChange(type, { item, counter: newVal });
     }
   };

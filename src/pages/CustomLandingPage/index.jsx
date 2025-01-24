@@ -1,42 +1,42 @@
-import CustomizeLandingPage from "@/components/CustomizeLandingPage";
-import { setListData } from "@/redux/estimateCalculations";
-import { setLocationInfo } from "@/redux/locationSlice";
-import { setMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { setWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import {
-  useFetchAllDocuments,
-  useFetchSingleDocument,
-} from "@/utilities/ApiHooks/common";
-import { backendURL, frontendURL } from "@/utilities/common";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+
+import CustomizeLandingPage from '@/components/CustomizeLandingPage';
+import { initializeState } from '@/redux/customerEstimateCalculation';
+import { setListData } from '@/redux/estimateCalculations';
+import { setLocationInfo } from '@/redux/locationSlice';
+import { setMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { setWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import { useFetchSingleDocument } from '@/utilities/ApiHooks/common';
+import { backendURL } from '@/utilities/common';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import {
   Box,
   Button,
   CircularProgress,
   Container,
   Typography,
-} from "@mui/material";
-import React, { useEffect, useMemo } from "react";
-import { useDispatch } from "react-redux";
-import { useParams } from "react-router-dom";
-import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
-import { initializeState } from "@/redux/customerEstimateCalculation";
+} from '@mui/material';
 
 const CustomLandingPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [selectedDataLoading, setSelectedDataLoading] = useState(true);
   const {
     data,
     refetch: refetchData,
     isFetching,
     isFetched,
   } = useFetchSingleDocument(`${backendURL}/landing-page-preview/${id}`);
-  const {
-    data: hardwareData,
-    refetch: refetchHardwareData,
-  } = useFetchSingleDocument(
-    `${backendURL}/landing-page-preview-additional-hardware/${data?.company_id}`
-  );
-
+  const { data: hardwareData, refetch: refetchHardwareData } =
+    useFetchSingleDocument(
+      `${backendURL}/landing-page-preview-additional-hardware/${data?.company_id}`
+    );
   useEffect(() => {
     if (id) {
       refetchData();
@@ -44,14 +44,16 @@ const CustomLandingPage = () => {
   }, [id, refetchData]);
 
   useEffect(() => {
-    if (data) {
-      refetchHardwareData();
+    if (isFetched) {
+      if (data) {
+        refetchHardwareData();
+      }
+      setSelectedDataLoading(false);
     }
-  }, [data, refetchHardwareData]);
+  }, [data, refetchHardwareData, isFetched]);
 
   useEffect(() => {
     if (hardwareData) {
-      // Abstract repeated dispatch logic into a helper function
       const initializeHardware = () => {
         if (data?.estimateDetailArray?.length) {
           dispatch(
@@ -59,60 +61,25 @@ const CustomLandingPage = () => {
               estimates: data.estimateDetailArray,
               showerHardwaresList: hardwareData.showersHardware,
               mirrorHardwaresList: hardwareData.mirrorsHardware,
-              wineCellarHardwaresList: hardwareData.wineCellarsHardware
+              wineCellarHardwaresList: hardwareData.wineCellarsHardware,
             })
           );
         }
         dispatch(setListData(hardwareData.showersHardware ?? {}));
         dispatch(setMirrorsHardware(hardwareData.mirrorsHardware ?? {}));
-        dispatch(setWineCellarsHardware(hardwareData.wineCellarsHardware ?? {}));
+        dispatch(
+          setWineCellarsHardware(hardwareData.wineCellarsHardware ?? {})
+        );
         dispatch(setLocationInfo(hardwareData.locationSettings ?? {}));
       };
       initializeHardware();
     }
   }, [hardwareData, data, dispatch]);
 
-  // const hardwareAndSettings = useMemo(() => {
-  //   return {
-  //     showerHardware: hardwareData?.showersHardware,
-  //     mirrorHardware: hardwareData?.mirrorsHardware ?? {},
-  //     wineCellarHardware: hardwareData?.wineCellarsHardware ?? {},
-  //     wineCallerSetting: hardwareData?.locationSettings?.wineCellars ?? {},
-  //     mirrorSetting: hardwareData?.locationSettings?.mirrors ?? {},
-  //     showerSetting: hardwareData?.locationSettings?.showers ?? {},
-  //     pdfSetting: hardwareData?.locationSettings?.pdfSettings ?? {},
-  //   };
-  // }, [hardwareData]);
-
-  // console.log(
-  //   data,
-  //   "datadatadatadatadatadatadatadatadatadatadata",
-  //   hardwareData
-  // );
-  // useEffect(() => {
-  //   if (data?.location) {
-  //     dispatch(setLocationInfo(data?.location));
-  //   }
-  //   if (data?.mirrorsHardware) {
-  //     dispatch(setMirrorsHardware(data?.mirrorsHardware));
-  //   }
-  //   if (data?.showersHardware) {
-  //     dispatch(setListData(data?.showersHardware));
-  //   }
-  //   if (data?.wineCellarsHardware) {
-  //     dispatch(setWineCellarsHardware(data?.wineCellarsHardware));
-  //   }
-  // }, [
-  //   data?.location,
-  //   data?.mirrorsHardware,
-  //   data?.showersHardware,
-  //   data?.wineCellarsHardware,
-  // ]);
-
   const handleBack = () => {
-    window.location.href = `${frontendURL}:3005`;
+    window.location.href = `http://3.219.213.248:3005`;
   };
-  return !isFetched ? (
+  return selectedDataLoading ? (
     <Box
       sx={{
         p: "24px 16px",
@@ -182,13 +149,6 @@ const CustomLandingPage = () => {
         refetchData={refetchData}
         isFetched={isFetched}
         isFetching={isFetching}
-      // showerHardwaresList={hardwareAndSettings?.showerHardware}
-      // mirrorHardwaresList={hardwareAndSettings?.mirrorHardware}
-      // wineCellarHardwaresList={hardwareAndSettings?.wineCellarHardware}
-      // wineCellarLocationSettings={hardwareAndSettings?.wineCallerSetting}
-      // mirrorsLocationSettings={hardwareAndSettings?.mirrorSetting}
-      // showersLocationSettings={hardwareAndSettings?.showerSetting}
-      // pdfSettings={hardwareAndSettings?.pdfSetting}
       />
     </Box>
   );

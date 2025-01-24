@@ -78,6 +78,7 @@ const CreateCompanyContactForm = ({
           <TextField
             id="phone"
             name="phone"
+            type='number'
             placeholder="Enter phone number"
             size="small"
             variant="outlined"

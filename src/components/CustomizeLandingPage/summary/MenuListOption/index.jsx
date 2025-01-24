@@ -1,31 +1,11 @@
 import { useEffect, useState } from "react";
-import Button from "@mui/material/Button";
+import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
 import {
-  AddCircleOutline,
-  ChevronRight,
-  RemoveCircleOutline,
-} from "@mui/icons-material";
-import {
-  Box,
-  CircularProgress,
-  TextField,
-  Typography,
-  MenuItem as MuiMenuItem,
-  Select,
-} from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getContent,
-  setContent,
   setCounters,
-  setThickness,
 } from "@/redux/estimateCalculations";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import { showSnackbar } from "@/redux/snackBarSlice";
 import MenuItem from "./menuItem";
-import CustomInputField from "@/components/ui-components/CustomInput";
 
 const MenuList = ({
   menuOptions,
@@ -35,10 +15,10 @@ const MenuList = ({
   thickness,
   currentItem,
   selectedContent,
-  handleChange, 
+  handleChange,
   locationSettings,
+  colorData,
 }) => {
-  // const selectedContent = useSelector(getContent);
   const [anchorEl, setAnchorEl] = useState(true);
   const [countVal, setCountVal] = useState(0);
   const [thicknessVal, setThicknessVal] = useState("1/2");
@@ -55,9 +35,7 @@ const MenuList = ({
   }, [currentItem]);
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
-    handleChange(type,item);
-    // dispatch(setContent({ type: type, item: item }));
-    // setSelectedGlassType(item); // Call the function only if it's valid    
+    handleChange(type, item);
     setSelectedItem(item);
   };
   const handleCountSet = (value) => {
@@ -66,20 +44,7 @@ const MenuList = ({
       dispatch(setCounters({ item: selectedItem, type: type, value: value }));
     }
   };
-  const handleThicknessSet = (thickness) => {
-    setThicknessVal(thickness);
-    dispatch(setThickness(thickness));
-  };
-  const opneClose = () => {
-    if (
-      selectedContent?.hardwareFinish?.type ||
-      ["hardwareFinishes"].includes(type)
-    ) {
-      setAnchorEl(!anchorEl);
-    } else {
-      setAnchorEl(!anchorEl);
-    }
-  };
+
   return (
     <Box>
       <Box
@@ -91,12 +56,9 @@ const MenuList = ({
           background: "white",
           borderRadius: "11px",
           color: "black",
-          // pb: 1,
         }}
       >
         <Box
-          // onClick={opneClose}
-          // id="basic-button"
           sx={{
             color: {
               sm: anchorEl ? "black" : "black !important ",
@@ -108,22 +70,8 @@ const MenuList = ({
             px: 2,
             display: "flex",
             alignItems: "center",
-            // cursor: "pointer",
           }}
         >
-          {/* {anchorEl ? (
-            <ChevronRight
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                transform: "rotate(90deg)",
-                color: "black !important",
-                mr: 2,
-              }}
-            />
-          ) : (
-            <ChevronRight sx={{ color: "black !important", mr: 2 }} />
-          )} */}
           <Typography
             sx={{
               fontSize: "24px",
@@ -153,9 +101,7 @@ const MenuList = ({
               display: "flex",
               alignItems: "center",
               gap: 1,
-              color: { sm: "#000000  ", xs: "white" },
-              // alignSelf: "flex-end",
-              // py: 1.5,
+              color: { sm: "#000000", xs: "white" },
             }}
           >
             <AddCircleOutline
@@ -183,7 +129,6 @@ const MenuList = ({
         <Box
           sx={{
             maxHeight: "220px",
-            // minHeight: "80px",
             overflowY: "scroll",
             color: { sm: "#000000", xs: "white" },
             backgroundColor: "#F3F5F6",
@@ -221,6 +166,7 @@ const MenuList = ({
                 selectedContent={selectedContent}
                 handleChange={handleChange}
                 locationSettings={locationSettings}
+                colorData={colorData}
               />
             ))
           )}

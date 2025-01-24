@@ -7,12 +7,11 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ShowerSummary from "./summary/summary";
 import ShowerImg from "@/Assets/CustomerLandingImages/shower.png";
 import MirrorImg from "@/Assets/CustomerLandingImages/mirror.png";
 import WineCallerImg from "@/Assets/CustomerLandingImages/wineCaller.png";
-import { backendURL, calculateDiscount } from "@/utilities/common";
 import { EstimateCategory, statusTypes } from "@/utilities/constants";
 
 const SingleAccordian = ({
@@ -24,38 +23,25 @@ const SingleAccordian = ({
   reCalculateTotal,
   locationSettings,
   UpgradeOPtions,
-  // showersLocationSettings,
-  // mirrorsLocationSettings,
-  // wineCellarLocationSettings,
+  colorData,
   hardwareList,
-  // showerHardwaresList,
-  // mirrorHardwaresList,
-  // wineCellarHardwaresList,
   category,
 }) => {
   const [totalPrice, setTotalPrice] = useState(data?.totalCost ?? 0);
-  console.log(data, "sdfgqwfgqwfwqvd", totalPrice);
+  const secondaryColor = colorData?.secondary;
+  const primaryColor = colorData?.primary;
+  const backgroundColor = colorData?.default;
   const chipColor = data?.selectedItem?.status
     ? data?.selectedItem?.status === "pending"
-      ? "#F95500"
+      ? primaryColor
       : "#0FE90D"
-    : "#F95500";
+    : primaryColor;
   const imageData =
     data?.category === EstimateCategory.SHOWERS
       ? ShowerImg
       : data?.category === EstimateCategory.WINECELLARS
       ? WineCallerImg
       : MirrorImg;
-
-  // useEffect(() => {
-  //   const discountPrice = calculateDiscount(
-  //     data?.pricing?.totalPrice,
-  //     data?.config?.config?.discount.value,
-  //     data?.config?.config?.discount.unit
-  //   );
-  //   setTotalPrice(discountPrice);
-  // }, [data]);
-
   const discountValue = data?.content?.discount?.value ?? 0;
 
   return (
@@ -65,21 +51,20 @@ const SingleAccordian = ({
       onChange={handleChangeAccordian(`panel${category}${index + 1}`)}
       sx={{
         borderRadius: "10px !important",
-        // py: "3px",
         px: "4px",
-        background: "#000000",
-        color: "white",
+        background: backgroundColor,
+        color: secondaryColor,
         border: "1px solid #D6D6D6",
         boxShadow: "none",
-        mt: 2,
+        mt: index === 0 ? 0 : 2,
       }}
     >
       <AccordionSummary
         expandIcon={
           expanded === `panel${category}${index + 1}` ? (
-            <Remove sx={{ color: "white" }} />
+            <Remove sx={{ color: secondaryColor }} />
           ) : (
-            <Add sx={{ color: "white" }} />
+            <Add sx={{ color: secondaryColor }} />
           )
         }
         aria-controls={`panel${category}${index + 1}-content`}
@@ -121,7 +106,7 @@ const SingleAccordian = ({
             <Box
               component="span"
               sx={{
-                color: discountValue > 0 ? "#BFBFBD" : "#F95500",
+                color: discountValue > 0 ? "#BFBFBD" : primaryColor,
                 textDecoration: discountValue > 0 ? "line-through" : "auto",
                 fontSize: discountValue > 0 ? "17px" : "20px",
               }}
@@ -129,19 +114,14 @@ const SingleAccordian = ({
               ${(data?.totalPrice ?? 0).toFixed(2)}
             </Box>{" "}
             {discountValue > 0 && (
-              <Box component="span" sx={{ color: "#F95500" }}>
+              <Box component="span" sx={{ color: primaryColor }}>
                 $ {(data?.content?.discount?.total ?? 0)?.toFixed(2)}
-                {/* {calculateDiscount(
-                  totalPrice,
-                  discountValue,
-                  data?.content?.discount?.unit
-                ).toFixed(2)} */}
               </Box>
             )}
           </Typography>
         </Box>
       </AccordionSummary>
-      <AccordionDetails sx={{ borderBottom: "1ps solid " }}>
+      <AccordionDetails sx={{ borderBottom: "1ps solid" }}>
         <Box>
           <Box>
             <Box>
@@ -153,24 +133,8 @@ const SingleAccordian = ({
                 reCalculateTotal={reCalculateTotal}
                 locationSettings={locationSettings}
                 UpgradeOPtions={UpgradeOPtions}
-                // locationSettings={
-                //   data?.category === EstimateCategory.SHOWERS
-                //     ? showersLocationSettings
-                //     : data?.category === EstimateCategory.MIRRORS
-                //     ? mirrorsLocationSettings
-                //     : wineCellarLocationSettings
-                // }
+                colorData={colorData}
                 hardwaresList={hardwareList}
-                // hardwaresList={
-                //   data?.category === EstimateCategory.SHOWERS
-                //     ? showerHardwaresList
-                //     : data?.category === EstimateCategory.MIRRORS
-                //     ? {
-                //         ...mirrorHardwaresList,
-                //         glassType: mirrorHardwaresList?.glassTypes ?? [],
-                //       }
-                //     : wineCellarHardwaresList
-                // }
               />
             </Box>
           </Box>

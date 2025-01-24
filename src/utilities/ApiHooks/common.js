@@ -1,7 +1,11 @@
-import { showSnackbar } from "@/redux/snackBarSlice";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useDispatch } from "react-redux";
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+
+import { showSnackbar } from '@/redux/snackBarSlice';
+import {
+  useMutation,
+  useQuery,
+} from '@tanstack/react-query';
 
 export const useFetchAllDocuments = (apiRoute) => {
   async function fetch() {
@@ -36,7 +40,8 @@ export const useFetchSingleDocument = (apiRoute) => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data && response.data.code === 200) {
-        return response.data.data ? response.data.data : {};
+        return response?.data?.data;
+        // return response.data.data ? response.data.data : {};
       } else {
         throw new Error("An error occurred while fetching records.");
       }

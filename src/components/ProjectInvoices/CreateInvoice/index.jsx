@@ -20,13 +20,13 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import SelectItemModal from "../SelectItemModal";
-import { Close } from "@mui/icons-material";
+import { Close, KeyboardArrowLeft } from "@mui/icons-material";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
   customer: yup.string().required("Customer is required"),
   dueDate: yup.string().required("Due Date is required"),
-  preview: yup.string().required("Preview is required")
+  preview: yup.string().required("Preview is required"),
 });
 
 const CreateInvoice = () => {
@@ -37,10 +37,8 @@ const CreateInvoice = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedPreview, setSelectedPreview] = useState(null);
   const navigate = useNavigate();
-  const {
-    mutateAsync: createInvoice,
-    isLoading: createInvoiceLoading,
-  } = useCreateDocument();
+  const { mutateAsync: createInvoice, isLoading: createInvoiceLoading } =
+    useCreateDocument();
   const formik = useFormik({
     initialValues: {
       customer: selectedCustomer?.name || "",
@@ -58,7 +56,7 @@ const CreateInvoice = () => {
   const {
     data: customerList,
     refetch: customerListRefetch,
-    isFetching: customerListFetching
+    isFetching: customerListFetching,
   } = useFetchAllDocuments(`${backendURL}/customers`);
   const {
     data: projectList,
@@ -78,7 +76,7 @@ const CreateInvoice = () => {
 
   useEffect(() => {
     customerListRefetch();
-  }, [])
+  }, []);
   useEffect(() => {
     if (selectedCustomer?.name) {
       projectListRefetch();
@@ -99,10 +97,10 @@ const CreateInvoice = () => {
         description: values?.description,
         customer_id: selectedPreview?.customer_id,
         source_id: selectedPreview?._id,
-        dueDate: values?.dueDate      
-      }
+        dueDate: values?.dueDate,
+      };
       const response = await createInvoice({
-        data:payload,
+        data: payload,
         apiRoute: `${backendURL}/invoices/save`,
       });
       console.log(response);
@@ -138,11 +136,11 @@ const CreateInvoice = () => {
   };
 
   const handleCustomerUnSelect = (event) => {
-    event.stopPropagation();
+    if (event) event.stopPropagation();
     setSelectedCustomer(null);
     formik.setFieldValue("customer", "");
     handleProjectUnSelect(event);
-    handlePreviewUnSelect();
+    handlePreviewUnSelect(event);
   };
 
   const handleCustomerSelect = (item) => {
@@ -167,10 +165,10 @@ const CreateInvoice = () => {
   };
 
   const handleProjectUnSelect = (event) => {
-    event.stopPropagation();
+    if (event) event.stopPropagation();
     setSelectedProject(null);
     formik.setFieldValue("project", "");
-    handlePreviewUnSelect();
+    handlePreviewUnSelect(event);
   };
 
   const handlePreviewSelect = (item) => {
@@ -180,7 +178,7 @@ const CreateInvoice = () => {
   };
 
   const handlePreviewUnSelect = (event) => {
-    event.stopPropagation();
+    if (event) event.stopPropagation();
     setSelectedPreview(null);
     formik.setFieldValue("preview", "");
   };
@@ -204,36 +202,46 @@ const CreateInvoice = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: { lg: 24, md: 20 },
-                    fontWeight: 600,
-                    color: "#000000",
-                    display: "flex",
-                    lineHeight: "32.78px",
-                    gap: 1,
-                  }}
+              <Box sx={{ display: "flex" }}>
+                <Button
+                  sx={{ minWidth: "auto", p: "0px !important" }}
+                  onClick={() => navigate(`/invoices`)}
                 >
-                  Create Invoice
-                </Typography>
-                <Typography
-                  sx={{
-                    color: "#212528",
-                    fontSize: { lg: 16, md: 14 },
-                    fontWeight: 600,
-                    lineHeight: "21.86px",
-                    opacity: "70%",
-                  }}
-                >
-                  Create new invoice.
-                </Typography>
+                  <KeyboardArrowLeft
+                    sx={{ fontSize: "35px", color: "black" }}
+                  />
+                </Button>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: { lg: 24, md: 20 },
+                      fontWeight: 600,
+                      color: "#000000",
+                      display: "flex",
+                      lineHeight: "32.78px",
+                      gap: 1,
+                    }}
+                  >
+                    Create Invoice
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#212528",
+                      fontSize: { lg: 16, md: 14 },
+                      fontWeight: 600,
+                      lineHeight: "21.86px",
+                      opacity: "70%",
+                    }}
+                  >
+                    Create new invoice.
+                  </Typography>
+                </Box>{" "}
               </Box>
+
               <Box sx={{ display: "flex", gap: 2 }}>
                 <Button
                   type="submit"
                   sx={{
-                    // width: "150px",
                     textTransform: "initial",
                     backgroundColor: "#8477da",
                     height: "44px",
@@ -252,9 +260,9 @@ const CreateInvoice = () => {
                 >
                   {createInvoiceLoading ? (
                     <CircularProgress sx={{ color: "#8477da" }} size={24} />
-                  ) :
+                  ) : (
                     "Save Invoice"
-                  }
+                  )}
                 </Button>
               </Box>
             </Box>
@@ -344,7 +352,7 @@ const CreateInvoice = () => {
                         width: "100%",
                       }}
                       value={formik.values?.customer}
-                      onChange={() => { }}
+                      onChange={() => {}}
                     />
                     <Typography>{selectedCustomer?.name}</Typography>
                     <Typography>{selectedCustomer?.email}</Typography>
@@ -528,7 +536,7 @@ const CreateInvoice = () => {
                   aligItems: "baseline",
                   width: "100%",
                   px: "16px",
-                  pb: 2
+                  pb: 2,
                 }}
               >
                 <Box sx={{ width: { sm: "51.1%", xs: "100%" } }}>
@@ -557,13 +565,13 @@ const CreateInvoice = () => {
                         color="neutral"
                         minRows={5}
                         maxRows={19}
-                        id="notes"
-                        name="notes"
+                        id="description"
+                        name="description"
                         placeholder="Enter Description"
                         size="large"
                         variant="outlined"
                         sx={{ padding: "10px" }}
-                        value={formik.values.notes}
+                        value={formik.values.description}
                         onChange={formik.handleChange}
                       />
                     </Box>
@@ -577,35 +585,35 @@ const CreateInvoice = () => {
       <SelectItemModal
         handleClose={() => setOpenCustomerSelectModal(false)}
         open={openCustomerSelectModal}
-        itemType={'customer'}
+        itemType={"customer"}
         itemsList={customerList}
         loading={customerListFetching}
         selectedItem={selectedCustomer}
         setSelectedItem={handleCustomerSelect}
-        title={'Customer'}
-        key={'Customer-select-modal'}
+        title={"Customer"}
+        key={"Customer-select-modal"}
       />
       <SelectItemModal
         handleClose={() => setOpenProjectSelectModal(false)}
         open={openProjectSelectModal}
-        itemType={'project'}
+        itemType={"project"}
         itemsList={projectList?.projects}
         loading={projectListFetching}
         selectedItem={selectedProject}
         setSelectedItem={handleProjectSelect}
-        title={'Project'}
-        key={'Project-select-modal'}
+        title={"Project"}
+        key={"Project-select-modal"}
       />
       <SelectItemModal
         handleClose={() => setOpenPreviewSelectModal(false)}
         open={openPreviewSelectModal}
-        itemType={'preview'}
+        itemType={"preview"}
         itemsList={previewList}
         loading={previewListFetching}
         selectedItem={selectedPreview}
         setSelectedItem={handlePreviewSelect}
-        title={'Preview'}
-        key={'Preview-select-modal'}
+        title={"Preview"}
+        key={"Preview-select-modal"}
       />
     </Box>
   );

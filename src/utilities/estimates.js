@@ -842,14 +842,13 @@ export const generateObjForMirrorPDFRuntime = (
   };
 };
 
-export const generateInvoiceItemsFromEstimates = (
+export const generateInvoiceItemsFromEstimates = async (
   estimatesList,
   hardwaresList,
   companySettings
 ) => {
   let items = [];
-  estimatesList.forEach(async (estimate) => {
-    console.log(estimate,'wqwqwddwdwertw');
+  for (const estimate of estimatesList) {
     switch (estimate.category) {
       case EstimateCategory.SHOWERS:
         const showerResp = await generateInvoiceItemForShowers(
@@ -878,7 +877,8 @@ export const generateInvoiceItemsFromEstimates = (
       default:
         break;
     }
-  });
+  }
+  
   return items;
 };
 
@@ -887,6 +887,7 @@ const generateInvoiceItemForShowers = async (
   hardwaresList,
   companySettings
 ) => {
+  console.log(estimate,'qwerdwdestimate')
   let summaryObject = {};
   let hardwarePrice = 0;
   let hardwareAddonsPrice = 0;
@@ -1297,6 +1298,22 @@ const generateInvoiceItemForShowers = async (
   ) {
     totalPrice = ((cost * 100) / (estimate.config.userProfitPercentage - 100)) * -1;
   }
+
+  let discountTotal = totalPrice;
+  if (
+    estimate.config?.discount?.value > 0 &&
+    estimate.config?.discount?.unit === "$"
+  ) {
+    discountTotal = totalPrice - estimate.config.discount.value;
+  } else if (
+    estimate.config?.discount?.value > 0 &&
+    estimate.config?.discount?.value < 100 &&
+    estimate.config?.discount?.unit === "%"
+  ) {
+    const discountAmount = (totalPrice * estimate.config.discount.value) / 100;
+    discountTotal = totalPrice - discountAmount;
+  }
+
   summaryObject.pricing = {
     hardwarePrice,
     hardwareAddonsPrice,
@@ -1305,7 +1322,10 @@ const generateInvoiceItemForShowers = async (
     glassAddonPrice,
     laborPrice,
     totalPrice,
-    cost
+    cost,
+    discountTotal,
+    profit:
+      discountTotal > 0 && discountTotal - cost > 0 ? ((discountTotal - cost) * 100) / discountTotal : 0,
   };
   return summaryObject;
 };
@@ -1484,6 +1504,22 @@ const generateInvoiceItemForMirrors = async (
   ) {
     totalPrice = ((cost * 100) / (estimate.config.modifiedProfitPercentage - 100)) * -1;
   }
+
+  let discountTotal = totalPrice;
+  if (
+    estimate.config?.discount?.value > 0 &&
+    estimate.config?.discount?.unit === "$"
+  ) {
+    discountTotal = totalPrice - estimate.config.discount.value;
+  } else if (
+    estimate.config?.discount?.value > 0 &&
+    estimate.config?.discount?.value < 100 &&
+    estimate.config?.discount?.unit === "%"
+  ) {
+    const discountAmount = (totalPrice * estimate.config.discount.value) / 100;
+    discountTotal = totalPrice - discountAmount;
+  }
+
   summaryObject.pricing = {
     hardwarePrice,
     fabricationPrice,
@@ -1491,7 +1527,10 @@ const generateInvoiceItemForMirrors = async (
     glassAddonPrice,
     laborPrice,
     totalPrice,
-    cost
+    cost,
+    discountTotal,
+    profit:
+      discountTotal > 0 && discountTotal - cost > 0 ? ((discountTotal - cost) * 100) / discountTotal : 0,
   };
   return summaryObject;
 };
@@ -1501,6 +1540,7 @@ const generateInvoiceItemForWineCellars = async (
   hardwaresList,
   companySettings
 ) => {
+  console.log(estimate,'internal estimate')
   let summaryObject = {};
   let hardwarePrice = 0;
   let hardwareAddonsPrice = 0;
@@ -1932,6 +1972,21 @@ const generateInvoiceItemForWineCellars = async (
   ) {
     totalPrice = ((cost * 100) / (estimate.config.userProfitPercentage - 100)) * -1;
   }
+  let discountTotal = totalPrice;
+  if (
+    estimate.config?.discount?.value > 0 &&
+    estimate.config?.discount?.unit === "$"
+  ) {
+    discountTotal = totalPrice - estimate.config.discount.value;
+  } else if (
+    estimate.config?.discount?.value > 0 &&
+    estimate.config?.discount?.value < 100 &&
+    estimate.config?.discount?.unit === "%"
+  ) {
+    const discountAmount = (totalPrice * estimate.config.discount.value) / 100;
+    discountTotal = totalPrice - discountAmount;
+  }
+
   summaryObject.pricing = {
     hardwarePrice,
     hardwareAddonsPrice,
@@ -1941,7 +1996,10 @@ const generateInvoiceItemForWineCellars = async (
     laborPrice,
     doorLaborPrice,
     totalPrice,
-    cost
+    cost,
+    discountTotal,
+    profit:
+      discountTotal > 0 && discountTotal - cost > 0 ? ((discountTotal - cost) * 100) / discountTotal : 0,
   };
   return summaryObject;
 };

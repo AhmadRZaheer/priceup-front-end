@@ -15,7 +15,7 @@ export const layoutVariants = {
   INLINE: "inline",
   NINTYDEGREE: "90-degree",
   THREESIDEDGLASS: "3-sided-glass",
-  GLASSCUBE: "glass-cube"
+  GLASSCUBE: "glass-cube",
 };
 
 export const notificationTypes = {
@@ -96,7 +96,7 @@ export const severity = {
 export const EstimateCategory = {
   SHOWERS: "showers",
   MIRRORS: "mirrors",
-  WINECELLARS: "wineCellars"
+  WINECELLARS: "wineCellars",
 };
 
 export const mirrorHardwareTypes = {
@@ -121,19 +121,28 @@ export const projectStatus = {
   VOIDED: "voided",
   APPROVED: "approved",
 };
+export const previewStatus = {
+  PENDING: "pending",
+  PREVIEW1: "first_preview",
+  PREVIEW2: "second_preview",
+  APPROVE: "approve",
+};
 export const logActions = {
-  DOWNLOADPDF: "Download Pdf",
-  APPROVEESTIMATE: "Approve Estimate",
-  APPROVEPROJECT: "Approve Project",
+  DOWNLOADPDF: "download_pdf",
+  APPROVEESTIMATE: "approve_estimate",
+  APPROVEPROJECT: "approve_project",
+};
+export const logResourceType = {
+  PREVIEWLINK: "preview_link",
 };
 
 export const statusTypes = {
   PENDING: "pending",
   VOIDED: "voided",
   APPROVED: "approved",
-  PAID:'Paid',
-  UNPAID:'Unpaid',
-  CUSTOMER_APPROVED: "customer_approved"
+  PAID: "Paid",
+  UNPAID: "Unpaid",
+  CUSTOMER_APPROVED: "customer_approved",
 };
 
 export const inputLength = 6;
@@ -143,4 +152,4 @@ export const defaultNotificationState = {
   status: false,
   variant: notificationsVariant.DEFAULT,
   message: ``,
-}
+};

@@ -31,11 +31,11 @@ export default function ProjectInvoices() {
 
   const handleDateChange = (newDate) => {
     if (newDate) {
-      const adjustedDate = dayjs(newDate)
-        .hour(12)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
+      const adjustedDate = dayjs(newDate);
+        // .hour(12)
+        // .minute(0)
+        // .second(0)
+        // .millisecond(0);
       setSelectedDate(adjustedDate);
     } else {
       setSelectedDate(null);
@@ -101,7 +101,6 @@ export default function ProjectInvoices() {
             sx={{
               backgroundColor: "#8477DA",
               height: "44px",
-              // width: { sm: "219px", xs: "197px" },
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
@@ -128,11 +127,23 @@ export default function ProjectInvoices() {
             px: { sm: 0, xs: 1 },
           }}
         >
-           <Grid container spacing={2}>
+          <Grid container spacing={2}>
             {[
-              { title: "Paid", text: stats?.statusCounts?.Paid, variant: "green" },
-              { title: "Unpaid", text: stats?.statusCounts?.Unpaid, variant: "blue" },
-              { title: "Voided", text: stats?.statusCounts?.Voided, variant: "red" },
+              {
+                title: "Paid",
+                text: stats?.statusCounts?.Paid,
+                variant: "green",
+              },
+              {
+                title: "Unpaid",
+                text: stats?.statusCounts?.Unpaid,
+                variant: "blue",
+              },
+              {
+                title: "Voided",
+                text: stats?.statusCounts?.Voided,
+                variant: "red",
+              },
             ]?.map((item) => (
               <Grid item lg={3} md={6} sm={6} xs={6}>
                 <WidgetCard
@@ -143,17 +154,6 @@ export default function ProjectInvoices() {
               </Grid>
             ))}
           </Grid>
-          {/* <Grid container spacing={2}>
-            {stats?.map((item) => (
-              <Grid item lg={3} md={6} sm={6} xs={6}>
-                <WidgetCard
-                  text={item?.count}
-                  title={item?.status}
-                  varient={item?.status === "Paid" ? "blue" : "green"}
-                />
-              </Grid>
-            ))}
-          </Grid> */}
         </Box>
         <Box
           sx={{
@@ -258,21 +258,15 @@ export default function ProjectInvoices() {
                     );
                   }}
                 >
-                   <MenuItem value={"Paid"}>
-                    <StatusChip
-                      variant={"Paid"}
-                      sx={{ padding: 0, px: 2 }}
-                    />
+                  <MenuItem value={"Paid"}>
+                    <StatusChip variant={"Paid"} sx={{ padding: 0, px: 2 }} />
                   </MenuItem>
                   <MenuItem value={"Unpaid"}>
-                    <StatusChip
-                      variant={"Unpaid"}
-                      sx={{ padding: 0, px: 2 }}
-                    />
+                    <StatusChip variant={"Unpaid"} sx={{ padding: 0, px: 2 }} />
                   </MenuItem>
                   <MenuItem value={"Voided"}>
                     <StatusChip variant={"voided"} sx={{ padding: 0, px: 2 }} />
-                  </MenuItem>                 
+                  </MenuItem>
                 </Select>
               </FormControl>
               <Button

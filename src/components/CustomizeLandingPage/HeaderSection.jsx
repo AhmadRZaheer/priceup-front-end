@@ -1,16 +1,17 @@
-import { Box, Button, Container, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Container } from "@mui/material";
+import React from "react";
 import LogoNavBar from "../../Assets/purplelogo.svg";
 import GCSLogo from "@/Assets/GCS-logo.png";
 import "./style.scss";
 import { backendURL } from "@/utilities/common";
 
-const HeaderSection = ({ selectedData,authUser }) => {
+const HeaderSection = ({ selectedData, authUser }) => {
+  const backgroundColor = selectedData?.content?.colorSection?.default;
   return (
     <>
       <Box
         sx={{
-          bgcolor: "#000000",
+          bgcolor: backgroundColor,
           width: "100%",
           display: "flex",
         }}
@@ -19,7 +20,7 @@ const HeaderSection = ({ selectedData,authUser }) => {
           className="gcs-logo"
           component="a"
           href="https://gcsglassandmirror.com/"
-          sx={{top: authUser ? '68px' : '0px'}}
+          sx={{ top: authUser ? "68px" : "0px" }}
         >
           <img
             src={
@@ -28,7 +29,7 @@ const HeaderSection = ({ selectedData,authUser }) => {
                 : GCSLogo
             }
             alt="logo nav bar"
-            style={{ height: "100px", borderRadius: "50%" }}
+            style={{ height: "100px" }}
           />
         </Box>
         <Container

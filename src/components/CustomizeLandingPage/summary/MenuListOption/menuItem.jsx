@@ -1,17 +1,14 @@
 import {
-  Button,
-  IconButton,
   MenuItem as MuiMenuItem,
   Tooltip,
 } from "@mui/material";
-import { backendURL } from "@/utilities/common";
+import {  hexToRgba } from "@/utilities/common";
 import { Box, Typography } from "@mui/material";
 import OptionWithCounter from "./optionWithCounter";
 import { getActiveStatus } from "@/utilities/estimatorHelper";
-import { useMemo, useState } from "react";
+import {  useState } from "react";
 import { hardwareTypes } from "@/utilities/constants";
 import { CheckCircle } from "@mui/icons-material";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import OptionInfoModel from "./optionInfoModel";
 
 const MenuItem = ({
@@ -23,15 +20,9 @@ const MenuItem = ({
   selectedContent,
   handleChange,
   locationSettings,
+  colorData,
 }) => {
-  console.log(selectedContent, "selectedContentselectedContent");
-  const thicknessPrice = useMemo(() => {
-    const price = item?.options?.find(
-      (option) => option.thickness === thickness
-    )?.cost;
-    return price;
-  }, [item]);
-
+  const primaryColor = colorData?.primary;
   const activeFinishOrThickness =
     type === hardwareTypes.GLASSTYPE
       ? selectedContent?.glassType?.thickness
@@ -93,13 +84,7 @@ const MenuItem = ({
           (selectedItem) => selectedItem?.item?._id === item?._id
         )
       : item?._id === selectedItem?._id;
-  console.log(isSelected, type, item?._id === selectedItem?._id);
-  // const selectedCount = useMemo(() => {
-  //   const value =  selectedContent?.hardwareAddons?.find(
-  //     (row) => row?.type === item?._id
-  //   )?.count;
-  //   return value;
-  // }, [selectedContent]);
+  const primaryRgba = hexToRgba(primaryColor,0.06);
 
   return (
     <Tooltip
@@ -132,11 +117,8 @@ const MenuItem = ({
       >
         <Box
           sx={{
-            // width: "100%",
             borderRadius: "4px",
-            border: isSelected ? "1px solid #F95500" : "1px solid #D4DBDF",
-            // boxShadow:
-            //   "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+            border: isSelected ? `1px solid ${primaryColor}` : "1px solid #D4DBDF",
             py: "3px",
             px: "10px",
             display: "flex",
@@ -146,7 +128,7 @@ const MenuItem = ({
             justifyContent: "space-between",
             backgroundColor:
               // status ?
-              isSelected ? "rgba(249, 85, 0, 0.06)" : "white",
+              isSelected ? primaryRgba : "white",
             // : "#f3f5f6",
             color:
               // status ?
@@ -155,21 +137,10 @@ const MenuItem = ({
           }}
         >
           <Box sx={{ display: "flex", gap: 1 }}>
-            {/* <img
-              width={"25px"}
-              height={"25px"}
-              src={`${backendURL}/${item?.image}`}
-              alt="Selected"
-            /> */}
             <Typography>
               {item?.modifiedName ?? item?.name}
-              {/* has price of $
-              {(selectedContent?.sqftArea * thicknessPrice ?? 0) *
-                (locationSettings?.miscPricing?.pricingFactorStatus
-                  ? locationSettings?.miscPricing?.pricingFactor
-                  : 1)} */}
             </Typography>
-            <OptionInfoModel itemData={item} />
+            <OptionInfoModel itemData={item} colorData={colorData} />
           </Box>
           <Box>
             {type === "hardwareAddons" ? (
@@ -220,7 +191,7 @@ const MenuItem = ({
               isSelected && (
                 <CheckCircle
                   sx={{
-                    color: "#F95500",
+                    color: primaryColor,
                     width: "21px",
                     height: "21px",
                     mb: "-3.9px",

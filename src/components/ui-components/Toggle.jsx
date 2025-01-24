@@ -3,6 +3,7 @@ import { Box, Switch, Tooltip, Typography } from "@mui/material";
 function CustomToggle({
   checked,
   onChange,
+  disabled=false,
   name,
   onBlur,
   onClick,
@@ -20,6 +21,7 @@ function CustomToggle({
             name={name}
             onBlur={onBlur}
             onClick={onClick}
+            disabled={disabled}
             sx={{
               "& .MuiSwitch-switchBase": {
                 color: "transparent !important",
@@ -42,7 +44,7 @@ function CustomToggle({
 
               "& .MuiSwitch-track": {
                 backgroundColor: "#8477DA !important",
-                opacity: `${checked ? 1 : 0.2} !important`,
+                opacity: disabled ? `${0.2} !important` : `${checked ? 1 : 0.2} !important`,
                 paddingTop: 1.4,
                 pl: 1.6,
                 pr: 4,

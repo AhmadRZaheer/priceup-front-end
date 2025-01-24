@@ -23,7 +23,7 @@ import {
 } from "@/utilities/ApiHooks/common";
 import { backendURL, base64ToFile } from "@/utilities/common";
 import { useParams } from "react-router-dom";
-import { logActions } from "@/utilities/constants";
+import { logActions, logResourceType } from "@/utilities/constants";
 import { getEstimatesList } from "@/redux/customerEstimateCalculation";
 import { useSelector } from "react-redux";
 
@@ -53,6 +53,9 @@ const SigntureSection = ({
 }) => {
   const estimatesList = useSelector(getEstimatesList);
   console.log(data, "sdfsdddfgfweefvcddd", estimatesList);
+  const primaryColor = data?.content?.colorSection?.primary;
+  const secondaryColor = data?.content?.colorSection?.secondary;
+  const backgroundColor = data?.content?.colorSection?.default;
   const newDate = new Date();
   const formattedDateTime = newDate.toLocaleString("en-US", {
     weekday: "long", // Full weekday name
@@ -156,16 +159,13 @@ const SigntureSection = ({
       const result = await blobPdf.toBlob();
       saveAs(result, "Priceup");
       const logData = {
-        title: `${data?.customer?.name} downloaded the PDF on ${formattedDateTime}.`,
-        performer_id: data?.customer_id,
-        performer_name: data?.customer?.name,
         action: logActions.DOWNLOADPDF,
         resource_id: id,
-        company_id: data?.company_id,
+        resource_type: logResourceType.PREVIEWLINK,
       };
       activityLog({
         data: logData,
-        apiRoute: `${backendURL}/logs/save`,
+        apiRoute: `${backendURL}/logs/customer`,
       });
     } catch (error) {
       console.error("Error generating PDF:", error);
@@ -189,16 +189,13 @@ const SigntureSection = ({
     refetchData();
 
     const logData = {
-      title: `${data?.customer?.name} approved this project at ${formattedDateTime}`,
-      performer_id: data?.customer_id,
-      performer_name: data?.customer?.name,
-      action: logActions.DOWNLOADPDF,
+      action: logActions.APPROVEPROJECT,
       resource_id: id,
-      company_id: data?.company_id,
+      resource_type: logResourceType.PREVIEWLINK,
     };
     activityLog({
       data: logData,
-      apiRoute: `${backendURL}/logs/save`,
+      apiRoute: `${backendURL}/logs/customer`,
     });
   };
   const estimateStatus = useMemo(() => {
@@ -210,15 +207,16 @@ const SigntureSection = ({
       }
     });
     return status;
-  }, [data]);
+  }, [data,estimatesList]);
 
   return (
     <Box
       sx={{
-        background: "#000000",
+        background: backgroundColor,
         pb: 3,
         pt: 4,
-        borderTop: "5px solid #F95500",
+        borderTop: "5px solid",
+        borderColor:primaryColor,
       }}
     >
       <Container maxWidth="lg">
@@ -228,7 +226,7 @@ const SigntureSection = ({
             fontSize: "32px",
             fontWeight: 600,
             lineHeight: "39.94px",
-            color: "white",
+            color: secondaryColor,
             pb: 2,
           }}
         >
@@ -236,7 +234,7 @@ const SigntureSection = ({
         </Typography>
         <Box sx={{ width: "100%", display: "flex", gap: 7 }}>
           <Box sx={{ width: "50%" }}>
-            <Box sx={{ background: "white", borderRadius: 2, p: 3 }}>
+            <Box sx={{ background: 'white', borderRadius: 2, p: 3 }}>
               <Box
                 sx={{
                   display: "flex",
@@ -310,37 +308,6 @@ const SigntureSection = ({
                 </Box>
               ) : (
                 <Box>
-                  {/* <Stack
-                    sx={{ mb: 1.2 }}
-                    direction={"row"}
-                    justifyContent={"end"}
-                  >
-                    <Button
-                      variant="outlined"
-                      onClick={handleClearSignature}
-                      sx={{
-                        border: "1px solid #8477DA",
-                        // mr: 1,
-                        height: "38px",
-                        color: "#8477DA",
-                      }}
-                    >
-                      Clear
-                    </Button>
-                    <Button
-                      onClick={handleAddSignature}
-                      variant="contained"
-                      sx={{
-                        background: "#8477DA",
-                        height: "38px",
-                        ":hover": {
-                          background: "#8477DA",
-                        },
-                      }}
-                    >
-                      Save
-                    </Button> 
-                  </Stack> */}
                   <SignatureCanvas
                     ref={signaturePadRef}
                     penColor="darkblue"
@@ -357,104 +324,7 @@ const SigntureSection = ({
                   />
                 </Box>
               )}
-
-              {/* {signatureURL && data?.status !== "approve" && (
-                <Box sx={{ pt: 2 }}>
-                  <img
-                    src={signatureURL}
-                    alt="Signature"
-                    width="100%"
-                    height={150}
-                    style={{
-                      objectFit: "contain",
-                      maxWidth: "100%",
-                      maxHeight: "100%",
-                      border: "1px solid #E3E8EF",
-                      borderRadius: "4px",
-                    }}
-                  />
-                </Box>
-              )} */}
-
-              {/* <Box sx={{ pt: 2 }}>
-                <ButtonBase
-                  onClick={handleUploadClick}
-                  sx={{
-                    width: "100%",
-                    border: "1px dashed",
-                    borderRadius: 2,
-                    cursor: "pointer",
-                    backgroundColor: "#F8FAFC",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    display: "flex",
-                    borderColor: "#1849D6",
-                    p: "24px",
-                  }}
-                >
-                  <Stack
-                    direction={"column"}
-                    sx={{
-                      justifyContent: "center",
-                      alignItems: "center",
-                      display: "flex",
-                      gap: "12px",
-                    }}
-                  >
-                    <Box>
-                      <CloudUploadOutlined
-                        sx={{ width: "36px", color: "#1849D6" }}
-                      />
-                    </Box>
-                    <Typography
-                      sx={{
-                        color: "#0B0B0B",
-                        lineHeight: "20px",
-                        fontSize: "14px",
-                        fontFamily: '"Inter" !important',
-                      }}
-                    >
-                      Drag your file(s) or{" "}
-                      <Box
-                        component="span"
-                        sx={{ color: "#1849D6 !important" }}
-                      >
-                        browse
-                      </Box>
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: "#6D6D6D",
-                        lineHeight: "20px",
-                        fontSize: "14px",
-                        fontFamily: '"Inter" !important',
-                      }}
-                    >
-                      Max 10 MB files are allowed
-                    </Typography>
-                  </Stack>
-                </ButtonBase>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                  // accept=".jpg,.jpeg,.png,.gif,.bmp,.webp"
-                  accept="image/*"
-                  capture={false}
-                />
-              </Box> */}
-              {/* <Typography
-                sx={{
-                  py: 2,
-                  color: "#6D6D6D",
-                  lineHeight: "20px",
-                  fontSize: "14px",
-                  fontFamily: '"Inter" !important',
-                }}
-              >
-                Only support .jpg, .png and .svg and zip files
-              </Typography> */}
+            
               <Divider sx={{ color: "#6D6D6D" }}>OR</Divider>
               <Box
                 sx={{
@@ -489,27 +359,6 @@ const SigntureSection = ({
                       backgroundColor: "white",
                       height: "52px",
                     },
-                    // endAdornment: (
-                    //   <InputAdornment position="end">
-                    //     <Button
-                    //       variant="outlined"
-                    //       aria-label="toggle password visibility"
-                    //       // onClick={handleClickShowPassword}
-                    //       sx={{
-                    //         fontWeight: `${600} !important`,
-                    //         fontSize: "12px !important",
-                    //         lineHeight: "18px !important",
-                    //         height: "35px",
-                    //         borderRadius: "8px !important",
-                    //         color: "#6D6D6D",
-                    //         borderColor: "#CECECE",
-                    //         fontFamily: '"Inter" !important',
-                    //       }}
-                    //     >
-                    //       {true ? "Done" : "Edit"}
-                    //     </Button>
-                    //   </InputAdornment>
-                    // ),
                   }}
                   sx={{
                     color: { sm: "black", xs: "white" },
@@ -535,7 +384,7 @@ const SigntureSection = ({
                   sx={{
                     fontFamily: '"Poppins" !important',
                     fontSize: "22px",
-                    color: "white",
+                    color: secondaryColor,
                     fontWeight: 600,
                   }}
                 >
@@ -543,9 +392,9 @@ const SigntureSection = ({
                 </Typography>
               ) : (
                 <Box>
-                  <Typography sx={{ color: "white" }}>
+                  <Typography sx={{ color:secondaryColor }}>
                     <Info
-                      sx={{ fontSize: "16px", pt: 0.2, color: "#F95500" }}
+                      sx={{ fontSize: "16px", pt: 0.2, color:primaryColor }}
                     />{" "}
                     You must approve all estimate and provide your signature to
                     continue...
@@ -565,15 +414,13 @@ const SigntureSection = ({
                       borderRadius: "12px",
                       fontSize: "24px",
                       fontWeight: 700,
-                      backgroundColor: "#F95500",
-                      color: "black",
+                     backgroundColor: primaryColor,
+                        color: secondaryColor,
                       lineHeight: "26px",
-                      "&:hover": {
-                        backgroundColor: "#F95500",
-                      },
-                      "&.Mui-disabled": {
-                        background: "#F95500",
-                      },
+                      "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
+                        "&.Mui-disabled": {
+                          background: primaryColor,
+                        },
                       mt: 1,
                     }}
                   >
@@ -585,13 +432,12 @@ const SigntureSection = ({
                   </Button>
                 </Box>
               )}
-              {/* {data?.status === "approve" && ( */}
               <Box>
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
                     fontSize: "32px",
-                    color: "white",
+                    color:secondaryColor,
                     fontWeight: 700,
                     lineHeight: "39.94px",
                     py: 3,
@@ -613,13 +459,13 @@ const SigntureSection = ({
                       variant="contained"
                       onClick={handleOpenEditModal}
                       sx={{
-                        backgroundColor: "#F95500",
-                        color: "#0B0B0B",
+                        backgroundColor: primaryColor,
+                        color: secondaryColor,
                         height: "44px",
                         width: { sm: "100%", xs: "187px" },
-                        "&:hover": { backgroundColor: "#F95500" },
+                        "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
-                          background: "#F95500",
+                          background: primaryColor, 
                         },
                         textTransform: "capitalize",
                         borderRadius: 1,
@@ -635,17 +481,16 @@ const SigntureSection = ({
                     </Button>
                     <Button
                       fullWidth
-                      // onClick={handleAddSignature}
                       disabled={!estimateStatus}
                       variant="contained"
                       sx={{
-                        backgroundColor: "#F95500",
-                        color: "#0B0B0B",
+                        backgroundColor: primaryColor,
+                        color: secondaryColor,
                         height: "44px",
                         width: { sm: "100%", xs: "187px" },
-                        "&:hover": { backgroundColor: "#F95500" },
+                        "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
-                          background: "#F95500",
+                          background: primaryColor, 
                         },
                         textTransform: "capitalize",
                         borderRadius: 1,
@@ -672,17 +517,16 @@ const SigntureSection = ({
                     borderRadius: "12px",
                     fontSize: "24px",
                     fontWeight: 700,
-                    // backgroundColor: "#F95500",
-                    color: "#F95500",
+                    color: primaryColor,
                     lineHeight: "26px",
-                    borderColor: "#F95500",
+                    borderColor: primaryColor,
                     "&:hover": {
-                      backgroundColor: "#F95500",
-                      color: "#0B0B0B",
-                      borderColor: "#F95500",
+                      backgroundColor: primaryColor,
+                      color: secondaryColor,
+                      borderColor: primaryColor,
                     },
                     "&.Mui-disabled": {
-                      background: "#F95500",
+                      background: primaryColor,
                     },
                   }}
                 >

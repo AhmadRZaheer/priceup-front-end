@@ -1,5 +1,4 @@
-import { RemoveRedEyeOutlined } from "@mui/icons-material";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import React from "react";
 import "./style.scss";
 import GlassServeice from "../../Assets/CustomerLandingImages/CustomerLanding01.jpg";
@@ -42,7 +41,6 @@ const ServiceSection = () => {
           </Box>
           <Box className="width-lg" sx={{ pl: 5 }}>
             <Box sx={{width:'100%',display:'flex',justifyContent:'space-between',gap:3}}>
-              {/* <Grid item xs={3}> */}
                 <Box sx={{width:'25%', background: "rgba(237,237,237,1)", p: "20px" }}>
                   <img src={Diamond} alt="not" style={{height:'40px',width:'40px'}}/>
                   <Typography
@@ -57,8 +55,6 @@ const ServiceSection = () => {
                     bathroom a million-dollar look.
                   </Typography>
                 </Box>
-              {/* </Grid> */}
-              {/* <Grid item xs={3}> */}
                 <Box sx={{width:'25%', background: "rgba(237,237,237,1)", p: "20px" }}>
                 <img src={PersonHeart} alt="not" style={{height:'40px',width:'40px'}}/>
                   <Typography
@@ -73,8 +69,6 @@ const ServiceSection = () => {
                     the initial contact to the final install.
                   </Typography>
                 </Box>
-              {/* </Grid> */}
-              {/* <Grid item xs={3}> */}
                 <Box sx={{width:'25%', background: "rgba(237,237,237,1)", p: "20px" }}>
                 <img src={EyeIcon} alt="not" style={{height:'40px',width:'40px'}}/>
                   <Typography
@@ -89,8 +83,6 @@ const ServiceSection = () => {
                     It will change your life.
                   </Typography>
                 </Box>
-              {/* </Grid> */}
-              {/* <Grid item xs={3}> */}
                 <Box sx={{width:'25%', background: "rgba(237,237,237,1)", p: "20px" }}>
                 <img src={StopWatch} alt="not" style={{height:'40px',width:'40px'}}/>
                   <Typography
@@ -105,7 +97,6 @@ const ServiceSection = () => {
                     next project.
                   </Typography>
                 </Box>
-              {/* </Grid> */}
             </Box>
           </Box>
         </Box>
