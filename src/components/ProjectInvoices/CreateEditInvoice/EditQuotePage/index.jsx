@@ -70,6 +70,7 @@ import { DesktopDatePicker } from '@mui/x-date-pickers';
 import EditEstimateTable from './EditEstimateTable';
 import FAQSection from './FAQSection';
 import TextEditor from './TextEditor';
+import ActivityLogs from '@/components/ActivityLogs';
 
 const accordionDefaultData = [
   {
@@ -769,19 +770,7 @@ const EditQuoteInvoice = () => {
     singleItemData?.status === previewStatus.PENDING ||
     singleItemData?.status === previewStatus.PREVIEW1;
 
-  const getHumanReadableDate = (date) => {
-    const newDate = new Date(date);
-    const formattedDateTime = newDate.toLocaleString("en-US", {
-      weekday: "long", // Full weekday name
-      month: "long", // Full month name
-      day: "numeric", // Numeric day
-      year: "numeric", // Full year
-      hour: "numeric", // Hour
-      minute: "2-digit", // Minute
-      hour12: true, // 12-hour format
-    });
-    return formattedDateTime;
-  };
+ 
   //Scroll Shadow
   const [scrollShadow, setScrollShadow] = useState(false);
   useEffect(() => {
@@ -1311,50 +1300,7 @@ const EditQuoteInvoice = () => {
                         Activity Logs
                       </Typography>
                       <Box sx={{ maxHeight: "210px", overflow: "auto" }}>
-                        {logsFetching ? (
-                          <Box
-                            sx={{
-                              height: "200px",
-                              alignContent: "center",
-                              textAlign: "center",
-                            }}
-                          >
-                            <CircularProgress
-                              size={30}
-                              sx={{ color: "#8477DA" }}
-                            />
-                          </Box>
-                        ) : logsData.length > 0 ? (
-                          logsData?.map((data, index) => (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                gap: 1,
-                                alignItems: "center",
-                              }}
-                            >
-                              <FiberManualRecordIcon
-                                sx={{ color: "#8477DA", fontSize: "15px" }}
-                              />
-                              <Typography sx={{ fontSize: 16 }} key={index}>
-                                {data?.title +
-                                  getHumanReadableDate(data?.createdAt)}
-                              </Typography>
-                            </Box>
-                          ))
-                        ) : (
-                          <Typography
-                            sx={{
-                              fontSize: 16,
-                              pb: 1,
-                              height: "200px",
-                              alignContent: "center",
-                              textAlign: "center",
-                            }}
-                          >
-                            No Activity Log Found!
-                          </Typography>
-                        )}
+                        <ActivityLogs logsFetching={logsFetching} logsData={logsData} />
                       </Box>
                     </Card>
                   </Box>

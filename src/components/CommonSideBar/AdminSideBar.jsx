@@ -43,6 +43,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import InnerMenuItem from "./InnerMenuItem";
 import { setChangeLocation } from "@/redux/refetch";
+import HistoryIcon from '@mui/icons-material/History';
 
 const AdminSideBar = () => {
   const dispatch = useDispatch();
@@ -433,6 +434,10 @@ const AdminSideBar = () => {
               <MenuSigleItem link="/team">
                 <PeopleAltOutlinedIcon sx={{}} />
                 <span>Users</span>
+              </MenuSigleItem>
+              <MenuSigleItem link="/logs">
+                <HistoryIcon sx={{}} />
+                <span>Logs</span>
               </MenuSigleItem>
             </ul>
           </div>
