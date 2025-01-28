@@ -1,15 +1,21 @@
-import { Box, Grid, Tooltip, Typography } from "@mui/material";
-import DefaultImage from "@/components/ui-components/defaultImage";
-import SelectMenu_Status from "@/components/ui-components/selectMenu-status";
-import EstimateActionsDropdown from "@/components/EstimateActionsDropdown";
-import userImg from "@/Assets/username1.svg";
-import wheel from "@/Assets/wheel.svg";
-import "@/components/table/table.scss";
-import ActionsDropdown from "@/components/common/ActionsDropdown";
-import StatusChip from "@/components/common/StatusChip";
-import CustomInputField from "@/components/ui-components/CustomInput";
-import CustomToggle from "@/components/ui-components/Toggle";
-import { EstimateCategory } from "./constants";
+import '@/components/table/table.scss';
+
+import userImg from '@/Assets/username1.svg';
+import wheel from '@/Assets/wheel.svg';
+import ActionsDropdown from '@/components/common/ActionsDropdown';
+import StatusChip from '@/components/common/StatusChip';
+import EstimateActionsDropdown from '@/components/EstimateActionsDropdown';
+import DefaultImage from '@/components/ui-components/defaultImage';
+import SelectMenu_Status from '@/components/ui-components/selectMenu-status';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import {
+  Box,
+  Grid,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+
+import { EstimateCategory } from './constants';
 
 export const EstimatesColumns = (
   handleDeleteEstimate,
@@ -331,7 +337,7 @@ export const EstimatesColumns = (
                 sx={{
                   width: "100%",
                   display: "flex",
-                  pl:0.4
+                  pl: 0.4,
                   // justifyContent: "center",
                 }}
               >
@@ -358,22 +364,37 @@ export const EstimatesColumns = (
         );
       },
     },
-    ...( showActions ? [{
-      field: "Action",
-      headerClassName: "customHeaderClass",
-      sortable: false,
-      flex: 0.9,
-      renderCell: (params) => {
-        return (
-          <EstimateActionsDropdown
-            params={params}
-            handleDeleteEstimate={handleDeleteEstimate}
-            handleIconButtonClick={handleIconButtonClick}
-            handlePDFPreviewClick={handlePDFPreviewClick}
-          />
-        );
-      },
-    }] : []),
+    ...(showActions
+      ? [
+          {
+            field: "Action",
+            headerClassName: "customHeaderClass",
+            sortable: false,
+            flex: 0.9,
+            renderCell: (params) => {
+              return (
+                <Box sx={{ display: "flex", gap: 1.5 }}>
+                  <EstimateActionsDropdown
+                    params={params}
+                    handleDeleteEstimate={handleDeleteEstimate}
+                    handleIconButtonClick={handleIconButtonClick}
+                    handlePDFPreviewClick={handlePDFPreviewClick}
+                  />
+                  {params?.row?.sufferCostDifference && (
+                    <Box sx={{ alignContent: "end" }}>
+                      <Tooltip placement="top" title="Suffer cost difference">
+                        <WarningAmberIcon
+                          sx={{ textAlign: "center", color: "red" }}
+                        />
+                      </Tooltip>
+                    </Box>
+                  )}
+                </Box>
+              );
+            },
+          },
+        ]
+      : []),
   ];
 };
 

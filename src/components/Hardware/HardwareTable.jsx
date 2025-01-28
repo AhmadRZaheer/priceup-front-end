@@ -1,36 +1,45 @@
-import { HardWareColumns } from "@/utilities/DataGridColumns";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { useDispatch } from 'react-redux';
+
+import { setShowersHardwareRefetch } from '@/redux/refetch';
+import { useEditDocument } from '@/utilities/ApiHooks/common';
+import { useDeleteHardwares } from '@/utilities/ApiHooks/hardware';
+import { backendURL } from '@/utilities/common';
+import {
+  inputLength,
+  inputMaxValue,
+} from '@/utilities/constants';
+import { HardWareColumns } from '@/utilities/DataGridColumns';
 import {
   DeleteOutlineOutlined,
   EditOutlined,
   KeyboardArrowDown,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   Box,
   Button,
   Menu,
   MenuItem,
   Typography,
-  CircularProgress,
-  Stack,
-} from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect, useState, useCallback, useMemo } from "react";
-import CustomToggle from "../ui-components/Toggle";
-import CustomInputField from "../ui-components/CustomInput";
-import DeleteModal from "../Modal/deleteModal";
-import {
-  useDeleteHardwares,
-  useEditFullHardware,
-} from "@/utilities/ApiHooks/hardware";
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+
+import { CustomSmallSwtich } from '../common/CustomSmallSwitch';
 // import AddEditHardware from '../Modal/addEditHardware'
-import AddEditModelHardware from "../Modal/AddEditModelHardware";
-import DefaultImage from "../ui-components/defaultImage";
-import { inputLength, inputMaxValue } from "@/utilities/constants";
-import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
-import { useEditDocument } from "@/utilities/ApiHooks/common";
-import { backendURL } from "@/utilities/common";
+import AddEditModelHardware from '../Modal/AddEditModelHardware';
+import DeleteModal from '../Modal/deleteModal';
+import CustomInputField from '../ui-components/CustomInput';
+import DefaultImage from '../ui-components/defaultImage';
+import CustomToggle from '../ui-components/Toggle';
 
 const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
+  const dispatch =  useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [finishes, setFinishes] = useState(data.finishes);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -54,8 +63,14 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
   useEffect(() => {
     if (deleteSuccess) {
       refetchData();
+      dispatch(setShowersHardwareRefetch());
     }
   }, [deleteSuccess]);
+  useEffect(() => {
+    if (hardwareEditSuccess) {
+      dispatch(setShowersHardwareRefetch())
+    }
+  }, [hardwareEditSuccess]);
 
   const handleClick = useCallback((event) => {
     setAnchorEl(event.currentTarget);

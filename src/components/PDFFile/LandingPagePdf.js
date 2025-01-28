@@ -1,27 +1,33 @@
-import React, { useMemo, useState } from "react";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  StyleSheet,
-  Image,
-} from "@react-pdf/renderer";
-import GCS_logo from "../../Assets/GCS-logo.png";
-import CustomImage from "../../Assets/customlayoutimage.png";
-import {
-  backendURL,
-  calculateDiscount,
-  estimateTotalWithCategory,
-} from "../../utilities/common";
-import { EstimateCategory } from "../../utilities/constants";
+import React, {
+  useMemo,
+  useState,
+} from 'react';
+
 import {
   dimensionsSection,
   fabricationSection,
   pdfFields,
   pricingSection,
   summarySection,
-} from "@/utilities/pdfConfigs";
+} from '@/utilities/pdfConfigs';
+import {
+  Document,
+  Image,
+  Page,
+  StyleSheet,
+  Text,
+  View,
+} from '@react-pdf/renderer';
+
+import CustomImage from '../../Assets/customlayoutimage.png';
+import GCS_logo from '../../Assets/GCS-logo.png';
+import {
+  backendURL,
+  calculateDiscount,
+  estimateTotalWithCategory,
+} from '../../utilities/common';
+import { EstimateCategory } from '../../utilities/constants';
+
 // Create styles
 const styles = StyleSheet.create({
   page: {
@@ -784,7 +790,7 @@ const LandingPDFFile = ({ controls, data }) => {
                                 Gross Total:
                               </Text>
                               <Text style={{ fontSize: "12px" }}>
-                                $ {item?.pricing?.total?.toFixed(2) || 0}
+                               $ {calculateDiscount(data?.quote?.cost,data?.quote?.discount?.value,data?.quote?.discount?.unit)?.toFixed(2) || 0}
                               </Text>
                             </View>
                             {item?.pdfSettings?.cost && (
@@ -1228,7 +1234,7 @@ const LandingPDFFile = ({ controls, data }) => {
                                 <Text style={{ fontSize: "12px" }}>
                                   {item?.glassAddons?.map(
                                     (data, index) =>
-                                      `${data?.name}${
+                                      `${data?.item?.name}${
                                         index < item?.glassAddons?.length - 1
                                           ? ", "
                                           : ""
@@ -2157,7 +2163,7 @@ const LandingPDFFile = ({ controls, data }) => {
                                 Gross Total:
                               </Text>
                               <Text style={{ fontSize: "12px" }}>
-                                $ {item?.pricing?.total?.toFixed(2) || 0}
+                                $ {calculateDiscount(data?.quote?.cost,data?.quote?.discount?.value,data?.quote?.discount?.unit)?.toFixed(2) || 0}
                               </Text>
                             </View>
                             {item?.pdfSettings?.cost && (
@@ -2601,7 +2607,7 @@ const LandingPDFFile = ({ controls, data }) => {
                                 <Text style={{ fontSize: "12px" }}>
                                   {item?.glassAddons?.map(
                                     (data, index) =>
-                                      `${data?.name}${commaFn(
+                                      `${data?.item?.name}${commaFn(
                                         index,
                                         item?.glassAddons?.length
                                       )}`
@@ -3533,7 +3539,7 @@ const LandingPDFFile = ({ controls, data }) => {
                                 Gross Total:
                               </Text>
                               <Text style={{ fontSize: "12px" }}>
-                                $ {item?.pricing?.total?.toFixed(2) || 0}
+                                 $ {calculateDiscount(data?.quote?.cost,data?.quote?.discount?.value,data?.quote?.discount?.unit)?.toFixed(2) || 0}
                               </Text>
                             </View>
                             {item?.pdfSettings?.cost && (
@@ -3977,7 +3983,7 @@ const LandingPDFFile = ({ controls, data }) => {
                                 <Text style={{ fontSize: "12px" }}>
                                   {item?.glassAddons?.map(
                                     (data, index) =>
-                                      `${data?.name}${commaFn(
+                                      `${data?.item?.name}${commaFn(
                                         index,
                                         item?.glassAddons?.length
                                       )}`

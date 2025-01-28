@@ -55,7 +55,7 @@ const MenuItem = ({
         )
       : type === "glassAddons"
       ? selectedContent?.glassAddons.some(
-          (selectedItem) => selectedItem?._id === item?._id
+          (selectedItem) => selectedItem?.item?._id === item?._id
         )
       : type === "wallClamp"
       ? selectedContent?.mountingClamps?.wallClamp.some(

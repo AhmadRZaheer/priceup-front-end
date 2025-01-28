@@ -1,12 +1,17 @@
-import { backendURL } from "../common";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { parseJwt } from "../../components/ProtectedRoute/authVerify";
-import { useDispatch } from "react-redux";
-import { showSnackbar } from "../../redux/snackBarSlice";
-import { setEstimatesListRefetch } from "../../redux/refetch";
-import { socketClient } from "../../configs/socket";
-import { socketIoChannel } from "../constants";
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+
+import {
+  useMutation,
+  useQuery,
+} from '@tanstack/react-query';
+
+import { parseJwt } from '../../components/ProtectedRoute/authVerify';
+import { socketClient } from '../../configs/socket';
+import { setEstimatesListRefetch } from '../../redux/refetch';
+import { showSnackbar } from '../../redux/snackBarSlice';
+import { backendURL } from '../common';
+import { socketIoChannel } from '../constants';
 
 export const useFetchDataEstimate = () => {
   async function fetchData() {
@@ -164,6 +169,7 @@ export const useEditEstimates = () => {
                   config: { ...updatedEstimate.estimateData },
                   cost: updatedEstimate.cost,
                   project_id: updatedEstimate.projectId,
+                  sufferCostDifference: updatedEstimate.sufferCostDifference
                 }
               : {}),
             ...(updatedEstimate.status

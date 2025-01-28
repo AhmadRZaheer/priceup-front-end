@@ -1,3 +1,36 @@
+import 'swiper/css';
+import 'swiper/css/navigation';
+import '../style.scss';
+
+import React, {
+  useEffect,
+  useMemo,
+} from 'react';
+
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { Navigation } from 'swiper/modules';
+import {
+  Swiper,
+  SwiperSlide,
+} from 'swiper/react';
+
+import Bulb from '@/Assets/CustomerLandingImages/blubImg.png';
+import CustomImage from '@/Assets/customlayoutimage.svg';
+import {
+  setContent,
+  setCounter,
+  setEstimateStatus,
+  setEstimateTotal,
+} from '@/redux/customerEstimateCalculation';
+import {
+  useCreateDocument,
+  useEditDocument,
+} from '@/utilities/ApiHooks/common';
+import {
+  backendURL,
+  calculateTotal as calculateTotalForShower,
+} from '@/utilities/common';
 import {
   EstimateCategory,
   hardwareTypes,
@@ -5,56 +38,35 @@ import {
   logResourceType,
   quoteState,
   statusTypes,
-} from "@/utilities/constants";
+} from '@/utilities/constants';
 import {
-  Box,
-  Divider,
-  Grid,
-  Typography,
-  Stack,
-  Container,
-  Card,
-  Button,
-  CircularProgress,
-  Tooltip,
-} from "@mui/material";
-import React, { useEffect, useMemo } from "react";
-import Bulb from "../../../Assets/CustomerLandingImages/blubImg.png";
-import CustomImage from "@/Assets/customlayoutimage.svg";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import { useDispatch } from "react-redux";
-import MenuList from "./MenuListOption";
-import {
-  backendURL,
-  calculateTotal as calculateTotalForShower,
-} from "@/utilities/common";
-import {
-  useCreateDocument,
-  useEditDocument,
-} from "@/utilities/ApiHooks/common";
-import { useParams } from "react-router-dom";
-import "../style.scss";
-import { renderMeasurementSides as renderShowerMeasurementSides } from "@/utilities/estimates";
-import {
-  calculateTotal as calculateTotalForMirror,
-  renderMeasurementSides as renderMirrorMeasurementSides,
-} from "@/utilities/mirrorEstimates";
-import {
-  setContent,
-  setCounter,
-  setEstimateStatus,
-  setEstimateTotal,
-} from "@/redux/customerEstimateCalculation";
+  renderMeasurementSides as renderShowerMeasurementSides,
+} from '@/utilities/estimates';
 import {
   generateEstimatePayloadForMirror,
   generateEstimatePayloadForShower,
   generateEstimatePayloadForWineCellar,
   getFabricationsCostForShowerItem,
   getFabricationsCostForWineCellarItem,
-} from "@/utilities/generateEstimateCalculationContent";
+} from '@/utilities/generateEstimateCalculationContent';
+import {
+  calculateTotal as calculateTotalForMirror,
+  renderMeasurementSides as renderMirrorMeasurementSides,
+} from '@/utilities/mirrorEstimates';
+import {
+  Box,
+  Button,
+  Card,
+  CircularProgress,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+
+import MenuList from './MenuListOption';
 
 const ShowerSummary = ({
   refetchData,
@@ -237,14 +249,14 @@ const ShowerSummary = ({
         }
       }
     });
-
+    
     const glassAddonsData = upgradeGlassAddonsList?.map((item) => {
       const price = item?.options?.[0]?.cost;
       const costDifference =
         data?.content?.glassAddons
           ?.map((addon) => {
             const matchedItem = upgradeGlassAddonsList?.find(
-              (firstItem) => firstItem._id === addon?._id
+              (firstItem) => firstItem._id === addon?.item?._id
             );
             if (matchedItem && matchedItem.options?.length > 0) {
               return matchedItem.options[0].cost;
@@ -1084,7 +1096,7 @@ const ShowerSummary = ({
                         </Typography>
                         {data?.content?.glassAddons?.map((item, index) => (
                           <Typography key={index} className="text-xs-ragular">
-                            {item?.name},
+                            {item?.item?.name},
                           </Typography>
                         ))}
                       </Box>

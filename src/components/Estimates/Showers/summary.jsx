@@ -1,91 +1,90 @@
 import {
+  useMemo,
+  useState,
+} from 'react';
+
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+
+import CustomImage from '@/Assets/customlayoutimage.svg';
+import GrayEyeIcon from '@/Assets/eye-gray-icon.svg';
+import CustomToggle from '@/components/ui-components/Toggle';
+import PDFPreviewDrawer from '@/pages/PDFPreview/PDFDrawer';
+import {
+  getAdditionalFieldsTotal,
+  getContent,
+  getCost,
+  getDoorWeight,
+  getDoorWidth,
+  getEstimateDiscount,
+  getEstimateDiscountTotal,
+  getEstimateDiscountUnit,
+  getFabricationTotal,
+  getGlassAddonsTotal,
+  getGlassTotal,
+  getHardwareAddonsTotal,
+  getHardwareTotal,
+  getisCustomizedDoorWidth,
+  getLaborTotal,
+  getLayoutArea,
+  getLayoutPerimeter,
+  getListData,
+  getMeasurementSide,
+  getMiscTotal,
+  getPanelWeight,
+  getProfit,
+  getReturnWeight,
+  getTotal,
+  getUserProfitPercentage,
+  selectedItem,
+  setContent,
+  setEstimateDiscount,
+  setEstimateDiscountUnit,
+  setUserProfitPercentage,
+} from '@/redux/estimateCalculations';
+import {
+  getCustomerDetail,
+  getEstimateState,
+} from '@/redux/estimateSlice';
+import {
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+} from '@/redux/locationSlice';
+import {
+  backendURL,
+  calculateTotal,
+  getGlassTypeDetailsByThickness,
+} from '@/utilities/common';
+import {
+  hardwareTypes,
+  layoutVariants,
+  quoteState as quotestate,
+} from '@/utilities/constants';
+import {
+  generateObjectForPDFRuntime,
+  renderMeasurementSides,
+} from '@/utilities/estimates';
+import {
+  AttachMoneyOutlined,
+  KeyboardArrowDownOutlined,
+  PercentOutlined,
+} from '@mui/icons-material';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import {
   Box,
   Button,
   Divider,
-  FormControl,
   Grid,
-  MenuItem,
   Popover,
-  Select,
   Stack,
   TextField,
   Tooltip,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import {
-  getContent,
-  getFabricationTotal,
-  getGlassAddonsTotal,
-  getGlassTotal,
-  getHardwareTotal,
-  getLaborTotal,
-  getMeasurementSide,
-  getMiscTotal,
-  getTotal,
-  getCost,
-  getProfit,
-  selectedItem,
-  getDoorWidth,
-  getQuoteState,
-  getLayoutArea,
-  getUserProfitPercentage,
-  setUserProfitPercentage,
-  getPanelWeight,
-  getReturnWeight,
-  getDoorWeight,
-  getHardwareAddonsTotal,
-  getAdditionalFieldsTotal,
-  getListData,
-  getisCustomizedDoorWidth,
-  getLayoutPerimeter,
-  setContent,
-  setEstimateDiscount,
-  getEstimateDiscount,
-  getEstimateDiscountUnit,
-  setEstimateDiscountUnit,
-  getEstimateDiscountTotal,
-} from "@/redux/estimateCalculations";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  backendURL,
-  calculateAreaAndPerimeter,
-  calculateTotal,
-  getGlassTypeDetailsByThickness,
-} from "@/utilities/common";
-import CustomImage from "@/Assets/customlayoutimage.svg";
-import {
-  hardwareTypes,
-  layoutVariants,
-  quoteState as quotestate,
-} from "@/utilities/constants";
-import {
-  generateObjectForPDFPreview,
-  generateObjectForPDFRuntime,
-  renderMeasurementSides,
-} from "@/utilities/estimates";
-import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
-import {
-  AttachMoneyOutlined,
-  KeyboardArrowDownOutlined,
-  PercentOutlined,
-} from "@mui/icons-material";
-import { useEffect, useMemo, useState } from "react";
-import CustomToggle from "@/components/ui-components/Toggle";
-import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
-import {
-  getLocationPdfSettings,
-  getLocationShowerSettings,
-} from "@/redux/locationSlice";
-import {
-  getCustomerDetail,
-  getEstimateCategory,
-  getEstimateState,
-  getProjectId,
-} from "@/redux/estimateSlice";
-import { useSearchParams } from "react-router-dom";
-import ChangeCircleOutlinedIcon from "@mui/icons-material/ChangeCircleOutlined";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
+} from '@mui/material';
 
 const Summary = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -757,7 +756,7 @@ const Summary = ({ setStep }) => {
                             Glass Addons:
                           </Typography>
                           {selectedContent?.glassAddons?.map((item) => (
-                            <Typography className="text-xs-ragular">{`${item?.name} `}</Typography>
+                            <Typography className="text-xs-ragular">{`${item?.item?.name} `}</Typography>
                           ))}
                         </Box>
                       ) : (

@@ -1,11 +1,17 @@
-import { MenuItem as MuiMenuItem, Tooltip } from "@mui/material";
-import { backendURL } from "@/utilities/common";
-import { Box, Typography } from "@mui/material";
-import { mirrorHardwareTypes } from "@/utilities/constants";
-import { getActiveStatus } from "@/utilities/mirrorEstimates";
-import { useState } from "react";
-import { CheckCircle } from "@mui/icons-material";
-import OptionWithCounter from "./optionWithCounter";
+import { useState } from 'react';
+
+import { backendURL } from '@/utilities/common';
+import { mirrorHardwareTypes } from '@/utilities/constants';
+import { getActiveStatus } from '@/utilities/mirrorEstimates';
+import { CheckCircle } from '@mui/icons-material';
+import {
+  Box,
+  MenuItem as MuiMenuItem,
+  Tooltip,
+  Typography,
+} from '@mui/material';
+
+import OptionWithCounter from './optionWithCounter';
 
 const MenuItem = ({
   item,
@@ -42,9 +48,9 @@ const MenuItem = ({
     }
   };
   const isSelected =
-    type === "glassAddons"
+    type === "glassAddons" 
       ? selectedContent?.glassAddons.some(
-          (selectedItem) => selectedItem?._id === item?._id
+          (selectedItem) => selectedItem?.item?._id === item?._id
         )
       : type === "hardwares"
       ? selectedContent?.hardwares.some(

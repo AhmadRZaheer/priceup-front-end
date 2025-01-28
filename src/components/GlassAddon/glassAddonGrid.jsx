@@ -1,40 +1,52 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 import {
-  Box,
-  Button,
-  CircularProgress,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+
+import { setShowersHardwareRefetch } from '@/redux/refetch';
+import { useEditDocument } from '@/utilities/ApiHooks/common';
+import { backendURL } from '@/utilities/common';
+import {
+  inputLength,
+  inputMaxValue,
+} from '@/utilities/constants';
+import { GlassAddonsColumn } from '@/utilities/DataGridColumns';
+import {
+  GenrateColumns,
+  GenrateRows,
+} from '@/utilities/skeltonLoading';
 import {
   ArrowForward,
   DeleteOutlineOutlined,
   EditOutlined,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+
+import { getDataRefetch } from '../../redux/staff';
 import {
   useDeleteGlassAddon,
-  useEditFullGlassAddon,
   useFetchGlassAddons,
-} from "../../utilities/ApiHooks/glassAddon";
-import AddEditGlassAddon from "../Modal/addEditGlassAddon";
-import { useSelector } from "react-redux";
-import { getDataRefetch } from "../../redux/staff";
-import { DataGrid } from "@mui/x-data-grid";
-import { GlassAddonsColumn } from "@/utilities/DataGridColumns";
-import EditIcon from "@/Assets/d.svg";
-import DeleteIcon from "../../Assets/Delete-Icon.svg";
-import CustomInputField from "../ui-components/CustomInput";
-import CustomToggle from "../ui-components/Toggle";
-import DeleteModal from "../Modal/deleteModal";
-import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
-import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
-import { inputLength, inputMaxValue } from "@/utilities/constants";
-import { useEditDocument } from "@/utilities/ApiHooks/common";
-import { backendURL } from "@/utilities/common";
+} from '../../utilities/ApiHooks/glassAddon';
+import { CustomSmallSwtich } from '../common/CustomSmallSwitch';
+import AddEditGlassAddon from '../Modal/addEditGlassAddon';
+import DeleteModal from '../Modal/deleteModal';
+import CustomInputField from '../ui-components/CustomInput';
 
 const GlassAddonGrid = ({ type }) => {
+  const dispatch = useDispatch();
   const refetchData = useSelector(getDataRefetch);
   const itemsPerPage = 10;
   const {
@@ -414,6 +426,7 @@ const GlassAddonGrid = ({ type }) => {
       setDeleteModalOpen(false);
       setRowCosts({});
     }
+    dispatch(setShowersHardwareRefetch())
   }, [deleteSuccess, glassAddonEditSuccess]);
   // const miniTab = useMediaQuery("(max-width: 1400px)");
   return (

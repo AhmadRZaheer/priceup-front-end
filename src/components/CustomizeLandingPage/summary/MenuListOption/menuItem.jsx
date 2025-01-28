@@ -1,15 +1,18 @@
+import { useState } from 'react';
+
+import { hexToRgba } from '@/utilities/common';
+import { hardwareTypes } from '@/utilities/constants';
+import { getActiveStatus } from '@/utilities/estimatorHelper';
+import { CheckCircle } from '@mui/icons-material';
 import {
+  Box,
   MenuItem as MuiMenuItem,
   Tooltip,
-} from "@mui/material";
-import {  hexToRgba } from "@/utilities/common";
-import { Box, Typography } from "@mui/material";
-import OptionWithCounter from "./optionWithCounter";
-import { getActiveStatus } from "@/utilities/estimatorHelper";
-import {  useState } from "react";
-import { hardwareTypes } from "@/utilities/constants";
-import { CheckCircle } from "@mui/icons-material";
-import OptionInfoModel from "./optionInfoModel";
+  Typography,
+} from '@mui/material';
+
+import OptionInfoModel from './optionInfoModel';
+import OptionWithCounter from './optionWithCounter';
 
 const MenuItem = ({
   item,
@@ -57,7 +60,7 @@ const MenuItem = ({
         )
       : type === "glassAddons"
       ? selectedContent?.glassAddons.some(
-          (selectedItem) => selectedItem?._id === item?._id
+          (selectedItem) => selectedItem?.item?._id === item?._id
         )
       : type === "wallClamp"
       ? selectedContent?.mountingClamps?.wallClamp.some(

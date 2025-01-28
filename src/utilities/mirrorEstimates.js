@@ -1,17 +1,21 @@
-import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import {
-  EstimateCategory,
-  mirrorHardwareTypes,
-  notificationsVariant,
-  quoteState,
-} from "./constants";
+  setEstimateCategory,
+  setEstimateState,
+} from '@/redux/estimateSlice';
 import {
   resetMirrorEstimateState,
   resetNotifications,
   setEstimateMeasurements,
   setMirrorProjectId,
   setSelectedItem,
-} from "@/redux/mirrorsEstimateSlice";
+} from '@/redux/mirrorsEstimateSlice';
+
+import {
+  EstimateCategory,
+  mirrorHardwareTypes,
+  notificationsVariant,
+  quoteState,
+} from './constants';
 
 export const getAreaSqft = (measurements) => {
   let totalSqft = 0;
@@ -93,24 +97,33 @@ export const calculateTotal = (
   selectedContent,
   sqftArea,
   mirrorLocationSettings,
-  measurements
+  measurements,
 ) => {
   //glass
-  let glassPrice = 0;
+  let glassPrice = 0 ;
   if (selectedContent?.glassType?.item) {
-    glassPrice =
-      (selectedContent?.glassType?.item?.options?.find(
+    if(selectedContent?.sufferCostDifference && selectedContent?.glassType?.cost > 0){
+      glassPrice = selectedContent?.glassType?.cost
+    }else{
+      glassPrice = (selectedContent?.glassType?.item?.options?.find(
         (glass) => glass.thickness === selectedContent?.glassType?.thickness
-      )?.cost || 0) * sqftArea;
+      )?.cost || 0)
+    }
+    glassPrice = glassPrice * sqftArea;
   }
+
 
   //edgeWork
   let edgeWorkPrice = 0;
   if (selectedContent?.edgeWork?.item) {
-    const edgeWork =
-      selectedContent?.edgeWork?.item?.options?.find(
+    let edgeWork = 0;
+    if(selectedContent?.sufferCostDifference && selectedContent?.edgeWork?.cost > 0){
+      edgeWork = selectedContent?.edgeWork?.cost; 
+    }else{
+      edgeWork = selectedContent?.edgeWork?.item?.options?.find(
         (polish) => polish.thickness === selectedContent?.edgeWork?.thickness
       )?.cost || 0;
+    }
     Object.entries(measurements).forEach(([key, value]) => {
       const count = value["count"];
       const width = value["width"];
@@ -121,8 +134,6 @@ export const calculateTotal = (
       }
     });
   }
-
-  console.log(edgeWorkPrice, "edgeWork Price");
 
   // let floatingPrice = 0;
   // if (selectedContent.floatingSize?.length) {
@@ -137,9 +148,13 @@ export const calculateTotal = (
   selectedContent?.glassAddons?.forEach((item) => {
     console.log(item)
     let price = 0;
+    if(selectedContent?.sufferCostDifference && item?.cost > 0){
+      price = item?.cost 
+    }else{
     if (item?.options?.length) {
       price = item?.options[0]?.cost || 0;
     }
+  }
     // if(['floating-small','floating-large','floating-medium'].includes(item?.slug)){
     //   Object.entries(measurements).forEach(([key, value]) => {
     //     const count = value["count"];
@@ -172,7 +187,12 @@ export const calculateTotal = (
   let hardwaresPrice = 0;
   selectedContent?.hardwares?.forEach((row) => {
     if (row?.item?.options?.length && measurementsArray?.length) {
-      const price = row?.item?.options[0]?.cost || 0;
+      let price = 0; 
+      if(selectedContent?.sufferCostDifference && row?.cost > 0){
+        price = row?.cost
+      }else{
+        price = row?.item?.options[0]?.cost || 0;
+      }
       hardwaresPrice = hardwaresPrice + price * row?.count;
     }
     //  * priceBySqft;  // hardwares are not calculated by price by sqft
@@ -383,7 +403,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
   if (selectedContent.glassAddons.length) {
     let noSelectedDisableFound = true;
     selectedContent.glassAddons.forEach((element) => {
-      if (!getActiveStatus(element, null, mirrorHardwareTypes.GLASSADDONS)) {
+      if (!getActiveStatus(element?.item, null, mirrorHardwareTypes.GLASSADDONS)) {
         noSelectedDisableFound = false;
         return;
       }
@@ -444,8 +464,8 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
   if (selectedContent.glassAddons.length) {
     let selectedDisableNames = "";
     selectedContent.glassAddons.forEach((element) => {
-      if (!getActiveStatus(element, null, mirrorHardwareTypes.GLASSADDONS)) {
-        selectedDisableNames += `${element.name}, `;
+      if (!getActiveStatus(element?.item, null, mirrorHardwareTypes.GLASSADDONS)) {
+        selectedDisableNames += `${element.item.name}, `;
       }
     });
     if (selectedDisableNames.length) {
@@ -520,11 +540,11 @@ export const generateNotificationsForCurrentEstimate = (
   if (selectedContent.glassAddons.length) {
     let glassAddonsNotAvailable = [];
     selectedContent.glassAddons.forEach((element) => {
-      if (!getActiveStatus(element, null, mirrorHardwareTypes.GLASSADDONS)) {
+      if (!getActiveStatus(element.item, null, mirrorHardwareTypes.GLASSADDONS)) {
         glassAddonsNotAvailable.push({
           status: true,
           variant: notificationsVariant.WARNING,
-          message: `Glass Addon "${element.name}" is not available.`,
+          message: `Glass Addon "${element.item.name}" is not available.`,
         });
       }
     });
@@ -569,8 +589,10 @@ export const generateObjectForPDFPreview = (
 
   let glassAddons = [];
   glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-    const record = listData?.glassAddons?.find((addon) => addon._id === item);
-    return record;
+    const record = listData?.glassAddons?.find((addon) => addon._id === item?.type);
+    return {
+      item : record
+    };;
   });
 
   let hardwares = [];

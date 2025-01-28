@@ -1,7 +1,7 @@
+import { useNavigate } from 'react-router-dom';
+
 // import { selectedItem } from "@/redux/estimateCalculations";
-import { useCreateEstimates } from "@/utilities/ApiHooks/estimate";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useCreateEstimates } from '@/utilities/ApiHooks/estimate';
 
 const { Close } = require("@mui/icons-material");
 const {
@@ -22,7 +22,8 @@ const EnterLabelModal = ({
   estimateCategory,
   estimatesTotal,
   projectId,
-  selectedLayout = null
+  selectedLayout = null,
+  sufferCostDifference
 }) => {
   const { mutateAsync, isLoading: estimateCreateLoading } =
     useCreateEstimates();
@@ -47,6 +48,7 @@ const EnterLabelModal = ({
         label: label,
         category: estimateCategory,
         cost: Number(estimatesTotal),
+        sufferCostDifference:sufferCostDifference,
         projectId: projectId,
       });
       navigate(`/projects/${projectId}`);

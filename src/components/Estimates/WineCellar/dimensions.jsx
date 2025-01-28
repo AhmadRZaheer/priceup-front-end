@@ -1,30 +1,51 @@
-import { quoteState } from "@/utilities/constants";
-import { useDispatch, useSelector } from "react-redux";
-// import { CustomLayoutDimensions } from "./Dimensions/customLayoutDimensions";
-import { Box, useMediaQuery } from "@mui/material";
-import { NavLink, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import {
-  // getWineProjectId,
-  // getWineQuoteState,
-  selectedItem,
-} from "@/redux/wineCellarEstimateSlice";
-import Summary from "./summary";
-import Review from "./review";
+  useEffect,
+  useState,
+} from 'react';
+
 import {
-  getEstimateState,
-  getProjectId,
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  NavLink,
+  useSearchParams,
+} from 'react-router-dom';
+
+import EstimateDetailSkeleton
+  from '@/components/estimateSkelton/EstimateDetailSkeleton';
+import ModificationSkeleton
+  from '@/components/estimateSkelton/ModificationSkeleton';
+import {
   getSkeltonState,
   setSkeltonState,
-} from "@/redux/estimateSlice";
-import { SimpleLayoutDimensions } from "./Dimensions/simpleLayoutDimensions";
+} from '@/redux/estimateSlice';
+import {
+  getContent,
+  selectedItem,
+  setSufferCostDifference,
+} from '@/redux/wineCellarEstimateSlice';
 import {
   useFetchAllDocuments,
   useFetchSingleDocument,
-} from "@/utilities/ApiHooks/common";
-import { backendURL } from "@/utilities/common";
-import ModificationSkeleton from "@/components/estimateSkelton/ModificationSkeleton";
-import EstimateDetailSkeleton from "@/components/estimateSkelton/EstimateDetailSkeleton";
+} from '@/utilities/ApiHooks/common';
+import { backendURL } from '@/utilities/common';
+import { quoteState } from '@/utilities/constants';
+import { Close } from '@mui/icons-material';
+// import { CustomLayoutDimensions } from "./Dimensions/customLayoutDimensions";
+import {
+  Alert,
+  Box,
+  Button,
+  Collapse,
+  IconButton,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
+
+import { SimpleLayoutDimensions } from './Dimensions/simpleLayoutDimensions';
+import Review from './review';
+import Summary from './summary';
 
 export const WineCellarDimensions = () => {
   const dispatch = useDispatch();
@@ -38,9 +59,10 @@ export const WineCellarDimensions = () => {
   // const projectId = useSelector(getProjectId);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
+  const [openAlert, setOpenAlert] = useState(true);
   const estimateId = searchParams.get("estimateId");
   const skeltonState = useSelector(getSkeltonState);
-
+  const selectedContent = useSelector(getContent);
   const {
     data: layouts,
     refetch,
@@ -60,9 +82,65 @@ export const WineCellarDimensions = () => {
       dispatch(setSkeltonState());
     }
   }, [estimateSuccess, layoutSuccess]);
+   const handleSufferCost = ()=>{
+      dispatch(setSufferCostDifference());
+    }
 
   return (
     <Box>
+      {(selectedContent.sufferCostDifference && activeQuoteState === quoteState.EDIT) && (
+        <Box sx={{ width: "100%" }}>
+          <Collapse in={openAlert}>
+            <Alert
+              action={
+                <IconButton
+                  aria-label="close"
+                  size="small"
+                  onClick={() => {
+                    setOpenAlert(false);
+                  }}
+                >
+                  <Close fontSize="inherit" sx={{ color: "white" }} />
+                </IconButton>
+              }
+              icon={false}
+              sx={{
+                mb: 1,
+                background: "#DC3545",
+                color: "white",
+                ".MuiAlert-action": {
+                  flexWrap: "wrap",
+                  alignContent: "center",
+                },
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 5 }}>
+                <Typography sx={{ alignSelf: "center" }}>
+                  This estimate has a cost discrepancy. Would you like to apply
+                  the updated cost?
+                </Typography>
+                <Button
+                onClick={handleSufferCost}
+                  variant="contained"
+                  sx={{
+                    display: "flex",
+                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                    color: "white",
+                    textTransform: "initial",
+                    fontSize: 14,
+                    backgroundColor: "#8477da",
+                    "&:hover": {
+                      backgroundColor: "#8477da",
+                    },
+                  }}
+                >
+                  Apply Cost
+                </Button>
+              </Box>
+            </Alert>
+          </Collapse>
+        </Box>
+      )}
       <Box
         sx={{
           background: { sm: "#F6F5FF", xs: "#08061B" },
@@ -164,8 +242,7 @@ export const WineCellarDimensions = () => {
               //   <CustomLayoutDimensions />
               // ) :
               null}
-              {skeltonState || estimateFetcing || isFetching
-              ? (
+              {skeltonState || estimateFetcing || isFetching ? (
                 <EstimateDetailSkeleton />
               ) : (
                 <Summary />

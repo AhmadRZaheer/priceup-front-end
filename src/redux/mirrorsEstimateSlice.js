@@ -63,6 +63,7 @@ const initialState = {
   },
   content: {
     modifiedProfitPercentage: 0,
+    sufferCostDifference : false,
     discount: {
       value: 0,
       unit: "%",
@@ -72,10 +73,12 @@ const initialState = {
     glassType: {
       item: null,
       thickness: "1/4",
+      cost : 0
     },
     edgeWork: {
       item: null,
       thickness: "1/4",
+      cost : 0
     },
     hardwares: [],
     glassAddons: [],
@@ -115,11 +118,13 @@ const mirrorsEstimateSlice = createSlice({
     },
     setThickness: (state, action) => {
       const { thickness, type } = action.payload;
+      let cost = state.content[type]?.item?.options?.find((option) => option.thickness === thickness)?.cost;
       state.content = {
         ...state.content,
         [type]: {
           ...state.content[type],
           thickness: thickness,
+          cost : cost ?? 0
         },
       };
     },
@@ -186,8 +191,8 @@ const mirrorsEstimateSlice = createSlice({
       ) {
         let glassAddonCost = 0 ;
         glassAddonCost = item?.options[0]?.cost;
-        const foundIndex = state.content[type]?.findIndex(
-          (row) => row.slug === item.slug
+        const foundIndex = state.content[type]?.findIndex( 
+          (row) => row.item.slug === item.slug
         );
         if (foundIndex !== -1) {
           state.content[type].splice(foundIndex, 1);
@@ -212,6 +217,60 @@ const mirrorsEstimateSlice = createSlice({
         };
       }
     },
+    setSufferCostDifference: (state, action) => {
+      const calculateNewCost = (type, identifierKey, identifierValue) => {
+      const cost = state.content[type].cost;
+      const currentCost = state.content[type]?.item?.[identifierKey]?.find(
+        (item) => item[identifierValue.key] === identifierValue.value
+      )?.cost;
+  
+      return cost >= 0 && cost !== currentCost ? currentCost : cost;
+    };
+  
+    // Update glass cost
+    const newGlassCost = calculateNewCost("glassType", "options", {
+      key: "thickness",
+      value: state.content.glassType.thickness,
+    });
+  
+    // Update handle cost
+    const newEdgeWorkCost = calculateNewCost("edgeWork", "options", {
+      key: "thickness",
+      value: state.content.edgeWork.thickness,
+    });    
+    const glassAddonsCost = state?.content?.glassAddons?.map((item)=>{
+      const itemCost = item?.cost
+      const currentCost = item?.item?.options[0]?.cost;
+      let newCost = itemCost >= 0 && itemCost !== currentCost ? currentCost : itemCost;
+      return {
+        ...item,
+        cost : newCost ?? 0
+      }
+    })
+    const hardwareCost = state?.content?.hardwares?.map((item)=>{
+      const itemCost = item?.cost
+      const currentCost = item?.item?.options[0]?.cost;
+      let newCost = itemCost >= 0 && itemCost !== currentCost ? currentCost : itemCost;
+      return {
+        ...item,
+        cost : newCost ?? 0
+      }
+    })
+      state.content = {
+        ...state.content,
+        edgeWork: {
+          ...state.content.edgeWork,
+          cost : newEdgeWorkCost ?? 0
+        },       
+        glassType: {
+          ...state.content.glassType,
+          cost: newGlassCost ?? 0
+        },
+      glassAddons: glassAddonsCost ?? [],
+      hardwares: hardwareCost ?? [],
+      sufferCostDifference : false
+      };
+  },
     setInputContent: (state, action) => {
       const { type, value } = action.payload;
       state.content = {
@@ -257,6 +316,7 @@ const mirrorsEstimateSlice = createSlice({
     initializeStateForEditQuote: (state, action) => {
       const { estimateData, hardwaresList } = action.payload;
       state.estimateId = estimateData?._id;
+      state.content.sufferCostDifference = estimateData?.sufferCostDifference;
       const resp = generateContentForMirrorEdit(hardwaresList,estimateData);
       state.content = {
         ...state.content,
@@ -282,6 +342,7 @@ export const {
   setSandBlasting,
   setPricing,
   setSelectedItem,
+  setSufferCostDifference,
   initializeStateForEditQuote,
   setModifiedProfitPercentage,
   setEstimateDiscountValue,

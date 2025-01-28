@@ -26,7 +26,6 @@ export const generateContentForShowerEdit = (listData, estimate) => {
   slidingDoorSystemType = listData?.slidingDoorSystem?.find(
     (item) => item._id === estimate?.config?.slidingDoorSystem?.type
   );
-
   let headerType = null;
   headerType = listData?.header?.find(
     (item) => item._id === estimate?.config?.header?.type
@@ -39,8 +38,11 @@ export const generateContentForShowerEdit = (listData, estimate) => {
 
   let glassAddons = [];
   glassAddons = estimate?.config?.glassAddons?.map((item) => {
-    const record = listData?.glassAddons.find((addon) => addon._id === item);
-    return record;
+    const record = listData?.glassAddons.find((addon) => addon._id === item?.type);
+    return {
+      item : record,
+      cost : item?.cost
+    };
   });
 
   let wallClampArray,
@@ -70,14 +72,14 @@ export const generateContentForShowerEdit = (listData, estimate) => {
       const record = listData?.wallClamp?.find(
         (clamp) => clamp._id === row?.type
       );
-      return { item: record, count: row.count };
+      return { item: record, count: row.count , cost : row.cost ?? 0 };
     });
     sleeveOverArray = estimate?.config?.mountingClamps?.sleeveOver?.map(
       (row) => {
         const record = listData?.sleeveOver?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count , cost : row.cost ?? 0 };
       }
     );
     glassToGlassArray = estimate?.config?.mountingClamps?.glassToGlass?.map(
@@ -85,7 +87,7 @@ export const generateContentForShowerEdit = (listData, estimate) => {
         const record = listData?.glassToGlass?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
 
@@ -94,7 +96,7 @@ export const generateContentForShowerEdit = (listData, estimate) => {
         const record = listData?.cornerWallClamp?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
 
@@ -103,7 +105,7 @@ export const generateContentForShowerEdit = (listData, estimate) => {
         const record = listData?.cornerSleeveOver?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
 
@@ -112,12 +114,12 @@ export const generateContentForShowerEdit = (listData, estimate) => {
         const record = listData?.cornerGlassToGlass?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
 
     channelItem = listData?.mountingChannel?.find(
-      (item) => item._id === estimate?.config?.mountingChannel
+      (item) => item._id === estimate?.config?.mountingChannel?.type
     );
   }
   let hardwareAddons = [];
@@ -125,7 +127,7 @@ export const generateContentForShowerEdit = (listData, estimate) => {
     const found = listData?.hardwareAddons?.find(
       (item) => item?._id === row.type
     );
-    return { item: found, count: row.count };
+    return { item: found, count: row.count , cost : row.cost ?? 0  };
   });
   const noGlassAddon = listData?.glassAddons?.find(
     (item) => item.slug === "no-treatment"
@@ -148,23 +150,28 @@ export const generateContentForShowerEdit = (listData, estimate) => {
         //   ...state.handles,
         item: handleType,
         count: estimate?.config?.handles?.count,
+        cost : estimate?.config?.handles?.cost ?? 0 
       },
       hinges: {
         //   ...state.hinges,
         item: hingesType,
         count: estimate?.config?.hinges?.count,
+        cost : estimate?.config?.hinges?.cost ?? 0 
       },
       header: {
         item: headerType,
         count: estimate?.config?.header?.count,
+        cost: estimate?.config?.header?.cost ?? 0 ,
       },
       slidingDoorSystem: {
         item: slidingDoorSystemType,
         count: estimate?.config?.slidingDoorSystem?.count,
+        cost: estimate?.config?.slidingDoorSystem?.cost ?? 0 ,
       },
       glassType: {
         item: glassTypee,
         thickness: estimate?.config?.glassType?.thickness,
+        cost: estimate?.config?.glassType?.cost ?? 0 ,
       },
 
       mountingClamps: {
@@ -184,6 +191,7 @@ export const generateContentForShowerEdit = (listData, estimate) => {
       mountingChannel: {
         item: channelItem || null,
         count: channelItem ? 1 : 0,
+        cost: estimate?.config?.mountingChannel?.cost || 0
       },
       mountingState:
         wallClampArray?.length ||
@@ -194,7 +202,7 @@ export const generateContentForShowerEdit = (listData, estimate) => {
       hingeCut: estimate?.config?.hingeCut,
       people: estimate?.config?.people,
       hours: estimate?.config?.hours,
-      glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
+      glassAddons: glassAddons?.length ? [...glassAddons] : [{item: noGlassAddon ,cost:0}],
       oneInchHoles: estimate?.config?.oneInchHoles,
       clampCut: estimate?.config?.clampCut,
       notch: estimate?.config?.notch,
@@ -235,16 +243,20 @@ export const generateContentForMirrorEdit = (hardwaresList, estimate) => {
   let glassAddons = [];
   glassAddons = estimate?.config?.glassAddons?.map((item) => {
     const record = hardwaresList?.glassAddons?.find(
-      (addon) => addon?._id === item
+      (addon) => addon?._id === item?.type
     );
-    return record;
+    return {
+      item : record ,
+      cost : item?.cost ?? 0 
+    };
   });
+
   let hardwares = [];
   hardwares = estimate?.config?.hardwares?.map((row) => {
     const found = hardwaresList?.hardwares?.find(
       (item) => item?._id === row.type
     );
-    return { item: found, count: row.count };
+    return { item: found, count: row.count , cost : row.cost ?? 0  };
   });
 
   return {
@@ -253,10 +265,12 @@ export const generateContentForMirrorEdit = (hardwaresList, estimate) => {
       glassType: {
         item: glassTypee,
         thickness: estimate?.config?.glassType?.thickness,
+        cost: estimate?.config?.glassType?.cost ?? 0 ,
       },
       edgeWork: {
         item: edgeWork,
         thickness: estimate?.config?.edgeWork?.thickness,
+        cost: estimate?.config?.edgeWork?.cost ?? 0 ,
       },
       glassAddons: glassAddons ? [...glassAddons] : [],
       hardwares: hardwares ? [...hardwares] : [],
@@ -290,7 +304,6 @@ export const generateContentForMirrorEdit = (hardwaresList, estimate) => {
 };
 
 export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
-  console.log(hardwaresList, estimate, "ddddd");
   let calculateChannelWarning = {
     status: false,
     variant: notificationsVariant.DEFAULT,
@@ -331,9 +344,12 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
   let glassAddons = [];
   glassAddons = estimate?.config?.glassAddons?.map((item) => {
     const record = hardwaresList?.glassAddons.find(
-      (addon) => addon._id === item
+      (addon) => addon._id === item?.type
     );
-    return record;
+    return {
+      item : record,
+      cost : item?.cost ?? 0 
+    };
   });
 
   let wallClampArray,
@@ -362,14 +378,14 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
       const record = hardwaresList?.wallClamp?.find(
         (clamp) => clamp._id === row?.type
       );
-      return { item: record, count: row.count };
+      return { item: record, count: row.count , cost : row.cost ?? 0 };
     });
     sleeveOverArray = estimate?.config?.mountingClamps?.sleeveOver?.map(
       (row) => {
         const record = hardwaresList?.sleeveOver?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
     glassToGlassArray = estimate?.config?.mountingClamps?.glassToGlass?.map(
@@ -377,7 +393,7 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
         const record = hardwaresList?.glassToGlass?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
 
@@ -386,7 +402,7 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
         const record = hardwaresList?.cornerWallClamp?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
 
@@ -395,7 +411,7 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
         const record = hardwaresList?.cornerSleeveOver?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
 
@@ -404,12 +420,12 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
         const record = hardwaresList?.cornerGlassToGlass?.find(
           (clamp) => clamp._id === row?.type
         );
-        return { item: record, count: row.count };
+        return { item: record, count: row.count, cost : row.cost ?? 0  };
       }
     );
 
     channelItem = hardwaresList?.mountingChannel?.find(
-      (item) => item._id === estimate?.config?.mountingChannel
+      (item) => item._id === estimate?.config?.mountingChannel?.type
     );
   }
   let hardwareAddons = [];
@@ -417,7 +433,7 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
     const found = hardwaresList?.hardwareAddons?.find(
       (item) => item?._id === row.type
     );
-    return { item: found, count: row.count };
+    return { item: found, count: row.count, cost : row.cost ?? 0  };
   });
   const noGlassAddon = hardwaresList?.glassAddons?.find(
     (item) => item.slug === "no-treatment"
@@ -444,28 +460,34 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
         // ...state.handles,
         item: handleType,
         count: estimate?.config?.handles?.count,
+        cost : estimate?.config?.handles?.cost ?? 0 
       },
       doorLock: {
         // ...state.doorLock,
         item: doorLockType,
         count: estimate?.config?.doorLock?.count,
+        cost : estimate?.config?.doorLock?.cost ?? 0 
       },
       hinges: {
         // ...state.hinges,
         item: hingesType,
         count: estimate?.config?.hinges?.count,
+        cost : estimate?.config?.hinges?.cost ?? 0 
       },
       header: {
         item: headerType,
         count: estimate?.config?.header?.count,
+        cost: estimate?.config?.header?.cost ?? 0 ,
       },
       slidingDoorSystem: {
         item: slidingDoorSystemType,
         count: estimate?.config?.slidingDoorSystem?.count,
+        cost: estimate?.config?.slidingDoorSystem?.cost ?? 0 ,
       },
       glassType: {
         item: glassTypee,
         thickness: estimate?.config?.glassType?.thickness,
+        cost: estimate?.config?.glassType?.cost ?? 0 ,
       },
       mountingClamps: {
         wallClamp: wallClampArray ? [...wallClampArray] : [],
@@ -484,6 +506,7 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
       mountingChannel: {
         item: channelItem || null,
         count: channelItem ? 1 : 0,
+        cost: estimate?.config?.mountingChannel?.cost || 0
       },
       mountingState:
         wallClampArray?.length ||
@@ -610,14 +633,20 @@ export const generateEstimatePayloadForShower = (
         cost : row.cost ?? 0
       };
     });
-  const glassAddonsArray = selectedContent?.glassAddons?.map(
-    (item) => item?._id
+  const glassAddonsArray = selectedContent?.glassAddons?.map((item) => {
+     return { 
+      type : item?.item?._id,
+      cost : item?.cost ?? 0 
+     }
+    }
   );
+const mountingChannelItem = selectedContent?.mountingChannel?.item
   const estimateConfig = {
     doorWidth: Number(doorWidthredux),
     isCustomizedDoorWidth: isCustomizedDoorWidth,
     additionalFields: [...additionalFieldsArray],
     hardwareFinishes: selectedContent?.hardwareFinishes?._id,
+
     handles: {
       type: selectedContent?.handles?.item?._id,
       count: selectedContent?.handles?.count,
@@ -638,15 +667,16 @@ export const generateEstimatePayloadForShower = (
       sleeveOver: [...cornerSleeveOverArray],
       glassToGlass: [...cornerGlassToGlassArray],
     },
-    mountingChannel: { type : selectedContent?.mountingChannel?.item?._id || null ,
+    mountingChannel: mountingChannelItem ? {
+    type :  mountingChannelItem?._id,
     cost :  selectedContent?.mountingChannel?.cost ?? 0
-  },
+  } : null,
     glassType: {
       type: selectedContent?.glassType?.item?._id,
       thickness: selectedContent?.glassType?.thickness,
       cost: selectedContent?.glassType?.cost ?? 0,
     },
-    glassAddons: [...glassAddonsArray],
+    glassAddons: [...(glassAddonsArray || [])],
     slidingDoorSystem: {
       type: selectedContent?.slidingDoorSystem?.item?._id,
       count: selectedContent?.slidingDoorSystem?.count,
@@ -698,9 +728,13 @@ export const generateEstimatePayloadForMirror = (
   measurementsArray = newArray;
   // }
 
-  const glassAddonsArray = selectedContent?.glassAddons?.map(
-    (item) => item?._id
-  );
+  const glassAddonsArray = selectedContent?.glassAddons?.map((item) => {
+    return { 
+      type : item?.item?._id,
+     cost : item?.cost ?? 0 
+    }
+   }
+ );
 
   const hardwaresArray = selectedContent?.hardwares?.map((row) => {
     return {
@@ -731,7 +765,7 @@ export const generateEstimatePayloadForMirror = (
       thickness: selectedContent?.edgeWork?.thickness,
       cost: selectedContent?.edgeWork?.cost ?? 0,
     },
-    glassAddons: [...glassAddonsArray],
+    glassAddons: [...(glassAddonsArray || [])],
     hardwares: [...hardwaresArray],
     // floatingSize: selectedContent.floatingSize,
     // sandBlasting: selectedContent.sandBlasting,
@@ -856,9 +890,13 @@ export const generateEstimatePayloadForWineCellar = (
         cost: row.cost ?? 0,
       };
     });
-  const glassAddonsArray = selectedContent?.glassAddons?.map(
-    (item) => item?._id
-  );
+    const glassAddonsArray = selectedContent?.glassAddons?.map((item) => {
+      return { 
+        type : item?.item?._id,
+       cost : item?.cost ?? 0 
+      }
+     }
+   );
 
   const estimateConfig = {
     doorWidth: Number(doorWidthredux),
@@ -900,7 +938,7 @@ export const generateEstimatePayloadForWineCellar = (
       thickness: selectedContent?.glassType?.thickness,
       cost: selectedContent?.glassType?.cost ?? 0,
     },
-    glassAddons: [...glassAddonsArray],
+    glassAddons: [...(glassAddonsArray || [])],
     slidingDoorSystem: {
       type: selectedContent?.slidingDoorSystem?.item?._id,
       count: selectedContent?.slidingDoorSystem?.count,

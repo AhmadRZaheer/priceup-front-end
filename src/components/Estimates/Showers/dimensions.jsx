@@ -1,26 +1,51 @@
-import { quoteState } from "@/utilities/constants";
-import { useDispatch, useSelector } from "react-redux";
-import { SimpleLayoutDimensions } from "./Dimensions/simpleLayoutDimensions";
-import { CustomLayoutDimensions } from "./Dimensions/customLayoutDimensions";
-import {
-  getProjectId,
-  getQuoteState,
-  selectedItem,
-} from "@/redux/estimateCalculations";
-import { Box, Typography, useMediaQuery } from "@mui/material";
-import { NavLink, useSearchParams } from "react-router-dom";
-import { ShowerReview } from "./review";
 // import Summary from "./summary_dep";
-import { useEffect, useState } from "react";
-import Summary from "./summary";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  NavLink,
+  useSearchParams,
+} from 'react-router-dom';
+
+import EstimateDetailSkeleton
+  from '@/components/estimateSkelton/EstimateDetailSkeleton';
+import ModificationSkeleton
+  from '@/components/estimateSkelton/ModificationSkeleton';
+import {
+  getContent,
+  setSufferCostDifference,
+} from '@/redux/estimateCalculations';
+import {
+  getSkeltonState,
+  setSkeltonState,
+} from '@/redux/estimateSlice';
 import {
   useFetchAllDocuments,
   useFetchSingleDocument,
-} from "@/utilities/ApiHooks/common";
-import { backendURL } from "@/utilities/common";
-import { getSkeltonState, setSkeltonState } from "@/redux/estimateSlice";
-import ModificationSkeleton from "@/components/estimateSkelton/ModificationSkeleton";
-import EstimateDetailSkeleton from "@/components/estimateSkelton/EstimateDetailSkeleton";
+} from '@/utilities/ApiHooks/common';
+import { backendURL } from '@/utilities/common';
+import { quoteState } from '@/utilities/constants';
+import { Close } from '@mui/icons-material';
+import {
+  Alert,
+  Box,
+  Button,
+  Collapse,
+  IconButton,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
+
+import { CustomLayoutDimensions } from './Dimensions/customLayoutDimensions';
+import { SimpleLayoutDimensions } from './Dimensions/simpleLayoutDimensions';
+import { ShowerReview } from './review';
+import Summary from './summary';
 
 export const ShowerDimensions = () => {
   const dispatch = useDispatch();
@@ -35,7 +60,9 @@ export const ShowerDimensions = () => {
   // const projectId = useSelector(getProjectId);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const skeltonState = useSelector(getSkeltonState);
+  const selectedContent = useSelector(getContent);
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
+  const [openAlert, setOpenAlert] = useState(true);
 
   const {
     data: layouts,
@@ -56,9 +83,68 @@ export const ShowerDimensions = () => {
       dispatch(setSkeltonState());
     }
   }, [estimateSuccess, layoutSuccess]);
+  
+  const handleSufferCost = ()=>{
+    // dispatch(setSufferCostDifference(false));
+    dispatch(setSufferCostDifference());
+  }
 
   return (
     <Box>
+      {(selectedContent.sufferCostDifference && activeQuoteState === quoteState.EDIT) && (
+        <Box sx={{ width: "100%" }}>
+          <Collapse in={openAlert}>
+            <Alert
+              action={
+                <IconButton
+                  aria-label="close"
+                  size="small"
+                  onClick={() => {
+                    setOpenAlert(false);
+                  }}
+                >
+                  <Close fontSize="inherit" sx={{ color: "white" }} />
+                </IconButton>
+              }
+              icon={false}
+              sx={{
+                mb: 1,
+                background: "#DC3545",
+                color: "white",
+                ".MuiAlert-action": {
+                  flexWrap: "wrap",
+                  alignContent: "center",
+                },
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 5 }}>
+                <Typography sx={{ alignSelf: "center" }}>
+                  This estimate has a cost discrepancy. Would you like to apply
+                  the updated cost?
+                </Typography>
+                <Button
+                onClick={handleSufferCost}
+                  variant="contained"
+                  sx={{
+                    display: "flex",
+                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                    color: "white",
+                    textTransform: "initial",
+                    // height: 40,
+                    fontSize: 14,
+                    backgroundColor: "#8477da",
+                    "&:hover": {
+                      backgroundColor: "#8477da",
+                    },
+                  }}
+                >
+                  Apply Cost
+                </Button>
+              </Box>
+            </Alert>
+          </Collapse>
+        </Box>
+      )}
       <Box
         sx={{
           // background: "white",
@@ -152,7 +238,7 @@ export const ShowerDimensions = () => {
                 width: { lg: "60%", md: "50%" },
                 gap: 2,
               }}
-            >              
+            >
               <>
                 {activeQuoteState === quoteState.CREATE ||
                 (activeQuoteState === quoteState.EDIT &&
@@ -166,11 +252,11 @@ export const ShowerDimensions = () => {
                   (activeQuoteState === quoteState.EDIT &&
                     layoutId === "null") ? (
                   <CustomLayoutDimensions
-                  recordData={{ record, refetchRecord, estimateFetcing }}
+                    recordData={{ record, refetchRecord, estimateFetcing }}
                   />
                 ) : null}
                 {skeltonState || estimateFetcing || isFetching ? (
-                   <EstimateDetailSkeleton />
+                  <EstimateDetailSkeleton />
                 ) : (
                   <Summary />
                 )}
@@ -197,9 +283,9 @@ export const ShowerDimensions = () => {
                   layoutId &&
                   layoutId !== "null")) && (
                 <SimpleLayoutDimensions
-                setStep={setStep}
-                layoutData={{ layouts, refetch, isFetching }}
-                recordData={{ record, refetchRecord, estimateFetcing }}
+                  setStep={setStep}
+                  layoutData={{ layouts, refetch, isFetching }}
+                  recordData={{ record, refetchRecord, estimateFetcing }}
                 />
               )}
             {step === 0 &&

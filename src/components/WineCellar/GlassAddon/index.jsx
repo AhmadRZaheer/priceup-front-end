@@ -1,4 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+import { useDispatch } from 'react-redux';
+
+import { CustomSmallSwtich } from '@/components/common/CustomSmallSwitch';
+import HardwareCreateModal from '@/components/common/HardwareCreateModal';
+import HardwareEditModal from '@/components/common/HardwareEditModal';
+import DeleteModal from '@/components/Modal/deleteModal';
+import CustomInputField from '@/components/ui-components/CustomInput';
+import { setWineCellarsHardwareRefetch } from '@/redux/refetch';
+import {
+  useCreateDocument,
+  useDeleteDocument,
+  useEditDocument,
+  useFetchAllDocuments,
+} from '@/utilities/ApiHooks/common';
+import {
+  backendURL,
+  createSlug,
+  getDecryptedToken,
+} from '@/utilities/common';
+import {
+  inputLength,
+  inputMaxValue,
+} from '@/utilities/constants';
+import { WineMirrorsGlassAddon } from '@/utilities/DataGridColumns';
+import {
+  GenrateColumns,
+  GenrateRows,
+} from '@/utilities/skeltonLoading';
+import { ArrowForward } from '@mui/icons-material';
+import DeleteOutlineOutlinedIcon
+  from '@mui/icons-material/DeleteOutlineOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import {
   Box,
   Button,
@@ -6,32 +42,8 @@ import {
   Menu,
   MenuItem,
   Typography,
-  useMediaQuery,
-} from "@mui/material";
-import { ArrowForward } from "@mui/icons-material";
-import { backendURL, createSlug, getDecryptedToken } from "@/utilities/common";
-import DeleteModal from "@/components/Modal/deleteModal";
-import HardwareEditModal from "@/components/common/HardwareEditModal";
-import HardwareCreateModal from "@/components/common/HardwareCreateModal";
-import { useDispatch } from "react-redux";
-import { DataGrid } from "@mui/x-data-grid";
-import {
-  WineMirrorsGlassAddon,
-  WineMirrorsGlassType,
-} from "@/utilities/DataGridColumns";
-import CustomInputField from "@/components/ui-components/CustomInput";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
-import {
-  useCreateDocument,
-  useDeleteDocument,
-  useEditDocument,
-  useFetchAllDocuments,
-} from "@/utilities/ApiHooks/common";
-import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
-import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
-import { inputLength, inputMaxValue } from "@/utilities/constants";
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 
 const WineGlassAddonComponent = () => {
   const dispatch = useDispatch();

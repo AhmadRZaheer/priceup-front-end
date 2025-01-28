@@ -1,12 +1,20 @@
-import { EstimateCategory, hardwareTypes } from "@/utilities/constants";
+import {
+  EstimateCategory,
+  hardwareTypes,
+} from '@/utilities/constants';
 import {
   generateContentForMirrorEdit,
   generateContentForShowerEdit,
   generateContentForWineCellarEdit,
-} from "@/utilities/generateEstimateCalculationContent";
-import { getHardwareSpecificFabrication as getShowerHardwareFabrication } from "@/utilities/hardwarefabrication";
-import { getHardwareSpecificFabrication as getWineCellarHardwareFabrication } from "@/utilities/WineCellarEstimate";
-import { createSlice } from "@reduxjs/toolkit";
+} from '@/utilities/generateEstimateCalculationContent';
+import {
+  getHardwareSpecificFabrication as getShowerHardwareFabrication,
+} from '@/utilities/hardwarefabrication';
+import {
+  getHardwareSpecificFabrication as getWineCellarHardwareFabrication,
+} from '@/utilities/WineCellarEstimate';
+import { createSlice } from '@reduxjs/toolkit';
+
 export const getEstimatesList = (state) => state.customerEstimation.estimates;
 
 const initialState = {
@@ -73,23 +81,23 @@ const customerEstimationSlice = createSlice({
             const noGlassAddon = hardwaresList.glassAddons?.find(
               (item) => item.slug === "no-treatment"
             );
-            state.estimates[estimateIndex].content.glassAddons = [noGlassAddon];
+            state.estimates[estimateIndex].content.glassAddons = [{item : noGlassAddon }];
           } else {
             const foundIndex = state.estimates[
               estimateIndex
-            ].content.glassAddons?.findIndex((row) => row.slug === item.slug);
+            ].content.glassAddons?.findIndex((row) => row.item.slug === item.slug);
             if (foundIndex !== -1) {
               state.estimates[estimateIndex].content.glassAddons.splice(
                 foundIndex,
                 1
               );
             } else {
-              state.estimates[estimateIndex].content.glassAddons.push(item);
+              state.estimates[estimateIndex].content.glassAddons.push({ item: item });
             }
             const indexOfNoTreatment = state.estimates[
               estimateIndex
             ].content.glassAddons?.findIndex(
-              (row) => row.slug === "no-treatment"
+              (row) => row.item.slug === "no-treatment"
             );
             if (indexOfNoTreatment !== -1) {
               state.estimates[estimateIndex].content.glassAddons.splice(
