@@ -1,12 +1,23 @@
-import { backendURL } from "@/utilities/common";
-import { Box, Card, Container, Typography } from "@mui/material";
-import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import Bulb from "@/Assets/CustomerLandingImages/blubImg.png";
-import { EstimateCategory } from "@/utilities/constants";
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+import React from 'react';
+
+import { Navigation } from 'swiper/modules';
+import {
+  Swiper,
+  SwiperSlide,
+} from 'swiper/react';
+
+import Bulb from '@/Assets/CustomerLandingImages/blubImg.png';
+import { backendURL } from '@/utilities/common';
+import { EstimateCategory } from '@/utilities/constants';
+import {
+  Box,
+  Card,
+  Container,
+  Typography,
+} from '@mui/material';
 
 const CustomSwiper = ({ data, category, colorData }) => {
   const detailDesc =
@@ -99,6 +110,7 @@ const CustomSwiper = ({ data, category, colorData }) => {
                     fontWeight: 500,
                     lineHeight: "54px",
                     textAlign: "center",
+                    color:'white'
                   }}
                 >
                   No Image Selected!

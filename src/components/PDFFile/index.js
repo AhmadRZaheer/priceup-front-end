@@ -1,18 +1,29 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
+
 import {
+  dimensionsSection,
+  fabricationSection,
+  pdfFields,
+  pricingSection,
+  summarySection,
+} from '@/utilities/pdfConfigs';
+import {
+  Document,
+  Image,
   Page,
+  StyleSheet,
   Text,
   View,
-  Document,
-  StyleSheet,
-  Image,
-} from "@react-pdf/renderer";
-import GCS_logo from "../../Assets/GCS-logo.png";
-import CustomImage from "../../Assets/customlayoutimage.png";
-import { backendURL, calculateDiscount } from "../../utilities/common";
-import { renderMeasurementSides } from "../../utilities/estimates";
-import { EstimateCategory, quoteState } from "../../utilities/constants";
-import { dimensionsSection, fabricationSection, pdfFields, pricingSection, summarySection } from "@/utilities/pdfConfigs";
+} from '@react-pdf/renderer';
+
+import CustomImage from '../../Assets/customlayoutimage.png';
+import GCS_logo from '../../Assets/GCS-logo.png';
+import {
+  backendURL,
+  calculateDiscount,
+} from '../../utilities/common';
+import { EstimateCategory } from '../../utilities/constants';
+
 // Create styles
 const styles = StyleSheet.create({
   page: {
@@ -241,7 +252,7 @@ const PDFFile = ({controls,data}) => {
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Gross {data?.quote?.pdfSettings?.profit ? 'Profit' : 'Total'}:</Text>
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Gross Total:</Text>
-          <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.total?.toFixed(2) || 0}</Text>
+          <Text style={{fontSize:'12px'}}>$ {calculateDiscount(data?.quote?.cost,data?.quote?.discount?.value,data?.quote?.discount?.unit)?.toFixed(2) || 0}</Text>
           </View>
           {data?.quote?.pdfSettings?.cost && 
            <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
@@ -350,7 +361,7 @@ const PDFFile = ({controls,data}) => {
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Glass Addons:</Text>
             <Text style={{fontSize:'12px'}}>
-            {data?.quote?.glassAddons?.map((item,index) => (`${item?.name}${commaFn(index, data?.quote?.glassAddons?.length)}`))}
+            {data?.quote?.glassAddons?.map((item,index) => (`${item?.item?.name}${commaFn(index, data?.quote?.glassAddons?.length)}`))}
             </Text>
           </View>
           ) : (

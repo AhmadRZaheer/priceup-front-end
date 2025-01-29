@@ -1,27 +1,20 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  Popover,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { useState } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
-import CustomImage from "@/Assets/customlayoutimage.svg";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
-  calculateTotal,
-  renderMeasurementSides,
-} from "@/utilities/mirrorEstimates";
-import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+
+import CustomImage from '@/Assets/customlayoutimage.svg';
+import GrayEyeIcon from '@/Assets/eye-gray-icon.svg';
+import CustomToggle from '@/components/ui-components/Toggle';
+import PDFPreviewDrawer from '@/pages/PDFPreview/PDFDrawer';
+import { getCustomerDetail } from '@/redux/estimateSlice';
+import {
+  getLocationMirrorSettings,
+  getLocationPdfSettings,
+} from '@/redux/locationSlice';
 import {
   getEstimateDiscountTotal,
   getEstimateDiscountUnit,
@@ -36,32 +29,36 @@ import {
   setEstimateDiscountValue,
   setModifiedProfitPercentage,
   setSelectedContent,
-} from "@/redux/mirrorsEstimateSlice";
+} from '@/redux/mirrorsEstimateSlice';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { getGlassTypeDetailsByThickness } from '@/utilities/common';
 import {
-  getLocationMirrorSettings,
-  getLocationPdfSettings,
-} from "@/redux/locationSlice";
-import CustomToggle from "@/components/ui-components/Toggle";
+  hardwareTypes,
+  quoteState,
+} from '@/utilities/constants';
+import { generateObjForMirrorPDFRuntime } from '@/utilities/estimates';
+import {
+  calculateTotal,
+  renderMeasurementSides,
+} from '@/utilities/mirrorEstimates';
 import {
   AttachMoneyOutlined,
-  ChangeCircleOutlined,
   KeyboardArrowDownOutlined,
   PercentOutlined,
   RestartAlt,
-} from "@mui/icons-material";
-import { useState } from "react";
-import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
-import { generateObjForMirrorPDFRuntime } from "@/utilities/estimates";
+} from '@mui/icons-material';
 import {
-  getCustomerDetail,
-  getEstimateCategory,
-  getEstimateState,
-  getProjectId,
-} from "@/redux/estimateSlice";
-import { hardwareTypes, quoteState } from "@/utilities/constants";
-import { useSearchParams } from "react-router-dom";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getGlassTypeDetailsByThickness } from "@/utilities/common";
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Popover,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 
 const Summary = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -467,7 +464,7 @@ const Summary = ({ setStep }) => {
                           </Typography>
                           {selectedContent?.glassAddons?.map((item, index) => (
                             <Typography className="text-xs-ragular">
-                              {item?.name}
+                              {item?.item?.name}
                               {selectedContent?.glassAddons?.length - 1 !==
                               index
                                 ? ", "

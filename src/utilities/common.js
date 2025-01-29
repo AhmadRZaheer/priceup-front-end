@@ -78,68 +78,131 @@ export const convertDate = (isoDate) => {
 
 export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   // hardware
-  const handlePrice = selectedContent?.handles?.item
-    ? (selectedContent?.handles?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
-      )?.cost || 0) * selectedContent.handles.count
-    : 0;
-  const hingesPrice = selectedContent?.hinges?.item
-    ? (selectedContent?.hinges?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
-      )?.cost || 0) * selectedContent.hinges.count
-    : 0;
-  const doorLockPrice = selectedContent?.doorLock?.item
-    ? (selectedContent?.doorLock?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
-      )?.cost || 0) * selectedContent.doorLock.count
-    : 0;
-  const mountingChannel = selectedContent?.mountingChannel.item
-    ? selectedContent?.mountingChannel?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
-      )?.cost || 0
-    : 0;
+  // const handlePrice = selectedContent?.handles?.item
+  //   ? (selectedContent?.handles?.item?.finishes?.find(
+  //       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+  //     )?.cost || 0) * selectedContent.handles.count
+  //   : 0;
+  let handlePrice = 0;
+  if(selectedContent?.handles?.item){
+    if(selectedContent?.sufferCostDifference && selectedContent?.handles?.cost > 0 ){
+      handlePrice = selectedContent?.handles?.cost
+    }else{
+      handlePrice = (selectedContent?.handles?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        )?.cost || 0);
+    }
+    handlePrice = (handlePrice * selectedContent.handles.count) ?? 0;
+  } 
+
+    let hingesPrice = 0;
+    if(selectedContent?.hinges?.item){
+      if(selectedContent?.sufferCostDifference && selectedContent?.hinges?.cost > 0 ){
+        hingesPrice = selectedContent?.hinges?.cost
+      }else{
+        hingesPrice = (selectedContent?.hinges?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        )?.cost || 0);
+      }
+      hingesPrice = (hingesPrice * selectedContent.hinges.count) ?? 0;
+    }
+
+    let doorLockPrice = 0;
+    if(selectedContent?.doorLock?.item){
+      if(selectedContent?.sufferCostDifference && selectedContent?.doorLock?.cost > 0 ){
+        doorLockPrice = selectedContent?.doorLock?.cost
+      }else{
+        doorLockPrice = (selectedContent?.doorLock?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        )?.cost || 0);
+      }
+      doorLockPrice = (doorLockPrice * selectedContent.doorLock.count) ?? 0;
+    }
+
+    let mountingChannel = 0;
+    if(selectedContent?.mountingChannel?.item){
+      if(selectedContent?.sufferCostDifference && selectedContent?.mountingChannel?.cost > 0 ){
+        mountingChannel = selectedContent?.mountingChannel?.cost
+      }else{
+        mountingChannel = (selectedContent?.mountingChannel?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        )?.cost || 0);
+      }
+      mountingChannel = (mountingChannel * selectedContent.mountingChannel.count) ?? 0;
+    }
 
   let mountingWallClamps = 0;
   selectedContent?.mountingClamps?.wallClamp?.forEach((row) => {
-    const price = row?.item?.finishes?.find(
-      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
-    )?.cost;
+    let price = 0;
+    if(selectedContent?.sufferCostDifference && row.cost > 0){
+      price = row.cost
+    }else{
+     price = row?.item?.finishes?.find(
+        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+      )?.cost;
+    }
     mountingWallClamps += price ? price * row.count : 0;
   });
+
   let mountingsleeveOver = 0;
   selectedContent?.mountingClamps?.sleeveOver?.forEach((row) => {
-    const price = row?.item?.finishes?.find(
-      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
-    )?.cost;
+    let price = 0;
+    if(selectedContent?.sufferCostDifference && row.cost > 0){
+      price = row.cost
+    }else{
+      price = row?.item?.finishes?.find(
+        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+      )?.cost;
+    }
     mountingsleeveOver += price ? price * row.count : 0;
   });
   let mountingglassToGlass = 0;
   selectedContent?.mountingClamps?.glassToGlass?.forEach((row) => {
-    const price = row?.item?.finishes?.find(
+    let price = 0;
+    if(selectedContent?.sufferCostDifference && row.cost > 0){
+      price = row.cost
+    }else{
+     price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
+  }
     mountingglassToGlass += price ? price * row.count : 0;
   });
 
   let cornerWallClamps = 0;
   selectedContent?.cornerClamps?.cornerWallClamp?.forEach((row) => {
-    const price = row?.item?.finishes?.find(
+    let price = 0;
+    if(selectedContent?.sufferCostDifference && row.cost > 0){
+      price = row.cost
+    }else{
+     price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
+  }
     cornerWallClamps += price ? price * row.count : 0;
   });
   let cornerSleeveOver = 0;
   selectedContent?.cornerClamps?.cornerSleeveOver?.forEach((row) => {
-    const price = row?.item?.finishes?.find(
+    let price = 0;
+    if(selectedContent?.sufferCostDifference && row.cost > 0){
+      price = row.cost
+    }else{
+     price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
+  }
     cornerSleeveOver += price ? price * row.count : 0;
   });
   let cornerGlassToGlass = 0;
   selectedContent?.cornerClamps?.cornerGlassToGlass?.forEach((row) => {
-    const price = row?.item?.finishes?.find(
+    let price = 0;
+    if(selectedContent?.sufferCostDifference && row.cost > 0){
+      price = row.cost
+    }else{
+     price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
+  }
     cornerGlassToGlass += price ? price * row.count : 0;
   });
   // const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp?.item
@@ -158,16 +221,29 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //       (item) => selectedContent.hardwareFinishes._id === item.finish_id
   //     )?.cost || 0) * selectedContent?.mounting?.clamps?.glassToGlass?.count
   //   : 0;
-  const slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.item
-    ? (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
-        (item) => selectedContent?.hardwareFinishes?._id === item.finish_id
-      )?.cost || 0) * selectedContent.slidingDoorSystem.count
-    : 0;
-  const headerPrice = selectedContent?.header?.item
-    ? (selectedContent?.header?.item?.finishes?.find(
-        (item) => selectedContent?.hardwareFinishes?._id === item.finish_id
-      )?.cost || 0) * selectedContent.header.count
-    : 0;
+    let slidingDoorSystemPrice = 0;
+    if(selectedContent?.slidingDoorSystem?.item){
+      if(selectedContent?.sufferCostDifference && selectedContent?.slidingDoorSystem?.cost > 0 ){
+        slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.cost
+      }else{
+        slidingDoorSystemPrice = (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        )?.cost || 0);
+      }
+      slidingDoorSystemPrice = (slidingDoorSystemPrice * selectedContent.slidingDoorSystem.count) ?? 0;
+    }
+
+    let headerPrice = 0;
+    if(selectedContent?.header?.item){
+      if(selectedContent?.sufferCostDifference && selectedContent?.header?.cost > 0 ){
+        headerPrice = selectedContent?.header?.cost
+      }else{
+        headerPrice = (selectedContent?.header?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        )?.cost || 0);
+      }
+      headerPrice = (headerPrice * selectedContent.header.count) ?? 0;
+    }
 
   let mountingPrice =
     selectedContent?.mountingState === "channel"
@@ -236,10 +312,14 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //   )?.cost || 0;
   let hardwareAddons = 0;
   selectedContent?.hardwareAddons?.forEach((row) => {
-    const price =
-      row?.item?.finishes?.find(
+    let price = 0 ;
+    if(selectedContent?.sufferCostDifference && row?.cost > 0){
+      price = row?.cost;
+    }else{
+      price = row?.item?.finishes?.find(
         (finish) => finish?.finish_id === selectedContent?.hardwareFinishes?._id
       )?.cost || 0;
+    }  
     hardwareAddons = hardwareAddons + price * row?.count;
     //  * priceBySqft;  // hardware addons are not calculated by price by sqft
   });
@@ -249,18 +329,27 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //   otherAddons;
 
   //glass
-  const glassPrice =
-    (selectedContent?.glassType?.item?.options?.find(
+  let glassPrice = 0 ;
+  if(selectedContent?.sufferCostDifference && selectedContent?.glassType?.cost > 0){
+    glassPrice = selectedContent?.glassType?.cost
+  }else{
+    glassPrice = (selectedContent?.glassType?.item?.options?.find(
       (glass) => glass.thickness === selectedContent?.glassType?.thickness
-    )?.cost || 0) * priceBySqft;
+    )?.cost || 0)
+  }
+  glassPrice = glassPrice * priceBySqft;
 
   //glassAddons
   let glassAddonsPrice = 0;
   selectedContent?.glassAddons?.forEach((item) => {
     let price = 0;
-    if (item?.options?.length) {
-      price = item?.options[0]?.cost || 0;
-    }
+    if(selectedContent?.sufferCostDifference && item?.cost > 0){
+      price = item?.cost 
+    }else{
+      if (item?.item?.options?.length) {
+        price = item?.item?.options[0]?.cost || 0;
+      }
+    }  
     glassAddonsPrice = glassAddonsPrice + price * priceBySqft;
   });
   // const glassTreatmentPrice =

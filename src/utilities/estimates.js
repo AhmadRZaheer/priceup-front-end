@@ -1,11 +1,25 @@
 import {
-  getEstimateCategory,
-  getEstimateState,
-  getProjectId,
+  addSelectedItem,
+  resetNotifications,
+  resetState,
+  setDoorWeight,
+  setDoorWidth,
+  setisCustomizedDoorWidth,
+  setPanelWeight,
+  setQuoteState,
+  setReturnWeight,
+  setShowerProjectId,
+  updateMeasurements,
+} from '@/redux/estimateCalculations';
+import {
   setEstimateCategory,
   setEstimateState,
-  setProjectId,
-} from "@/redux/estimateSlice";
+} from '@/redux/estimateSlice';
+import {
+  renderMeasurementSides as renderMeasurementSidesOfMirror,
+} from '@/utilities/mirrorEstimates';
+
+import { calculateAreaAndPerimeter } from './common';
 import {
   EstimateCategory,
   layoutVariants,
@@ -14,27 +28,8 @@ import {
   quoteState,
   thicknessTypes,
   userRoles,
-} from "./constants";
-import {
-  addSelectedItem,
-  getContent,
-  getDoorWidth,
-  getLayoutPerimeter,
-  getisCustomizedDoorWidth,
-  resetNotifications,
-  resetState,
-  setDoorWeight,
-  setDoorWidth,
-  setPanelWeight,
-  setQuoteState,
-  setReturnWeight,
-  setShowerProjectId,
-  setisCustomizedDoorWidth,
-  updateMeasurements,
-} from "@/redux/estimateCalculations";
-import { calculateAreaAndPerimeter } from "./common";
-import CustomImage from "../Assets/customlayoutimage.svg";
-import { renderMeasurementSides as renderMeasurementSidesOfMirror } from "@/utilities/mirrorEstimates";
+} from './constants';
+
 export const generateNotificationsForCurrentItem = (
   estimateState,
   calculatedGlassThickness = ""
@@ -455,10 +450,11 @@ export const generateObjectForPDFPreview = (
 
   let glassAddons = [];
   glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-    const record = listData?.glassAddons?.find((addon) => addon._id === item);
-    return record;
+    const record = listData?.glassAddons?.find((addon) => addon._id === item?.type);
+    return {
+      item : record
+    };
   });
-
   let wallClampArray,
     sleeveOverArray,
     glassToGlassArray,
@@ -613,7 +609,7 @@ export const generateObjectForPDFPreview = (
       glassToGlassArray?.length
         ? "clamps"
         : "channel",
-    glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
+    glassAddons: glassAddons?.length ? [...glassAddons] : [{item : noGlassAddon}],
     hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
     oneInchHoles: estimateData?.config?.oneInchHoles,
     hingeCut: estimateData?.config?.hingeCut,
@@ -1149,9 +1145,9 @@ const generateInvoiceItemForShowers = async (
   }
   // glassAddons
   let glassAddonsNameArray = [];
-  estimate.config?.glassAddons?.forEach((glassAddonId) => {
+  estimate.config?.glassAddons?.forEach((glassAddon) => {
     const item = hardwaresList.glassAddons.find(
-      (_item) => _item._id === glassAddonId
+      (_item) => _item._id === glassAddon?.type
     );
     if (item) {
       glassAddonsNameArray.push({type:item._id,name:item.name});

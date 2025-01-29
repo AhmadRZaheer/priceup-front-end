@@ -1,35 +1,25 @@
 import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  Popover,
-  Stack,
-  TextField,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+  useMemo,
+  useState,
+} from 'react';
+
 import {
-  hardwareTypes,
-  layoutVariants,
-  quoteState as quotestate,
-} from "@/utilities/constants";
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+
+import GrayEyeIcon from '@/Assets/eye-gray-icon.svg';
+import CustomToggle from '@/components/ui-components/Toggle';
+import PDFPreviewDrawer from '@/pages/PDFPreview/PDFDrawer';
 import {
-  generateObjectForPDFRuntime,
-  renderMeasurementSides,
-} from "@/utilities/estimates";
-import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
+  getCustomerDetail,
+  getEstimateCategory,
+} from '@/redux/estimateSlice';
 import {
-  AttachMoneyOutlined,
-  ChangeCircleOutlined,
-  KeyboardArrowDownOutlined,
-  PercentOutlined,
-  RestartAlt,
-} from "@mui/icons-material";
-import { useMemo, useState } from "react";
-import CustomToggle from "@/components/ui-components/Toggle";
+  getLocationPdfSettings,
+  getLocationWineCellarSettings,
+} from '@/redux/locationSlice';
 import {
   getAdditionalFieldsTotal,
   getContent,
@@ -42,7 +32,6 @@ import {
   getEstimateDiscountValue,
   getFabricationTotal,
   getGlassAddonsTotal,
-  // getWineGlassAddonsTotal,
   getGlassTotal,
   getHardwareAddonsTotal,
   getHardwareTotal,
@@ -51,7 +40,6 @@ import {
   getMeasurements,
   getPanelWeight,
   getProfit,
-  // getWineQuoteState,
   getReturnWeight,
   getTotal,
   getUserProfitPercentage,
@@ -60,25 +48,39 @@ import {
   setEstimateDiscountUnit,
   setEstimateDiscountValue,
   setUserProfitPercentage,
-} from "@/redux/wineCellarEstimateSlice";
-import {
-  getCustomerDetail,
-  getEstimateCategory,
-  getEstimateState,
-  getProjectId,
-} from "@/redux/estimateSlice";
-import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
-import {
-  getLocationPdfSettings,
-  getLocationShowerSettings,
-  getLocationWineCellarSettings,
-} from "@/redux/locationSlice";
+} from '@/redux/wineCellarEstimateSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
 import {
   calculateTotal,
   getGlassTypeDetailsByThickness,
-} from "@/utilities/common";
-import { useSearchParams } from "react-router-dom";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+} from '@/utilities/common';
+import {
+  hardwareTypes,
+  layoutVariants,
+  quoteState as quotestate,
+} from '@/utilities/constants';
+import {
+  generateObjectForPDFRuntime,
+  renderMeasurementSides,
+} from '@/utilities/estimates';
+import {
+  AttachMoneyOutlined,
+  KeyboardArrowDownOutlined,
+  PercentOutlined,
+  RestartAlt,
+} from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Popover,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 
 const Summary = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -725,7 +727,7 @@ const Summary = ({ setStep }) => {
                             Glass Addons:
                           </Typography>
                           {selectedContent?.glassAddons?.map((item) => (
-                            <Typography className="text-xs-ragular">{`${item?.name} `}</Typography>
+                            <Typography className="text-xs-ragular">{`${item?.item?.name} `}</Typography>
                           ))}
                         </Box>
                       ) : (

@@ -1,26 +1,35 @@
-import { useEffect, useState } from "react";
 import {
-  AddCircleOutline,
-  ChevronRight,
-  RemoveCircleOutline,
-} from "@mui/icons-material";
+  useEffect,
+  useState,
+} from 'react';
+
 import {
-  Box,
-  CircularProgress,
-  Typography,
-  MenuItem as MuiMenuItem,
-  Select,
-} from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+
+import { showSnackbar } from '@/redux/snackBarSlice';
 import {
   getContent,
   setContent,
   setCounters,
   setThickness,
-} from "@/redux/wineCellarEstimateSlice";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import MenuItem from "./menuItem";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+} from '@/redux/wineCellarEstimateSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import {
+  AddCircleOutline,
+  ChevronRight,
+  RemoveCircleOutline,
+} from '@mui/icons-material';
+import {
+  Box,
+  CircularProgress,
+  MenuItem as MuiMenuItem,
+  Select,
+  Typography,
+} from '@mui/material';
+
+import MenuItem from './menuItem';
 
 const MenuList = ({
   menuOptions,

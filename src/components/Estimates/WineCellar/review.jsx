@@ -1,4 +1,64 @@
-import React, { useMemo } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+
+import HardwareMissingAlert from '@/components/Modal/hardwareMissingAlert';
+import { SingleField } from '@/components/ui-components/SingleFieldComponent';
+import { getLocationWineCellarSettings } from '@/redux/locationSlice';
+import { showSnackbar } from '@/redux/snackBarSlice';
+import {
+  getAdditionalFields,
+  getContent,
+  getDoorQuantity,
+  getDoorWidth,
+  getisCustomDoorWidth,
+  getLayoutArea,
+  getLayoutPerimeter,
+  getMeasurements,
+  getQuoteId,
+  getTotal,
+  selectedItem,
+  setAdditionalFieldsPrice,
+  setContent,
+  setCost,
+  setDoorLaborPrice,
+  setEstimateDiscountTotal,
+  setFabricationPrice,
+  setGlassAddonsPrice,
+  setGlassPrice,
+  setHardwareAddonsPrice,
+  setHardwarePrice,
+  setInputContent,
+  setLaborPrice,
+  setProfit,
+  setTotal,
+} from '@/redux/wineCellarEstimateSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import { useEditEstimates } from '@/utilities/ApiHooks/estimate';
+// import ChannelTypeDesktop from "./channelorClamp";
+import { calculateTotal } from '@/utilities/common';
+import {
+  EstimateCategory,
+  inputLength,
+  inputMaxValue,
+  quoteState,
+} from '@/utilities/constants';
+import { getEstimateErrorStatus } from '@/utilities/estimatorHelper';
+import {
+  generateEstimatePayloadForWineCellar,
+} from '@/utilities/generateEstimateCalculationContent';
+import { Add } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -7,63 +67,11 @@ import {
   TextField,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import MenuList from "./menuList";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
-// import ChannelTypeDesktop from "./channelorClamp";
-import { calculateTotal } from "@/utilities/common";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  EstimateCategory,
-  inputLength,
-  inputMaxValue,
-  layoutVariants,
-  quoteState,
-} from "@/utilities/constants";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import { SingleField } from "@/components/ui-components/SingleFieldComponent";
-import { getEstimateErrorStatus } from "@/utilities/estimatorHelper";
-import { getLocationWineCellarSettings } from "@/redux/locationSlice";
-import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
-import EnterLabelModal from "../enterLabelModal";
-import { Add } from "@mui/icons-material";
-import {
-  getisCustomDoorWidth,
-  getAdditionalFields,
-  getContent,
-  getDoorWidth,
-  getLayoutArea,
-  getLayoutPerimeter,
-  // getWineListData,
-  getMeasurements,
-  // getWineProjectId,
-  getQuoteId,
-  // getWineQuoteState,
-  getTotal,
-  selectedItem,
-  setAdditionalFieldsPrice,
-  setContent,
-  setCost,
-  setFabricationPrice,
-  setGlassPrice,
-  setHardwarePrice,
-  setInputContent,
-  setLaborPrice,
-  setProfit,
-  setTotal,
-  getDoorQuantity,
-  setDoorLaborPrice,
-  setGlassAddonsPrice,
-  setHardwareAddonsPrice,
-  setEstimateDiscountTotal,
-} from "@/redux/wineCellarEstimateSlice";
-import ChannelOrClamp from "./channelorClamp";
-import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { generateEstimatePayloadForWineCellar } from "@/utilities/generateEstimateCalculationContent";
+} from '@mui/material';
 
+import EnterLabelModal from '../enterLabelModal';
+import ChannelOrClamp from './channelorClamp';
+import MenuList from './menuList';
 
 const Review = ({ setStep }) => {
   const navigate = useNavigate();
@@ -129,6 +137,7 @@ const Review = ({ setStep }) => {
     mutateEdit({
       projectId: projectId,
       cost: Number(estimatesTotal),
+      sufferCostDifference:selectedContent.sufferCostDifference,
       customerData: {},
       estimateData: estimateConfig,
       id: quoteId,
@@ -1405,6 +1414,7 @@ const Review = ({ setStep }) => {
         estimatesTotal={estimatesTotal}
         projectId={projectId}
         selectedLayout={selectedData}
+        sufferCostDifference = {selectedContent.sufferCostDifference}
       />
     </>
   );

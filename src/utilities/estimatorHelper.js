@@ -1,5 +1,12 @@
-import { convertArrayKeysToObject } from "./common";
-import { defaultNotificationState, hardwareTypes, notificationsVariant, panelOverWeightAmount, standardDoorWidth, thicknessTypes } from "./constants";
+import { convertArrayKeysToObject } from './common';
+import {
+  defaultNotificationState,
+  hardwareTypes,
+  notificationsVariant,
+  panelOverWeightAmount,
+  standardDoorWidth,
+  thicknessTypes,
+} from './constants';
 
 export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type) => {
  switch(type){
@@ -87,7 +94,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
    if (selectedContent.glassAddons?.length) {
     let noSelectedDisableFound = true;
     selectedContent.glassAddons.forEach(element => {
-      if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
+      if(!getActiveStatus(element?.item,null,hardwareTypes.GLASSADDONS)){
         noSelectedDisableFound = false;
         return;
       }
@@ -280,8 +287,8 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
     if(selectedContent.glassAddons?.length){
       let selectedDisableNames = '';
     selectedContent.glassAddons.forEach(element => {
-      if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
-        selectedDisableNames += `${element.name}, `;
+      if(!getActiveStatus(element?.item,null,hardwareTypes.GLASSADDONS)){
+        selectedDisableNames += `${element?.item?.name}, `;
       }
     });
     if(selectedDisableNames.length){
@@ -523,10 +530,12 @@ export const generateNotificationsForCurrentEstimate = (
           let itemFound = reduxListData?.mountingChannel?.find(
             (item) => item.slug === "u-channel-1-2"
           );
+          const mountingCost = getHardwareCostBySelectedFinish(itemFound,selectedContent?.hardwareFinish?._id)
           if(itemFound){
             selectedContent.mountingChannel = {
                item: itemFound,
-               count: 1
+               count: 1,
+               cost : mountingCost
             };
           }
       }
@@ -535,10 +544,12 @@ export const generateNotificationsForCurrentEstimate = (
         let itemFound = reduxListData?.mountingChannel?.find(
           (item) => item.slug === "u-channel-3-8"
         );
+        const mountingCost = getHardwareCostBySelectedFinish(itemFound,selectedContent?.hardwareFinish?._id)
         if(itemFound){
           selectedContent.mountingChannel = {
              item: itemFound,
-             count: 1
+             count: 1,
+             cost : mountingCost
           };
         }
       }
@@ -560,11 +571,11 @@ export const generateNotificationsForCurrentEstimate = (
     if(selectedContent.glassAddons?.length){
       let glassAddonsNotAvailable = [];
       selectedContent.glassAddons.forEach(element => {
-        if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
+        if(!getActiveStatus(element?.item,null,hardwareTypes.GLASSADDONS)){
           glassAddonsNotAvailable.push({
           status: true,
           variant: notificationsVariant.WARNING,
-          message: `Glass Addon "${element.name}" is not available.`,
+          message: `Glass Addon "${element?.item?.name}" is not available.`,
           });
         }
       });
@@ -739,6 +750,7 @@ if(reduxSelectedItem?.settings?.glassType?.thickness === thicknessTypes.ONEBYTWO
       item._id === reduxSelectedItem?.settings?.heavyDutyOption?.heavyDutyType
   );
   if (hinge) {
+    let hingesCost = getHardwareCostBySelectedFinish(hinge,selectedContent?.hardwareFinish?._id);
     // set Notification
     const hingesSwitch = {
       status: false,
@@ -749,6 +761,7 @@ if(reduxSelectedItem?.settings?.glassType?.thickness === thicknessTypes.ONEBYTWO
     const hinges = {
       ...selectedContent.hinges,
       item: hinge,
+      cost : hingesCost ?? 0
     };
     return { hingesSwitch, hinges };
 }
@@ -766,6 +779,7 @@ else{
         item._id === reduxSelectedItem?.settings?.heavyDutyOption?.heavyDutyType
     );
     if (hinge) {
+      let hingesCost = getHardwareCostBySelectedFinish(hinge,selectedContent?.hardwareFinish?._id);
       // set Notification
       const hingesSwitch = {
         status: true,
@@ -776,6 +790,7 @@ else{
       const hinges = {
         ...selectedContent.hinges,
         item: hinge,
+        cost : hingesCost ?? 0
       };
       return { hingesSwitch, hinges };
     } else {
@@ -788,6 +803,7 @@ else{
           item._id === reduxSelectedItem?.settings?.hinges?.hingesType
       );
       if(hinge){
+        let hingesCost = getHardwareCostBySelectedFinish(hinge,selectedContent?.hardwareFinish?._id);
         // set Notification
       const hingesSwitch = {
         status: true,
@@ -798,6 +814,7 @@ else{
       const hinges = {
         ...selectedContent.hinges,
         item: hinge,
+        cost : hingesCost ?? 0
       };
       return { hingesSwitch, hinges };
       }
@@ -823,10 +840,12 @@ const getGlassThicknessShiftNotification = (
       variant: notificationsVariant.WARNING,
       message: `Glass thickness switched from ${thicknessTypes.THREEBYEIGHT} to ${thicknessTypes.ONEBYTWO}`,
     };
+     let glassCost = getGlassCostBySelectedthickness(selectedContent.glassType,calculatedGlassThickness); 
     // set glass thickness
     const glassType = {
       ...selectedContent.glassType,
       thickness: calculatedGlassThickness,
+      cost : glassCost ?? 0
     };
     return { glassThicknessSwitch, glassType };
   } else {
@@ -837,13 +856,22 @@ const getGlassThicknessShiftNotification = (
       variant: notificationsVariant.INFO,
       message: `Glass thickness switched from ${thicknessTypes.ONEBYTWO} to ${thicknessTypes.THREEBYEIGHT}`,
     };
+    let glassCost = getGlassCostBySelectedthickness(selectedContent.glassType,thicknessTypes.THREEBYEIGHT); 
     // set glass thickness
     const glassType = {
       ...selectedContent.glassType,
       thickness: thicknessTypes.THREEBYEIGHT,
+      cost : glassCost ?? 0
     };
     return { glassThicknessSwitch, glassType };
     }
     return null;
   }
 };
+
+const getHardwareCostBySelectedFinish = (hardware,finishId)=>{
+  return  hardware?.finishes?.find((item) => item?.finish_id === finishId)?.cost;
+}
+const getGlassCostBySelectedthickness = (hardware,thickness)=>{
+  return   hardware?.item?.options?.find((option) => option?.thickness === thickness)?.cost;
+}

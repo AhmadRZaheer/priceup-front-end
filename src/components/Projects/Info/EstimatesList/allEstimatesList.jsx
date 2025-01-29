@@ -1,44 +1,66 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { EstimatesColumns } from "@/utilities/DataGridColumns";
-import { Box, Button, Typography, useMediaQuery } from "@mui/material";
-import { makeStyles } from "@material-ui/core";
-import Pagination from "@/components/Pagination";
-import DeleteModal from "@/components/Modal/deleteModal";
-import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
-import { EstimateCategory, quoteState } from "@/utilities/constants";
 import {
-  backendURL,
-  calculateTotal,
-  calculateAreaAndPerimeter,
-} from "@/utilities/common";
-import { Edit } from "@mui/icons-material";
-import { getListData } from "@/redux/estimateCalculations";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import DefaultImage from "@/components/ui-components/defaultImage";
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { debounce } from 'lodash';
 import {
-  generateObjectForPDFPreview,
-  renderMeasurementSides,
-  setStateForShowerEstimate,
-} from "@/utilities/estimates";
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import DeleteModal from '@/components/Modal/deleteModal';
+import Pagination from '@/components/Pagination';
+import DefaultImage from '@/components/ui-components/defaultImage';
+import { getListData } from '@/redux/estimateCalculations';
 import {
   getLocationMirrorSettings,
   getLocationPdfSettings,
   getLocationShowerSettings,
   getLocationWineCellarSettings,
-} from "@/redux/locationSlice";
-import { debounce } from "lodash";
-import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+} from '@/redux/locationSlice';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  calculateTotal,
+} from '@/utilities/common';
+import {
+  EstimateCategory,
+  quoteState,
+} from '@/utilities/constants';
+import { EstimatesColumns } from '@/utilities/DataGridColumns';
+import {
+  generateObjectForPDFPreview,
+  renderMeasurementSides,
+  setStateForShowerEstimate,
+} from '@/utilities/estimates';
 import {
   calculateTotal as calculateMirrorTotal,
   generateObjectForPDFPreview as generateObjectForMirrorPDFPreview,
   renderMeasurementSides as renderMirrorMeasurementSides,
   setStateForMirrorEstimate,
-} from "@/utilities/mirrorEstimates";
-import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+} from '@/utilities/mirrorEstimates';
+import {
+  GenrateColumns,
+  GenrateRows,
+} from '@/utilities/skeltonLoading';
+import { setStateForWineCellarEstimate } from '@/utilities/WineCellarEstimate';
+import { makeStyles } from '@material-ui/core';
+import { Edit } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
 const routePrefix = `${backendURL}/estimates`;

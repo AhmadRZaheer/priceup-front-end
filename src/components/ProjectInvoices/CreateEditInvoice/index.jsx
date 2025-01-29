@@ -225,7 +225,6 @@ const ProjectInvoiceComponent = ({
       console.log(error);
     }
   };
-console.log(locationPresentationSettings,'locationPresentationSettingslocationPresentationSettings')
   useEffect(() => {
     if (customerID && projectID) {
       const customer = customerList?.find((data) => data?._id === customerID);

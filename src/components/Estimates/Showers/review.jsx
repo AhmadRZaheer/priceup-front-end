@@ -1,4 +1,64 @@
-import React, { useMemo } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { useSnackbar } from 'notistack';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+
+import HardwareMissingAlert from '@/components/Modal/hardwareMissingAlert';
+import { SingleField } from '@/components/ui-components/SingleFieldComponent';
+import {
+  getAdditionalFields,
+  getContent,
+  getDoorWidth,
+  getisCustomizedDoorWidth,
+  getLayoutArea,
+  getLayoutPerimeter,
+  getListData,
+  getMeasurementSide,
+  getNotifications,
+  getQuoteId,
+  getTotal,
+  selectedItem,
+  setAdditionalFieldsPrice,
+  setContent,
+  setCost,
+  setEstimateDiscountTotal,
+  setFabricationPrice,
+  setGlassAddonsPrice,
+  setGlassPrice,
+  setHardwareAddonsPrice,
+  setHardwarePrice,
+  setInputContent,
+  setLaborPrice,
+  setProfit,
+  setTotal,
+} from '@/redux/estimateCalculations';
+import { getLocationShowerSettings } from '@/redux/locationSlice';
+import { showSnackbar } from '@/redux/snackBarSlice';
+import { useEditEstimates } from '@/utilities/ApiHooks/estimate';
+import { calculateTotal } from '@/utilities/common';
+import {
+  EstimateCategory,
+  inputLength,
+  inputMaxValue,
+  layoutVariants,
+  quoteState,
+} from '@/utilities/constants';
+import { getEstimateErrorStatus } from '@/utilities/estimatorHelper';
+import {
+  generateEstimatePayloadForShower,
+} from '@/utilities/generateEstimateCalculationContent';
+import { Add } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -7,65 +67,11 @@ import {
   TextField,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import MenuList from "./menuList";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getContent,
-  getLayoutArea,
-  getQuoteState,
-  setInputContent,
-  setNavigationDesktop,
-  setTotal,
-  getTotal,
-  getMeasurementSide,
-  getLayoutPerimeter,
-  getQuoteId,
-  setHardwarePrice,
-  setGlassPrice,
-  setGlassAddonsPrice,
-  setFabricationPrice,
-  setLaborPrice,
-  selectedItem,
-  setCost,
-  setProfit,
-  getListData,
-  getNotifications,
-  setHardwareAddonsPrice,
-  resetNotifications,
-  setContent,
-  getAdditionalFields,
-  getDoorWidth,
-  getisCustomizedDoorWidth,
-  setAdditionalFieldsPrice,
-  getProjectId,
-  setEstimateDiscountTotal,
-} from "@/redux/estimateCalculations";
-import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
-import Summary from "./summary_dep";
-import ChannelTypeDesktop from "./channelorClamp";
-import { calculateTotal } from "@/utilities/common";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import {
-  EstimateCategory,
-  inputLength,
-  inputMaxValue,
-  layoutVariants,
-  quoteState,
-} from "@/utilities/constants";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import { useSnackbar } from "notistack";
-import { SingleField } from "@/components/ui-components/SingleFieldComponent";
-import { getEstimateErrorStatus } from "@/utilities/estimatorHelper";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
-import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
-import { CustomerSelectModal } from "../CustomerSelectModal";
-import EnterLabelModal from "../enterLabelModal";
-import CustomInputField from "@/components/ui-components/CustomInput";
-import { Add } from "@mui/icons-material";
-import { generateEstimatePayloadForShower } from "@/utilities/generateEstimateCalculationContent";
+} from '@mui/material';
 
+import EnterLabelModal from '../enterLabelModal';
+import ChannelTypeDesktop from './channelorClamp';
+import MenuList from './menuList';
 
 export const ShowerReview = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -137,6 +143,7 @@ export const ShowerReview = ({ setStep }) => {
     mutateEdit({
       projectId: projectId,
       cost: Number(estimatesTotal),
+      sufferCostDifference:selectedContent.sufferCostDifference,
       customerData: {},
       estimateData: estimateConfig,
       id: quoteId,
@@ -1476,6 +1483,7 @@ export const ShowerReview = ({ setStep }) => {
         estimatesTotal={estimatesTotal}
         projectId={projectId}
         selectedLayout={selectedData}
+        sufferCostDifference={selectedContent.sufferCostDifference}
       />
     </>
   );

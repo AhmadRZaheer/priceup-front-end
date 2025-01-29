@@ -1,4 +1,51 @@
-import React, { useMemo } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+
+import HardwareMissingAlert from '@/components/Modal/hardwareMissingAlert';
+import { SingleField } from '@/components/ui-components/SingleFieldComponent';
+import { getLocationMirrorSettings } from '@/redux/locationSlice';
+import {
+  getAdditionalFields,
+  getEstimateId,
+  getEstimateMeasurements,
+  getNotifications,
+  getPricing,
+  getSelectedContent,
+  getSqftArea,
+  setEstimateDiscountTotal,
+  setInputContent,
+  setPricing,
+  setSelectedContent,
+} from '@/redux/mirrorsEstimateSlice';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { showSnackbar } from '@/redux/snackBarSlice';
+import { useEditEstimates } from '@/utilities/ApiHooks/estimate';
+import {
+  EstimateCategory,
+  inputLength,
+  inputMaxValue,
+  mirrorHardwareTypes,
+  quoteState,
+} from '@/utilities/constants';
+import {
+  generateEstimatePayloadForMirror,
+} from '@/utilities/generateEstimateCalculationContent';
+import {
+  calculateTotal,
+  getEstimateErrorStatus,
+} from '@/utilities/mirrorEstimates';
+import { Add } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -7,50 +54,10 @@ import {
   TextField,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import MenuList from "./menuList";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
-import Summary from "./summary";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import {
-  EstimateCategory,
-  inputLength,
-  inputMaxValue,
-  mirrorHardwareTypes,
-  quoteState,
-} from "@/utilities/constants";
-import { getLocationMirrorSettings } from "@/redux/locationSlice";
-import { getEstimateState } from "@/redux/estimateSlice";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import {
-  getAdditionalFields,
-  getEstimateId,
-  getEstimateMeasurements,
-  getNotifications,
-  getPricing,
-  getProjectId,
-  getSelectedContent,
-  getSqftArea,
-  resetNotifications,
-  setEstimateDiscountTotal,
-  setInputContent,
-  setPricing,
-  setSelectedContent,
-  setToggles,
-} from "@/redux/mirrorsEstimateSlice";
-import {
-  calculateTotal,
-  getEstimateErrorStatus,
-} from "@/utilities/mirrorEstimates";
-import { showSnackbar } from "@/redux/snackBarSlice";
-import { SingleField } from "@/components/ui-components/SingleFieldComponent";
-import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
-import { enqueueSnackbar } from "notistack";
-import EnterLabelModal from "../enterLabelModal";
-import { Add } from "@mui/icons-material";
-import { generateEstimatePayloadForMirror } from "@/utilities/generateEstimateCalculationContent";
+} from '@mui/material';
+
+import EnterLabelModal from '../enterLabelModal';
+import MenuList from './menuList';
 
 // const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
@@ -99,6 +106,7 @@ export const MirrorReview = ({ setStep }) => {
     mutateEdit({
       projectId: projectId,
       cost: Number(pricing.total),
+      sufferCostDifference : selectedContent.sufferCostDifference,
       customerData: {},
       estimateData: estimateConfig,
       id: estimateId,
@@ -1604,6 +1612,7 @@ export const MirrorReview = ({ setStep }) => {
         estimateCategory={"mirrors"}
         estimatesTotal={pricing.total}
         projectId={projectId}
+        sufferCostDifference = {selectedContent.sufferCostDifference}
       />
     </>
   );

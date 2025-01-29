@@ -1,3 +1,71 @@
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { useFormik } from 'formik';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  NavLink,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+import * as Yup from 'yup';
+
+import LayoutMeasurementSkeleton
+  from '@/components/estimateSkelton/LayoutMeasurementSkeleton';
+import {
+  addSelectedItem,
+  getAdditionalFields,
+  getDoorWidth,
+  getisCustomizedDoorWidth,
+  getListData,
+  getMeasurementSide,
+  initializeStateForCreateQuote,
+  initializeStateForEditQuote,
+  resetNotifications,
+  selectedItem,
+  setDoorWeight,
+  setDoorWidth,
+  setHardwareFabricationQuantity,
+  setisCustomizedDoorWidth,
+  setLayoutArea,
+  setLayoutPerimeter,
+  setMultipleNotifications,
+  setPanelWeight,
+  setReturnWeight,
+  updateMeasurements,
+} from '@/redux/estimateCalculations';
+import { getSkeltonState } from '@/redux/estimateSlice';
+import { getLocationShowerSettings } from '@/redux/locationSlice';
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  getGlassThickness,
+} from '@/utilities/common';
+import {
+  inputLength,
+  inputMaxValue,
+  layoutVariants,
+  panelOverWeightAmount,
+  quoteState,
+  thicknessTypes,
+} from '@/utilities/constants';
+import { setStateForShowerEstimate } from '@/utilities/estimates';
+import {
+  generateNotificationsForCurrentEstimate,
+} from '@/utilities/estimatorHelper';
+// import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
+import {
+  getHardwareFabricationQuantity,
+} from '@/utilities/hardwarefabrication';
+import CheckIcon from '@mui/icons-material/Check';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
   Box,
   Button,
@@ -10,74 +78,9 @@ import {
   Tooltip,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectedItem,
-  setLayoutArea,
-  setLayoutPerimeter,
-  setNavigationDesktop,
-  updateMeasurements,
-  getDoorWidth,
-  setDoorWidth,
-  getMeasurementSide,
-  getQuoteState,
-  setDoorWeight,
-  setPanelWeight,
-  setReturnWeight,
-  setMultipleNotifications,
-  initializeStateForCreateQuote,
-  initializeStateForEditQuote,
-  setHardwareFabricationQuantity,
-  getAdditionalFields,
-  getisCustomizedDoorWidth,
-  setisCustomizedDoorWidth,
-  getProjectId,
-  addSelectedItem,
-  resetNotifications,
-  getListData,  
-} from "@/redux/estimateCalculations";
-import CheckIcon from "@mui/icons-material/Check";
-import {
-  backendURL,
-  calculateAreaAndPerimeter,
-  getGlassThickness,
-  notificationsAvailable,
-} from "@/utilities/common";
-import {
-  inputLength,
-  inputMaxValue,
-  layoutVariants,
-  panelOverWeightAmount,
-  quoteState,
-  standardDoorWidth,
-  thicknessTypes,
-} from "@/utilities/constants";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-// import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
-import { getHardwareFabricationQuantity } from "@/utilities/hardwarefabrication";
-import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
-import {
-  NavLink,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
-// import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
-// import AlertMessage from "@/components/ui-components/AlertMessage";
-import {
-  useFetchAllDocuments,
-  useFetchSingleDocument,
-} from "@/utilities/ApiHooks/common";
-import AlertsAndWarnings from "../AlertsAndWarnings";
-import { Flag } from "@mui/icons-material";
-import { setStateForShowerEstimate } from "@/utilities/estimates";
-import { getSkeltonState } from "@/redux/estimateSlice";
-import LayoutMeasurementSkeleton from "@/components/estimateSkelton/LayoutMeasurementSkeleton";
+} from '@mui/material';
+
+import AlertsAndWarnings from '../AlertsAndWarnings';
 
 export const SimpleLayoutDimensions = ({ setStep ,layoutData,recordData }) => {
   const [searchParams] = useSearchParams();

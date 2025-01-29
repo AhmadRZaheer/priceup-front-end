@@ -1,20 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+  generateNotificationsForCurrentEstimate,
+} from '@/utilities/estimatorHelper';
+import {
+  generateContentForShowerEdit,
+} from '@/utilities/generateEstimateCalculationContent';
+import { createSlice } from '@reduxjs/toolkit';
+
+import { calculateAreaAndPerimeter } from '../utilities/common';
 import {
   hardwareTypes,
   layoutVariants,
-  notificationTypes,
   notificationsVariant,
+  notificationTypes,
   quoteState,
   thicknessTypes,
-} from "../utilities/constants";
-import { calculateAreaAndPerimeter } from "../utilities/common";
+} from '../utilities/constants';
 import {
-  // getHandleFabrication,
-  // getHardwareFabricationQuantity,
   getHardwareSpecificFabrication,
-} from "../utilities/hardwarefabrication";
-import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
-import { generateContentForShowerEdit } from "@/utilities/generateEstimateCalculationContent";
+} from '../utilities/hardwarefabrication';
+
 export const getContent = (state) => state.estimateCalculations.content;
 export const getAdditionalFields = (state) =>
   state.estimateCalculations.content.additionalFields;
@@ -155,10 +159,12 @@ const initialState = {
     handles: {
       item: null,
       count: 0,
+      cost:0
     },
     hinges: {
       item: null,
       count: 0,
+      cost:0
     },
     mountingClamps: {
       wallClamp: [],
@@ -177,14 +183,17 @@ const initialState = {
     header: {
       item: null,
       count: 0,
+      cost:0
     },
     slidingDoorSystem: {
       item: null,
       count: 0,
+      cost:0
     },
     glassType: {
       item: null,
       thickness: thicknessTypes.THREEBYEIGHT,
+      cost: 0,
     },
     glassAddons: [],
     oneInchHoles: 0,
@@ -199,6 +208,7 @@ const initialState = {
     hardwareAddons: [],
     mountingState: "channel",
     userProfitPercentage: 0,
+    sufferCostDifference : false,
     discount: {
       value: 0,
       unit: "%",
@@ -354,12 +364,15 @@ const estimateCalcSlice = createSlice({
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
         console.log("Nice Try.");
       } else if (["channel"].includes(type)) {
+        let itemCost = 0;
+        itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
         const found = item?._id === state.content.mountingChannel.item?._id;
         state.content = {
           ...state.content,
           mountingChannel: {
             item: found ? null : item,
             count: found ? 0 : 1,
+            cost : itemCost
           },
         };
       } else if (["hardwareFinishes"].includes(type)) {
@@ -415,22 +428,24 @@ const estimateCalcSlice = createSlice({
       } else if (["hardwareAddons"].includes(type)) {
         console.log("Nice Try.");
       } else if (["glassAddons"].includes(type)) {
+        let glassAddonCost = 0 ;
+        glassAddonCost = item?.options?.[0]?.cost;
         if (item.slug === "no-treatment") {
           const noGlassAddon = state.listData.glassAddons?.find(
             (item) => item.slug === "no-treatment"
           );
-          state.content.glassAddons = [noGlassAddon];
+          state.content.glassAddons = [{item : noGlassAddon , cost : 0}];
         } else {
           const foundIndex = state.content.glassAddons?.findIndex(
-            (row) => row.slug === item.slug
+            (row) => row.item.slug === item.slug
           );
           if (foundIndex !== -1) {
             state.content.glassAddons.splice(foundIndex, 1);
           } else {
-            state.content.glassAddons.push(item);
+            state.content.glassAddons.push({ item: item, cost : glassAddonCost });
           }
           const indexOfNoTreatment = state.content.glassAddons?.findIndex(
-            (row) => row.slug === "no-treatment"
+            (row) => row.item.slug === "no-treatment"
           );
           if (indexOfNoTreatment !== -1) {
             state.content.glassAddons.splice(indexOfNoTreatment, 1);
@@ -441,12 +456,25 @@ const estimateCalcSlice = createSlice({
           ...state.content,
           [type]: item,
         };
+      } else if(["glassType"].includes(type)){
+       let itemCost = item?.options?.find((item) => item?.thickness === state.content.glassType.thickness)?.cost;
+        state.content = {
+          ...state.content,
+          glassType: {
+            ...state.content.glassType,
+            item: item,
+            cost: itemCost ?? 0
+          },
+        };
       } else {
+        let itemCost = 0;
+        itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
         state.content = {
           ...state.content,
           [type]: {
             ...state.content[type],
             item: item,
+            cost: itemCost
           },
         };
       }
@@ -546,6 +574,8 @@ const estimateCalcSlice = createSlice({
 
       if (allClamps.includes(type) || allCorners.includes(type)) {
         let existing;
+        let clampsCost = 0 ;
+        clampsCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
         if (allClamps.includes(type)) {
           existing = state.content.mountingClamps[type];
         } else {
@@ -562,7 +592,7 @@ const estimateCalcSlice = createSlice({
             existing[foundIndex].count = value;
           }
         } else {
-          existing.push({ item: item, count: value });
+          existing.push({ item: item, count: value , cost : clampsCost });
         }
 
         if (allClamps.includes(type)) {
@@ -578,6 +608,8 @@ const estimateCalcSlice = createSlice({
         }
       } else if (["hardwareAddons"].includes(type)) {
         let existing = state.content.hardwareAddons;
+        let hardwareAddonCost = 0 ;
+        hardwareAddonCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
         const foundIndex = existing.findIndex(
           (row) => row?.item?.slug === item.slug
         );
@@ -588,23 +620,187 @@ const estimateCalcSlice = createSlice({
             existing[foundIndex].count = value;
           }
         } else {
-          existing.push({ item: item, count: value });
+          existing.push({ item: item, count: value ,cost : hardwareAddonCost });
         }
         state.content = {
           ...state.content,
           hardwareAddons: [...existing],
         };
       } else {
+        let itemCost = 0;
+        itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost; 
         state.content = {
           ...state.content,
           [type]: {
             ...state.content[type],
             count: value,
+            cost : itemCost
           },
         };
       }
     },
-
+    setSufferCostDifference: (state, action) => {
+      const calculateNewCost = (type, identifierKey, identifierValue) => {
+        const cost = state.content[type]?.cost;
+        const currentCost = state.content[type]?.item?.[identifierKey]?.find(
+          (item) => item[identifierValue.key] === identifierValue?.value
+        )?.cost;
+    
+        return cost >= 0 && cost !== currentCost ? currentCost : cost;
+      };
+    
+      // Update glass cost
+      const newGlassCost = calculateNewCost("glassType", "options", {
+        key: "thickness",
+        value: state.content.glassType.thickness,
+      });
+    
+      // Update handle cost
+      const newHandleCost = calculateNewCost("handles", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+    
+      // Update hinge cost
+      const newHingCost = calculateNewCost("hinges", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+      // Update Header cost
+      const newHeaderCost = calculateNewCost("header", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+      const newSlidingDoorSystemCost = calculateNewCost("slidingDoorSystem", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+      const newMountingChannelCost = calculateNewCost("mountingChannel", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+      const newCornerWallClampCost = state?.content?.cornerClamps?.cornerWallClamp?.map((item,index)=>{
+        const cost = calculateNewCost(`cornerClamps.cornerWallClamp[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newCornerSleeveOverCost = state?.content?.cornerClamps?.cornerSleeveOver?.map((item,index)=>{
+        const cost = calculateNewCost(`cornerClamps.cornerSleeveOver[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newCornerGlassToGlassCost = state?.content?.cornerClamps?.cornerGlassToGlass?.map((item,index)=>{
+        const cost = calculateNewCost(`cornerClamps.cornerGlassToGlass[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newWallClampCost = state?.content?.mountingClamps?.wallClamp?.map((item,index)=>{
+        const cost = calculateNewCost(`mountingClamps.wallClamp[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newSleeveOverCost = state?.content?.mountingClamps?.sleeveOver?.map((item,index)=>{
+        const cost = calculateNewCost(`mountingClamps.sleeveOver[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newGlassToGlassCost = state?.content?.mountingClamps?.glassToGlass?.map((item,index)=>{
+        const cost = calculateNewCost(`mountingClamps.glassToGlass[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const glassAddonsCost = state?.content?.glassAddons?.map((item)=>{
+        const itemCost = item?.cost
+        const currentCost = item?.item?.options[0]?.cost;
+        let newCost = itemCost >= 0 && itemCost !== currentCost ? currentCost : itemCost;
+        return {
+          ...item,
+          cost : newCost ?? 0
+        }
+      })
+      const hardwareAddonsCost = state?.content?.hardwareAddons?.map((item,index)=>{
+        const cost = calculateNewCost(`hardwareAddons[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+        state.content = {
+          ...state.content,
+          handles: {
+            ...state.content.handles,
+            cost : newHandleCost ?? 0
+          },
+          hinges: {
+            ...state.content.hinges,
+            cost : newHingCost ?? 0
+          },
+          header: {
+            ...state.content.header,
+            cost :  newHeaderCost ?? 0
+          },
+          slidingDoorSystem: {
+             ...state.content.slidingDoorSystem,
+            cost : newSlidingDoorSystemCost ?? 0
+          },
+          glassType: {
+            ...state.content.glassType,
+            cost: newGlassCost ?? 0
+          },
+          mountingChannel: {
+            ...state.content.mountingChannel,
+            cost: newMountingChannelCost || 0
+          },
+          mountingClamps: {
+            ...state.content.mountingClamps,
+            wallClamp: newWallClampCost ?? [],
+            sleeveOver: newSleeveOverCost ?? [],
+            glassToGlass: newGlassToGlassCost ?? []
+          },
+          cornerClamps: {
+            ...state.content.cornerClamps,
+            cornerWallClamp: newCornerWallClampCost ?? [],
+            cornerSleeveOver:  newCornerSleeveOverCost ?? [],
+            cornerGlassToGlass: newCornerGlassToGlassCost ?? [],
+          },
+        glassAddons: glassAddonsCost ?? [],
+        hardwareAddons: hardwareAddonsCost ?? [],
+        sufferCostDifference : false
+        };
+    },
     setUserProfitPercentage: (state, action) => {
       const { payload } = action;
       state.content.userProfitPercentage = payload;
@@ -723,6 +919,8 @@ const estimateCalcSlice = createSlice({
         state.selectedItem?.settings?.variant ?? layoutVariants.CUSTOM,
         payload
       );
+      let channelCost = newChannel?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+      let glassCost = state.content.glassType?.item?.options?.find((option) => option.thickness === payload)?.cost;
       /** end */
       return {
         ...state,
@@ -734,10 +932,12 @@ const estimateCalcSlice = createSlice({
           glassType: {
             ...state.content.glassType,
             thickness: payload,
+            cost : glassCost ?? 0
           },
           mountingChannel: {
             item: newChannel,
             count: newChannel ? 1 : 0,
+            cost : channelCost ?? 0
           },
           oneInchHoles: hardwareFabrication.oneInchHoles,
           hingeCut: hardwareFabrication.hingeCut,
@@ -888,12 +1088,14 @@ const estimateCalcSlice = createSlice({
                 "Current channel price is being calculated according to 1 channel stick",
             };
 
+            let channelCost = defaultItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
             // set mounting channel
             state.content = {
               ...state.content,
               mountingChannel: {
                 item: defaultItem,
                 count: 1,
+                cost : channelCost ?? 0
               },
             };
             /** end */
@@ -1001,6 +1203,9 @@ const estimateCalcSlice = createSlice({
             message: "",
           };
 
+          let wallClampCost = wallClampItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+          let sleeveOverCost = sleeveOverItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+          let glassToGlassCost = glassToGlassItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
           state.content = {
             ...state.content,
             mountingClamps: {
@@ -1009,6 +1214,7 @@ const estimateCalcSlice = createSlice({
                     {
                       item: wallClampItem,
                       count: state.selectedItem?.settings?.wallClamp?.count,
+                      cost : wallClampCost ?? 0
                     },
                   ]
                 : [],
@@ -1017,6 +1223,7 @@ const estimateCalcSlice = createSlice({
                     {
                       item: sleeveOverItem,
                       count: state.selectedItem?.settings?.sleeveOver?.count,
+                      cost : sleeveOverCost ?? 0
                     },
                   ]
                 : [],
@@ -1025,6 +1232,7 @@ const estimateCalcSlice = createSlice({
                     {
                       item: glassToGlassItem,
                       count: state.selectedItem?.settings?.glassToGlass?.count,
+                      cost : glassToGlassCost ?? 0
                     },
                   ]
                 : [],
@@ -1032,6 +1240,7 @@ const estimateCalcSlice = createSlice({
             mountingChannel: {
               item: null,
               count: 0,
+              cost : 0
             },
             oneInchHoles: fabricationsCount.oneInchHoles,
             hingeCut: fabricationsCount.hingeCut,
@@ -1053,7 +1262,7 @@ const estimateCalcSlice = createSlice({
 
         if (["channel"].includes(payload?.toLowerCase())) {
           // for channel
-
+          
           /** on shifting to default channel, remove fabrication of already selected clamps */
           state.content.mountingClamps.wallClamp.forEach((record) => {
             const hardwareFabrication = getHardwareSpecificFabrication(
@@ -1123,13 +1332,14 @@ const estimateCalcSlice = createSlice({
               message:
                 "Current channel price is being calculated according to 1 channel stick",
             };
-
+            let channelCost = defaultItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
             // set moutning channel
             state.content = {
               ...state.content,
               mountingChannel: {
                 item: defaultItem,
                 count: 1,
+                cost : channelCost ?? 0
               },
             };
           }
@@ -1162,7 +1372,7 @@ const estimateCalcSlice = createSlice({
           );
           fabricationsCount = { ...hardwareFabrication };
           /** end */
-
+      
           let wallClampArray = [];
           wallClampArray =
             state.selectedItem?.config?.mountingClamps?.wallClamp?.map(
@@ -1170,7 +1380,8 @@ const estimateCalcSlice = createSlice({
                 const record = state.listData?.wallClamp?.find(
                   (clamp) => clamp._id === row?.type
                 );
-                return { item: record, count: row.count };
+                let cost = record?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+                return { item: record, count: row.count , cost : cost ?? 0 };
               }
             );
           let sleeveOverArray = [];
@@ -1180,7 +1391,8 @@ const estimateCalcSlice = createSlice({
                 const record = state.listData?.sleeveOver?.find(
                   (clamp) => clamp._id === row?.type
                 );
-                return { item: record, count: row.count };
+                let cost = record?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+                return { item: record, count: row.count , cost : cost ?? 0 };
               }
             );
           let glassToGlassArray = [];
@@ -1190,7 +1402,8 @@ const estimateCalcSlice = createSlice({
                 const record = state.listData?.glassToGlass?.find(
                   (clamp) => clamp._id === row?.type
                 );
-                return { item: record, count: row.count };
+                let cost = record?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;          
+                return { item: record, count: row.count , cost : cost ?? 0 };
               }
             );
 
@@ -1239,6 +1452,7 @@ const estimateCalcSlice = createSlice({
             mountingChannel: {
               item: null,
               count: 0,
+              cost : 0
             },
             oneInchHoles: fabricationsCount.oneInchHoles,
             hingeCut: fabricationsCount.hingeCut,
@@ -1325,6 +1539,7 @@ const estimateCalcSlice = createSlice({
             mountingChannel: {
               item: null,
               count: 0,
+              cost: 0
             },
             oneInchHoles: hardwareFabrication.oneInchHoles,
             hingeCut: hardwareFabrication.hingeCut,
@@ -1346,7 +1561,9 @@ const estimateCalcSlice = createSlice({
       glassType = state.listData?.glassType?.find(
         (item) => item.slug === "clear"
       );
-
+      let glassTypeCost = null;
+      glassTypeCost = glassType?.options?.find((option) => option?.thickness === thicknessTypes.THREEBYEIGHT)?.cost;
+      
       let glassAddons = null;
       glassAddons = state.listData?.glassAddons?.find(
         (item) => item.slug === "no-treatment"
@@ -1359,8 +1576,9 @@ const estimateCalcSlice = createSlice({
         glassType: {
           item: glassType,
           thickness: thicknessTypes.THREEBYEIGHT,
+          cost:glassTypeCost
         },
-        glassAddons: glassAddons ? [glassAddons] : [],
+        glassAddons: glassAddons ? [{item: glassAddons ,cost : 0}] : [],
         people: 0,
         hours: 0,
       };
@@ -1372,39 +1590,51 @@ const estimateCalcSlice = createSlice({
       hardwareFinishes = state.listData?.hardwareFinishes?.find(
         (item) => item._id === layoutData?.settings?.hardwareFinishes
       );
-
       let handleType = null;
       handleType = state.listData?.handles?.find(
         (item) => item._id === layoutData?.settings?.handles?.handleType
       );
+      let handleTypeCost = null;
+      handleTypeCost = handleType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id )?.cost;
 
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
         (item) => item._id === layoutData?.settings?.hinges?.hingesType
       );
+      let hingesCost = null;
+      hingesCost = hingesType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
       let slidingDoorSystemType = null;
       slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
         (item) => item._id === layoutData?.settings?.slidingDoorSystem?.type
       );
+      let slidingDoorSystemCost = null;
+      slidingDoorSystemCost = slidingDoorSystemType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id )?.cost;
 
       let headerType = null;
       headerType = state.listData?.header?.find(
         (item) => item._id === layoutData?.settings?.header
       );
+      let headerCost = null;
+      headerCost = headerType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
       let glassType = null;
       glassType = state.listData?.glassType?.find(
         (item) => item._id === layoutData?.settings?.glassType?.type
       );
-      let glassThickness =
-        layoutData?.settings?.glassType?.thickness ||
-        thicknessTypes.THREEBYEIGHT;
 
+      let glassThickness =
+      layoutData?.settings?.glassType?.thickness ||
+      thicknessTypes.THREEBYEIGHT;
+
+      let glassCost = 0;
+      glassCost = glassType?.options?.find((option) => option?.thickness === glassThickness)?.cost;   
       let glassAddon = null;
       glassAddon = state.listData?.glassAddons?.find(
         (item) => item._id === layoutData?.settings?.glassAddon
       );
+      let glassAddonCost = null;
+      glassAddonCost = glassAddon?.options?.[0]?.cost;
 
       let clampCutOut = 0;
       let wallClampItem,
@@ -1422,6 +1652,13 @@ const estimateCalcSlice = createSlice({
         cornerGlassToGlassItem =
         channelItem =
           null;
+      let wallClampCost = 0;
+      let sleeveOverCost = 0;
+      let glassToGlassCost = 0;
+      let  cornerWallClampCost = 0;
+      let  cornerSleeveOverCost = 0;
+      let  cornerGlassToGlassCost = 0;
+      let  channelCost = 0;
       // do not calculate if a layout does not have mounting channel or clamp
       if (
         ![
@@ -1433,36 +1670,44 @@ const estimateCalcSlice = createSlice({
         wallClampItem = state.listData?.wallClamp?.find(
           (item) => item._id === layoutData?.settings?.wallClamp?.wallClampType
         );
+        wallClampCost = wallClampItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
         sleeveOverItem = state.listData?.sleeveOver?.find(
           (item) =>
             item._id === layoutData?.settings?.sleeveOver?.sleeveOverType
         );
+        sleeveOverCost = sleeveOverItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
         glassToGlassItem = state.listData?.glassToGlass?.find(
           (item) =>
             item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
         );
+        glassToGlassCost = glassToGlassItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
         cornerWallClampItem = state.listData?.cornerWallClamp?.find(
           (item) =>
             item._id === layoutData?.settings?.cornerWallClamp?.wallClampType
         );
+        cornerWallClampCost = cornerWallClampItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
         cornerSleeveOverItem = state.listData?.cornerSleeveOver?.find(
           (item) =>
             item._id === layoutData?.settings?.cornerSleeveOver?.sleeveOverType
         );
+        cornerSleeveOverCost = cornerSleeveOverItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
         cornerGlassToGlassItem = state.listData?.cornerGlassToGlass?.find(
           (item) =>
             item._id ===
             layoutData?.settings?.cornerGlassToGlass?.glassToGlassType
         );
+        cornerGlassToGlassCost = cornerGlassToGlassItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
 
         channelItem = state.listData?.mountingChannel?.find(
           (item) => item._id === layoutData?.settings?.mountingChannel
         );
+        channelCost = channelItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
         clampCutOut =
           layoutData?.settings?.wallClamp?.count +
           layoutData?.settings?.sleeveOver?.count +
@@ -1490,26 +1735,32 @@ const estimateCalcSlice = createSlice({
         handles: {
           item: handleType || null,
           count: layoutData?.settings?.handles?.count,
+          cost : handleTypeCost
         },
         hinges: {
           item: hingesType || null,
           count: layoutData?.settings?.hinges?.count,
+          cost : hingesCost
         },
         header: {
           item: headerType || null,
           count: headerType ? 1 : 0,
+          cost :  headerCost
         },
         slidingDoorSystem: {
           item: slidingDoorSystemType || null,
           count: layoutData?.settings?.slidingDoorSystem?.count,
+          cost : slidingDoorSystemCost
         },
         glassType: {
           item: glassType || null,
           thickness: glassThickness,
+          cost : glassCost ?? 0
         },
         mountingChannel: {
           item: channelItem || null,
           count: channelItem ? 1 : 0,
+          cost: channelCost || 0
         },
         mountingClamps: {
           wallClamp: wallClampItem
@@ -1517,6 +1768,7 @@ const estimateCalcSlice = createSlice({
                 {
                   item: wallClampItem,
                   count: layoutData?.settings?.wallClamp?.count,
+                  cost: wallClampCost,
                 },
               ]
             : [],
@@ -1525,6 +1777,7 @@ const estimateCalcSlice = createSlice({
                 {
                   item: sleeveOverItem,
                   count: layoutData?.settings?.sleeveOver?.count,
+                  cost: sleeveOverCost,
                 },
               ]
             : [],
@@ -1533,6 +1786,7 @@ const estimateCalcSlice = createSlice({
                 {
                   item: glassToGlassItem,
                   count: layoutData?.settings?.glassToGlass?.count,
+                  cost: glassToGlassCost,
                 },
               ]
             : [],
@@ -1543,6 +1797,7 @@ const estimateCalcSlice = createSlice({
                 {
                   item: cornerWallClampItem,
                   count: layoutData?.settings?.cornerWallClamp?.count,
+                  cost:cornerWallClampCost
                 },
               ]
             : [],
@@ -1551,6 +1806,7 @@ const estimateCalcSlice = createSlice({
                 {
                   item: cornerSleeveOverItem,
                   count: layoutData?.settings?.cornerSleeveOver?.count,
+                  cost: cornerSleeveOverCost,
                 },
               ]
             : [],
@@ -1559,6 +1815,7 @@ const estimateCalcSlice = createSlice({
                 {
                   item: cornerGlassToGlassItem,
                   count: layoutData?.settings?.cornerGlassToGlass?.count,
+                  cost: cornerGlassToGlassCost,
                 },
               ]
             : [],
@@ -1569,7 +1826,7 @@ const estimateCalcSlice = createSlice({
             : "channel",
         people: layoutData?.settings?.other?.people,
         hours: layoutData?.settings?.other?.hours,
-        glassAddons: glassAddon ? [glassAddon] : [noGlassAddon],
+        glassAddons: glassAddon ? [{item:glassAddon , cost: glassAddonCost }] : [{item: noGlassAddon ,cost:0}],
         outages: layoutData?.settings?.outages,
         notch: layoutData?.settings?.notch,
         hingeCut: layoutData?.settings?.hinges?.count,
@@ -1586,6 +1843,7 @@ const estimateCalcSlice = createSlice({
       const { estimateData, quotesId } = action.payload;
       state.quoteId = quotesId;
       state.quoteState = quoteState.EDIT
+      state.content.sufferCostDifference = estimateData?.sufferCostDifference;
       const resp = generateContentForShowerEdit(state.listData,estimateData);
       // let hardwareFinishes = null;
       // hardwareFinishes = state.listData?.hardwareFinishes?.find(
@@ -1820,6 +2078,7 @@ export const {
   setLayoutPerimeter,
   setContent,
   setTotal,
+  setSufferCostDifference,
   setCost,
   setProfit,
   setCounters,
