@@ -137,11 +137,13 @@ const ShowerSummary = ({
       console.log(upgradeGlassList);
     }
     const glassTypedata = upgradeGlassList?.map((item) => {
-      const price =
+      let price =
         item?.options?.find(
           (option) => option.thickness === data?.content?.glassType?.thickness
         )?.cost || 0;
-
+        // if(item?.cost > 0){
+        //   price = item?.cost
+        // }
       const costDifference =
         upgradeGlassList
           ?.filter((item) => item._id === data?.content?.glassType?.item?._id)
@@ -152,6 +154,10 @@ const ShowerSummary = ({
             )
           )
           ?.find((option) => option)?.cost || 0;
+        //   const costDifference1 =
+        // upgradeGlassList
+        //   ?.filter((item) => item._id === data?.content?.glassType?.item?._id)
+        //   console.log(costDifference1,'costDifference1',upgradeGlassList,hardwaresList?.glassType, UpgradeOPtions?.glassTypes,data?.selectedItem?.config?.glassType)
       const currentItemCost =
         (data?.cost ?? 0) -
           data?.sqftArea * costDifference +

@@ -219,9 +219,9 @@ const mirrorsEstimateSlice = createSlice({
     },
     setSufferCostDifference: (state, action) => {
       const calculateNewCost = (type, identifierKey, identifierValue) => {
-      const cost = state.content[type].cost;
+      const cost = state.content[type]?.cost;
       const currentCost = state.content[type]?.item?.[identifierKey]?.find(
-        (item) => item[identifierValue.key] === identifierValue.value
+        (item) => item[identifierValue.key] === identifierValue?.value
       )?.cost;
   
       return cost >= 0 && cost !== currentCost ? currentCost : cost;
