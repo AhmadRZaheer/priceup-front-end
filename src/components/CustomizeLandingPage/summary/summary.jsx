@@ -552,6 +552,7 @@ const ShowerSummary = ({
       : data?.category === EstimateCategory.MIRRORS
       ? renderMirrorMeasurementSides(data?.measurements)
       : () => {};
+    console.log(data,'datadatadatadatadata')
   return (
     <>
       <Box
@@ -1178,6 +1179,7 @@ const ShowerSummary = ({
           {data?.selectedItem?.status !== statusTypes.CUSTOMER_APPROVED && (
             <Box sx={{ pt: 2 }}>
               <Button
+                disabled={data?.content?.sufferCostDifference}
                 fullWidth
                 variant="contained"
                 onClick={handleApprove}
@@ -1208,7 +1210,7 @@ const ShowerSummary = ({
             </Box>
           )}
         </Box>
-        <Box sx={{ width: "50%", pt: 1 }}>
+        <Box sx={{ width: "50%" }}>
           {(glassAddonsList?.length >
             (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) ||
             hardwareAddonsList?.length > 0 ||
@@ -1245,12 +1247,12 @@ const ShowerSummary = ({
                     borderRadius: "11px",
                     pointerEvents:
                       data?.selectedItem?.status ===
-                      statusTypes.CUSTOMER_APPROVED
+                      statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
                         ? "none"
                         : "auto",
                     opacity:
                       data?.selectedItem?.status ===
-                      statusTypes.CUSTOMER_APPROVED
+                      statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
                         ? 0.5
                         : 1,
                   }}
@@ -1285,12 +1287,12 @@ const ShowerSummary = ({
                       borderRadius: "11px",
                       pointerEvents:
                         data?.selectedItem?.status ===
-                        statusTypes.CUSTOMER_APPROVED
+                        statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
                           ? "none"
                           : "auto",
                       opacity:
                         data?.selectedItem?.status ===
-                        statusTypes.CUSTOMER_APPROVED
+                        statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
                           ? 0.5
                           : 1,
                     }}
@@ -1322,12 +1324,12 @@ const ShowerSummary = ({
                     borderRadius: "11px",
                     pointerEvents:
                       data?.selectedItem?.status ===
-                      statusTypes.CUSTOMER_APPROVED
+                      statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
                         ? "none"
                         : "auto",
                     opacity:
                       data?.selectedItem?.status ===
-                      statusTypes.CUSTOMER_APPROVED
+                      statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
                         ? 0.5
                         : 1,
                   }}

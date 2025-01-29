@@ -31,13 +31,11 @@ import {
 } from '@/utilities/ApiHooks/common';
 import { backendURL } from '@/utilities/common';
 import { quoteState } from '@/utilities/constants';
-import { Close } from '@mui/icons-material';
 import {
   Alert,
   Box,
   Button,
   Collapse,
-  IconButton,
   Typography,
   useMediaQuery,
 } from '@mui/material';
@@ -88,37 +86,41 @@ export const ShowerDimensions = () => {
     // dispatch(setSufferCostDifference(false));
     dispatch(setSufferCostDifference());
   }
-
+const sufferStatus = selectedContent.sufferCostDifference && activeQuoteState === quoteState.EDIT
   return (
     <Box>
-      {(selectedContent.sufferCostDifference && activeQuoteState === quoteState.EDIT) && (
+      {(sufferStatus) && (
         <Box sx={{ width: "100%" }}>
           <Collapse in={openAlert}>
             <Alert
-              action={
-                <IconButton
-                  aria-label="close"
-                  size="small"
-                  onClick={() => {
-                    setOpenAlert(false);
-                  }}
-                >
-                  <Close fontSize="inherit" sx={{ color: "white" }} />
-                </IconButton>
-              }
+              // action={
+              //   <IconButton
+              //     aria-label="close"
+              //     size="small"
+              //     onClick={() => {
+              //       setOpenAlert(false);
+              //     }}
+              //   >
+              //     <Close fontSize="inherit" sx={{ color: "white" }} />
+              //   </IconButton>
+              // }
               icon={false}
               sx={{
                 mb: 1,
-                background: "#DC3545",
-                color: "white",
-                ".MuiAlert-action": {
-                  flexWrap: "wrap",
-                  alignContent: "center",
-                },
+                border: "2px solid #DC3545",
+                color: "#DC3545",
+                px:'12px',
+                py:'6px',
+                width:'-webkit-fill-available',
+                background:'transparent',
+                display:'block',
+                '.MuiAlert-message' : {
+                  p:'0px'
+                }
               }}
             >
-              <Box sx={{ display: "flex", gap: 5 }}>
-                <Typography sx={{ alignSelf: "center" }}>
+              <Box sx={{ display: "flex", justifyContent:'space-between' }}>
+                <Typography sx={{ alignSelf: "center",fontWeight:'bold' }}>
                   This estimate has a cost discrepancy. Would you like to apply
                   the updated cost?
                 </Typography>
@@ -133,6 +135,7 @@ export const ShowerDimensions = () => {
                     // height: 40,
                     fontSize: 14,
                     backgroundColor: "#8477da",
+                    p:'8px 16px 8px 16px !important',
                     "&:hover": {
                       backgroundColor: "#8477da",
                     },
@@ -227,6 +230,8 @@ export const ShowerDimensions = () => {
               gap: 1,
               pt: 3,
               // alignItems: "start",
+              pointerEvents: sufferStatus ? 'none' : 'auto',
+              opacity: sufferStatus ? 0.5 : 1  
             }}
           >
             <Box

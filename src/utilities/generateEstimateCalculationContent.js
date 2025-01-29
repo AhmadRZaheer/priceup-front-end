@@ -213,6 +213,7 @@ export const generateContentForShowerEdit = (listData, estimate) => {
       // towelBarsCount: estimate?.towelBarsCount,
       hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
       userProfitPercentage: estimate?.config?.userProfitPercentage,
+      sufferCostDifference : estimate?.sufferCostDifference,
       discount: {
         value: estimate?.config?.discount?.value ?? 0,
         unit: estimate?.config?.discount?.unit ?? "%",
@@ -281,6 +282,7 @@ export const generateContentForMirrorEdit = (hardwaresList, estimate) => {
         total: 0,
       },
       additionalFields: estimate?.config?.additionalFields,
+      sufferCostDifference : estimate?.sufferCostDifference,
       // floatingSize: estimate?.config?.floatingSize ?? null,
       // sandBlasting: estimate?.config?.sandBlasting,
       // bevelStrip: estimate?.config?.bevelStrip, // true, false
@@ -527,6 +529,7 @@ export const generateContentForWineCellarEdit = (hardwaresList, estimate) => {
       polish: estimate?.config?.polish,
       hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
       userProfitPercentage: estimate?.config?.userProfitPercentage,
+      sufferCostDifference : estimate?.sufferCostDifference,
       discount: {
         value: estimate?.config?.discount?.value ?? 0,
         unit: estimate?.config?.discount?.unit ?? "%",
