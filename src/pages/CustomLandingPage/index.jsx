@@ -76,6 +76,8 @@ const CustomLandingPage = () => {
     }
   }, [hardwareData, data, dispatch]);
 
+  const primaryColor = data?.content?.colorSection?.primary ?? '#F95500';
+
   const handleBack = () => {
     window.location.href = `http://3.219.213.248:3005`;
   };
@@ -88,7 +90,7 @@ const CustomLandingPage = () => {
         textAlign: "center",
       }}
     >
-      <CircularProgress size={64} sx={{ color: "#8477DA" }} />
+      <CircularProgress size={40} sx={{ color: primaryColor }} />
     </Box>
   ) : data === null || data === undefined ? (
     <Container maxWidth="xl" sx={{ pt: 2.5 }}>
