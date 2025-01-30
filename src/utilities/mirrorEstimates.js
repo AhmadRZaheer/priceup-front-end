@@ -145,15 +145,14 @@ export const calculateTotal = (
 
   //glassAddons
   let glassAddonsPrice = 0;
-  selectedContent?.glassAddons?.forEach((item) => {
-    console.log(item)
+  selectedContent?.glassAddons?.forEach((glassAddon) => {
     let price = 0;
-    if(selectedContent?.sufferCostDifference && item?.cost > 0){
-      price = item?.cost 
+    if(selectedContent?.sufferCostDifference && glassAddon?.cost > 0){
+      price = glassAddon?.cost 
     }else{
-    if (item?.options?.length) {
-      price = item?.options[0]?.cost || 0;
-    }
+    // if (item?.options?.length) {
+      price = glassAddon?.item?.options[0]?.cost || 0;
+    // }
   }
     // if(['floating-small','floating-large','floating-medium'].includes(item?.slug)){
     //   Object.entries(measurements).forEach(([key, value]) => {
