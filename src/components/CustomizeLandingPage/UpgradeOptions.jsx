@@ -16,12 +16,12 @@ import Imag2 from '../../Assets/CustomerLandingImages/3.png';
 const UpgradeOPtions = ({ data }) => {
   const primaryColor = data?.content?.colorSection?.primary;
   return (
-    <Container maxWidth="lg" sx={{ pb: 8, pt: 8 }}>
-      <Typography className="optionHeading" sx={{ width: "60%" }}>
+    <Container maxWidth="lg" sx={{ py: {sm:8,xs:4}, }}>
+      <Typography className="optionHeading" sx={{ width: {sm:"60%",xs:'100%'}}}>
         We’ve got glass upgrade options.
       </Typography>
-      <Grid container spacing={3} sx={{ px: "92px !important" }}>
-        <Grid item xs={4}>
+      <Grid container spacing={3} sx={{ px: {sm:"92px !important",xs:'16px !important'} }}>
+        <Grid item sm={4} xs={12} >
           <img
             src={
               data?.content?.section8?.image1
@@ -29,31 +29,31 @@ const UpgradeOPtions = ({ data }) => {
                 : Imag1
             }
             alt="not"
-            style={{ width: "100%", height: "401px" }}
+           className='upgradeOptionImage'
           />
         </Grid>
-        <Grid item xs={7.5} sx={{ display: "flex" }}>
+        <Grid item sm={7.5} xs={12} sx={{ display: "flex" }}>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              gap: 5,
+              gap: {sm:5,xs:1},
             }}
           >
             <Typography className="optionHead" sx={{ color: primaryColor }}>
               {data?.content?.section8?.product?.title ??
                 "GCS ARMOR THE ULTIMATE GLASS PROTECTION SOLUTION"}{" "}
             </Typography>
-            <Typography className="optionSubHead" sx={{ pr: 3 }}>
+            <Typography className="optionSubHead" sx={{ pr: {sm:3,xs:0} }}>
               {data?.content?.section8.product?.description1 ??
                 "Glass is naturally porous, allowing water and contaminants to seep in, but GCS Armor's hydrophobic nano coating fills and seals these pores, leaving surfaces smooth and protected. Backed by a 10-year warranty, it ensures long-lasting durability."}
             </Typography>
           </Box>
         </Grid>
       </Grid>
-      <Grid container spacing={3} sx={{ px: "92px !important" }}>
-        <Grid item xs={5} sx={{ display: "flex" }}>
+      <Grid container spacing={3} sx={{ px: {sm:"92px !important",xs:'16px !important'},pt:{sm:0,xs:1.5}}}>
+        <Grid item sm={5} xs={12} sx={{ display: "flex",order:{sm:1,xs:2} }}>
           <Box
             sx={{
               display: "flex",
@@ -67,7 +67,7 @@ const UpgradeOPtions = ({ data }) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={6.5} sx={{ display: "flex", justifyContent: "center" }}>
+        <Grid item sm={6.5} xs={12} sx={{ display: "flex", justifyContent: "center" ,order:{sm:2,xs:1}}}>
           <img
             src={
               data?.content?.section8?.image2
@@ -75,7 +75,7 @@ const UpgradeOPtions = ({ data }) => {
                 : Imag2
             }
             alt="not"
-            style={{ height: "372px" }}
+            className='upradeProductImage'
           />
         </Grid>
       </Grid>

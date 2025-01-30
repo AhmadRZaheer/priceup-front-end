@@ -45,24 +45,24 @@ const ScrollToTop = ({ background, color }) => {
             onClick={scrollToTop}
             sx={{
               position: "fixed",
-              bottom: "20px",
-              right: "20px",
+              bottom: {sm:"20px",xs:'10px'},
+              right: {sm:"20px",xs:'10px'},
               color: color,
               backgroundColor: background,
               border: "none",
               // borderRadius: "50%",
-              width: "48px",
-              height: "48px",
+              width: {sm:"48px",xs:'42px'},
+              height:  {sm:"48px",xs:'42px'},
               cursor: "pointer",
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              minWidth:'55px',
+              minWidth: {sm:"55px",xs:'38px'},
               fontSize: "18px",
               ":hover": {
                 backgroundColor: background,
               },
             }}
           >
-            <KeyboardArrowUpIcon sx={{fontSize:'38px'}} />
+            <KeyboardArrowUpIcon sx={{fontSize:{sm:"38px",xs:'30px'},}} />
           </Button>
         </Tooltip>
       )}

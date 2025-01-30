@@ -1,6 +1,16 @@
-import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+import {
+  AddCircleOutline,
+  RemoveCircleOutline,
+} from '@mui/icons-material';
+import {
+  Box,
+  Typography,
+} from '@mui/material';
 
 const OptionWithCounter = ({
   counter,
@@ -29,7 +39,7 @@ const OptionWithCounter = ({
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-around",
+        justifyContent: {sm:"space-around",xs:'none'},
         gap: 1,
         color: { md: "#000000  ", xs: "white" },
         alignSelf: "flex-end",
@@ -37,7 +47,7 @@ const OptionWithCounter = ({
     >
       <AddCircleOutline
         onClick={(event) => handleCountSet(count + 1, event)}
-        sx={{ color: isSelected ? "#000000" : "#5D6164" }}
+        sx={{ color: isSelected ? "#000000" : "#5D6164",fontSize:{sm:'24px',xs:'20px'} }}
       />
       <Typography
         className="counter-txt"
@@ -47,7 +57,7 @@ const OptionWithCounter = ({
       </Typography>
       <RemoveCircleOutline
         onClick={(event) => handleCountSet(count - 1, event)}
-        sx={{ color: isSelected ? "black" : "#5D6164" }}
+        sx={{ color: isSelected ? "black" : "#5D6164",fontSize:{sm:'24px',xs:'20px'}}}
       />
     </Box>
   );

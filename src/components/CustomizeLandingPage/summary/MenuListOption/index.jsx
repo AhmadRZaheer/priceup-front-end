@@ -1,11 +1,22 @@
-import { useEffect, useState } from "react";
-import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
-import { Box, CircularProgress, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
 import {
-  setCounters,
-} from "@/redux/estimateCalculations";
-import MenuItem from "./menuItem";
+  useEffect,
+  useState,
+} from 'react';
+
+import { useDispatch } from 'react-redux';
+
+import { setCounters } from '@/redux/estimateCalculations';
+import {
+  AddCircleOutline,
+  RemoveCircleOutline,
+} from '@mui/icons-material';
+import {
+  Box,
+  CircularProgress,
+  Typography,
+} from '@mui/material';
+
+import MenuItem from './menuItem';
 
 const MenuList = ({
   menuOptions,
@@ -65,8 +76,8 @@ const MenuList = ({
               xs: "black",
             },
             paddingLeft: "0px !important",
-            pt: "2px !important",
-            pb: "1px !important",
+            pt: {sm:"2px !important",xs:"5px !important"},
+            pb:  {sm:"1px !important",xs:"4px !important"},
             px: 2,
             display: "flex",
             alignItems: "center",
@@ -74,8 +85,8 @@ const MenuList = ({
         >
           <Typography
             sx={{
-              fontSize: "24px",
-              lineHeight: "36px",
+              fontSize: {sm:"24px",xs:'18px'},
+              lineHeight: {sm:"36px",xs:'24px'},
               fontWeight: 500,
               fontFamily: '"Poppins" !important',
             }}

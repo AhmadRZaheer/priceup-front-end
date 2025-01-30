@@ -39,20 +39,20 @@ const ClaimSection = ({ data }) => {
     return Faqs;
   }, [data]);
   return (
-    <Container maxWidth="lg" sx={{ pt: 5 }}>
+    <Container maxWidth="lg" sx={{ pt: {sm:5,xs:2} }}>
       <Box
         sx={{
           background: hexToRgba(primaryColor, 0.04),
-          pt: 5.5,
-          pb: 4,
-          px: "32px !important",
+          pt: {sm:5.5,xs:2},
+          pb: {sm:4,xs:2},
+          px: {sm:"32px !important",xs:"16px !important"},
           borderRadius: "10px",
         }}
       >
         <Typography className="claimHead">
           {data?.content?.section6?.heading ?? "How to File a Claim"}{" "}
         </Typography>
-        <Typography className="claimSubHead" sx={{ py: 3.5, width: "90%" }}>
+        <Typography className="claimSubHead" sx={{ py: {sm:3.5,xs:1}, width: {sm:"90%",xs:'100%'}}}>
           {data?.content?.section6?.subHeading ??
             "Submitting a warranty claim is easy! Simply contact your local GCS Glass & Mirror location to begin the process:"}
         </Typography>
@@ -61,8 +61,8 @@ const ClaimSection = ({ data }) => {
             width: "100%",
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
-            gap: 5,
-            pt: 2,
+            gap: {sm:5,xs:1},
+            pt: {sm:2,xs:0.5},
           }}
         >
           {claimData?.map((data, index) => (
@@ -83,10 +83,10 @@ const ClaimSection = ({ data }) => {
         <Typography
           sx={{
             fontFamily: '"Poppins" !important',
-            fontSize: "24px",
+            fontSize: {sm:"24px",xs:'16px'},
             fontWeight: 400,
-            lineHeight: "24px",
-            pt: 4,
+            lineHeight: {sm:"24px",xs:'16px'},
+            pt: {pt:4,xs:2},
           }}
         >
           <Box component="span" sx={{ fontWeight: `${700} !important` }}>
@@ -99,14 +99,14 @@ const ClaimSection = ({ data }) => {
       <Typography
         sx={{
           fontFamily: '"Poppins" !important',
-          fontSize: "24.9px",
+          fontSize: {sm:"24.9px",xs:'14px'},
           fontStyle: "italic",
-          lineHeight: "29px",
+          lineHeight: {sm:"29px",xs:'16px'},
           textAlign: "center",
           color: "rgba(0, 0, 0, 0.6)",
-          px: 12,
-          pt: 5,
-          pb: 8,
+          px: {sm:12,xs:1},
+          pt: {sm:5,xs:2},
+          pb: {sm:8,xs:4},
         }}
       >
         {data?.content?.section6?.bottomText ??

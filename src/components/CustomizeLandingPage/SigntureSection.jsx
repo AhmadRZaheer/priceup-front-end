@@ -1,31 +1,42 @@
-import { Close, Info } from "@mui/icons-material";
+import React, {
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import { saveAs } from 'file-saver';
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import SignatureCanvas from 'react-signature-canvas';
+
+import { getEstimatesList } from '@/redux/customerEstimateCalculation';
+import {
+  useCreateDocument,
+  useEditDocument,
+} from '@/utilities/ApiHooks/common';
+import {
+  backendURL,
+  base64ToFile,
+} from '@/utilities/common';
+import {
+  logActions,
+  logResourceType,
+} from '@/utilities/constants';
+import { Info } from '@mui/icons-material';
 import {
   Box,
   Button,
   CircularProgress,
   Container,
   Divider,
-  InputAdornment,
   Stack,
-  Tooltip,
   Typography,
-} from "@mui/material";
-import React, { useMemo, useRef, useState } from "react";
-import CustomInputField from "../ui-components/CustomInput";
-import SignatureCanvas from "react-signature-canvas";
-import PaymentModel from "./PaymentModel";
-import { pdf } from "@react-pdf/renderer";
-import { saveAs } from "file-saver";
-import LandingPDFFile from "../PDFFile/LandingPagePdf";
-import {
-  useCreateDocument,
-  useEditDocument,
-} from "@/utilities/ApiHooks/common";
-import { backendURL, base64ToFile } from "@/utilities/common";
-import { useParams } from "react-router-dom";
-import { logActions, logResourceType } from "@/utilities/constants";
-import { getEstimatesList } from "@/redux/customerEstimateCalculation";
-import { useSelector } from "react-redux";
+} from '@mui/material';
+import { pdf } from '@react-pdf/renderer';
+
+import LandingPDFFile from '../PDFFile/LandingPagePdf';
+import CustomInputField from '../ui-components/CustomInput';
+import PaymentModel from './PaymentModel';
 
 const controls = {
   viewPricingSubCategory: true,
@@ -214,7 +225,7 @@ const SigntureSection = ({
       sx={{
         background: backgroundColor,
         pb: 3,
-        pt: 4,
+        pt: {sm:4,xs:3},
         borderTop: "5px solid",
         borderColor:primaryColor,
       }}
@@ -223,18 +234,18 @@ const SigntureSection = ({
         <Typography
           sx={{
             fontFamily: '"Poppins" !important',
-            fontSize: "32px",
+            fontSize: {sm:"32px",xs:'20px'},
             fontWeight: 600,
-            lineHeight: "39.94px",
+            lineHeight: {sm:"39.94px",xs:'20px'},
             color: secondaryColor,
             pb: 2,
           }}
         >
           Your Signature:
         </Typography>
-        <Box sx={{ width: "100%", display: "flex", gap: 7 }}>
-          <Box sx={{ width: "50%" }}>
-            <Box sx={{ background: 'white', borderRadius: 2, p: 3 }}>
+        <Box sx={{ width: "100%", display: "flex", gap: {sm:7,xs:2},flexWrap:{sm:'nowrap',xs:'wrap'} }}>
+          <Box sx={{ width: {sm:"50%",xs:'100%'} }}>
+            <Box sx={{ background: 'white', borderRadius: 2, p: {sm:3,xs:1.5} }}>
               <Box
                 sx={{
                   display: "flex",
@@ -372,18 +383,18 @@ const SigntureSection = ({
           </Box>
           <Box
             sx={{
-              width: "50%",
+              width:  {sm:"50%",xs:'100%'},
               display: "flex",
-              justifyContent: "center",
+              justifyContent:"center",
               alignItems: "center",
             }}
           >
-            <Box sx={{ width: "70%" }}>
+            <Box sx={{ width: {sm:"70%",xs:'98%'},textAlignLast :{sm:'none',xs:'center'} }}>
               {data?.status === "approve" ? (
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
-                    fontSize: "22px",
+                    fontSize: {sm:"22px",xs:'16px'},
                     color: secondaryColor,
                     fontWeight: 600,
                   }}
@@ -409,13 +420,13 @@ const SigntureSection = ({
                     variant="contained"
                     sx={{
                       fontFamily: '"Inter" !important',
-                      height: "62px",
-                      width: "285px",
+                      height: {sm:"62px",xs:'52px'},
+                      width: {sm:"285px",xs:'235px'},
                       borderRadius: "12px",
-                      fontSize: "24px",
-                      fontWeight: 700,
-                     backgroundColor: primaryColor,
-                        color: secondaryColor,
+                      fontSize: {sm:"24px",xs:'16px'},
+                      fontWeight: {sm:700,xs:500},
+                      backgroundColor: primaryColor,
+                      color: secondaryColor,
                       lineHeight: "26px",
                       "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
@@ -436,11 +447,12 @@ const SigntureSection = ({
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
-                    fontSize: "32px",
+                    fontSize: {sm:"32px",xs:'24px'},
                     color:secondaryColor,
                     fontWeight: 700,
-                    lineHeight: "39.94px",
-                    py: 3,
+                    lineHeight: {sm:"39.94px",xs:'32px'},
+                    py: {sm:3,xs:1.5},
+                    textAlign:'center'
                   }}
                 >
                   Your Estimate PDF is ready to download!{" "}
@@ -448,10 +460,9 @@ const SigntureSection = ({
 
                 {!data?.invoice_id && (
                   <Stack
-                    sx={{ pb: 2.5, width: "285px" }}
                     direction={"row"}
                     gap={1.5}
-                    justifyContent={"space-between"}
+                    sx={{justifyContent:{sm:'space-between',xs:'center'}, pb: 2.5, width:{sm:"285px",xs:'100%'}}}
                   >
                     <Button
                       fullWidth
@@ -462,7 +473,7 @@ const SigntureSection = ({
                         backgroundColor: primaryColor,
                         color: secondaryColor,
                         height: "44px",
-                        width: { sm: "100%", xs: "187px" },
+                        width: { sm: "100%", xs: "110px" },
                         "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
                           background: primaryColor, 
@@ -487,7 +498,7 @@ const SigntureSection = ({
                         backgroundColor: primaryColor,
                         color: secondaryColor,
                         height: "44px",
-                        width: { sm: "100%", xs: "187px" },
+                        width: { sm: "100%", xs: "110px" },
                         "&:hover": { backgroundColor: primaryColor, color: secondaryColor,},
                         "&.Mui-disabled": {
                           background: primaryColor, 
@@ -512,11 +523,11 @@ const SigntureSection = ({
                   variant="outlined"
                   sx={{
                     fontFamily: '"Inter" !important',
-                    height: "62px",
-                    width: "285px",
+                    height: {sm:"62px",xs:'52px'},
+                    width: {sm:"285px",xs:'235px'},
                     borderRadius: "12px",
-                    fontSize: "24px",
-                    fontWeight: 700,
+                    fontSize: {sm:"24px",xs:'16px'},
+                    fontWeight: {sm:700,xs:500},
                     color: primaryColor,
                     lineHeight: "26px",
                     borderColor: primaryColor,
