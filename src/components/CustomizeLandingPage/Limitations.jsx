@@ -1,3 +1,15 @@
+import './style.scss';
+
+import React, {
+  useMemo,
+  useState,
+} from 'react';
+
+import { backendURL } from '@/utilities/common';
+import {
+  Add,
+  Remove,
+} from '@mui/icons-material';
 import {
   Accordion,
   AccordionDetails,
@@ -5,12 +17,10 @@ import {
   Box,
   Container,
   Typography,
-} from "@mui/material";
-import React, { useMemo, useState } from "react";
-import LimitationImg from "../../Assets/CustomerLandingImages/LimitationImg.svg";
-import { Add, Remove } from "@mui/icons-material";
-import "./style.scss";
-import { backendURL } from "@/utilities/common";
+} from '@mui/material';
+
+import LimitationImg
+  from '../../Assets/CustomerLandingImages/LimitationImg.svg';
 
 const accordionData = [
   {
@@ -52,13 +62,13 @@ const LimitationsSection = ({ data }) => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ pt: 8, pb: 2 }}>
+    <Container maxWidth="lg" sx={{ pt: {sm:8,xs:3}, pb: 2 }}>
       <Typography
         sx={{
           fontFamily: '"Poppins" !important',
-          fontSize: "48.5px",
-          fontWeight: "600",
-          lineHeight: "60.53px",
+          fontSize: {sm:"48.5px",xs:'24px'},
+          fontWeight: 600,
+          lineHeight: {sm:"60.53px",xs:'30px'},
           color: "#000000",
           textAlign: "center",
         }}
@@ -68,12 +78,12 @@ const LimitationsSection = ({ data }) => {
       <Typography
         sx={{
           fontFamily: '"Poppins" !important',
-          fontSize: "24px",
-          lineHeight: "24px",
+          fontSize: {sm:"24px",xs:'16px'},
+          lineHeight: {sm:"24px",xs:'16px'},
           fontWeight: 400,
           color: "rgba(0, 0, 0, 0.65)",
           pt: 2,
-          pb: 4,
+          pb: {sm:4,xs:1.5},
           textAlign: "center",
         }}
       >
@@ -81,9 +91,9 @@ const LimitationsSection = ({ data }) => {
         this warranty:
       </Typography>
       <Box
-        sx={{ display: "flex", FlexDirection: "column", width: "100%", gap: 4 }}
+        sx={{ display: "flex", width: "100%", gap: 4,flexWrap : {sm:'nowrap',xs:'wrap'} }}
       >
-        <Box sx={{ width: "50%" }}>
+        <Box sx={{ width: {sm:"50%",xs:'100%'}, }}>
           {FAQSData?.map((data, index) => (
             <Box key={index} sx={{ mb: 2 }}>
               <Accordion
@@ -93,8 +103,8 @@ const LimitationsSection = ({ data }) => {
                   borderRadius: "10px !important",
                   border: "1px solid #D6D6D6",
                   boxShadow: "none",
-                  py: "10px",
-                  px: "8px",
+                  py: {sm: "10px",xs:'0px'},
+                  px: {sm: "8px",xs:'0px'},
                 }}
               >
                 <AccordionSummary
@@ -121,7 +131,7 @@ const LimitationsSection = ({ data }) => {
             </Box>
           ))}
         </Box>
-        <Box sx={{ width: "50%", alignContent: "center" }}>
+        <Box sx={{ width: {sm:"50%",xs:'100%'}, alignContent: "center" }}>
           <img
             src={
               data?.content?.section5?.image
@@ -129,15 +139,15 @@ const LimitationsSection = ({ data }) => {
                 : LimitationImg
             }
             alt="not"
-            style={{ height: "500px", width: "500px", borderRadius: "10px" }}
+            className='faqsLogo'
           />
         </Box>
       </Box>
       <Typography
         sx={{
           fontFamily: '"Poppins" !important',
-          fontSize: "18px",
-          lineHeight: "24px",
+          fontSize: {sm:"18px",xs:'14px'},
+          lineHeight: {sm:"24px",xs:'16px'},
           fontStyle: "italic",
           pt: 0.5,
         }}

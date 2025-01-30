@@ -1,11 +1,14 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { IconButton } from "@mui/material";
-import { InfoOutlined } from "@mui/icons-material";
-import { backendURL } from "@/utilities/common";
+import '../../style.scss';
+
+import * as React from 'react';
+
+import { backendURL } from '@/utilities/common';
+import { InfoOutlined } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
 
 const NameAcronyms = ({ name, width, height, borderRadius = "100%", type }) => {
   let firstNameInitial = "";
@@ -43,14 +46,14 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  minWidth: 700,
+  minWidth: {sm:700,xs:340},
   minHeight: 300,
   bgcolor: "background.paper",
   boxShadow: 24,
   borderRadius: 2,
-  px: 3,
+  px: {sm:3,xs:2},
   pb: 1.5,
-  pt: 4,
+  pt: {sm:4,xs:2},
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
@@ -72,7 +75,7 @@ export default function OptionInfoModel({ itemData, colorData }) {
   return (
     <div>
       <IconButton sx={{ p: "1px" }} onClick={(event) => handleOpen(event)}>
-        <InfoOutlined />
+        <InfoOutlined sx={{fontSize:{sm:'24px',xs:'20px'}}}/>
       </IconButton>
       <Modal
         open={open}
@@ -82,15 +85,12 @@ export default function OptionInfoModel({ itemData, colorData }) {
         disableAutoFocus
       >
         <Box sx={style}>
-          <Box sx={{ display: "flex", gap: 4, width: "100%" }}>
-            <Box sx={{ width: "190px" }}>
+          <Box sx={{ display: "flex", gap: {sm:4,xs:2}, width: "100%" }}>
+            <Box sx={{ width: {sm:"190px",xs:'90px'} }}>
               {!imageError ? (
                 <img
-                  className="cellImg"
-                  style={{
-                    width: "170px",
-                    height: "170px",
-                  }}
+                  className="upgradeOptionImg"
+                  
                   onError={() => setImageError(true)}
                   src={`${backendURL}/${itemData?.image}`}
                   alt="not found"
@@ -109,7 +109,7 @@ export default function OptionInfoModel({ itemData, colorData }) {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: 3,
+                  gap: {sm:3,xs:1},
                 }}
               >
                 <Typography className="optionHead">
@@ -119,7 +119,7 @@ export default function OptionInfoModel({ itemData, colorData }) {
                   className="optionSubHead"
                   sx={{
                     pr: 1,
-                    fontSize: "18px !important",
+                    fontSize: {sm:"18px !important",xs:"16px !important"},
                     height: "200px",
                     overflowY: "auto",
                   }}

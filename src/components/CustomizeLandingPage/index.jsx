@@ -287,7 +287,7 @@ const CustomizeLandingPage = ({
             display: "block",
             gap: 10,
             position: "relative",
-            height: "68vh",
+            height: {sm:"68vh",xs:'88vh'},
           }}
         >
           <Box>
@@ -303,10 +303,10 @@ const CustomizeLandingPage = ({
                 sx={{
                   background: "rgba(255,255,255,.7)",
                   backdropFilter: "blur(10px)",
-                  px: 5,
-                  pt: 2,
-                  pb: 3,
-                  gap: 1,
+                  px: {sm:5,xs:3},
+                  pt: {sm:2,xs:1},
+                  pb: {sm:3,xs:1},
+                  gap: {sm:1,xs:0.2},
                   display: "flex",
                   flexDirection: "column",
                   maxWidth: "628px",
@@ -314,9 +314,9 @@ const CustomizeLandingPage = ({
               >
                 <Typography
                   sx={{
-                    fontSize: "24px",
-                    fontWeight: 500,
-                    lineHeight: "36px",
+                    fontSize: {sm:"24px",xs:'16px'},
+                    fontWeight: {sm:500,xs:400},
+                    lineHeight: {sm:"36px",xs:'24px'},
                     textAlign: "start",
                     fontFamily: '"Poppins" !important',
                   }}
@@ -325,7 +325,7 @@ const CustomizeLandingPage = ({
                     "Your GCS Estimate Presentation"}
                 </Typography>
                 <Typography
-                  sx={{ pr: 2, textAlign: "start" }}
+                  sx={{ pr: {sm:2,xs:0.4}, textAlign: "start" }}
                   className="subHeaderText"
                 >
                   {selectedData?.content?.section1?.text2 ??
@@ -335,23 +335,23 @@ const CustomizeLandingPage = ({
             </Box>
             <Box
               sx={{
-                display: "flex",
+                display: {sm:"flex",xs:'block'},
                 background: hexToRgba(backgroundColor, 0.3),
                 backdropFilter: "blur(11.899999618530273px)",
-                px: "2.5rem",
-                py: "1.25rem",
+                px: {sm:"2.5rem",xs:3},
+                py: {sm:"1.25rem",xs:2},
                 gap: 3,
               }}
             >
               <Box
-                sx={{ gap: "0.125rem", borderRight: "4px solid white", pr: 3 }}
+                sx={{ gap: "0.125rem", borderRight:{sm:"4px solid white",xs:'none'},borderBottom:{sm:'none',xs:"2px solid white"}, pr: {sm:3,xs:0},pb: {sm:0,xs:0.7} }}
               >
                 <Typography
                   sx={{
-                    fontSize: "24px",
+                    fontSize: {sm:"24px",xs:'16px'},
                     color: secondaryColor,
-                    lineHeight: "36px",
-                    fontWeight: 500,
+                    lineHeight: {sm:"36px",xs:'24px'},
+                    fontWeight: {sm:500,xs:400},
                     fontFamily: '"Poppins" !important',
                   }}
                 >
@@ -359,7 +359,7 @@ const CustomizeLandingPage = ({
                 </Typography>
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize: {sm:"16px",xs:'14px'},
                     color: secondaryColor,
                     lineHeight: "24px",
                     fontFamily: '"Poppins" !important',
@@ -369,7 +369,7 @@ const CustomizeLandingPage = ({
                 </Typography>
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize:{sm:"16px",xs:'14px'},
                     color: secondaryColor,
                     lineHeight: "24px",
                     fontFamily: '"Poppins" !important',
@@ -378,13 +378,13 @@ const CustomizeLandingPage = ({
                   John@GCSglass.com
                 </Typography>
               </Box>
-              <Box>
+              <Box sx={{pt: {sm:0,xs:0.7}}}>
                 <Typography
                   sx={{
-                    fontSize: "24px",
+                     fontSize: {sm:"24px",xs:'16px'},
                     color: secondaryColor,
-                    lineHeight: "36px",
-                    fontWeight: 500,
+                    lineHeight: {sm:"36px",xs:'24px'},
+                    fontWeight: {sm:500,xs:400},
                     fontFamily: '"Poppins" !important',
                   }}
                 >
@@ -392,7 +392,7 @@ const CustomizeLandingPage = ({
                 </Typography>
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize:{sm:"16px",xs:'14px'},
                     color: secondaryColor,
                     lineHeight: "24px",
                     fontFamily: '"Poppins" !important',
@@ -402,9 +402,9 @@ const CustomizeLandingPage = ({
                 </Typography>
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize: {sm:"16px",xs:'14px'},
                     color: secondaryColor,
-                    lineHeight: "24px",
+                    lineHeight: {sm:"24px",xs:'18px'},
                     fontFamily: '"Poppins" !important',
                   }}
                 >
@@ -416,11 +416,11 @@ const CustomizeLandingPage = ({
         </Box>
       </Box>
       <Box sx={{ background: backgroundColor }}>
-        <Container maxWidth="lg" sx={{ pb: 4, pt: 8 }}>
+        <Container maxWidth="lg" sx={{ pb: {sm:4,xs:1.5}, pt: {sm:8,xs:5} }}>
           <Box>
             <Box
               sx={{
-                pb: 2,
+                pb: {sm:2,xs:1},
                 display: "flex",
                 justifyContent: "space-between",
               }}
@@ -428,9 +428,9 @@ const CustomizeLandingPage = ({
               <Typography
                 sx={{
                   fontFamily: '"Poppins" !important',
-                  fontSize: "44px",
+                  fontSize: {sm:"44px",xs:'24px'},
                   fontWeight: 600,
-                  lineHeight: "62px",
+                  lineHeight: {sm:"62px",xs:'32px'},
                   color: secondaryColor,
                 }}
               >
@@ -447,7 +447,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
-                    fontSize: "28px",
+                    fontSize: {sm:"28px",xs:'16px'},
                     fontWeight: 600,
                     color: secondaryColor,
                   }}
@@ -461,10 +461,10 @@ const CustomizeLandingPage = ({
                   selectedData?.content?.section2?.shower?.status && (
                     <Typography
                       sx={{
-                        fontSize: "18px",
+                        fontSize: {sm:"18px",xs:'14px'},
                         fontWeight: 500,
                         color: secondaryColor,
-                        mb: 1.5,
+                        mb: {sm:1.5,xs:0.6},
                       }}
                     >
                       {selectedData?.content?.section2?.shower?.description}
@@ -511,7 +511,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
-                    fontSize: "28px",
+                    fontSize: {sm:"28px",xs:'16px'},
                     fontWeight: 600,
                     color: secondaryColor,
                     pt: 2,
@@ -526,10 +526,10 @@ const CustomizeLandingPage = ({
                   selectedData?.content?.section2?.mirror?.status && (
                     <Typography
                       sx={{
-                        fontSize: "18px",
+                        fontSize: {sm:"18px",xs:'14px'},
                         fontWeight: 500,
                         color: secondaryColor,
-                        mb: 1.5,
+                        mb: {sm:1.5,xs:0.6},
                       }}
                     >
                       {selectedData?.content?.section2?.mirror?.description}
@@ -579,7 +579,7 @@ const CustomizeLandingPage = ({
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
-                    fontSize: "28px",
+                    fontSize: {sm:"28px",xs:'16px'},
                     fontWeight: 600,
                     color: secondaryColor,
                     pt: 2,
@@ -595,12 +595,12 @@ const CustomizeLandingPage = ({
                   selectedData?.content?.section2?.wineCellar?.status && (
                     <Typography
                       sx={{
-                        fontSize: "18px",
+                        fontSize: {sm:"18px",xs:'14px'},
                         fontWeight: 500,
                         color: secondaryColor,
                         maxHeight: "159px",
                         overflowY: "auto",
-                        mb: 1.5,
+                        mb: {sm:1.5,xs:0.6},
                       }}
                     >
                       {selectedData?.content?.section2?.wineCellar?.description}
@@ -647,9 +647,9 @@ const CustomizeLandingPage = ({
               <Typography
                 sx={{
                   fontFamily: '"Poppins" !important',
-                  fontSize: "28px",
+                  fontSize: {sm:"28px",xs:'18px'},
                   fontWeight: 600,
-                  lineHeight: "62px",
+                  lineHeight: {sm:"62px",xs:'32px'},
                   color: secondaryColor,
                   textAlign: "end",
                 }}
@@ -657,7 +657,7 @@ const CustomizeLandingPage = ({
                 Total Price is{" "}
                 <Box
                   component="span"
-                  sx={{ color: primaryColor, fontSize: "34px !important" }}
+                  sx={{ color: primaryColor, fontSize: {sm:"34px !important",xs:'18px !important'}}}
                 >
                   $ {totalSum?.toFixed(2)}
                 </Box>
@@ -707,18 +707,18 @@ const CustomizeLandingPage = ({
             width: "90%",
             m: "auto",
             display: "flex",
-            justifyContent: "end",
-            p: 2,
+            justifyContent: {sm:"end",xs:'center'},
+            p: {sm:2,xs:1},
           }}
         >
           <Typography
             sx={{
               color: secondaryColor,
               fontFamily: '"Inter" !important',
-              fontSize: "24px",
+              fontSize: {sm:"24px",xs:'16px'},
               lineHeight: "26px",
               textAlign: "left",
-              pb: 2,
+              pb: {sm:2,xs:1},
             }}
           >
             © {new Date().getFullYear()} | All rights reserved.

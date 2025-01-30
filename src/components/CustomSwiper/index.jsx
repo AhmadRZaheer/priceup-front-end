@@ -1,5 +1,6 @@
 import 'swiper/css';
 import 'swiper/css/navigation';
+import '../CustomizeLandingPage/style.scss';
 
 import React from 'react';
 
@@ -43,13 +44,13 @@ const CustomSwiper = ({ data, category, colorData }) => {
       }`}
       </style>
       <Box sx={{ display: "flex", py: 4, justifyContent: "center" }}>
-        <img src={Bulb} alt="not" style={{ height: "50px" }} />
+        <img src={Bulb} alt="not" className='smilerBulbLogo' />
         <Typography
           sx={{
             fontFamily: '"Poppins" !important',
-            fontSize: "32px",
+            fontSize: {sm:"32px",xs:'16px'},
             fontWeight: 600,
-            lineHeight: "35px",
+            lineHeight: {sm:"35px",xs:'20px'},
             alignSelf: "end",
             borderBottom: "1px solid",
             borderColor: colorData?.primary,
@@ -72,7 +73,7 @@ const CustomSwiper = ({ data, category, colorData }) => {
               spaceBetween={20}
               slidesPerView={4}
               breakpoints={{
-                640: {
+                300: {
                   slidesPerView: 2,
                   spaceBetween: 20,
                 },
@@ -90,15 +91,11 @@ const CustomSwiper = ({ data, category, colorData }) => {
               {data?.images?.length > 0 ? (
                 data?.images?.map((data, index) => (
                   <SwiperSlide key={index}>
-                    <Card sx={{}}>
+                    <Card >
                       <img
                         src={`${backendURL}/${data}`}
                         alt="not"
-                        style={{
-                          height: "345px",
-                          width: "100%",
-                          objectFit: "fill",
-                        }}
+                        className='sliderCategoryImg'
                       />
                     </Card>
                   </SwiperSlide>
@@ -106,7 +103,7 @@ const CustomSwiper = ({ data, category, colorData }) => {
               ) : (
                 <Typography
                   sx={{
-                    fontSize: "20px",
+                    fontSize: {sm:"20px",xs:'14px'},
                     fontWeight: 500,
                     lineHeight: "54px",
                     textAlign: "center",

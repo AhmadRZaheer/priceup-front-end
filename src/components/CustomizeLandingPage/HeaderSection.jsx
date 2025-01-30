@@ -1,9 +1,15 @@
-import { Box, Container } from "@mui/material";
-import React from "react";
-import LogoNavBar from "../../Assets/purplelogo.svg";
-import GCSLogo from "@/Assets/GCS-logo.png";
-import "./style.scss";
-import { backendURL } from "@/utilities/common";
+import './style.scss';
+
+import React from 'react';
+
+import GCSLogo from '@/Assets/GCS-logo.png';
+import { backendURL } from '@/utilities/common';
+import {
+  Box,
+  Container,
+} from '@mui/material';
+
+import LogoNavBar from '../../Assets/purplelogo.svg';
 
 const HeaderSection = ({ selectedData, authUser }) => {
   const backgroundColor = selectedData?.content?.colorSection?.default;
@@ -29,7 +35,7 @@ const HeaderSection = ({ selectedData, authUser }) => {
                 : GCSLogo
             }
             alt="logo nav bar"
-            style={{ height: "100px" }}
+        className="companyGcsLogo"
           />
         </Box>
         <Container

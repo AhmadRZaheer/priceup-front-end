@@ -384,7 +384,7 @@ export const MirrorDimensions = () => {
               }}
             >
               {skeltonState || isFetching ? (
-                <>
+                <> 
                   <LayoutMeasurementSkeleton />
                   <EstimateDetailSkeleton />
                 </>

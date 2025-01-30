@@ -17,36 +17,36 @@ const WarrantySection = ({ data }) => {
   const secondaryColor = data?.content?.colorSection?.secondary;
 
   return (
-    <Container maxWidth="lg" sx={{ pt: 7 }}>
+    <Container maxWidth="lg" sx={{ pt: {sm:7,xs:2} }}>
       <Box
         sx={{
           background: primaryColor,
           borderRadius: "9px",
-          pl: 5,
+          pl: {sm:5,xs:2.5},
           pr: 1.5,
-          pt: 4,
-          pb: 7,
+          pt: {sm:4,xs:2},
+          pb: {sm:7,xs:3},
         }}
       >
         <Grid container spacing={2}>
-          <Grid item xs={9}>
+          <Grid item sm={9} xs={12} sx={{order:{sm:1,xs:2}}}>
             <Typography className="warrantyHead" sx={{ color: secondaryColor }}>
               {data?.content?.section4?.heading ??
                 "Lifetime Craftsmanship Warranty – Our Promise to You"}
             </Typography>
             <Typography
               className="warrantySubHead"
-              sx={{ pt: 3, color: secondaryColor }}
+              sx={{ pt: {sm:3,xs:1.5}, color: secondaryColor }}
             >
               {data?.content?.section4?.subHeading ??
                 "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction."}
             </Typography>
           </Grid>
-          <Grid item xs={3} sx={{ display: "flex", justifyContent: "end" }}>
-            <img src={WarrantySectionImg} alt="not" />
+          <Grid item sm={3} xs={12} sx={{ display: "flex", justifyContent: "end",order:{sm:2,xs:1} }}>
+            <img src={WarrantySectionImg} alt="not" style={{width:'100%',height:'100%'}} />
           </Grid>
         </Grid>
-        <Box sx={{ width: "84%", pt: 2 }}>
+        <Box sx={{ width: {sm:"84%",xs:'98%'}, pt: 2 }}>
           {data?.content?.section4?.description?.length ? (
             <div
               dangerouslySetInnerHTML={{
@@ -58,7 +58,7 @@ const WarrantySection = ({ data }) => {
             <>
               <Typography
                 className="wrantyText"
-                sx={{ pb: 4, pt: 5, color: secondaryColor }}
+                sx={{ pb: {sm:4,xs:2}, pt: {sm:4,xs:2}, color: secondaryColor }}
               >
                 What Our Warranty Covers
               </Typography>

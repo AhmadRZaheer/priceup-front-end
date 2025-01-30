@@ -87,7 +87,7 @@ const MenuItem = ({
           (selectedItem) => selectedItem?.item?._id === item?._id
         )
       : item?._id === selectedItem?._id;
-  const primaryRgba = hexToRgba(primaryColor,0.06);
+  const primaryRgba = hexToRgba(primaryColor, 0.06);
 
   return (
     <Tooltip
@@ -121,10 +121,13 @@ const MenuItem = ({
         <Box
           sx={{
             borderRadius: "4px",
-            border: isSelected ? `1px solid ${primaryColor}` : "1px solid #D4DBDF",
+            border: isSelected
+              ? `1px solid ${primaryColor}`
+              : "1px solid #D4DBDF",
             py: "3px",
             px: "10px",
-            display: "flex",
+            display:
+              type === "hardwareAddons" ? { sm: "flex", xs: "block" } : "flex",
             gap: 1,
             alignItems: "center",
             width: { sm: "100%", xs: "95%" },
@@ -140,7 +143,7 @@ const MenuItem = ({
           }}
         >
           <Box sx={{ display: "flex", gap: 1 }}>
-            <Typography>
+            <Typography sx={{ fontSize: { sm: "16px", xs: "14px" } }}>
               {item?.modifiedName ?? item?.name}
             </Typography>
             <OptionInfoModel itemData={item} colorData={colorData} />

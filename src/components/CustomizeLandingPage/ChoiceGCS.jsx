@@ -19,8 +19,8 @@ import bgHeaderImage from '../../Assets/CustomerLandingImages/WhyChoice.svg';
 const ChoiceGCS = ({ data }) => {
   const primaryColor = data?.content?.colorSection?.primary;
   return (
-    <>
-      <Container maxWidth="lg" sx={{ pb: 2.5, pt: 3.5 }}>
+    <Box sx={{ pt: {sm:3.5,xs:1.5},mb:{sm:0,xs:1}}}>
+      <Container maxWidth="lg" sx={{ pb: {sm:2.5,xs:1}, }}>
         <Typography className="choiceHead" sx={{ color: primaryColor }}>
           {data?.content?.section3?.heading ?? "Why Choose GCS?"}
         </Typography>
@@ -35,14 +35,11 @@ const ChoiceGCS = ({ data }) => {
       </Container>
       <Box
         sx={{
-          backgroundImage: {
-            md: `url(${
+          backgroundImage:  `url(${
               data?.content?.section3?.backgroundImage
                 ? `${backendURL}/${data?.content?.section3?.backgroundImage}`
                 : bgHeaderImage
             })`,
-            xs: "none",
-          },
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
           pb: { md: 5, xs: 2 },
@@ -50,22 +47,23 @@ const ChoiceGCS = ({ data }) => {
           display: "flex",
           flexDirection: { md: "row", xs: "column" },
           position: "relative",
-          height: "555px",
+          height: {sm:"555px",xs:'126vh'},
         }}
       >
-        <Container maxWidth="lg" sx={{ alignItems: "end", display: "flex" }}>
+        <Container maxWidth="lg" sx={{ alignItems: "end", display: "flex",height: {sm:'auto',xs:'-webkit-fill-available'} }}>
           <Box className="width-lg" sx={{}}>
             <Box
               sx={{
                 width: "100%",
                 display: "flex",
                 justifyContent: "space-between",
-                gap: 3,
+                gap: { sm: 3, xs: 1.5 },
+                flexWrap: {sm:'nowrap',xs:"wrap"},
               }}
             >
               <Box
                 sx={{
-                  width: "25%",
+                  width: { sm: "25%", xs: "100%" },
                   background: "rgba(237,237,237,1)",
                   p: "20px",
                   backdropFilter: " blur(5.599999904632568px)",
@@ -79,11 +77,7 @@ const ChoiceGCS = ({ data }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <img
-                    src={Diamond}
-                    alt="not"
-                    style={{ height: "64px", width: "64px", padding: "10px" }}
-                  />
+                  <img src={Diamond} alt="not" className="choiceLogo" />
                 </Box>
                 <Typography
                   variant="h3"
@@ -93,6 +87,7 @@ const ChoiceGCS = ({ data }) => {
                     py: 0.5,
                     fontWeight: 600,
                     lineHeight: "30px",
+                    textAlign:'center'
                   }}
                 >
                   {data?.content?.section3?.card1?.text1 ??
@@ -103,6 +98,7 @@ const ChoiceGCS = ({ data }) => {
                     fontFamily: '"Poppins" !important',
                     fontSize: "20px",
                     lineHeight: "30px",
+                     textAlign:'center'
                   }}
                 >
                   {data?.content?.section3?.card1?.text2 ??
@@ -112,7 +108,7 @@ const ChoiceGCS = ({ data }) => {
 
               <Box
                 sx={{
-                  width: "25%",
+                  width: { sm: "25%", xs: "100%" },
                   background: "rgba(237,237,237,1)",
                   p: "20px",
                 }}
@@ -124,11 +120,7 @@ const ChoiceGCS = ({ data }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <img
-                    src={PersonHeart}
-                    alt="not"
-                    style={{ height: "64px", width: "64px", padding: "10px" }}
-                  />
+                  <img src={PersonHeart} alt="not" className="choiceLogo" />
                 </Box>
 
                 <Typography
@@ -139,6 +131,7 @@ const ChoiceGCS = ({ data }) => {
                     fontWeight: 600,
                     lineHeight: "30px",
                     fontFamily: '"Poppins" !important',
+                     textAlign:'center'
                   }}
                 >
                   {data?.content?.section3?.card2?.text1 ?? "Customer Care"}
@@ -148,6 +141,7 @@ const ChoiceGCS = ({ data }) => {
                     fontSize: "20px",
                     lineHeight: "30px",
                     fontFamily: '"Poppins" !important',
+                     textAlign:'center'
                   }}
                 >
                   {data?.content?.section3?.card2?.text2 ??
@@ -157,7 +151,7 @@ const ChoiceGCS = ({ data }) => {
 
               <Box
                 sx={{
-                  width: "25%",
+                  width: { sm: "25%", xs: "100%" },
                   background: "rgba(237,237,237,1)",
                   p: "20px",
                 }}
@@ -169,11 +163,7 @@ const ChoiceGCS = ({ data }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <img
-                    src={StopWatch}
-                    alt="not"
-                    style={{ height: "64px", width: "64px", padding: "10px" }}
-                  />
+                  <img src={StopWatch} alt="not" className="choiceLogo" />
                 </Box>
                 <Typography
                   variant="h3"
@@ -183,6 +173,7 @@ const ChoiceGCS = ({ data }) => {
                     fontWeight: 600,
                     lineHeight: "30px",
                     fontFamily: '"Poppins" !important',
+                     textAlign:'center'
                   }}
                 >
                   {data?.content?.section3?.card3?.text1 ?? "Fast Response"}
@@ -192,6 +183,7 @@ const ChoiceGCS = ({ data }) => {
                     fontSize: "20px",
                     lineHeight: "30px",
                     fontFamily: '"Poppins" !important',
+                     textAlign:'center'
                   }}
                 >
                   {data?.content?.section3?.card3?.text2 ??
@@ -201,7 +193,7 @@ const ChoiceGCS = ({ data }) => {
 
               <Box
                 sx={{
-                  width: "25%",
+                  width: { sm: "25%", xs: "100%" },
                   background: "rgba(237,237,237,1)",
                   p: "20px",
                 }}
@@ -213,11 +205,7 @@ const ChoiceGCS = ({ data }) => {
                     justifyContent: "center",
                   }}
                 >
-                  <img
-                    src={EyeIcon}
-                    alt="not"
-                    style={{ height: "64px", width: "64px", padding: "10px" }}
-                  />
+                  <img src={EyeIcon} alt="not" className="choiceLogo" />
                 </Box>
                 <Typography
                   variant="h3"
@@ -227,6 +215,7 @@ const ChoiceGCS = ({ data }) => {
                     fontWeight: 600,
                     lineHeight: "30px",
                     fontFamily: '"Poppins" !important',
+                     textAlign:'center'
                   }}
                 >
                   {data?.content?.section3?.card4?.text1 ?? "High Clarity"}
@@ -236,6 +225,7 @@ const ChoiceGCS = ({ data }) => {
                     fontSize: "20px",
                     lineHeight: "30px",
                     fontFamily: '"Poppins" !important',
+                     textAlign:'center'
                   }}
                 >
                   {data?.content?.section3?.card4?.text2 ??
@@ -246,7 +236,7 @@ const ChoiceGCS = ({ data }) => {
           </Box>
         </Container>
       </Box>
-    </>
+    </Box>
   );
 };
 

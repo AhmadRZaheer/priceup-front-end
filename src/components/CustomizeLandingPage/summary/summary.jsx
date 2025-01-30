@@ -597,14 +597,16 @@ const ShowerSummary = ({
           <Box
             sx={{
               display: "flex",
-              gap: 4,
+              gap: {sm:4,xs:1.5},
               width: "100%",
+              flexWrap:{sm:'nowrap',xs:'wrap'}
             }}
           >
             <Box
               sx={{
-                width: "50%",
+                width: {sm:"50%",xs:'100%'},
                 mt: 3,
+                order:{sm:1,xs:2}
               }}
             >
               <Typography
@@ -612,6 +614,7 @@ const ShowerSummary = ({
                   fontSize: "18px",
                   fontWeight: "bold",
                   mb: 1.5,
+                  display:{sm:'block',xs:'none'}
                 }}
               >
                 Layout Dimensions:
@@ -719,31 +722,41 @@ const ShowerSummary = ({
             </Box>
             <Box
               sx={{
-                width: "40%",
+                width: {sm:"40%",xs:'100%'},
+                order:{sm:2,xs:1}
               }}
             >
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  mb: 1.5,
+                  display:{sm:'none',xs:'block'}
+                }}
+              >
+                Layout Dimensions:
+              </Typography>
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "end",
-                  py: 1,
+                  justifyContent: {sm:"end",xs:'center'},
+                  py: {sm:1,xs:0},
                 }}
               >
                 <img
                   src={imageData ?? CustomImage}
                   alt="not"
-                  style={{ height: "320px" }}
+                className='layoutLogo'
                 />
               </Box>
             </Box>
           </Box>
         </Box>
       </Box>
-      <Box sx={{ width: "100%", display: "flex", gap: 3, mt: 2 }}>
+      <Box sx={{ width: "100%", display: "flex", gap: 3, mt: 2 ,flexWrap:{sm:'nowrap',xs:'wrap'}}}>
         <Box
           sx={{
-            width: "50%",
-            paddingBottom: { sm: 0, xs: "80px" },
+            width: {sm:"50%",xs:'100%'},
           }}
         >
           <Box
@@ -758,7 +771,7 @@ const ShowerSummary = ({
           >
             <Box
               sx={{
-                px: 3,
+                px: {sm:3,xs:1.5},
                 py: 2,
                 display: "flex",
                 justifyContent: "space-between",
@@ -778,20 +791,20 @@ const ShowerSummary = ({
               </Typography>
             </Box>
             <Divider sx={{ borderColor: "#D4DBDF" }} />
-            <Box sx={{ backgroundColor: "#F3F5F6", px: 3, py: 2 }}>
+            <Box sx={{ backgroundColor: "#F3F5F6", px: {sm:3,xs:1.5}, py: 2 }}>
               <Grid container>
-                <Grid item md={7} className="text-xs-samibold">
+                <Grid item xs={7} className="text-xs-samibold">
                   Dimensions
                 </Grid>
-                <Grid item md={5} className="text-xs-samibold">
+                <Grid item xs={5} className="text-xs-samibold">
                   Summary
                 </Grid>
               </Grid>
             </Box>
             <Divider sx={{ borderColor: "#D4DBDF" }} />
-            <Box sx={{ px: 3, py: "15px" }}>
-              <Grid container spacing={2}>
-                <Grid item md={7}>
+            <Box sx={{ px: {sm:3,xs:1.5}, py: "15px" }}>
+              <Grid container >
+                <Grid item xs={7}>
                   <Stack gap={2}>
                     <Typography
                       className="text-xs-samibold"
@@ -833,7 +846,7 @@ const ShowerSummary = ({
                         {data?.sqftArea}
                       </Typography>
                     </Box>
-                    <Box sx={{ width: "60%" }}>
+                    <Box sx={{ width: {sm:"60%",xs:'87%'} }}>
                       <Divider sx={{ borderColor: "#D4DBDF" }} />
                       <Box
                         sx={{
@@ -844,7 +857,7 @@ const ShowerSummary = ({
                           className="text-xs-ragular-bold"
                           sx={{
                             color: primaryColor,
-                            fontSize: "20px !important",
+                            fontSize: {sm:"20px !important",xs:"16px !important"},
                             fontWeight: "bold !important",
                           }}
                         >
@@ -857,7 +870,7 @@ const ShowerSummary = ({
                             fontSize:
                               discountValue > 0
                                 ? "17px !important"
-                                : "20px !important",
+                                : {sm:"20px !important",xs:"16px !important"},
                             pt: 1,
                             fontWeight: "bold !important",
                             textDecoration:
@@ -871,7 +884,7 @@ const ShowerSummary = ({
                             className="text-xs-ragular"
                             sx={{
                               color: primaryColor,
-                              fontSize: "20px !important",
+                              fontSize: {sm:"20px !important",xs:"16px !important"},
                               pt: 1,
                               fontWeight: "bold !important",
                             }}
@@ -885,7 +898,7 @@ const ShowerSummary = ({
                     {/* )} */}
                   </Stack>
                 </Grid>
-                <Grid item md={5}>
+                <Grid item xs={5}>
                   <Stack gap={2}>
                     <Typography
                       className="text-xs-samibold"
@@ -1210,7 +1223,7 @@ const ShowerSummary = ({
             </Box>
           )}
         </Box>
-        <Box sx={{ width: "50%" }}>
+        <Box sx={{ width:  {sm:"50%",xs:'100%'}, }}>
           {(glassAddonsList?.length >
             (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) ||
             hardwareAddonsList?.length > 0 ||
@@ -1218,10 +1231,10 @@ const ShowerSummary = ({
             <Typography
               sx={{
                 fontFamily: '"Poppins" !important',
-                fontSize: "32px",
-                fontWeight: 600,
+                fontSize: {sm:"32px",xs:'18px'},
+                fontWeight: {sm:600,xs:400},
                 lineHeight: "35px",
-                width: "80%",
+                width: "98%",
                 color: secondaryColor,
               }}
             >
@@ -1229,7 +1242,7 @@ const ShowerSummary = ({
             </Typography>
           )}
 
-          <Box sx={{ pt: 1 }}>
+          <Box sx={{ pt: {sm:1,xs:0} }}>
             {glassAddonsList?.length >
               (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) && (
               <Box
@@ -1242,7 +1255,7 @@ const ShowerSummary = ({
               >
                 <Box
                   sx={{
-                    width: "80%",
+                    width: {sm:"80%",xs:'100%'},
                     background: "white",
                     borderRadius: "11px",
                     pointerEvents:
@@ -1282,7 +1295,7 @@ const ShowerSummary = ({
                 >
                   <Box
                     sx={{
-                      width: "80%",
+                      width:{sm:"80%",xs:'100%'},
                       background: "white",
                       borderRadius: "11px",
                       pointerEvents:
@@ -1319,7 +1332,7 @@ const ShowerSummary = ({
               >
                 <Box
                   sx={{
-                    width: "80%",
+                    width:{sm:"80%",xs:'100%'},
                     background: "white",
                     borderRadius: "11px",
                     pointerEvents:

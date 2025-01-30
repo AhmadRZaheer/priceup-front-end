@@ -1,8 +1,17 @@
-import { Box, Button, Checkbox, Container, Typography } from "@mui/material";
-import React, { useState } from "react";
-import "./style.scss";
-import { useSelector } from "react-redux";
-import { getLocationPresentationSettings } from "@/redux/locationSlice";
+import './style.scss';
+
+import React, { useState } from 'react';
+
+import { useSelector } from 'react-redux';
+
+import { getLocationPresentationSettings } from '@/redux/locationSlice';
+import {
+  Box,
+  Button,
+  Checkbox,
+  Container,
+  Typography,
+} from '@mui/material';
 
 const AggremantCondition = ({ data, acceptTerms, setAcceptTerms }) => {
   const primaryColor = data?.content?.colorSection?.primary;
@@ -24,19 +33,24 @@ const AggremantCondition = ({ data, acceptTerms, setAcceptTerms }) => {
         <Box
           sx={{
             background: "#FFFFFF",
-            pt: 3,
-            borderRadius: "15px",
-            pr: 3,
-            pl: 6,
+            pt: { sm: 3, xs: 1.5 },
+            borderRadius: { sm: "15px", xs: 1.2 },
+            pr: { sm: 3, xs: 1.5 },
+            pl: { sm: 6, xs: 2.5 },
           }}
         >
-          <Typography className="contionHead" sx={{color:primaryColor}}>Terms and Conditions</Typography>
-          <Typography className="contionSubHead" sx={{ pt: 1.3 }}>
+          <Typography className="contionHead" sx={{ color: primaryColor }}>
+            Terms and Conditions
+          </Typography>
+          <Typography
+            className="contionSubHead"
+            sx={{ pt: { sm: 1.3, xs: 0 } }}
+          >
             Your Agreement
           </Typography>
           <Box
             sx={{
-              maxHeight: "408px",
+              maxHeight: {sm:"408px",xs:'308px'},
               overflowY: "auto",
               mt: 1.5,
               "&::-webkit-scrollbar": {
@@ -59,7 +73,10 @@ const AggremantCondition = ({ data, acceptTerms, setAcceptTerms }) => {
                 }}
               />
             ) : (
-              <Typography className="condtionDesc" sx={{ pr: 5 }}>
+              <Typography
+                className="condtionDesc"
+                sx={{ pr: { sm: 5, xs: 1 } }}
+              >
                 <Box>Last Revised: December 16, 2013</Box>
                 <Box>
                   Welcome to www.lorem-ipsum.info. This site is provided as a
@@ -212,7 +229,12 @@ const AggremantCondition = ({ data, acceptTerms, setAcceptTerms }) => {
           {acceptTerms || data?.status === "approve" ? (
             <Typography
               className="contionHead"
-              sx={{ pt: 3, pb: 2, color: primaryColor, textAlign: "center" }}
+              sx={{
+                pt: { sm: 3, xs: 1.5 },
+                pb: { sm: 2, xs: 1 },
+                color: primaryColor,
+                textAlign: "center",
+              }}
             >
               {" "}
               Terms and Conditions Accepted
@@ -220,9 +242,9 @@ const AggremantCondition = ({ data, acceptTerms, setAcceptTerms }) => {
           ) : (
             <Box
               sx={{
-                pt: 3,
-                pb: 2,
-                display: "flex",
+                pt: { sm: 3, xs: 1.5 },
+                pb: { sm: 2, xs: 1 },
+                display: { sm: "flex", xs: "block" },
                 justifyContent: "space-between",
               }}
             >
@@ -245,7 +267,14 @@ const AggremantCondition = ({ data, acceptTerms, setAcceptTerms }) => {
                   and privacy policy.
                 </Typography>
               </Box>
-              <Box sx={{ display: "flex", gap: 2.5 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2.5,
+                  justifyContent: { sm: "start", xs: "end" },
+                  mt: { sm: 0, xs: 1.5 },
+                }}
+              >
                 <Button
                   disabled={!checked}
                   onClick={() => setAcceptTerms(true)}
@@ -255,7 +284,7 @@ const AggremantCondition = ({ data, acceptTerms, setAcceptTerms }) => {
                     "&:hover": {
                       backgroundColor: primaryColor,
                     },
-                    width: "152px",
+                    width: { sm: "152px", xs: "110px" },
                   }}
                 >
                   Accept
