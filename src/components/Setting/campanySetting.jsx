@@ -2833,11 +2833,13 @@ const CampanySetting = () => {
                       width: "39%",
                     }}
                   >
-                    <Typography
-                      sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
-                    >
-                      Text 1
-                    </Typography>
+                    <Box sx={{display:'flex',justifyContent:'space-between'}}>
+                          <Typography
+                            sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                          >
+                            Text 1 - Max Limit(28)
+                            </Typography>
+                          </Box> 
                     <TextareaAutosize
                       style={{
                         padding: "10px",
@@ -2870,7 +2872,7 @@ const CampanySetting = () => {
                     <Typography
                       sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
                     >
-                      Text 2
+                      Text 2 - Max Limit(90)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -3798,7 +3800,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Heading
+                      Heading - Max Limit(15)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -3831,7 +3833,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Sub Heading
+                      Sub Heading - Max Limit(49)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -3864,7 +3866,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Description
+                      Description - Max Limit(196)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -3914,7 +3916,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 1
+                        Text 1 - Max Limit(20)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -3947,7 +3949,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 2
+                        Text 2 - Max Limit(50)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -3996,7 +3998,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 1
+                        Text 1 - Max Limit(13)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4029,7 +4031,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 2
+                        Text 2 - Max Limit(127)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4078,7 +4080,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 1
+                        Text 1 - Max Limit(12)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4111,7 +4113,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 2
+                        Text 2 - Max Limit(50)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4160,7 +4162,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 1
+                        Text 1 - Max Limit(12)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4193,7 +4195,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 2
+                        Text 2 - Max Limit(50)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4387,7 +4389,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Heading
+                      Heading - Max Limit(69)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -4420,7 +4422,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Sub Heading
+                      Sub Heading - Max Limit(154)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -4654,7 +4656,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Heading
+                      Heading - Max Limit(20)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -4687,7 +4689,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Sub Heading
+                      Sub Heading - Max Limit(142)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -4726,7 +4728,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Bottom Text
+                      Bottom Text - Max Limit(197)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -4779,7 +4781,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Heading
+                      Heading - Max Limit(26)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -4812,7 +4814,7 @@ const CampanySetting = () => {
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Description
+                      Description - Max Limit(181)
                     </Typography>
                     <TextareaAutosize
                       style={{
@@ -4862,7 +4864,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 1
+                        Text 1 - Max Limit(23)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4894,7 +4896,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 2
+                        Text 2 - Max Limit(139)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4943,7 +4945,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 1
+                        Text 1 - Max Limit(23)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -4976,7 +4978,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 2
+                        Text 2 - Max Limit(258)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -5025,7 +5027,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 1
+                        Text 1 - Max Limit(23)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -5057,7 +5059,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Text 2
+                        Text 2 - Max Limit(500)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -5119,7 +5121,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Product Title
+                        Product Title - Max Limit(62)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -5152,7 +5154,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Product Description
+                        Product Description - Max Limit(276)
                       </Typography>
                       <TextareaAutosize
                         style={{
@@ -5185,7 +5187,7 @@ const CampanySetting = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Result Description
+                        Result Description - Max Limit(184)
                       </Typography>
                       <TextareaAutosize
                         style={{
