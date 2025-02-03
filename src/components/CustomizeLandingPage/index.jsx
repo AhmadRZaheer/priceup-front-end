@@ -457,7 +457,7 @@ const CustomizeLandingPage = ({
                     {estimateTotal?.totalShowers?.length}
                   </Box>
                 </Typography>
-                {selectedData?.content?.section2?.shower?.description.length &&
+                {selectedData?.content?.section2?.shower?.description?.length > 0 &&
                   selectedData?.content?.section2?.shower?.status && (
                     <Typography
                       sx={{
@@ -522,7 +522,7 @@ const CustomizeLandingPage = ({
                     {estimateTotal?.totalMirrors?.length}
                   </Box>
                 </Typography>
-                {selectedData?.content?.section2?.mirror?.description.length &&
+                {selectedData?.content?.section2?.mirror?.description?.length > 0 &&
                   selectedData?.content?.section2?.mirror?.status && (
                     <Typography
                       sx={{
@@ -591,7 +591,7 @@ const CustomizeLandingPage = ({
                   </Box>
                 </Typography>
                 {selectedData?.content?.section2?.wineCellar?.description
-                  .length &&
+                  ?.length > 0 &&
                   selectedData?.content?.section2?.wineCellar?.status && (
                     <Typography
                       sx={{

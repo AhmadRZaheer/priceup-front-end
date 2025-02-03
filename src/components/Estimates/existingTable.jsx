@@ -1,51 +1,45 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  Box,
-  // IconButton,
-  Typography,
-  // InputAdornment,
-  // TextField,
-  CircularProgress,
-  // Button,
-  useMediaQuery,
-} from "@mui/material";
-import { makeStyles } from "@material-ui/core";
-// import { Search } from "@mui/icons-material";
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+// import NewPagination from "../Pagination";
+import { debounce } from 'lodash';
 import {
-  useDeleteEstimates,
-  // useFetchDataEstimate,
-  // useGetEstimates,
-} from "@/utilities/ApiHooks/estimate";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  // addSelectedItem,
-  // resetState,
-  // setisCustomizedDoorWidth,
-  // setDoorWeight,
-  // setDoorWidth,
-  // setListData,
-  // setNavigationDesktop,
-  // setPanelWeight,
-  // setQuoteState,
-  // setReturnWeight,
-  // updateMeasurements,
-  getListData,
-} from "@/redux/estimateCalculations";
+  useDispatch,
+  useSelector,
+} from 'react-redux';
 // import PlusWhiteIcon from "@/Assets/plus-white.svg";
-import { useNavigate } from "react-router-dom";
-import { backendURL, calculateTotal } from "@/utilities/common";
-import { DataGrid } from "@mui/x-data-grid";
-import { EstimatesColumns } from "@/utilities/DataGridColumns";
-import Pagination from "@/components/Pagination";
-import DeleteModal from "@/components/Modal/deleteModal";
-import { getEstimatesListRefetch } from "@/redux/refetch";
+import { useNavigate } from 'react-router-dom';
+
+import DeleteModal from '@/components/Modal/deleteModal';
+import Pagination from '@/components/Pagination';
+import { getListData } from '@/redux/estimateCalculations';
+import {
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+} from '@/redux/locationSlice';
+import { getEstimatesListRefetch } from '@/redux/refetch';
+import { useFetchAllDocuments } from '@/utilities/ApiHooks/common';
+// import { Search } from "@mui/icons-material";
+import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
+import {
+  backendURL,
+  calculateTotal,
+} from '@/utilities/common';
+import {
+  EstimateCategory,
+  quoteState,
+} from '@/utilities/constants';
+import { setStateForCustomEstimate } from '@/utilities/CustomEstimate';
+import { EstimatesColumns } from '@/utilities/DataGridColumns';
 import {
   generateObjectForPDFPreview,
   renderMeasurementSides,
   setStateForShowerEstimate,
-} from "@/utilities/estimates";
-import { EstimateCategory, quoteState } from "@/utilities/constants";
-import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
+} from '@/utilities/estimates';
 // import {
 //   resetEstimateState,
 //   setEstimateCategory,
@@ -56,20 +50,27 @@ import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locat
 //   setEstimateMeasurements,
 //   setSelectedItem,
 // } from "@/redux/mirrorsEstimateSlice";
-import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
-// import NewPagination from "../Pagination";
-import { debounce } from "lodash";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
-import DefaultImage from "../ui-components/defaultImage";
-import ActionsDropdown from "../common/ActionsDropdown";
-
+import { setStateForMirrorEstimate } from '@/utilities/mirrorEstimates';
+import {
+  GenrateColumns,
+  GenrateRows,
+} from '@/utilities/skeltonLoading';
+import { setStateForWineCellarEstimate } from '@/utilities/WineCellarEstimate';
+import { makeStyles } from '@material-ui/core';
 import {
   DeleteOutline,
   Edit,
-  // ManageSearch,
   RemoveRedEyeOutlined,
-} from "@mui/icons-material";
-import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+} from '@mui/icons-material';
+import {
+  Box,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+
+import ActionsDropdown from '../common/ActionsDropdown';
+import DefaultImage from '../ui-components/defaultImage';
 
 // const debounce = (func, delay) => {
 //   let timeout;
@@ -180,11 +181,31 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     navigate(`/estimates/${item?._id}/pdf-preview`);
   };
 
+  // const handleIconButtonClick = (item) => {
+  //   if (item?.category === EstimateCategory.SHOWERS) {
+  //     setStateForShowerEstimate(item, dispatch, navigate);
+  //   } else if (item?.category === EstimateCategory.MIRRORS) {
+  //     setStateForMirrorEstimate(item, dispatch, navigate);
+  //   }
+  // };
+
   const handleIconButtonClick = (item) => {
     if (item?.category === EstimateCategory.SHOWERS) {
-      setStateForShowerEstimate(item, dispatch, navigate);
+      if (item?.config?.layout_id !== null) {
+        setStateForShowerEstimate(item, dispatch, navigate);
+      } else {
+        setStateForCustomEstimate(item, dispatch, navigate);
+      }
     } else if (item?.category === EstimateCategory.MIRRORS) {
       setStateForMirrorEstimate(item, dispatch, navigate);
+    } else if (item?.category === EstimateCategory.WINECELLARS) {
+      if (item?.config?.layout_id !== null) {
+        setStateForWineCellarEstimate(item, dispatch, navigate);
+      } else {
+        setStateForCustomEstimate(item, dispatch, navigate);
+      }
+    } else {
+      console.error("not");
     }
   };
 
@@ -192,11 +213,11 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     debounce(() => {
       // Always refetch when page is 1, else reset page to 1 to trigger refetch
       // if (page !== 1) {
-        // setPage(1); // This will trigger a refetch due to the useEffect watching `page`
-        // refetchEstimatesList();
-      // } 
+      // setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // refetchEstimatesList();
+      // }
       // else {
-        refetchEstimatesList(); // If already on page 1, just refetch directly
+      refetchEstimatesList(); // If already on page 1, just refetch directly
       // }
     }, 700),
     [refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
@@ -213,8 +234,8 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     }
   }, [statusValue, dateValue, searchValue, page, refetchEstimatesCounter]);
   useEffect(() => {
-    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change   
-     if (statusValue || dateValue || searchValue) {
+    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+    if (statusValue || dateValue || searchValue) {
       setPage(1);
     }
   }, [statusValue, dateValue, searchValue, refetchEstimatesCounter]);

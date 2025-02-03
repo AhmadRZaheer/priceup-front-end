@@ -97,6 +97,7 @@ export const EstimateCategory = {
   SHOWERS: "showers",
   MIRRORS: "mirrors",
   WINECELLARS: "wineCellars",
+  CUSTOMS : 'customs'
 };
 
 export const mirrorHardwareTypes = {

@@ -1,36 +1,55 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import {
-  Box,
-  Button,
-  // CircularProgress,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import { makeStyles } from "@material-ui/core";
-import Pagination from "@/components/Pagination";
-import DeleteModal from "@/components/Modal/deleteModal";
-import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
-import { EstimateCategory, quoteState } from "@/utilities/constants";
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { debounce } from 'lodash';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import DeleteModal from '@/components/Modal/deleteModal';
+import Pagination from '@/components/Pagination';
+import DefaultImage from '@/components/ui-components/defaultImage';
+import {
+  getLocationPdfSettings,
+  getLocationWineCellarSettings,
+} from '@/redux/locationSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
 import {
   backendURL,
   calculateAreaAndPerimeter,
   calculateTotal,
-} from "@/utilities/common";
-import { Edit } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import DefaultImage from "@/components/ui-components/defaultImage";
-import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
-import { getLocationPdfSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
-import { debounce } from "lodash";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+} from '@/utilities/common';
+import {
+  EstimateCategory,
+  quoteState,
+} from '@/utilities/constants';
+import { setStateForCustomEstimate } from '@/utilities/CustomEstimate';
+import { EstimatesColumns } from '@/utilities/DataGridColumns';
 import {
   generateObjectForPDFPreview,
   renderMeasurementSides,
-} from "@/utilities/estimates";
-import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+} from '@/utilities/estimates';
+import {
+  GenrateColumns,
+  GenrateRows,
+} from '@/utilities/skeltonLoading';
+import { setStateForWineCellarEstimate } from '@/utilities/WineCellarEstimate';
+import { makeStyles } from '@material-ui/core';
+import { Edit } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 const routePrefix = `${backendURL}/estimates`;
@@ -133,7 +152,12 @@ const WineCellarEstimatesList = ({
   };
 
   const handleIconButtonClick = (item) => {
-    setStateForWineCellarEstimate(item, dispatch, navigate);
+    if (item?.config?.layout_id !== null) {
+      setStateForWineCellarEstimate(item, dispatch, navigate);
+    } else {
+      setStateForCustomEstimate(item, dispatch, navigate);
+    }
+    // setStateForWineCellarEstimate(item, dispatch, navigate);
   };
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
@@ -149,7 +173,7 @@ const WineCellarEstimatesList = ({
       // if (page !== 1) {
       //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
       // } else {
-        refetchEstimatesList(); // If already on page 1, just refetch directly
+      refetchEstimatesList(); // If already on page 1, just refetch directly
       // }
     }, 700),
     [refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
@@ -192,13 +216,7 @@ const WineCellarEstimatesList = ({
     if (statusValue || dateValue || searchValue) {
       setPage(1);
     }
-  }, [
-    statusValue,
-    dateValue,
-    searchValue,
-    deletedSuccessfully,
-    projectId,
-  ]);
+  }, [statusValue, dateValue, searchValue, deletedSuccessfully, projectId]);
 
   useEffect(() => {
     if (isFetched) {

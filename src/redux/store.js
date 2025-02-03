@@ -1,24 +1,25 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore } from '@reduxjs/toolkit';
 
-import hardwareReducer from "./hardwareSlice";
-import formSlice from "./formSlice";
-import userAuth from "./userAuth";
-import estimateCalculations from "./estimateCalculations";
-import selectedIdSlice from "./selectedIdSlice";
-import defaultSlice from "./defaultSlice";
-import staffSlice from "./staff";
-import snackBarSlice from "./snackBarSlice";
-import refetchSlice from "./refetch";
-import locationReducer from "./locationSlice";
-import mirrorsHardwareReducer from "./mirrorsHardwareSlice";
-import estimateReducer from "./estimateSlice";
-import mirrorsEstimateReducer from "./mirrorsEstimateSlice";
-import notificationsSlice from "./notificationsSlice";
+import customerEstimationSlice from './customerEstimateCalculation';
+import customsEstimateSlice from './customEstimateSlice';
+import defaultSlice from './defaultSlice';
+import estimateCalculations from './estimateCalculations';
+import estimateReducer from './estimateSlice';
+import formSlice from './formSlice';
+import globalEstimateForm from './globalEstimateForm';
+import hardwareReducer from './hardwareSlice';
+import locationReducer from './locationSlice';
+import mirrorsEstimateReducer from './mirrorsEstimateSlice';
+import mirrorsHardwareReducer from './mirrorsHardwareSlice';
+import notificationsSlice from './notificationsSlice';
+import refetchSlice from './refetch';
+import selectedIdSlice from './selectedIdSlice';
+import snackBarSlice from './snackBarSlice';
+import staffSlice from './staff';
+import userAuth from './userAuth';
+import wineCellarsEstimateReducer from './wineCellarEstimateSlice';
 // import wineCellarSlice from "./wineCellarSlice";
-import wineCellarsHardwareReducer from "./wineCellarsHardwareSlice";
-import wineCellarsEstimateReducer from "./wineCellarEstimateSlice";
-import globalEstimateForm from "./globalEstimateForm";
-import customerEstimationSlice from "./customerEstimateCalculation";
+import wineCellarsHardwareReducer from './wineCellarsHardwareSlice';
 
 const store = configureStore({
   reducer: {
@@ -41,6 +42,7 @@ const store = configureStore({
     wineCellarsEstimate: wineCellarsEstimateReducer,
     globalEstimateForm: globalEstimateForm,
     customerEstimation: customerEstimationSlice,
+    customsEstimate: customsEstimateSlice,
   },
 });
 

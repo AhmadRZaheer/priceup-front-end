@@ -1,48 +1,56 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import {
-  Box,
-  Button,
-//   CircularProgress,
-//   IconButton,
-//   InputAdornment,
-//   TextField,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import { makeStyles } from "@material-ui/core";
-import Pagination from "@/components/Pagination";
-import DeleteModal from "@/components/Modal/deleteModal";
-import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
-import { EstimateCategory, quoteState } from "@/utilities/constants";
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { debounce } from 'lodash';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import DeleteModal from '@/components/Modal/deleteModal';
+import Pagination from '@/components/Pagination';
+import DefaultImage from '@/components/ui-components/defaultImage';
+// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
+import { getListData } from '@/redux/estimateCalculations';
+import {
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+} from '@/redux/locationSlice';
+import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
 import {
   backendURL,
-//   calculateAreaAndPerimeter,
   calculateTotal,
-} from "@/utilities/common";
+} from '@/utilities/common';
 import {
-  // Add,
-  Edit,
-  // Search
-} from "@mui/icons-material";
-// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
-import {
-  getListData,
-  //   resetState,
-  //   setShowerProjectId,
-} from "@/redux/estimateCalculations";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import DefaultImage from "@/components/ui-components/defaultImage";
+  EstimateCategory,
+  quoteState,
+} from '@/utilities/constants';
+import { setStateForCustomEstimate } from '@/utilities/CustomEstimate';
+import { EstimatesColumns } from '@/utilities/DataGridColumns';
 import {
   generateObjectForPDFPreview,
   renderMeasurementSides,
   setStateForShowerEstimate,
-} from "@/utilities/estimates";
-import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
-import { debounce } from "lodash";
-import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+} from '@/utilities/estimates';
+import {
+  GenrateColumns,
+  GenrateRows,
+} from '@/utilities/skeltonLoading';
+import { makeStyles } from '@material-ui/core';
+import { Edit } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
 const routePrefix = `${backendURL}/estimates`;
@@ -132,7 +140,12 @@ const ShowerEstimatesList = ({
   };
 
   const handleIconButtonClick = (item) => {
-    setStateForShowerEstimate(item, dispatch, navigate);
+    if (item?.config?.layout_id !== null) {
+      setStateForShowerEstimate(item, dispatch, navigate);
+    } else {
+      setStateForCustomEstimate(item, dispatch, navigate);
+    }
+    // setStateForShowerEstimate(item, dispatch, navigate);
   };
 
   const filteredData = useMemo(() => {
@@ -162,7 +175,7 @@ const ShowerEstimatesList = ({
       // if (page !== 1) {
       //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
       // } else {
-        refetchEstimatesList(); // If already on page 1, just refetch directly
+      refetchEstimatesList(); // If already on page 1, just refetch directly
       // }
     }, 700),
     [refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
@@ -193,10 +206,8 @@ const ShowerEstimatesList = ({
     // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
     if (statusValue || dateValue || searchValue) {
       setPage(1);
-    }   
-  }, [
-    statusValue,dateValue,searchValue,deletedSuccessfully,projectId,
-  ]);
+    }
+  }, [statusValue, dateValue, searchValue, deletedSuccessfully, projectId]);
 
   useEffect(() => {
     if (isFetched) {

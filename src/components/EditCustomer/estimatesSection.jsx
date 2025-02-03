@@ -1,58 +1,75 @@
 import {
-  Box,
-  Button,
-  CircularProgress,
-  FormControl,
-  // Grid,
-  InputAdornment,
-  // InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  // useMediaQuery,
-} from "@mui/material";
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import dayjs from 'dayjs';
+import { debounce } from 'lodash';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+// import ActionsDropdown from "../common/ActionsDropdown";
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+
+import { getListData } from '@/redux/estimateCalculations';
+import {
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+} from '@/redux/locationSlice';
+import { getEstimatesListRefetch } from '@/redux/refetch';
+import { useFetchAllDocuments } from '@/utilities/ApiHooks/common';
 // import image1 from "@/Assets/test.png";
 // import image2 from "@/Assets/ok.png";
 // import image3 from "@/Assets/cancel.png";
 // import image4 from "@/Assets/calculator.svg";
-import {
-  useDeleteEstimates,
-  // useGetEstimatesStats,
-} from "@/utilities/ApiHooks/estimate";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
 import {
   backendURL,
   calculateTotal,
-  // getDecryptedToken,
-} from "@/utilities/common";
-import { EstimateCategory, quoteState } from "@/utilities/constants";
-import CustomInputField from "../ui-components/CustomInput";
-import icon from "../../Assets/search-icon.svg";
-// import WidgetCard from "../ui-components/widgetCard";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
-import StatusChip from "../common/StatusChip";
-import dayjs from "dayjs";
-import DeleteModal from "../Modal/deleteModal";
-import Pagination from "../Pagination";
-import { DataGrid } from "@mui/x-data-grid";
-import { EstimatesColumns } from "@/utilities/DataGridColumns";
-// import ActionsDropdown from "../common/ActionsDropdown";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { getEstimatesListRefetch } from "@/redux/refetch";
-import { useDispatch, useSelector } from "react-redux";
-import { getListData } from "@/redux/estimateCalculations";
-import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
-import { debounce } from "lodash";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+} from '@/utilities/common';
+import {
+  EstimateCategory,
+  quoteState,
+} from '@/utilities/constants';
+import { setStateForCustomEstimate } from '@/utilities/CustomEstimate';
+import { EstimatesColumns } from '@/utilities/DataGridColumns';
 // import { DeleteOutline, Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
 import {
   generateObjectForPDFPreview,
   renderMeasurementSides,
   setStateForShowerEstimate,
-} from "@/utilities/estimates";
-import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
-import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+} from '@/utilities/estimates';
+import { setStateForMirrorEstimate } from '@/utilities/mirrorEstimates';
+import {
+  GenrateColumns,
+  GenrateRows,
+} from '@/utilities/skeltonLoading';
+import { setStateForWineCellarEstimate } from '@/utilities/WineCellarEstimate';
+import {
+  Box,
+  Button,
+  FormControl,
+  InputAdornment,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+// import WidgetCard from "../ui-components/widgetCard";
+import { DesktopDatePicker } from '@mui/x-date-pickers';
+
+import icon from '../../Assets/search-icon.svg';
+import StatusChip from '../common/StatusChip';
+import DeleteModal from '../Modal/deleteModal';
+import Pagination from '../Pagination';
+import CustomInputField from '../ui-components/CustomInput';
 
 export default function Estimates() {
   const [searchParams] = useSearchParams();
@@ -149,13 +166,32 @@ export default function Estimates() {
     navigate(`/estimates/${item?._id}/pdf-preview`);
   };
 
-  const handleIconButtonClick = (item) => {
-    if (item?.category === EstimateCategory.SHOWERS) {
-      setStateForShowerEstimate(item, dispatch, navigate);
-    } else if (item?.category === EstimateCategory.MIRRORS) {
-      setStateForMirrorEstimate(item, dispatch, navigate);
-    }
-  };
+  // const handleIconButtonClick = (item) => {
+  //   if (item?.category === EstimateCategory.SHOWERS) {
+  //     setStateForShowerEstimate(item, dispatch, navigate);
+  //   } else if (item?.category === EstimateCategory.MIRRORS) {
+  //     setStateForMirrorEstimate(item, dispatch, navigate);
+  //   }
+  // };
+    const handleIconButtonClick = (item) => {
+      if (item?.category === EstimateCategory.SHOWERS) {
+        if (item?.config?.layout_id !== null) {
+          setStateForShowerEstimate(item, dispatch, navigate);
+        } else {
+          setStateForCustomEstimate(item, dispatch, navigate);
+        }
+      } else if (item?.category === EstimateCategory.MIRRORS) {
+        setStateForMirrorEstimate(item, dispatch, navigate);
+      } else if (item?.category === EstimateCategory.WINECELLARS) {
+        if (item?.config?.layout_id !== null) {
+          setStateForWineCellarEstimate(item, dispatch, navigate);
+        } else {
+          setStateForCustomEstimate(item, dispatch, navigate);
+        }
+      } else {
+        console.log("not");
+      }
+    };
 
   const debouncedRefetch = useCallback(
     debounce(() => {

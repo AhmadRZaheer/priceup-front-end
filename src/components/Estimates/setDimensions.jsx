@@ -1,17 +1,23 @@
-import { getEstimateCategory } from "@/redux/estimateSlice";
-import { EstimateCategory } from "@/utilities/constants";
-import { useSelector } from "react-redux";
-import { ShowerDimensions } from "./Showers/dimensions";
-import { MirrorDimensions } from "./Mirrors/dimensions";
-import { WineCellarDimensions } from "./WineCellar/dimensions";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect } from 'react';
+
+import {
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+
+import { EstimateCategory } from '@/utilities/constants';
+
+import { CustomsDimensions } from './Customs/dimensions';
+import { MirrorDimensions } from './Mirrors/dimensions';
+import { ShowerDimensions } from './Showers/dimensions';
+import { WineCellarDimensions } from './WineCellar/dimensions';
 
 export const SetDimensions = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const estimateCategory = searchParams.get("category");
   const projectId = searchParams.get("projectId");
+  const layoutId = searchParams.get("layoutId");
   useEffect(() => {
     if (
       estimateCategory === "" &&
@@ -19,6 +25,7 @@ export const SetDimensions = () => {
         EstimateCategory.SHOWERS,
         EstimateCategory.MIRRORS,
         EstimateCategory.WINECELLARS,
+        EstimateCategory.CUSTOMS,
       ].includes(estimateCategory)
     ) {
       navigate(`/projects/${projectId}?category=${estimateCategory}`);
@@ -27,14 +34,15 @@ export const SetDimensions = () => {
   // const estimateCategory = useSelector(getEstimateCategory);
   return (
     <>
-      {estimateCategory === EstimateCategory.SHOWERS ? (
+      {estimateCategory === EstimateCategory.SHOWERS && layoutId !== 'null' ? (
         <ShowerDimensions />
       ) : estimateCategory === EstimateCategory.MIRRORS ? (
         <MirrorDimensions />
-      ) : estimateCategory === EstimateCategory.WINECELLARS ? (
+      ) : estimateCategory === EstimateCategory.WINECELLARS &&
+        layoutId !== 'null' ? (
         <WineCellarDimensions />
       ) : (
-        ""
+        <CustomsDimensions />
       )}
     </>
   );
