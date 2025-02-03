@@ -34,6 +34,7 @@ import {
   EstimateCategory,
   quoteState,
 } from '@/utilities/constants';
+import { setStateForCustomEstimate } from '@/utilities/CustomEstimate';
 import { EstimatesColumns } from '@/utilities/DataGridColumns';
 import {
   generateObjectForPDFPreview,
@@ -230,11 +231,21 @@ const AllEstimatesList = ({
 
   const handleIconButtonClick = (item) => {
     if (item?.category === EstimateCategory.SHOWERS) {
-      setStateForShowerEstimate(item, dispatch, navigate,true,true);
+      if (item?.config?.layout_id !== null) {
+        setStateForShowerEstimate(item, dispatch, navigate, true, true);
+      } else {
+        setStateForCustomEstimate(item, dispatch, navigate, true, true);
+      }
     } else if (item?.category === EstimateCategory.MIRRORS) {
-      setStateForMirrorEstimate(item, dispatch, navigate,true);
+      setStateForMirrorEstimate(item, dispatch, navigate, true);
+    } else if (item?.category === EstimateCategory.WINECELLARS) {
+      if (item?.config?.layout_id !== null) {
+        setStateForWineCellarEstimate(item, dispatch, navigate, true);
+      } else {
+        setStateForCustomEstimate(item, dispatch, navigate, true,);
+      }
     } else {
-      setStateForWineCellarEstimate(item, dispatch, navigate,true);
+      console.log("not");
     }
   };
 

@@ -672,6 +672,7 @@ export const setStateForShowerEstimate = (
   flag = true,
   redirect = false
 ) => {
+  console.log(item,'setStateForShowerEstimate')
   // if (item?.category === EstimateCategory.SHOWERS) {
   dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.SHOWERS));

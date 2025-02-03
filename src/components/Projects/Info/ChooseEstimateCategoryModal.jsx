@@ -1,36 +1,46 @@
-import { useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import { Button, Stack, Grid, CircularProgress } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from 'react';
+
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import DefaultIcon from '@/Assets/columns.svg';
+import MirrorImg from '@/Assets/CustomerLandingImages/mirror.svg';
+import ShowerImg from '@/Assets/CustomerLandingImages/Showers.svg';
+import WineCallerImg from '@/Assets/CustomerLandingImages/wineCellar.svg';
 import {
-  getEstimateCategory,
-  resetEstimateState,
-  setEstimateCategory,
-  setEstimateState,
-  setProjectId,
-} from "@/redux/estimateSlice";
-import bgCustom from "@/Assets/customlayoutimage.svg";
-import { EstimateCategory } from "@/utilities/constants";
-import { useNavigate } from "react-router-dom";
-import {
-  resetMirrorEstimateState,
-  resetNotifications as resetNotificationsMirror,
-  setMirrorProjectId,
-} from "@/redux/mirrorsEstimateSlice";
-import DefaultIcon from "@/Assets/columns.svg";
+  resetCustomsEstimateState,
+  resetNotifications as resetNotificationsCustoms,
+} from '@/redux/customEstimateSlice';
 import {
   resetNotifications as resetNotificationsShower,
   resetState,
   setShowerProjectId,
-} from "@/redux/estimateCalculations";
+} from '@/redux/estimateCalculations';
+import {
+  resetEstimateState,
+  setEstimateCategory,
+  setEstimateState,
+  setProjectId,
+} from '@/redux/estimateSlice';
+import {
+  resetMirrorEstimateState,
+  resetNotifications as resetNotificationsMirror,
+  setMirrorProjectId,
+} from '@/redux/mirrorsEstimateSlice';
 import {
   resetNotifications as resetNotificationsWineCaller,
   resetWineCellarEstimateState,
-  setWineCellarProjectId,
-} from "@/redux/wineCellarEstimateSlice";
+} from '@/redux/wineCellarEstimateSlice';
+import { EstimateCategory } from '@/utilities/constants';
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  Button,
+  Grid,
+  Stack,
+} from '@mui/material';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Typography from '@mui/material/Typography';
 
 const style = {
   position: "absolute",
@@ -47,9 +57,9 @@ const style = {
 };
 
 const boxStyles = {
-  minHeight: "182px",
-  minWidth: "180px",
-  margin: "auto",
+  minHeight: "142px",
+  minWidth: "127px",
+  // margin: "auto",
   borderRadius: "12px",
   boxShadow:
     "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
@@ -79,6 +89,7 @@ export default function ChooseEstimateCategoryModal({
     dispatch(resetEstimateState());
     dispatch(resetMirrorEstimateState());
     dispatch(resetWineCellarEstimateState());
+    dispatch(resetCustomsEstimateState());
     dispatch(resetState());
     dispatch(setEstimateState("create"));
     dispatch(setProjectId(projectId));
@@ -98,6 +109,11 @@ export default function ChooseEstimateCategoryModal({
       navigate(
         `/estimates/layouts?category=${EstimateCategory.WINECELLARS}&projectId=${projectId}`
       );
+    } else if (category === EstimateCategory.CUSTOMS) {
+      console.log("Customs");
+      dispatch(resetNotificationsCustoms());
+      //  dispatch(setEstimateCategory(EstimateCategory.CUSTOMS));
+      navigate(`/estimates/layouts?projectId=${projectId}`);
     } else {
       // mirrors
       dispatch(resetNotificationsMirror());
@@ -168,7 +184,8 @@ export default function ChooseEstimateCategoryModal({
               background: "#F3F5F6",
               borderRadius: "12px",
               p: "24px 16px",
-              height: "291px",
+              height: "192px",
+              overflow: "auto",
             }}
           >
             <Grid container gap={2} sx={{ height: "100%" }}>
@@ -182,8 +199,8 @@ export default function ChooseEstimateCategoryModal({
                       : "#8477DA",
                   color:
                     category !== EstimateCategory.SHOWERS ? "black" : "white",
-                  width: "213px",
-                  height: "243px",
+                  width: "147px",
+                  height: "160px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.SHOWERS)}
               >
@@ -191,20 +208,23 @@ export default function ChooseEstimateCategoryModal({
                   style={{
                     position: "relative",
                     zIndex: 1,
-                    width: "150px",
-                    height: "170px",
+                    width: "232px",
+                    height: "177px",
+                    marginTop:'-29px'
                   }}
-                  src={DefaultIcon}
+                  src={ShowerImg}
                   alt="Selected"
                 />
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "18px",
+                    fontWeight: 500,
                     color: "#FFFFFF",
                     lineHeight: "21.86px",
+                    mt:'-33px'
                   }}
                 >
-                  Showers
+                  Shower
                 </Typography>
               </Box>
               <Box
@@ -217,8 +237,8 @@ export default function ChooseEstimateCategoryModal({
                       : "#8477DA",
                   color:
                     category !== EstimateCategory.MIRRORS ? "black" : "white",
-                  width: "213px",
-                  height: "243px",
+                    width: "147px",
+                    height: "160px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.MIRRORS)}
               >
@@ -226,20 +246,24 @@ export default function ChooseEstimateCategoryModal({
                   style={{
                     position: "relative",
                     zIndex: 1,
-                    width: "150px",
-                    height: "170px",
+                    width: "225px",
+                    height: "225px",
+                    marginTop:'-56px'
                   }}
-                  src={DefaultIcon}
+                  src={MirrorImg}
                   alt="Selected"
                 />
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "18px",
+                    fontWeight: 500,
                     color: "#FFFFFF",
                     lineHeight: "21.86px",
+                     marginTop:'-58px'
+
                   }}
                 >
-                  Mirrors
+                  Mirror
                 </Typography>
               </Box>
               <Box
@@ -254,8 +278,8 @@ export default function ChooseEstimateCategoryModal({
                     category !== EstimateCategory.WINECELLARS
                       ? "black"
                       : "white",
-                  width: "213px",
-                  height: "243px",
+                      width: "147px",
+                      height: "160px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.WINECELLARS)}
               >
@@ -263,7 +287,43 @@ export default function ChooseEstimateCategoryModal({
                   style={{
                     position: "relative",
                     zIndex: 1,
-                    width: "150px",
+                    width: "115px",
+                    height: "170px",
+                  }}
+                  src={WineCallerImg}
+                  alt="Selected"
+                />
+                <Typography
+                  sx={{
+                    fontSize: "18px",
+                    fontWeight: 500,
+                    color: "#FFFFFF",
+                    lineHeight: "21.86px",
+                  }}
+                >
+                  Wine Cellar
+                </Typography>
+              </Box>
+              <Box
+                key={"custom-cat"}
+                sx={{
+                  ...boxStyles,
+                  backgroundColor:
+                    category !== EstimateCategory.CUSTOMS
+                      ? "rgba(184, 184, 185, 1)"
+                      : "#8477DA",
+                  color:
+                    category !== EstimateCategory.CUSTOMS ? "black" : "white",
+                    width: "147px",
+                    height: "160px",
+                }}
+                onClick={() => handleBoxClick(EstimateCategory.CUSTOMS)}
+              >
+                <img
+                  style={{
+                    position: "relative",
+                    zIndex: 1,
+                    width: "107px",
                     height: "170px",
                   }}
                   src={DefaultIcon}
@@ -271,12 +331,13 @@ export default function ChooseEstimateCategoryModal({
                 />
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize: "18px",
+                    fontWeight: 500,
                     color: "#FFFFFF",
                     lineHeight: "21.86px",
                   }}
                 >
-                  Wine Cellar
+                  Custom
                 </Typography>
               </Box>
             </Grid>

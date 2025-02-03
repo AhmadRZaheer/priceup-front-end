@@ -769,7 +769,6 @@ const EditQuoteInvoice = () => {
     singleItemData?.status === previewStatus.PENDING ||
     singleItemData?.status === previewStatus.PREVIEW1;
 
- 
   //Scroll Shadow
   const [scrollShadow, setScrollShadow] = useState(false);
   useEffect(() => {
@@ -1299,7 +1298,10 @@ const EditQuoteInvoice = () => {
                         Activity Logs
                       </Typography>
                       <Box sx={{ maxHeight: "210px", overflow: "auto" }}>
-                        <ActivityLogs logsFetching={logsFetching} logsData={logsData} />
+                        <ActivityLogs
+                          logsFetching={logsFetching}
+                          logsData={logsData}
+                        />
                       </Box>
                     </Card>
                   </Box>
@@ -1812,7 +1814,7 @@ const EditQuoteInvoice = () => {
                             sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
                           >
                             Text 1 - Max Limit(28)
-                            </Typography>                       
+                          </Typography>
                           <TextareaAutosize
                             style={{
                               padding: "10px",
@@ -3209,8 +3211,8 @@ const EditQuoteInvoice = () => {
                           </Typography>
                           <Box
                             sx={{
+                              width: "fit-content",
                               display: "flex",
-                              cursor: "pointer",
                             }}
                             onClick={() =>
                               document
@@ -3233,7 +3235,9 @@ const EditQuoteInvoice = () => {
                                 e.target.value = "";
                               }}
                             />
-                            <Box sx={{ position: "relative" }}>
+                            <Box
+                              sx={{ position: "relative", cursor: "pointer" }}
+                            >
                               <Box
                                 sx={{
                                   position: "absolute",

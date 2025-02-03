@@ -1,3 +1,74 @@
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { useFormik } from 'formik';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+import * as Yup from 'yup';
+
+import LayoutMeasurementSkeleton
+  from '@/components/estimateSkelton/LayoutMeasurementSkeleton';
+import { getSkeltonState } from '@/redux/estimateSlice';
+import { getLocationWineCellarSettings } from '@/redux/locationSlice';
+import {
+  getAdditionalFields,
+  getContent,
+  getDoorQuantity,
+  getDoorWidth,
+  getisCustomDoorWidth,
+  getMeasurements,
+  initializeStateForCreateQuote,
+  initializeStateForEditQuote,
+  resetNotifications,
+  selectedItem,
+  setBackWallGlassWeight,
+  setCounters,
+  setDoorQuantity,
+  setDoorWeight,
+  setDoorWidth,
+  setHardwareFabricationQuantity,
+  sethoursForSingleDoor,
+  setisCustomizedDoorWidth,
+  setLayoutArea,
+  setLayoutPerimeter,
+  setMultipleNotifications,
+  setPanelWeight,
+  setReturnWeight,
+  setSelectedItem,
+  updateMeasurements,
+} from '@/redux/wineCellarEstimateSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  getGlassThickness,
+} from '@/utilities/common';
+import {
+  inputLength,
+  inputMaxValue,
+  panelOverWeightAmount,
+  quoteState,
+  thicknessTypes,
+} from '@/utilities/constants';
+import {
+  generateNotificationsForCurrentEstimate,
+} from '@/utilities/estimatorHelper';
+import {
+  getHardwareFabricationQuantity,
+  setStateForWineCellarEstimate,
+} from '@/utilities/WineCellarEstimate';
+import CheckIcon from '@mui/icons-material/Check';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
   Box,
   Button,
@@ -10,79 +81,9 @@ import {
   Tooltip,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
-import CheckIcon from "@mui/icons-material/Check";
-import {
-  backendURL,
-  calculateAreaAndPerimeter,
-  getGlassThickness,
-} from "@/utilities/common";
-import {
-  inputLength,
-  inputMaxValue,
-  layoutVariants,
-  panelOverWeightAmount,
-  quoteState,
-  thicknessTypes,
-} from "@/utilities/constants";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
-import {
-  NavLink,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
-import { getLocationWineCellarSettings } from "@/redux/locationSlice";
-import {
-  setSelectedItem,
-  getisCustomDoorWidth,
-  getAdditionalFields,
-  getDoorWidth,
-  getMeasurements,
-  // getWineProjectId,
-  // getWineQuoteState,
-  initializeStateForCreateQuote,
-  initializeStateForEditQuote,
-  resetNotifications,
-  selectedItem,
-  setisCustomizedDoorWidth,
-  setDoorWeight,
-  setDoorWidth,
-  setHardwareFabricationQuantity,
-  setLayoutArea,
-  setLayoutPerimeter,
-  setMultipleNotifications,
-  setPanelWeight,
-  setReturnWeight,
-  updateMeasurements,
-  getDoorQuantity,
-  setDoorQuantity,
-  setBackWallGlassWeight,
-  sethoursForSingleDoor,
-  getContent,
-  setCounters,
-} from "@/redux/wineCellarEstimateSlice";
-import AlertsAndWarnings from "../AlertsAndWarnings";
-import {
-  useFetchAllDocuments,
-  useFetchSingleDocument,
-} from "@/utilities/ApiHooks/common";
-import {
-  getEstimateState,
-  getProjectId,
-  getSkeltonState,
-} from "@/redux/estimateSlice";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import {
-  getHardwareFabricationQuantity,
-  setStateForWineCellarEstimate,
-} from "@/utilities/WineCellarEstimate";
-import LayoutMeasurementSkeleton from "@/components/estimateSkelton/LayoutMeasurementSkeleton";
+} from '@mui/material';
+
+import AlertsAndWarnings from '../AlertsAndWarnings';
 
 export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
   const dispatch = useDispatch();

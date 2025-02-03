@@ -66,7 +66,7 @@ const SingleAccordian = ({
         color: secondaryColor,
         border: "1px solid #D6D6D6",
         boxShadow: "none",
-        mt: index === 0 ? 0 : 2,
+        mt: index === 0 ? 1 : 2,
         ".MuiAccordionSummary-root": {
           p: { sm: "0px 16px", xs: "0px" },
         },
