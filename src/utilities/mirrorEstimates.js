@@ -500,6 +500,77 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
   }
   return errors;
 };
+export const getSelectedCostDifferenceErrorMsgs = (selectedContent) => {
+  console.log(selectedContent,'selectedContentselectedContent')
+  let errors = null;
+  if (selectedContent.glassType?.item) {
+  const  glassPrice = (selectedContent?.glassType?.item?.options?.find(
+      (glass) => glass.thickness === selectedContent?.glassType?.thickness
+    )?.cost || 0)
+    if (glassPrice !== selectedContent.glassType?.cost) {
+      errors = {
+        ...errors,
+        glassType: {
+          message: `"${selectedContent.glassType.item?.name}" is not available in thickness "${selectedContent.glassType.thickness}".`,
+        },
+      };
+    }
+  }
+  if (selectedContent.edgeWork?.item) {
+   const edgeWork = selectedContent?.edgeWork?.item?.options?.find(
+      (polish) => polish.thickness === selectedContent?.edgeWork?.thickness
+    )?.cost || 0;
+    if (edgeWork !== selectedContent.edgeWork?.cost) {
+      errors = {
+        ...errors,
+        edgeWork: {
+          message: `"${selectedContent.edgeWork.item?.name}" is not available in thickness "${selectedContent.edgeWork.thickness}".`,
+        },
+      };
+    }
+  }
+  if (selectedContent.glassAddons.length) {
+    let glassAddonsCostDiffer = [];
+    if(selectedContent.glassAddons?.length){
+      selectedContent.glassAddons.forEach(element => {
+        let itemCost = element?.item?.options?.[0]?.cost ?? 0;
+        let originalCost = element?.cost ?? 0;
+        if(itemCost !== originalCost){
+          glassAddonsCostDiffer.push({
+          message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+          });
+        }
+      });
+    }
+    if (glassAddonsCostDiffer.length > 0) {
+      errors = {
+        ...errors,
+        glassAddons: glassAddonsCostDiffer
+      };
+    }
+  }
+  if (selectedContent.hardwares?.length) {
+    let hardwaresCostDiffer = [];
+    if(selectedContent.hardwares?.length){
+      selectedContent.hardwares.forEach(element => {
+        let itemCost = element?.item?.options?.[0]?.cost ?? 0;
+        let originalCost = element?.cost ?? 0;
+        if(itemCost !== originalCost){
+          hardwaresCostDiffer.push({
+          message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+          });
+        }
+      });
+    }
+    if (hardwaresCostDiffer.length > 0) {
+      errors = {
+        ...errors,
+        hardwares: hardwaresCostDiffer,
+    }
+  }
+}
+  return errors;
+};
 
 export const generateNotificationsForCurrentEstimate = (
   selectedContentFromRedux,

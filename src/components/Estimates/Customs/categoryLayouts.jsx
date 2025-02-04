@@ -35,7 +35,7 @@ import {
 export const CustomCategoryLayouts = () => {
   const boxStyles = {
     minHeight: "182px",
-    minWidth: "180px",
+    minWidth: "170px",
     // margin: "auto",
     borderRadius: "12px",
     boxShadow:
@@ -238,7 +238,7 @@ export const CustomCategoryLayouts = () => {
                     ? "rgba(132, 119, 218, 1)"
                     : "#b8b8b9",
                 color: "black",
-                width: "192px",
+                width: "170px",
                 height: "195px",
                 border:
                   customLayout === EstimateCategory.SHOWERS
@@ -297,7 +297,7 @@ export const CustomCategoryLayouts = () => {
                     ? "rgba(132, 119, 218,1)"
                     : "#b8b8b9",
                 color: "black",
-                width: "192px",
+                width: "170px",
                 height: "195px",
                 border:
                   customLayout === EstimateCategory.WINECELLARS

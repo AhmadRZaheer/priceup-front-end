@@ -20,6 +20,7 @@ import LayoutMeasurementSkeleton
   from '@/components/estimateSkelton/LayoutMeasurementSkeleton';
 import ModificationSkeleton
   from '@/components/estimateSkelton/ModificationSkeleton';
+import CostDifferenceAlert from '@/components/Modal/costDifferenceAlert';
 import {
   getSkeltonState,
   setSkeltonState,
@@ -43,6 +44,7 @@ import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
 import { useFetchSingleDocument } from '@/utilities/ApiHooks/common';
 import { backendURL } from '@/utilities/common';
 import {
+  EstimateCategory,
   inputLength,
   quoteState,
 } from '@/utilities/constants';
@@ -96,6 +98,7 @@ export const MirrorDimensions = () => {
   const category = searchParams.get("category");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
   const [openAlert, setOpenAlert] = useState(true);
+  const [openCostDifferAlert, setOpenCostDifferAlert] = useState(false);
   // console.log(measurements, "measurements");
   const skeltonState = useSelector(getSkeltonState);
 
@@ -228,7 +231,8 @@ export const MirrorDimensions = () => {
   }
   const sufferStatus = selectedContent.sufferCostDifference &&  currentEstimateState === quoteState.EDIT
   return (
-    <Box>
+    <>
+     <Box>
       {sufferStatus && (
           <Box sx={{ width: "100%" }}>
           <Collapse in={openAlert}>
@@ -264,25 +268,44 @@ export const MirrorDimensions = () => {
                   This estimate has a cost discrepancy. Would you like to apply
                   the updated cost?
                 </Typography>
-                <Button
-                onClick={handleSufferCost}
-                  variant="contained"
-                  sx={{
-                    display: "flex",
-                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                    color: "white",
-                    textTransform: "initial",
-                    // height: 40,
-                    fontSize: 14,
-                    backgroundColor: "#8477da",
-                    p:'8px 16px 8px 16px !important',
-                    "&:hover": {
-                      backgroundColor: "#8477da",
-                    },
-                  }}
-                >
-                  Apply Cost
-                </Button>
+                <Box sx={{ display: "flex", gap: 1.5 }}>
+                    <Button
+                      onClick={handleSufferCost}
+                      variant="contained"
+                      sx={{
+                        display: "flex",
+                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                        color: "white",
+                        textTransform: "initial",
+                        fontSize: 14,
+                        backgroundColor: "#8477da",
+                        p: "8px 16px 8px 16px !important",
+                        "&:hover": {
+                          backgroundColor: "#8477da",
+                        },
+                      }}
+                    >
+                      Apply Cost
+                    </Button>
+                    <Button
+                      onClick={() => setOpenCostDifferAlert(true)}
+                      variant="contained"
+                      sx={{
+                        display: "flex",
+                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                        color: "white",
+                        textTransform: "initial",
+                        fontSize: 14,
+                        backgroundColor: "#8477da",
+                        p: "8px 16px 8px 16px !important",
+                        "&:hover": {
+                          backgroundColor: "#8477da",
+                        },
+                      }}
+                    >
+                      View Details
+                    </Button>
+                  </Box>
               </Box>
             </Alert>
           </Collapse>
@@ -1327,5 +1350,12 @@ export const MirrorDimensions = () => {
         )}
       </Box>
     </Box>
+    <CostDifferenceAlert
+        open={openCostDifferAlert}
+        handleClose={() => setOpenCostDifferAlert(false)}
+        estimateCategory={EstimateCategory.MIRRORS}
+      />
+    </>
+   
   );
 };
