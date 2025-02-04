@@ -1,4 +1,4 @@
-import { CloseTwoTone } from "@mui/icons-material";
+import { CloseTwoTone } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -7,8 +7,9 @@ import {
   Modal,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import DeleteIcon from "../../Assets/delete-full icon.svg";
+} from '@mui/material';
+
+import DeleteIcon from '../../Assets/delete-full icon.svg';
 
 function DeleteModal({ open, close, handleDelete, isLoading, text }) {
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -20,7 +21,7 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
     left: "50%",
     gap: '19px',
     transform: "translate(-50%, -50%)",
-    width: isMobile ? 292 : 533,
+    minWidth: isMobile ? 292 : 533,
     bgcolor: "#FFFFFF",
     border: "1px solid #D0D5DD",
     // boxShadow: 24,
@@ -107,14 +108,14 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
           >
             <Button
               onClick={handleDelete}
-              variant="outlined"
+              variant="contained"
               sx={{
                 fontSize: '16px',
                 fontWeight: 600,
-                border: "1px solid #D6DAE3",
-                color: "#212528",
+                bgcolor: "#E22A2D",
+                color: "#FFFFFF",
                 ":hover": {
-                  border: "1px solid #D6DAE3",
+                  bgcolor: "#E22A2D",
                 },
               }}
               disabled={isLoading}
@@ -133,14 +134,14 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
             </Button>
             <Button
               onClick={close}
-              variant="contained"
+              variant="outlined"
               sx={{
                 fontSize: '16px',
                 fontWeight: 600,
-                bgcolor: "#E22A2D",
-                color: "#FFFFFF",
+                border: "1px solid #D6DAE3",
+                color: "#212528",
                 ":hover": {
-                  bgcolor: "#E22A2D",
+                  border: "1px solid #D6DAE3",
                 },
               }}
               disabled={isLoading}

@@ -185,6 +185,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
 
 
 export const getSelectedContentErrorMsgs = (selectedContent) => {
+  console.log(selectedContent,'selectedContent12qwas')
     let errors = null;
     if (!selectedContent.hardwareFinishes) {
         errors = {
@@ -412,6 +413,246 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
           status:false,
           message:`"${selectedDisableNames.trim().replace(/,\s*$/, '')}" are not available in finish "${selectedContent.hardwareFinishes?.name}.`
         }
+      }
+    }
+    }
+    return errors;
+}
+
+export const getSelectedCostDifferenceErrorMsgs = (selectedContent) => {
+  console.log(selectedContent,'selectedContent12qwas')
+    let errors = null;
+    if (!selectedContent.hardwareFinishes?._id) {
+        errors = {
+          ...errors,
+          hardwareFinish:{
+            message:`No hardware finish is selected.`
+          }
+        }
+    }
+    if (selectedContent.handles?.item && selectedContent.hardwareFinishes) {
+      let handlesCost = getHardwareCostBySelectedFinish(selectedContent.handles?.item,selectedContent?.hardwareFinishes?._id);
+       if(handlesCost !== selectedContent.handles?.cost){
+        errors = {
+          ...errors,
+          handle:{
+            message: `Cost for "${selectedContent.handles.item?.name}" changed from "${selectedContent.handles?.cost}" to "${handlesCost}".`
+          }
+        }
+       } 
+    }
+    if (selectedContent.doorLock?.item && selectedContent.hardwareFinishes) {
+      let itemCost = getHardwareCostBySelectedFinish(selectedContent.doorLock?.item,selectedContent?.hardwareFinishes?._id);
+      if(itemCost !== selectedContent.doorLock?.cost){
+       errors = {
+         ...errors,
+         doorLock:{
+           status:false,
+           message: `Cost for "${selectedContent.doorLock.item?.name}" changed from "${selectedContent.doorLock?.cost}" to "${itemCost}".`
+         }
+       }
+      } 
+    }
+    if (selectedContent.hinges?.item && selectedContent.hardwareFinishes) {
+      let hingesCost = getHardwareCostBySelectedFinish(selectedContent.hinges?.item,selectedContent?.hardwareFinishes?._id);
+       if(hingesCost !== selectedContent.hinges?.cost){
+        errors = {
+          ...errors,
+          hinge:{
+            message: `Cost for "${selectedContent.hinges.item?.name}" changed from "${selectedContent.hinges?.cost}" to "${hingesCost}".`
+          }
+        }
+       } 
+    }
+    if (selectedContent.slidingDoorSystem?.item && selectedContent.hardwareFinishes) {
+      let itemCost = getHardwareCostBySelectedFinish(selectedContent.slidingDoorSystem?.item,selectedContent?.hardwareFinishes?._id);
+       if(itemCost !== selectedContent.slidingDoorSystem?.cost){
+        errors = {
+          ...errors,
+          slidingDoorSystem:{
+            status:false,
+            message: `Cost for "${selectedContent.slidingDoorSystem.item?.name}" changed from "${selectedContent.slidingDoorSystem?.cost}" to "${itemCost}".`
+          }
+        }
+       } 
+    }
+    if (selectedContent.header?.item && selectedContent.hardwareFinishes) {
+      let itemCost = getHardwareCostBySelectedFinish(selectedContent.header?.item,selectedContent?.hardwareFinishes?._id);
+      if(itemCost !== selectedContent.header?.cost){
+       errors = {
+         ...errors,
+         header:{
+           status:false,
+           message: `Cost for "${selectedContent.header.item?.name}" changed from "${selectedContent.header?.cost}" to "${itemCost}".`
+         }
+       }
+      }  
+    }
+    if(selectedContent.hardwareAddons?.length && selectedContent.hardwareFinishes){
+      let hardwareAddonsCostDiffer = [];
+     selectedContent.hardwareAddons.forEach(element => {
+      let itemCost = getHardwareCostBySelectedFinish(element?.item,selectedContent?.hardwareFinishes?._id) ?? 0;
+      let originalCost = element?.cost ?? 0;
+      if(itemCost !== originalCost){
+        hardwareAddonsCostDiffer.push({
+        message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+        });
+      }
+    });
+    if(hardwareAddonsCostDiffer.length > 0){
+      errors = {
+        ...errors,
+        hardwareAddons: hardwareAddonsCostDiffer
+      }
+    }
+    }
+    if (selectedContent.glassType?.item) {
+      let glassCost = getGlassCostBySelectedthickness(selectedContent.glassType,selectedContent.glassType.thickness); 
+       if(glassCost !== selectedContent.glassType.cost){
+        errors = {
+          ...errors,
+          glassType:{
+            message: `Cost for "${selectedContent.glassType.item?.name}" changed from "${selectedContent.glassType.cost}" to "${glassCost}".`
+          }
+        }
+       } 
+    }
+    if(selectedContent.glassAddons?.length){
+      let glassAddonsCostDiffer = [];
+      if(selectedContent.glassAddons?.length){
+        selectedContent.glassAddons.forEach(element => {
+          let itemCost = element?.item?.options?.[0]?.cost ?? 0;
+          let originalCost = element?.cost ?? 0;
+          if(itemCost !== originalCost){
+            glassAddonsCostDiffer.push({
+            message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+            });
+          }
+        });
+      }
+    if(glassAddonsCostDiffer.length){
+      errors = {
+        ...errors,
+        glassAddons:glassAddonsCostDiffer
+      }
+    }
+    }
+    if (selectedContent.mountingState === 'channel' && selectedContent.mountingChannel?.item && selectedContent.hardwareFinishes) {
+      let itemCost = getHardwareCostBySelectedFinish(selectedContent.mountingChannel?.item,selectedContent?.hardwareFinishes?._id) ?? 0;
+       if(itemCost !== selectedContent.mountingChannel?.cost){
+        errors = {
+          ...errors,
+          mountingChannel:{
+            message: `Cost for "${selectedContent.mountingChannel.item?.name}" changed from "${selectedContent.mountingChannel?.cost}" to "${itemCost}".`,
+          }
+        }
+       } 
+    }
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.wallClamp?.length && selectedContent.hardwareFinishes){
+      let wallClampDiff = [];
+      selectedContent.mountingClamps?.wallClamp.forEach(element => {
+       let itemCost = getHardwareCostBySelectedFinish(element?.item,selectedContent?.hardwareFinishes?._id) ?? 0;
+       let originalCost = element?.cost ?? 0;
+       if(itemCost !== originalCost){
+        wallClampDiff.push({
+         message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+         });
+       }
+      });
+    if(wallClampDiff.length){
+      errors = {
+        ...errors,
+        wallClamp : wallClampDiff
+      }
+    }
+    }
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.sleeveOver?.length && selectedContent.hardwareFinishes){
+      let sleeveOverDiff = [];
+      selectedContent.mountingClamps?.sleeveOver.forEach(element => {
+       let itemCost = getHardwareCostBySelectedFinish(element?.item,selectedContent?.hardwareFinishes?._id) ?? 0;
+       let originalCost = element?.cost ?? 0;
+       if(itemCost !== originalCost){
+        sleeveOverDiff.push({
+         message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+         });
+       }
+      });
+    if(sleeveOverDiff.length){
+      errors = {
+        ...errors,
+        sleeveOver: sleeveOverDiff
+      }
+    }
+    }
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.glassToGlass?.length && selectedContent.hardwareFinishes){
+      let glassToGlassDiff = [];
+      selectedContent.mountingClamps?.glassToGlass.forEach(element => {
+       let itemCost = getHardwareCostBySelectedFinish(element?.item,selectedContent?.hardwareFinishes?._id) ?? 0;
+       let originalCost = element?.cost ?? 0;
+       if(itemCost !== originalCost){
+        glassToGlassDiff.push({
+         message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+         });
+       }
+      });
+    if(glassToGlassDiff.length){
+      errors = {
+        ...errors,
+        glassToGlass: glassToGlassDiff
+      }
+    }
+    }
+    if(selectedContent.cornerClamps?.cornerWallClamp?.length && selectedContent.hardwareFinishes){
+      let cornerWallClampDiff = [];
+     selectedContent.cornerClamps.cornerWallClamp.forEach(element => {
+      let itemCost = getHardwareCostBySelectedFinish(element?.item,selectedContent?.hardwareFinishes?._id) ?? 0;
+      let originalCost = element?.cost ?? 0;
+      if(itemCost !== originalCost){
+        cornerWallClampDiff.push({
+        message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+        });
+      }
+     });
+     if(cornerWallClampDiff.length){
+      errors = {
+        ...errors,
+        cornerWallClamp: cornerWallClampDiff
+      }
+    }
+    }
+    if(selectedContent.cornerClamps?.cornerSleeveOver?.length && selectedContent.hardwareFinishes){
+      let cornerSleeveOverDiff = [];
+     selectedContent.cornerClamps.cornerSleeveOver.forEach(element => {
+      let itemCost = getHardwareCostBySelectedFinish(element?.item,selectedContent?.hardwareFinishes?._id) ?? 0;
+      let originalCost = element?.cost ?? 0;
+      if(itemCost !== originalCost){
+        cornerSleeveOverDiff.push({
+        message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+        });
+      }
+     });
+    if(cornerSleeveOverDiff.length){
+      errors = {
+        ...errors,
+        cornerSleeveOver:cornerSleeveOverDiff
+      }
+    }
+    }
+    if(selectedContent.cornerClamps?.cornerGlassToGlass?.length && selectedContent.hardwareFinishes){
+      let cornerGlassToGlassDiff = [];
+      selectedContent.cornerClamps.cornerGlassToGlass.forEach(element => {
+       let itemCost = getHardwareCostBySelectedFinish(element?.item,selectedContent?.hardwareFinishes?._id) ?? 0;
+       let originalCost = element?.cost ?? 0;
+       if(itemCost !== originalCost){
+        cornerGlassToGlassDiff.push({
+         message: `Cost for "${element.item?.name}" changed from "${originalCost}" to "${itemCost}".`,
+         });
+       }
+      });
+    if(cornerGlassToGlassDiff.length){
+      errors = {
+        ...errors,
+        cornerGlassToGlass: cornerGlassToGlassDiff
       }
     }
     }

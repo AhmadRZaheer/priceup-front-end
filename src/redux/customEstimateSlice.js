@@ -1694,11 +1694,12 @@ const customsEstimateSlice = createSlice({
         estimateData?.category === EstimateCategory.SHOWERS
           ? generateContentForShowerEdit(hardwaresList, estimateData)
           : generateContentForWineCellarEdit(hardwaresList, estimateData);
-      console.log(resp, "reppp");
+      console.log(resp, "reppp",{...resp.content});
       // state.measurements = measurements;
       state.content = {
         ...state.content,
         ...resp.content,
+        sufferCostDifference : estimateData?.sufferCostDifference
       };
       state.perimeter = resp.perimeter;
       state.sqftArea = resp.sqftArea;

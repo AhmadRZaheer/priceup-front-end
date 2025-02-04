@@ -1,4 +1,39 @@
 import {
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import {
+  NavLink,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
+
+import bgCustom from '@/Assets/customlayoutimage.svg';
+import CustomInputField from '@/components/ui-components/CustomInput';
+import {
+  addSelectedItem,
+  getQuoteState,
+  resetNotifications,
+  selectedItem,
+  setDoorWidth,
+  setisCustomizedDoorWidth,
+  setQuoteState,
+  updateMeasurements,
+} from '@/redux/estimateCalculations';
+import { useFetchAllDocuments } from '@/utilities/ApiHooks/common';
+import { backendURL } from '@/utilities/common';
+import { EstimateCategory } from '@/utilities/constants';
+import {
+  CheckCircle,
+  Close,
+} from '@mui/icons-material';
+import {
   Box,
   Button,
   CircularProgress,
@@ -6,32 +41,9 @@ import {
   InputAdornment,
   Typography,
   useMediaQuery,
-} from "@mui/material";
-import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import { backendURL } from "@/utilities/common";
-import { useDispatch, useSelector } from "react-redux";
-import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
-import {
-  addSelectedItem,
-  getProjectId,
-  getQuoteState,
-  resetNotifications,
-  // initializeStateForCreateQuote,
-  // initializeStateForCustomQuote,
-  selectedItem,
-  setDoorWidth,
-  // setNavigationDesktop,
-  setQuoteState,
-  setisCustomizedDoorWidth,
-  updateMeasurements,
-} from "@/redux/estimateCalculations";
-import { useEffect, useMemo, useState } from "react";
-import bgCustom from "@/Assets/customlayoutimage.svg";
-import CustomInputField from "@/components/ui-components/CustomInput";
-import { CheckCircle, Close } from "@mui/icons-material";
-import icon from "../../../Assets/search-icon.svg";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
-import { EstimateCategory } from "@/utilities/constants";
+} from '@mui/material';
+
+import icon from '../../../Assets/search-icon.svg';
 
 export const ShowerLayouts = () => {
   const boxStyles = {
@@ -72,7 +84,8 @@ export const ShowerLayouts = () => {
 
   const filteredData = useMemo(() => {
     if (layouts) {
-      const data = [...layouts, { id: 3213412321, name: "Custom" }];
+      // const data = [...layouts, { id: 3213412321, name: "Custom" }];
+      const data = [...layouts];
       const result = data.filter((item) =>
         item.name.toLowerCase().includes(search?.toLowerCase() || "")
       );
