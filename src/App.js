@@ -1,21 +1,38 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter } from "react-router-dom";
-import "./App.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AppRoutes from "./components/ProtectedRoute/appRoutes";
-import AuthVerify from "./components/ProtectedRoute/authVerify";
-import { useDispatch, useSelector } from "react-redux";
-import { logoutHandler } from "./redux/userAuth";
-import { FetchId2 } from "./utilities/ApiHooks/superAdmin";
-import Snackbars from "./components/Modal/snackBar";
-import { closeSnackbar, selectSnackbar } from "./redux/snackBarSlice";
-import { SnackbarProvider } from "notistack";
-import { CustomHooks } from "@/utilities/CustomHooks";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import SplashScreen from "@/components/ui-components/SplashScreen";
-import { getChangeLocation } from "./redux/refetch";
+import './App.css';
 
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+
+import { SnackbarProvider } from 'notistack';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
+
+import SplashScreen from '@/components/ui-components/SplashScreen';
+import { CustomHooks } from '@/utilities/CustomHooks';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+
+import CostDifferenceAlert from './components/Modal/costDifferenceAlert';
+import Snackbars from './components/Modal/snackBar';
+import AppRoutes from './components/ProtectedRoute/appRoutes';
+import AuthVerify from './components/ProtectedRoute/authVerify';
+import { getChangeLocation } from './redux/refetch';
+import {
+  closeSnackbar,
+  selectSnackbar,
+} from './redux/snackBarSlice';
+import { logoutHandler } from './redux/userAuth';
+import { FetchId2 } from './utilities/ApiHooks/superAdmin';
 
 function App() {
   const dispatch = useDispatch();
@@ -85,6 +102,7 @@ useEffect(()=>{
               <FetchId2>
                 <CustomHooks />
                 <AppRoutes />
+                <CostDifferenceAlert />
                 <AuthVerify logOut={logOut} />
               </FetchId2>
             </BrowserRouter>

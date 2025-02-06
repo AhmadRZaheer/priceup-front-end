@@ -133,7 +133,8 @@ const PDFFile = ({controls,data}) => {
       </View>
       {/** Section 3 */}
       <View style={{borderTop:'1px sloid #ccc',paddingTop:'10px'}}>
-       <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+        <View>
+        <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
         <View style={{width:'357px'}} wrap>
            <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'357px'}}>{data?.quote?.settings?.name ? data?.quote?.settings?.name : data?.quote?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'} Layout - Estimate</Text>
            {dimensionsSection[data?.quote?.category]?.includes(pdfFields.MEASUREMENTS) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}} wrap>
@@ -206,6 +207,18 @@ const PDFFile = ({controls,data}) => {
         {controls?.viewLayoutImage && <Image style={styles.logo2} src={ data?.quote?.layout_id ? `${backendURL}/${data?.quote?.settings?.image}` : CustomImage} alt="logo" />}
         {/* <Text style={{fontSize:'18px'}}>Total: ${data?.quote?.cost?.toFixed(2) || 0}</Text> */}
        </View>
+           <Text
+              style={{
+               fontSize: "11px",
+               fontWeight: "extrabold",
+               flexWrap: "wrap", 
+               paddingTop:'8px' 
+              }}
+              >
+               Note : Image attached to this estimate is a sample image and may not match exactly to your project.
+             </Text>
+        </View>
+      
        <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px', alignItems: 'stretch',gap:'10px'}}>
         {controls?.viewPricingSubCategory &&
          <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display: 'flex', flexDirection: 'column'}}>

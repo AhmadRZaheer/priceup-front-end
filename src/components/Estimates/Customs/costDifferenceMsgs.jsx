@@ -1,8 +1,5 @@
 import { useMemo } from 'react';
 
-import { useSelector } from 'react-redux';
-
-import { getContent } from '@/redux/customEstimateSlice';
 import {
   getSelectedCostDifferenceErrorMsgs,
 } from '@/utilities/estimatorHelper';
@@ -11,8 +8,8 @@ import {
   Typography,
 } from '@mui/material';
 
-const CustomCostDifferenceMsgs = () => {
-  const selectedContent = useSelector(getContent);
+const CustomCostDifferenceMsgs = ({customData}) => {
+  const selectedContent = customData?.content;
   const hardwareDisable = useMemo(() => {
     const getErrors = getSelectedCostDifferenceErrorMsgs(selectedContent);
     return getErrors;
@@ -36,7 +33,7 @@ const CustomCostDifferenceMsgs = () => {
             gap: 0.6,
           }}
         >
-          <Typography sx={{ fontWeight: "bold" }}>Hardware Finish:</Typography>
+          <Typography sx={{ fontWeight: "bold" }}>Hardware Finishsss:</Typography>
           <Typography>{hardwareDisable?.hardwareFinish?.message}</Typography>
         </Box>
       )}

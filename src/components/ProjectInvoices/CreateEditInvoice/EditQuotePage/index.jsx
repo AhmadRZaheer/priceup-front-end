@@ -21,6 +21,7 @@ import Imag2 from '@/Assets/CustomerLandingImages/3.png';
 import bgHeaderImage from '@/Assets/CustomerLandingImages/BannerHeadImg.png';
 import LimitationImg from '@/Assets/CustomerLandingImages/LimitationImg.svg';
 import infoBgHeaderImage from '@/Assets/CustomerLandingImages/WhyChoice.svg';
+import WarrantySectionImg from '@/Assets/CustomerLandingImages/WrrantyImg.svg';
 import GCSLogo from '@/Assets/GCS-logo.png';
 import ActivityLogs from '@/components/ActivityLogs';
 import ScrollToTop from '@/components/ScrollToTop';
@@ -166,6 +167,7 @@ const EditQuoteInvoice = () => {
     background: false,
     "content.section3.backgroundImage": false,
     "content.section5.image": false,
+    "content.section4.image": false,
     "content.section8.image1": false,
     "content.section8.image2": false,
     "content.section2.shower.images": false,
@@ -399,6 +401,7 @@ const EditQuoteInvoice = () => {
           singleItemData?.content?.section4?.subHeading ||
           "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction.",
         status: singleItemData?.content?.section4?.status ?? true,
+        image: singleItemData?.content?.section4?.image,
       },
       section5: {
         image: singleItemData?.content?.section5?.image,
@@ -554,6 +557,7 @@ const EditQuoteInvoice = () => {
           subHeading: values.section4?.subHeading,
           description: warrantyText,
           status: values.section4?.status,
+
         },
         section7: {
           ...singleItemData?.content?.section7,
@@ -3365,7 +3369,7 @@ const EditQuoteInvoice = () => {
                             display: "flex",
                             flexDirection: "column",
                             gap: 0.2,
-                            width: "33%",
+                            width: "40%",
                           }}
                         >
                           <Typography
@@ -3381,8 +3385,8 @@ const EditQuoteInvoice = () => {
                             }}
                             className="custom-textfield"
                             color="neutral"
-                            minRows={3}
-                            maxRows={4}
+                            minRows={5}
+                            maxRows={7}
                             name="section4.heading"
                             placeholder="Enter Text"
                             size="large"
@@ -3397,7 +3401,7 @@ const EditQuoteInvoice = () => {
                             display: "flex",
                             flexDirection: "column",
                             gap: 0.2,
-                            width: "33%",
+                            width: "40%",
                           }}
                         >
                           <Typography
@@ -3413,8 +3417,8 @@ const EditQuoteInvoice = () => {
                             }}
                             className="custom-textfield"
                             color="neutral"
-                            minRows={3}
-                            maxRows={4}
+                            minRows={5}
+                            maxRows={7}
                             name="section4.subHeading"
                             placeholder="Enter Text"
                             size="large"
@@ -3424,6 +3428,131 @@ const EditQuoteInvoice = () => {
                             onChange={formik.handleChange}
                           />
                         </Box>
+                        <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "19%",
+                    }}
+                  >                     
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500, }}
+                    >
+                      Image
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        cursor: "pointer",
+                      }}
+                      onClick={() =>
+                        document.getElementById("warranty-image-upload").click()
+                      }
+                    >
+                      <input
+                        id="warranty-image-upload"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        hidden
+                        onChange={(e) => {
+                          handleUploadEstimatesImage(
+                            e,
+                           "content.section4.image",
+                            { height: 110, width: 110 }
+                          );
+                          e.target.value = "";
+                        }}
+                      />
+                      <Box sx={{ position: "relative" }}>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: "-10px",
+                            zIndex: 3,
+                            right: "-5px",
+                          }}
+                        >
+                          <IconButton
+                            disabled={
+                              uploadLoading[
+                               "content.section4.image"
+                              ]
+                            }
+                            sx={{
+                              background: "#8477DA",
+                              color: "white",
+                              p: "5px",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            <Edit sx={{ fontSize: "20px" }} />
+                          </IconButton>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            height: "100%",
+                            width: "100%",
+                            position: "absolute",
+                            zIndex: 3,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box>
+                            {uploadLoading[
+                              "content.section4.image"
+                            ] ? (
+                              <CircularProgress
+                                sx={{ color: "#8477DA" }}
+                                size={24}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </Box>
+                        </Box>
+
+                        {formik.values.section4.image ? (
+                          <img
+                            src={`${backendURL}/${formik.values.section4.image}`}
+                            width={115}
+                            height={115}
+                            alt="not found"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "content.section4.image"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={WarrantySectionImg}
+                            width={115}
+                            height={115}
+                            alt="not found"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "content.section4.image"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </Box>
                       </Box>
                       <Box sx={{ width: "100%" }}>
                         <TextEditor

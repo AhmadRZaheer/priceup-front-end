@@ -21,6 +21,10 @@ import {
   getLocationPdfSettings,
   getLocationShowerSettings,
 } from '@/redux/locationSlice';
+import {
+  setCostDifferenceModelData,
+  setCostDifferenceModelState,
+} from '@/redux/modelSlice';
 import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
 import {
   backendURL,
@@ -140,6 +144,7 @@ const ShowerEstimatesList = ({
   };
 
   const handleIconButtonClick = (item) => {
+    dispatch(setCostDifferenceModelData(item));
     if (item?.config?.layout_id !== null) {
       setStateForShowerEstimate(item, dispatch, navigate);
     } else {
@@ -147,6 +152,10 @@ const ShowerEstimatesList = ({
     }
     // setStateForShowerEstimate(item, dispatch, navigate);
   };
+   const handleCostDifferButton = (item) => {
+        dispatch(setCostDifferenceModelState(true));
+        dispatch(setCostDifferenceModelData(item));
+      };
 
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
@@ -332,7 +341,9 @@ const ShowerEstimatesList = ({
               columns={EstimatesColumns(
                 handleOpenDeleteModal,
                 handleIconButtonClick,
-                handlePreviewPDFClick
+                handlePreviewPDFClick,
+                true,
+                handleCostDifferButton
               )}
               page={page}
               pageSize={itemsPerPage}

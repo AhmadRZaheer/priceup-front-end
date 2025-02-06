@@ -1,33 +1,53 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import {
-  Box,
-  Button,
-  // CircularProgress,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import Pagination from "@/components/Pagination";
-import DeleteModal from "@/components/Modal/deleteModal";
-import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
-import { EstimateCategory } from "@/utilities/constants";
-import { backendURL } from "@/utilities/common";
-import { Edit } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { makeStyles } from "@material-ui/core";
-import DefaultImage from "@/components/ui-components/defaultImage";
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import { debounce } from 'lodash';
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+import DeleteModal from '@/components/Modal/deleteModal';
+import Pagination from '@/components/Pagination';
+import DefaultImage from '@/components/ui-components/defaultImage';
+import {
+  getLocationMirrorSettings,
+  getLocationPdfSettings,
+} from '@/redux/locationSlice';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import {
+  setCostDifferenceModelData,
+  setCostDifferenceModelState,
+} from '@/redux/modelSlice';
+import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
+import { backendURL } from '@/utilities/common';
+import { EstimateCategory } from '@/utilities/constants';
+import { EstimatesColumns } from '@/utilities/DataGridColumns';
 import {
   calculateTotal,
   generateObjectForPDFPreview,
   renderMeasurementSides,
   setStateForMirrorEstimate,
-} from "@/utilities/mirrorEstimates";
-import { debounce } from "lodash";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getLocationMirrorSettings, getLocationPdfSettings } from "@/redux/locationSlice";
-import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+} from '@/utilities/mirrorEstimates';
+import {
+  GenrateColumns,
+  GenrateRows,
+} from '@/utilities/skeltonLoading';
+import { makeStyles } from '@material-ui/core';
+import { Edit } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
+
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
 const routePrefix = `${backendURL}/estimates`;
@@ -132,8 +152,13 @@ const MirrorEstimatesList = ({
   };
 
   const handleIconButtonClick = (item) => {
+    dispatch(setCostDifferenceModelData(item));
     setStateForMirrorEstimate(item, dispatch, navigate);
   };
+   const handleCostDifferButton = (item) => {
+      dispatch(setCostDifferenceModelState(true));
+      dispatch(setCostDifferenceModelData(item));
+    };
 
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
@@ -318,7 +343,9 @@ const MirrorEstimatesList = ({
               columns={EstimatesColumns(
                 handleOpenDeleteModal,
                 handleIconButtonClick,
-                handlePreviewPDFClick
+                handlePreviewPDFClick,
+                true,
+                handleCostDifferButton
               )}
               page={page}
               pageSize={itemsPerPage}

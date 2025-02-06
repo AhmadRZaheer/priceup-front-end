@@ -41,6 +41,7 @@ import {
   setSufferCostDifference,
 } from '@/redux/mirrorsEstimateSlice';
 import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import { setCostDifferenceModelState } from '@/redux/modelSlice';
 import { useFetchSingleDocument } from '@/utilities/ApiHooks/common';
 import { backendURL } from '@/utilities/common';
 import {
@@ -288,7 +289,7 @@ export const MirrorDimensions = () => {
                       Apply Cost
                     </Button>
                     <Button
-                      onClick={() => setOpenCostDifferAlert(true)}
+                      onClick={() => dispatch(setCostDifferenceModelState(true))}
                       variant="contained"
                       sx={{
                         display: "flex",
@@ -1351,8 +1352,6 @@ export const MirrorDimensions = () => {
       </Box>
     </Box>
     <CostDifferenceAlert
-        open={openCostDifferAlert}
-        handleClose={() => setOpenCostDifferAlert(false)}
         estimateCategory={EstimateCategory.MIRRORS}
       />
     </>

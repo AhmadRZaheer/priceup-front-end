@@ -26,6 +26,7 @@ import {
   getSkeltonState,
   setSkeltonState,
 } from '@/redux/estimateSlice';
+import { setCostDifferenceModelState } from '@/redux/modelSlice';
 import {
   useFetchAllDocuments,
   useFetchSingleDocument,
@@ -151,7 +152,7 @@ export const ShowerDimensions = () => {
                       Apply Cost
                     </Button>
                     <Button
-                      onClick={() => setOpenCostDifferAlert(true)}
+                      onClick={() => dispatch(setCostDifferenceModelState(true))}
                       variant="contained"
                       sx={{
                         display: "flex",
@@ -335,8 +336,6 @@ export const ShowerDimensions = () => {
         </Box>
       </Box>
       <CostDifferenceAlert
-        open={openCostDifferAlert}
-        handleClose={() => setOpenCostDifferAlert(false)}
         estimateCategory={EstimateCategory.SHOWERS}
       />
     </>

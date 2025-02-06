@@ -5,7 +5,6 @@ import React, {
 
 import {
   dimensionsSection,
-  fabricationSection,
   pdfFields,
   pricingSection,
   summarySection,
@@ -39,20 +38,21 @@ const styles = StyleSheet.create({
   section_top: {
     display: "flex",
     flexDirection: "row",
-    gap: 40,
-    height: "32px",
-    alignItems: "center",
+    justifyContent:'space-between',
+    gap: 80,
+    // height: "32px",
+    // alignItems: "center",
   },
   top_view_2: {
     display: "flex",
-    flexDirection: "row",
-    gap: 10,
+    flexDirection: "column",
+    gap: 2,
   },
   top_view_2_container: {
     display: "flex",
     flexDirection: "row",
     gap: 5,
-    alignItems: "baseline",
+    // alignItems: "baseline",
   },
   top_view_2_title: {
     fontSize: 12,
@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 30,
-    height: 30,
+    width: 60,
+    height: 60,
   },
   logo2: {
     width: 125,
-    height: 150,
+    height: 140,
   },
   title: {
     color: "#000",
@@ -106,21 +106,64 @@ const LandingPDFFile = ({ controls, data }) => {
             <View style={styles.section_top}>
               <View style={styles.title_logo}>
                 <Image style={styles.logo} src={GCS_logo} alt="logo" />
-                <Text style={styles.title}> PRICE UP</Text>
+                {/* <Text style={styles.title}> PRICE UP</Text> */}
+                <View style={{ width: "135px",paddingLeft:'8px' }}>
+                <View style={{ padding: "5px" }}>
+                  <Text style={{ fontSize: "12px" }}>
+                  {data?.location?.name}
+                  </Text>
+                  <Text style={{ fontSize: "12px" }}>
+                    {data?.location?.street}
+                  </Text>
+                  <Text style={{ fontSize: "12px" }}>
+                    {data?.location?.state}, {data?.location?.zipCode}
+                  </Text>
+                </View>
+              </View>
               </View>
               <View style={styles.top_view_2}>
-                <View style={styles.top_view_2_container}>
+                {/* <View style={styles.top_view_2_container}>
                   <Text style={{ fontWeight: "extrabold", fontSize: "14px" }}>
                     Job ID:
                   </Text>
                   <Text style={styles.top_view_2_value}>
                     {data?.estimateData?.project_id}
                   </Text>
-                </View>
+                </View> */}
                 <View style={styles.top_view_2_container}>
-                  <Text style={{ fontWeight: "extrabold", fontSize: "14px" }}>
+                  <View style={{width:'100px',textAlign:'right'}}>
+                  <Text style={{ fontWeight: "extrabold", fontSize: "12px" }}>
                     {" "}
-                    Date:
+                    Date :
+                  </Text>
+                  <Text style={{ fontWeight: "extrabold", fontSize: "12px" }}>
+                    {" "}
+                    Estimate # :
+                  </Text>
+                  <Text style={{ fontWeight: "extrabold", fontSize: "12px" }}>
+                    {" "}
+                    Salesperson :
+                  </Text>
+                  <Text style={{ fontWeight: "extrabold", fontSize: "12px" }}>
+                    {" "}
+                    Project Name :
+                  </Text>
+                  <Text style={{ fontWeight: "extrabold", fontSize: "12px" }}>
+                    {" "}
+                    Contact Name :
+                  </Text>
+             
+                  <Text style={{ fontWeight: "extrabold", fontSize: "12px" }}>
+                    {" "}
+                    Deposit Required :
+                  </Text>
+                  </View>
+                   <View style={{}} >
+                   <Text style={styles.top_view_2_value}>
+                    {" "}
+                    {new Date(
+                      data?.estimateData?.createdAt
+                    )?.toLocaleDateString()}
                   </Text>
                   <Text style={styles.top_view_2_value}>
                     {" "}
@@ -128,6 +171,29 @@ const LandingPDFFile = ({ controls, data }) => {
                       data?.estimateData?.createdAt
                     )?.toLocaleDateString()}
                   </Text>
+                     <Text style={styles.top_view_2_value}>
+                    {" "}
+                    {new Date(
+                      data?.estimateData?.createdAt
+                    )?.toLocaleDateString()}
+                  </Text>
+                  <Text style={styles.top_view_2_value}>
+                    {" "}
+                    {data?.estimateData?.project?.projectName ?? ""}
+                  </Text>
+                      <Text style={styles.top_view_2_value}>
+                    {" "}
+                    {new Date(
+                      data?.estimateData?.createdAt
+                    )?.toLocaleDateString()}
+                  </Text>
+                      <Text style={styles.top_view_2_value}>
+                    {" "}
+                    {new Date(
+                      data?.estimateData?.createdAt
+                    )?.toLocaleDateString()}
+                  </Text>
+                   </View>
                 </View>
               </View>
             </View>
@@ -165,7 +231,7 @@ const LandingPDFFile = ({ controls, data }) => {
                   </Text>
                 </View>
               </View>
-              <View style={{ flexGrow: 1 }}>
+              {/* <View style={{ flexGrow: 1 }}>
                 <Text
                   style={{
                     padding: "5px 10px",
@@ -182,8 +248,8 @@ const LandingPDFFile = ({ controls, data }) => {
                     {data?.estimateData?.project?.projectName ?? ""} - Project
                   </Text>
                 </View>
-              </View>
-              <View style={{ width: "175px" }}>
+              </View> */}
+              {/* <View style={{ width: "175px" }}>
                 <Text
                   style={{
                     padding: "5px 10px",
@@ -206,14 +272,160 @@ const LandingPDFFile = ({ controls, data }) => {
                     {data?.location?.website}
                   </Text>
                 </View>
-              </View>
+              </View> */}
             </View>
+            <View
+                        wrap={false}
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: "10px",
+                          alignItems: "stretch",
+                          gap: "10px",
+                        }}
+                      >
+                          <View
+                            style={{
+                              border: "1.5px solid #ccc",
+                              flexGrow: 1,
+                              borderRadius: "5px",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: "16px",
+                                fontWeight: 600,
+                                marginBottom: "2px",
+                                padding:'8px'
+                              }}
+                            >
+                              Billing:
+                            </Text>
+                            <View
+                            style={{
+                              borderTop: "1.5px solid #ccc",
+                              padding:'8px'
+                            }}
+                          >
+                                <View style={{ width: "135px",}}>
+                <View style={{  }}>
+                  <Text style={{ fontSize: "12px" }}>
+                  {data?.location?.name}
+                  </Text>
+                  <Text style={{ fontSize: "12px" }}>
+                    {data?.location?.street}
+                  </Text>
+                  <Text style={{ fontSize: "12px" }}>
+                    {data?.location?.state}, {data?.location?.zipCode}
+                  </Text>
+                </View>
+              </View>
+                          </View>
+                            <View
+                            style={{
+                              borderTop: "1.5px solid #ccc",
+                              display:'flex',
+                              flexDirection:'row',
+                              gap:3,
+                              padding:'8px'
+                            }}
+                          >
+                             <Text
+                              style={{
+                                fontSize: "16px",
+                                fontWeight: "extrabold",
+                                marginBottom: "2px",
+                              }}
+                            >
+                              Terms:
+                            </Text>
+                             <Text
+                              style={{
+                                fontSize: "16px",
+                                marginBottom: "2px",
+                              }}
+                            >
+                              Due Upon Completion
+                            </Text>
+                          </View>
+                          </View>
+                          <View
+                            style={{
+                              border: "1.5px solid #ccc",
+                              flexGrow: 1,
+                              borderRadius: "5px",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <Text
+                              style={{
+                                fontSize: "16px",
+                                fontWeight: 600,
+                                marginBottom: "2px",
+                                padding:'8px'
+                              }}
+                            >
+                              Shipping:
+                            </Text>
+                            <View
+                            style={{
+                              borderTop: "1.5px solid #ccc",
+                              padding:'8px'
+                            }}
+                          >
+                                <View style={{ width: "135px",}}>
+                <View style={{ }}>
+                  <Text style={{ fontSize: "12px" }}>
+                  {data?.location?.name}
+                  </Text>
+                  <Text style={{ fontSize: "12px" }}>
+                    {data?.location?.street}
+                  </Text>
+                  <Text style={{ fontSize: "12px" }}>
+                    {data?.location?.state}, {data?.location?.zipCode}
+                  </Text>
+                </View>
+              </View>
+                          </View>
+                            <View
+                            style={{
+                              borderTop: "1.5px solid #ccc",
+                              display:'flex',
+                              flexDirection:'row',
+                              gap:3,
+                              padding:'8px'
+                            }}
+                          >
+                             <Text
+                              style={{
+                                fontSize: "16px",
+                                fontWeight: "extrabold",
+                                marginBottom: "2px",
+                              }}
+                            >
+                              Ship Via:
+                            </Text>
+                             <Text
+                              style={{
+                                fontSize: "16px",
+                                marginBottom: "2px",
+                              }}
+                            >
+                              Due Upon Completion
+                            </Text>
+                          </View>
+                          </View>
+                      </View>
             <View
               style={{
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "start",
-                borderTop: "1px sloid #ccc",
+                // borderTop: "1px sloid #ccc",
                 paddingTop: "10px",
               }}
             >
@@ -252,7 +464,7 @@ const LandingPDFFile = ({ controls, data }) => {
                     </Text>
                   </View>
                 }
-                {
+                {noOfEstimate?.totalShowers?.length > 0 &&
                   <View
                     style={{
                       display: "flex",
@@ -266,7 +478,7 @@ const LandingPDFFile = ({ controls, data }) => {
                     </Text>
                   </View>
                 }
-                {
+                {noOfEstimate?.totalMirrors.length > 0 &&
                   <View
                     style={{
                       display: "flex",
@@ -280,7 +492,7 @@ const LandingPDFFile = ({ controls, data }) => {
                     </Text>
                   </View>
                 }
-                {
+                {noOfEstimate?.totalWineCellar.length > 0 && 
                   <View
                     style={{
                       display: "flex",
@@ -342,6 +554,7 @@ const LandingPDFFile = ({ controls, data }) => {
                             ? "Mirror"
                             : "Custom"}
                         </Text>
+                        <View>
                         <View
                           style={{
                             display: "flex",
@@ -533,7 +746,8 @@ const LandingPDFFile = ({ controls, data }) => {
                             }
                           </View>
                           {controls?.viewLayoutImage && (
-                            <Image
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'center'}}>
+                              <Image
                               style={styles.logo2}
                               src={
                                 item?.layout_id
@@ -542,8 +756,21 @@ const LandingPDFFile = ({ controls, data }) => {
                               }
                               alt="logo"
                             />
+                              </View>
                           )}
                         </View>
+                        <Text
+                           style={{
+                            fontSize: "11px",
+                            fontWeight: "extrabold",
+                            flexWrap: "wrap", 
+                            paddingTop:'8px' 
+                          }}
+                        >
+                        Note : Image attached to this estimate is a sample image and may not match exactly to your project.
+                        </Text>
+                        </View>
+                      
                       </View>
                       <View
                         wrap={false}
@@ -556,7 +783,7 @@ const LandingPDFFile = ({ controls, data }) => {
                           gap: "10px",
                         }}
                       >
-                        {controls?.viewPricingSubCategory && (
+                        {/* {controls?.viewPricingSubCategory && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -757,8 +984,8 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
-                        {controls?.viewGrossProfit && (
+                        )} */}
+                        {/* {controls?.viewGrossProfit && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -826,7 +1053,7 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
+                        )} */}
                       </View>
                       <View
                         wrap={false}
@@ -1380,7 +1607,7 @@ const LandingPDFFile = ({ controls, data }) => {
                           paddingBottom: "30px",
                         }}
                       >
-                        {controls?.viewFabrication && (
+                        {/* {controls?.viewFabrication && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -1629,8 +1856,8 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
-                        {controls?.viewAdditionalFields && (
+                        )} */}
+                        {(controls?.viewAdditionalFields && item?.additionalFields?.length > 0) && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -1716,6 +1943,7 @@ const LandingPDFFile = ({ controls, data }) => {
                         >
                           Mirror Estimate - Custom
                         </Text>
+                        <View>
                         <View
                           style={{
                             display: "flex",
@@ -1906,16 +2134,29 @@ const LandingPDFFile = ({ controls, data }) => {
                             }
                           </View>
                           {controls?.viewLayoutImage && (
-                            <Image
-                              style={styles.logo2}
-                              src={
-                                item?.layout_id
-                                  ? `${backendURL}/${item?.settings?.image}`
-                                  : CustomImage
-                              }
-                              alt="logo"
-                            />
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'center'}}>
+                             <Image
+                               style={styles.logo2}
+                               src={
+                                 item?.layout_id
+                                   ? `${backendURL}/${item?.settings?.image}`
+                                   : CustomImage
+                               }
+                               alt="logo"
+                             />
+                             </View>
                           )}
+                        </View>
+                        <Text
+                           style={{
+                            fontSize: "11px",
+                            fontWeight: "extrabold",
+                            flexWrap: "wrap",
+                            paddingTop:'8px'  
+                          }}
+                        >
+                        Note : Image attached to this estimate is a sample image and may not match exactly to your project.
+                        </Text>
                         </View>
                       </View>
                       <View
@@ -1929,7 +2170,7 @@ const LandingPDFFile = ({ controls, data }) => {
                           gap: "10px",
                         }}
                       >
-                        {controls?.viewPricingSubCategory && (
+                        {/* {controls?.viewPricingSubCategory && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -2130,8 +2371,8 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
-                        {controls?.viewGrossProfit && (
+                        )} */}
+                        {/* {controls?.viewGrossProfit && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -2199,7 +2440,7 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
+                        )} */}
                       </View>
                       <View
                         wrap={false}
@@ -2752,7 +2993,7 @@ const LandingPDFFile = ({ controls, data }) => {
                           paddingBottom: "30px",
                         }}
                       >
-                        {controls?.viewFabrication && (
+                        {/* {controls?.viewFabrication && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -3001,8 +3242,8 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
-                        {controls?.viewAdditionalFields && (
+                        )} */}
+                        {(controls?.viewAdditionalFields && item?.additionalFields?.length > 0) && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -3092,6 +3333,7 @@ const LandingPDFFile = ({ controls, data }) => {
                             ? "Mirror"
                             : "Custom"}
                         </Text>
+                        <View>
                         <View
                           style={{
                             display: "flex",
@@ -3282,6 +3524,7 @@ const LandingPDFFile = ({ controls, data }) => {
                             }
                           </View>
                           {controls?.viewLayoutImage && (
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'center'}}>
                             <Image
                               style={styles.logo2}
                               src={
@@ -3291,7 +3534,19 @@ const LandingPDFFile = ({ controls, data }) => {
                               }
                               alt="logo"
                             />
+                            </View>
                           )}
+                        </View>
+                        <Text
+                           style={{
+                            fontSize: "11px",
+                            fontWeight: "extrabold",
+                            flexWrap: "wrap",  
+                            paddingTop:'8px'
+                          }}
+                        >
+                        Note : Image attached to this estimate is a sample image and may not match exactly to your project.
+                        </Text>
                         </View>
                       </View>
                       <View
@@ -3305,7 +3560,7 @@ const LandingPDFFile = ({ controls, data }) => {
                           gap: "10px",
                         }}
                       >
-                        {controls?.viewPricingSubCategory && (
+                        {/* {controls?.viewPricingSubCategory && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -3506,8 +3761,8 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
-                        {controls?.viewGrossProfit && (
+                        )} */}
+                        {/* {controls?.viewGrossProfit && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -3575,7 +3830,7 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
+                        )} */}
                       </View>
                       <View
                         wrap={false}
@@ -4128,7 +4383,7 @@ const LandingPDFFile = ({ controls, data }) => {
                           paddingBottom: "30px",
                         }}
                       >
-                        {controls?.viewFabrication && (
+                        {/* {controls?.viewFabrication && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -4377,8 +4632,8 @@ const LandingPDFFile = ({ controls, data }) => {
                               </View>
                             )}
                           </View>
-                        )}
-                        {controls?.viewAdditionalFields && (
+                        )} */}
+                        {(controls?.viewAdditionalFields && item?.additionalFields?.length > 0) && (
                           <View
                             style={{
                               border: "1.5px solid #ccc",
@@ -4446,7 +4701,6 @@ const LandingPDFFile = ({ controls, data }) => {
               })}
 
             {(data?.estimateData?.signature ||
-              data?.estimateData?.customer?.name ||
               data?.signature?.image) && (
               <View
                 wrap={false}

@@ -389,7 +389,7 @@ const SigntureSection = ({
               alignItems: "center",
             }}
           >
-            <Box sx={{ width: {sm:"70%",xs:'98%'},textAlignLast :{sm:'none',xs:'center'} }}>
+            <Box sx={{ width: {sm:"70%",xs:'98%'},textAlignLast :{sm:'start',xs:'center'} }}>
               {data?.status === "approve" ? (
                 <Typography
                   sx={{
@@ -452,7 +452,7 @@ const SigntureSection = ({
                     fontWeight: 700,
                     lineHeight: {sm:"39.94px",xs:'32px'},
                     py: {sm:3,xs:1.5},
-                    textAlign:'center'
+                    textAlign:{sm:"start" , xs:'center'}
                   }}
                 >
                   Your Estimate PDF is ready to download!{" "}

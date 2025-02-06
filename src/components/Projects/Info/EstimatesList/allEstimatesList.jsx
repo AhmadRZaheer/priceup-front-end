@@ -23,6 +23,10 @@ import {
   getLocationWineCellarSettings,
 } from '@/redux/locationSlice';
 import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import {
+  setCostDifferenceModelData,
+  setCostDifferenceModelState,
+} from '@/redux/modelSlice';
 import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
 import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
 import {
@@ -76,6 +80,9 @@ const AllEstimatesList = ({
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [costDifferenceCategory, setCostDifferenceCategory] = useState(
+    EstimateCategory.SHOWERS
+  );
   const showersHardwareList = useSelector(getListData);
   const showersLocationSettings = useSelector(getLocationShowerSettings);
   const pdfSettings = useSelector(getLocationPdfSettings);
@@ -230,6 +237,7 @@ const AllEstimatesList = ({
   };
 
   const handleIconButtonClick = (item) => {
+    dispatch(setCostDifferenceModelData(item));
     if (item?.category === EstimateCategory.SHOWERS) {
       if (item?.config?.layout_id !== null) {
         setStateForShowerEstimate(item, dispatch, navigate, true, true);
@@ -242,11 +250,15 @@ const AllEstimatesList = ({
       if (item?.config?.layout_id !== null) {
         setStateForWineCellarEstimate(item, dispatch, navigate, true);
       } else {
-        setStateForCustomEstimate(item, dispatch, navigate, true,);
+        setStateForCustomEstimate(item, dispatch, navigate, true);
       }
     } else {
       console.log("not");
     }
+  };
+  const handleCostDifferButton = (item) => {
+    dispatch(setCostDifferenceModelState(true));
+    dispatch(setCostDifferenceModelData(item));
   };
 
   const filteredData = useMemo(() => {
@@ -422,7 +434,9 @@ const AllEstimatesList = ({
               columns={EstimatesColumns(
                 handleOpenDeleteModal,
                 handleIconButtonClick,
-                handlePreviewPDFClick
+                handlePreviewPDFClick,
+                true,
+                handleCostDifferButton
               )}
               page={page}
               pageSize={itemsPerPage}
