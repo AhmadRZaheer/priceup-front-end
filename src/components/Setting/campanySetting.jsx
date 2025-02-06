@@ -52,6 +52,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import WarrantySectionImg
+  from '../../Assets/CustomerLandingImages/WrrantyImg.svg';
 import FAQSection
   from '../ProjectInvoices/CreateEditInvoice/EditQuotePage/FAQSection';
 import TextEditor
@@ -226,6 +228,7 @@ const CampanySetting = () => {
     "presentationSettings.section1.logo": false,
     "presentationSettings.section1.backgroundImage": false,
     "presentationSettings.section3.backgroundImage": false,
+    "presentationSettings.section4.image": false,    
     "presentationSettings.section5.image": false,
     "presentationSettings.section8.image1": false,
     "presentationSettings.section8.image2": false,
@@ -557,6 +560,7 @@ const CampanySetting = () => {
             "At GCS Glass & Mirror, we stand by our commitment to superior craftsmanship, customized design, and unparalleled customer satisfaction.",
           status: settingData?.presentationSettings?.section4?.status ?? true,
           description: warrantyText ?? WarrantyText,
+          image: settingData?.presentationSettings?.section4?.image,
         },
         section5: {
           image: settingData?.presentationSettings?.section5?.image,
@@ -4385,7 +4389,7 @@ const CampanySetting = () => {
                       display: "flex",
                       flexDirection: "column",
                       gap: 0.2,
-                      width: "33%",
+                      width: "40%",
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
@@ -4399,8 +4403,8 @@ const CampanySetting = () => {
                       }}
                       className="custom-textfield"
                       color="neutral"
-                      minRows={3}
-                      maxRows={4}
+                      minRows={5}
+                      maxRows={7}
                       name="presentationSettings.section4.heading"
                       placeholder="Enter Text"
                       size="large"
@@ -4418,7 +4422,7 @@ const CampanySetting = () => {
                       display: "flex",
                       flexDirection: "column",
                       gap: 0.2,
-                      width: "33%",
+                      width: "40%",
                     }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
@@ -4432,8 +4436,8 @@ const CampanySetting = () => {
                       }}
                       className="custom-textfield"
                       color="neutral"
-                      minRows={3}
-                      maxRows={4}
+                      minRows={5}
+                      maxRows={7}
                       name="presentationSettings.section4.subHeading"
                       placeholder="Enter Text"
                       size="large"
@@ -4445,6 +4449,132 @@ const CampanySetting = () => {
                       }
                       onChange={formik.handleChange}
                     />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 0.2,
+                      width: "19%",
+                    }}
+                  >                     
+                    <Typography
+                      sx={{ fontSize: "14px", fontWeight: 500, }}
+                    >
+                      Image
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        cursor: "pointer",
+                      }}
+                      onClick={() =>
+                        document.getElementById("warranty-image-upload").click()
+                      }
+                    >
+                      <input
+                        id="warranty-image-upload"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        hidden
+                        onChange={(e) => {
+                          handleUploadPreviewImage(
+                            e,
+                            [],
+                            "presentationSettings.section4.image"
+                            // { height: 380, width: 380 }
+                          );
+                          e.target.value = "";
+                        }}
+                      />
+                      <Box sx={{ position: "relative" }}>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: "-10px",
+                            zIndex: 3,
+                            right: "-5px",
+                          }}
+                        >
+                          <IconButton
+                            disabled={
+                              uploadLoading[
+                                "presentationSettings.section4.image"
+                              ]
+                            }
+                            sx={{
+                              background: "#8477DA",
+                              color: "white",
+                              p: "5px",
+                              ":hover": {
+                                background: "#8477DA",
+                              },
+                            }}
+                          >
+                            <Edit sx={{ fontSize: "20px" }} />
+                          </IconButton>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            height: "100%",
+                            width: "100%",
+                            position: "absolute",
+                            zIndex: 3,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Box>
+                            {uploadLoading[
+                              "presentationSettings.section4.image"
+                            ] ? (
+                              <CircularProgress
+                                sx={{ color: "#8477DA" }}
+                                size={24}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </Box>
+                        </Box>
+
+                        {formik.values.presentationSettings.section4?.image ? (
+                          <img
+                            src={`${backendURL}/${formik.values.presentationSettings.section4?.image}`}
+                            width={115}
+                            height={115}
+                            alt="not found"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "presentationSettings.section4.image"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={WarrantySectionImg}
+                            width={115}
+                            height={115}
+                            alt="not found"
+                            style={{
+                              border: "1px solid  #ccc",
+                              borderRadius: "10px",
+                              opacity: uploadLoading[
+                                "presentationSettings.section4.image"
+                              ]
+                                ? 0.3
+                                : 1,
+                            }}
+                          />
+                        )}
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
                 <Box sx={{ width: "100%" }}>

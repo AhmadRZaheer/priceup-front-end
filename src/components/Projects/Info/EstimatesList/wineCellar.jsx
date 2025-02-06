@@ -19,6 +19,10 @@ import {
   getLocationPdfSettings,
   getLocationWineCellarSettings,
 } from '@/redux/locationSlice';
+import {
+  setCostDifferenceModelData,
+  setCostDifferenceModelState,
+} from '@/redux/modelSlice';
 import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
 import { useDeleteEstimates } from '@/utilities/ApiHooks/estimate';
 import {
@@ -152,6 +156,7 @@ const WineCellarEstimatesList = ({
   };
 
   const handleIconButtonClick = (item) => {
+    dispatch(setCostDifferenceModelData(item));
     if (item?.config?.layout_id !== null) {
       setStateForWineCellarEstimate(item, dispatch, navigate);
     } else {
@@ -159,6 +164,10 @@ const WineCellarEstimatesList = ({
     }
     // setStateForWineCellarEstimate(item, dispatch, navigate);
   };
+     const handleCostDifferButton = (item) => {
+          dispatch(setCostDifferenceModelState(true));
+          dispatch(setCostDifferenceModelData(item));
+        };
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
       return estimatesList?.estimates;
@@ -341,7 +350,9 @@ const WineCellarEstimatesList = ({
               columns={EstimatesColumns(
                 handleOpenDeleteModal,
                 handleIconButtonClick,
-                handlePreviewPDFClick
+                handlePreviewPDFClick,
+                true,
+                handleCostDifferButton
               )}
               page={page}
               pageSize={itemsPerPage}

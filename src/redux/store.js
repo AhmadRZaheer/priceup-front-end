@@ -11,6 +11,7 @@ import hardwareReducer from './hardwareSlice';
 import locationReducer from './locationSlice';
 import mirrorsEstimateReducer from './mirrorsEstimateSlice';
 import mirrorsHardwareReducer from './mirrorsHardwareSlice';
+import modelSlice from './modelSlice';
 import notificationsSlice from './notificationsSlice';
 import refetchSlice from './refetch';
 import selectedIdSlice from './selectedIdSlice';
@@ -43,6 +44,7 @@ const store = configureStore({
     globalEstimateForm: globalEstimateForm,
     customerEstimation: customerEstimationSlice,
     customsEstimate: customsEstimateSlice,
+    model : modelSlice
   },
 });
 

@@ -21,6 +21,7 @@ import {
   getSkeltonState,
   setSkeltonState,
 } from '@/redux/estimateSlice';
+import { setCostDifferenceModelState } from '@/redux/modelSlice';
 import {
   getContent,
   selectedItem,
@@ -150,7 +151,7 @@ export const WineCellarDimensions = () => {
                       Apply Cost
                     </Button>
                     <Button
-                      onClick={() => setOpenCostDifferAlert(true)}
+                      onClick={() => dispatch(setCostDifferenceModelState(true))}
                       variant="contained"
                       sx={{
                         display: "flex",
@@ -320,8 +321,6 @@ export const WineCellarDimensions = () => {
         </Box>
       </Box>
       <CostDifferenceAlert
-        open={openCostDifferAlert}
-        handleClose={() => setOpenCostDifferAlert(false)}
         estimateCategory={EstimateCategory.WINECELLARS}
       />
     </>

@@ -1,4 +1,22 @@
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+
+import { getListData } from '@/redux/estimateCalculations';
+import { getMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
+import {
+  getCostDifferenceModelData,
+  getCostDifferenceModelStatus,
+  setCostDifferenceModelState,
+} from '@/redux/modelSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
 import { EstimateCategory } from '@/utilities/constants';
+import {
+  generateContentForMirrorEdit,
+  generateContentForShowerEdit,
+  generateContentForWineCellarEdit,
+} from '@/utilities/generateEstimateCalculationContent';
 import {
   Close,
   ErrorOutline,
@@ -26,18 +44,37 @@ const style = {
   bgcolor: "#ffff",
   borderRadius: "4px",
   p: 3,
-  minWidth:'700px'
+  minWidth: "700px",
 };
 
-export default function CostDifferenceAlert({
-  open,
-  handleClose,
-  estimateCategory,
-}) {
+export default function CostDifferenceAlert({ estimate }) {
+  console.log(estimate, "estimateestimate");
+  const dispatch = useDispatch();
+  const status = useSelector(getCostDifferenceModelStatus);
+  const reduxData = useSelector(getCostDifferenceModelData);
+  const wineCellarsHardware = useSelector(getWineCellarsHardware);
+  const mirrorsHardware = useSelector(getMirrorsHardware);
+  const showersHardware = useSelector(getListData);
+  const handleClose = () => {
+    dispatch(setCostDifferenceModelState(false));
+  };
+  const wineCostDifference = generateContentForWineCellarEdit(
+    wineCellarsHardware,
+    reduxData
+  );
+  const showerCostDifference = generateContentForShowerEdit(
+    showersHardware,
+    reduxData
+  );
+  const mirrorCostDifference = generateContentForMirrorEdit(
+    mirrorsHardware,
+    reduxData
+  );
+  console.log(showerCostDifference, "showerCostDifference");
   return (
     <div>
       <Modal
-        open={open}
+        open={status}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -58,15 +95,31 @@ export default function CostDifferenceAlert({
           <Typography>
             The following selected hardware currently have a cost difference.
           </Typography>
-          {estimateCategory === EstimateCategory.SHOWERS ? (
-            <CostDifferenceMsgs />
-          ) : estimateCategory === EstimateCategory.WINECELLARS ? (
-            <WineCallerCostDifferenceMsgs />
-          ) : estimateCategory === EstimateCategory.MIRRORS ? (
-            <MirrorCostDifferenceMsgs />
-          ) :  estimateCategory === EstimateCategory.CUSTOMS ?  (
-            <CustomCostDifferenceMsgs />
-          ) : ''}
+          {reduxData?.category === EstimateCategory.SHOWERS &&
+          reduxData?.settings !== null ? (
+            <CostDifferenceMsgs showerData={showerCostDifference} />
+          ) : reduxData?.category === EstimateCategory.WINECELLARS &&
+            reduxData?.settings !== null ? (
+            <WineCallerCostDifferenceMsgs
+              wineCostDifference={wineCostDifference}
+            />
+          ) : reduxData?.category === EstimateCategory.MIRRORS ? (
+            <MirrorCostDifferenceMsgs
+              mirrorCostDifference={mirrorCostDifference}
+            />
+          ) : (reduxData?.category === EstimateCategory.SHOWERS ||
+              reduxData?.category === EstimateCategory.WINECELLARS) &&
+            reduxData?.settings === null ? (
+            <CustomCostDifferenceMsgs
+              customData={
+                reduxData?.category === EstimateCategory.SHOWERS
+                  ? showerCostDifference
+                  : wineCostDifference
+              }
+            />
+          ) : (
+            ""
+          )}
           <Box
             sx={{
               display: "flex",

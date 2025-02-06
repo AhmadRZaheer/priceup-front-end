@@ -11,6 +11,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import {
   Box,
   Grid,
+  IconButton,
   Tooltip,
   Typography,
 } from '@mui/material';
@@ -21,7 +22,8 @@ export const EstimatesColumns = (
   handleDeleteEstimate,
   handleIconButtonClick,
   handlePDFPreviewClick,
-  showActions = true
+  showActions = true,
+  handleCostDifferButton
 ) => {
   return [
     {
@@ -373,7 +375,7 @@ export const EstimatesColumns = (
             flex: 0.9,
             renderCell: (params) => {
               return (
-                <Box sx={{ display: "flex", gap: 1.5 }}>
+                <Box sx={{ display: "flex",}}>
                   <EstimateActionsDropdown
                     params={params}
                     handleDeleteEstimate={handleDeleteEstimate}
@@ -383,9 +385,11 @@ export const EstimatesColumns = (
                   {params?.row?.sufferCostDifference && (
                     <Box sx={{ alignContent: "end" }}>
                       <Tooltip placement="top" title="Suffer cost difference">
+                        <IconButton onClick={()=>handleCostDifferButton(params?.row)}>
                         <WarningAmberIcon
                           sx={{ textAlign: "center", color: "red" }}
                         />
+                        </IconButton>
                       </Tooltip>
                     </Box>
                   )}

@@ -1,8 +1,5 @@
 import { useMemo } from 'react';
 
-import { useSelector } from 'react-redux';
-
-import { getContent } from '@/redux/estimateCalculations';
 import {
   getSelectedCostDifferenceErrorMsgs,
 } from '@/utilities/estimatorHelper';
@@ -11,14 +8,13 @@ import {
   Typography,
 } from '@mui/material';
 
-const CostDifferenceMsgs = () => {
-  const selectedContent = useSelector(getContent);
+const CostDifferenceMsgs = ({showerData}) => {
+  const selectedContent = showerData.content;
   const hardwareDisable = useMemo(() => {
     const getErrors = getSelectedCostDifferenceErrorMsgs(selectedContent);
     return getErrors;
   }, [selectedContent]);
 
-  console.log(hardwareDisable, "hardwareDisablehardwareDisable");
 
   return (
     <Box

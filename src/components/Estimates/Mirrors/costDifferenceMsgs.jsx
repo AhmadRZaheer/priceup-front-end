@@ -1,8 +1,5 @@
 import { useMemo } from 'react';
 
-import { useSelector } from 'react-redux';
-
-import { getSelectedContent } from '@/redux/mirrorsEstimateSlice';
 import {
   getSelectedCostDifferenceErrorMsgs,
 } from '@/utilities/mirrorEstimates';
@@ -11,8 +8,8 @@ import {
   Typography,
 } from '@mui/material';
 
-const MirrorCostDifferenceMsgs = () => {
-  const selectedContent = useSelector(getSelectedContent);
+const MirrorCostDifferenceMsgs = ({mirrorCostDifference}) => {
+  const selectedContent = mirrorCostDifference?.content;
   const hardwareDisable = useMemo(() => {
     const getErrors = getSelectedCostDifferenceErrorMsgs(selectedContent);
     return getErrors;

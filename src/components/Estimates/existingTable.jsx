@@ -21,6 +21,10 @@ import {
   getLocationPdfSettings,
   getLocationShowerSettings,
 } from '@/redux/locationSlice';
+import {
+  setCostDifferenceModelData,
+  setCostDifferenceModelState,
+} from '@/redux/modelSlice';
 import { getEstimatesListRefetch } from '@/redux/refetch';
 import { useFetchAllDocuments } from '@/utilities/ApiHooks/common';
 // import { Search } from "@mui/icons-material";
@@ -190,6 +194,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
   // };
 
   const handleIconButtonClick = (item) => {
+    dispatch(setCostDifferenceModelData(item));
     if (item?.category === EstimateCategory.SHOWERS) {
       if (item?.config?.layout_id !== null) {
         setStateForShowerEstimate(item, dispatch, navigate);
@@ -208,6 +213,10 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
       console.error("not");
     }
   };
+     const handleCostDifferButton = (item) => {
+       dispatch(setCostDifferenceModelState(true));
+       dispatch(setCostDifferenceModelData(item));
+     };
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -371,7 +380,9 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
               columns={EstimatesColumns(
                 handleOpenDeleteModal,
                 handleIconButtonClick,
-                handlePreviewPDFClick
+                handlePreviewPDFClick,
+                true,
+                handleCostDifferButton
               )}
               page={page}
               pageSize={itemsPerPage}

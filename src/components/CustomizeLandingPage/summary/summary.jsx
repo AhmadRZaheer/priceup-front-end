@@ -722,7 +722,7 @@ const ShowerSummary = ({
             </Box>
             <Box
               sx={{
-                width: {sm:"40%",xs:'100%'},
+                width: {sm:"47%",xs:'100%'},
                 order:{sm:2,xs:1}
               }}
             >
@@ -736,10 +736,11 @@ const ShowerSummary = ({
               >
                 Layout Dimensions:
               </Typography>
+              <Box>
               <Box
                 sx={{
                   display: "flex",
-                  justifyContent: {sm:"end",xs:'center'},
+                  justifyContent: 'center',
                   py: {sm:1,xs:0},
                 }}
               >
@@ -748,6 +749,8 @@ const ShowerSummary = ({
                   alt="not"
                 className='layoutLogo'
                 />
+              </Box>
+              <Typography sx={{fontWeight:'bold',fontSize:'14px',color:primaryColor}}>This image is a sample image and may not match exactly to your project.</Typography>
               </Box>
             </Box>
           </Box>
@@ -1137,7 +1140,7 @@ const ShowerSummary = ({
                         </Typography>
                       </Box>
                     )}
-                    <Box
+                    {/* <Box
                       sx={{
                         display: "flex",
                         textAlign: "baseline",
@@ -1150,8 +1153,8 @@ const ShowerSummary = ({
                       <Typography className="text-xs-ragular">
                         {data?.content?.people}
                       </Typography>
-                    </Box>
-                    <Box
+                    </Box> */}
+                    {/* <Box
                       sx={{
                         display: "flex",
                         textAlign: "baseline",
@@ -1183,7 +1186,7 @@ const ShowerSummary = ({
                           {data?.content?.laborHoursForDoor}
                         </Typography>
                       </Box>
-                    )}
+                    )} */}
                   </Stack>
                 </Grid>
               </Grid>

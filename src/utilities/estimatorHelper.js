@@ -420,7 +420,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
 }
 
 export const getSelectedCostDifferenceErrorMsgs = (selectedContent) => {
-  console.log(selectedContent,'selectedContent12qwas')
+  console.log(selectedContent,'selectedContentselectedContent121212')
     let errors = null;
     if (!selectedContent.hardwareFinishes?._id) {
         errors = {
