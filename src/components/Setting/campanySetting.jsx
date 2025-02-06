@@ -54,6 +54,7 @@ import {
 
 import WarrantySectionImg
   from '../../Assets/CustomerLandingImages/WrrantyImg.svg';
+import ColorPicker from '../ColorPicker';
 import FAQSection
   from '../ProjectInvoices/CreateEditInvoice/EditQuotePage/FAQSection';
 import TextEditor
@@ -228,7 +229,7 @@ const CampanySetting = () => {
     "presentationSettings.section1.logo": false,
     "presentationSettings.section1.backgroundImage": false,
     "presentationSettings.section3.backgroundImage": false,
-    "presentationSettings.section4.image": false,    
+    "presentationSettings.section4.image": false,
     "presentationSettings.section5.image": false,
     "presentationSettings.section8.image1": false,
     "presentationSettings.section8.image2": false,
@@ -2748,7 +2749,7 @@ const CampanySetting = () => {
                   >
                     Primary
                   </Typography>
-                  <input
+                  {/* <input
                     type="color"
                     value={
                       formik.values.presentationSettings.colorSection.primary
@@ -2766,6 +2767,17 @@ const CampanySetting = () => {
                       width: "100%",
                       height: "40px",
                     }}
+                  /> */}
+                  <ColorPicker
+                    value={
+                      formik.values.presentationSettings.colorSection.primary
+                    }
+                    onChange={(hex) =>
+                      formik.setFieldValue(
+                        "presentationSettings.colorSection.primary",
+                        hex
+                      )
+                    }
                   />
                 </Box>
                 <Box sx={{ width: "10%" }}>
@@ -2774,24 +2786,16 @@ const CampanySetting = () => {
                   >
                     Secondary
                   </Typography>
-                  <input
-                    type="color"
+                  <ColorPicker
                     value={
                       formik.values.presentationSettings.colorSection.secondary
                     }
-                    onChange={(e) =>
+                    onChange={(hex) =>
                       formik.setFieldValue(
                         "presentationSettings.colorSection.secondary",
-                        e.target.value
+                        hex
                       )
                     }
-                    style={{
-                      width: "100%",
-                      height: "40px",
-                      margin: 0,
-                      cursor: "pointer",
-                      padding: "2px",
-                    }}
                   />
                 </Box>
                 <Box sx={{ width: "10%" }}>
@@ -2800,24 +2804,16 @@ const CampanySetting = () => {
                   >
                     Background
                   </Typography>
-                  <input
-                    type="color"
+                  <ColorPicker
                     value={
                       formik.values.presentationSettings.colorSection.default
                     }
-                    onChange={(e) =>
+                    onChange={(hex) =>
                       formik.setFieldValue(
                         "presentationSettings.colorSection.default",
-                        e.target.value
+                        hex
                       )
                     }
-                    style={{
-                      width: "100%",
-                      height: "40px",
-                      margin: 0,
-                      cursor: "pointer",
-                      padding: "2px",
-                    }}
                   />
                 </Box>
               </Box>
@@ -2837,13 +2833,15 @@ const CampanySetting = () => {
                       width: "39%",
                     }}
                   >
-                    <Box sx={{display:'flex',justifyContent:'space-between'}}>
-                          <Typography
-                            sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
-                          >
-                            Text 1 - Max Limit(28)
-                            </Typography>
-                          </Box> 
+                    <Box
+                      sx={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <Typography
+                        sx={{ fontSize: "14px", fontWeight: 500, pb: 0.8 }}
+                      >
+                        Text 1 - Max Limit(28)
+                      </Typography>
+                    </Box>
                     <TextareaAutosize
                       style={{
                         padding: "10px",
@@ -4457,10 +4455,8 @@ const CampanySetting = () => {
                       gap: 0.2,
                       width: "19%",
                     }}
-                  >                     
-                    <Typography
-                      sx={{ fontSize: "14px", fontWeight: 500, }}
-                    >
+                  >
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
                       Image
                     </Typography>
                     <Box
