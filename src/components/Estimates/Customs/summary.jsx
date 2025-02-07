@@ -18,6 +18,7 @@ import {
   getCost,
   getDoorWeight,
   getDoorWidth,
+  getEstimateDiscount,
   getEstimateDiscountTotal,
   getEstimateDiscountUnit,
   getFabricationTotal,
@@ -39,7 +40,6 @@ import {
   setEstimateDiscountUnit,
   setUserProfitPercentage,
 } from '@/redux/customEstimateSlice';
-import { getEstimateDiscount } from '@/redux/estimateCalculations';
 import {
   getCustomerDetail,
   getEstimateState,
@@ -47,12 +47,15 @@ import {
 import {
   getLocationPdfSettings,
   getLocationShowerSettings,
+  getLocationWineCellarSettings,
 } from '@/redux/locationSlice';
+import { getWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
 import {
   calculateTotal,
   getGlassTypeDetailsByThickness,
 } from '@/utilities/common';
 import {
+  EstimateCategory,
   hardwareTypes,
   layoutVariants,
   quoteState as quotestate,
@@ -80,7 +83,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 
-const Summary = ({ setStep,listData }) => {
+const Summary = ({ setStep, listData }) => {
   const [searchParams] = useSearchParams();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const hardwarePrice = useSelector(getHardwareTotal);
@@ -111,6 +114,8 @@ const Summary = ({ setStep,listData }) => {
   const selectedCategory = searchParams.get("category");
   const showersLocationSettings = useSelector(getLocationShowerSettings);
   const pdfSettings = useSelector(getLocationPdfSettings);
+  const wineCallerLocationSettings = useSelector(getLocationWineCellarSettings);
+  const WineCellarHardware = useSelector(getWineCellarsHardware);
   const showerEstimateState = useSelector(
     (state) => state.estimateCalculations
   );
@@ -215,13 +220,41 @@ const Summary = ({ setStep,listData }) => {
   const resetDiscount = () => {
     dispatch(setEstimateDiscount(0));
   };
+  const isShowers = selectedCategory === EstimateCategory.SHOWERS;
+  const glassDetails = useMemo(() => {
+    if (
+      ![EstimateCategory.SHOWERS, EstimateCategory.WINECELLARS].includes(
+        selectedCategory
+      )
+    ) {
+      return null;
+    }
+    const glassTypes = isShowers
+      ? showersLocationSettings?.glassTypesForComparison
+      : wineCallerLocationSettings?.glassTypesForComparison;
 
-  const glassDetails = getGlassTypeDetailsByThickness(
-    showersLocationSettings?.glassTypesForComparison,
-    listData?.glassType,
-    selectedContent?.glassType?.thickness,
-    selectedContent?.glassType?.item?._id
-  );
+    const glassType = isShowers
+      ? listData?.glassType
+      : WineCellarHardware.glassType;
+
+    return getGlassTypeDetailsByThickness(
+      glassTypes,
+      glassType,
+      selectedContent?.glassType?.thickness,
+      selectedContent?.glassType?.item?._id
+    );
+  }, [
+    selectedCategory,
+    selectedContent,
+    showersLocationSettings,
+    wineCallerLocationSettings,
+    listData,
+  ]);
+
+  const pricingFactor = isShowers
+    ? showersLocationSettings?.miscPricing
+    : wineCallerLocationSettings?.miscPricing;
+
   return (
     <>
       <Box
@@ -408,9 +441,7 @@ const Summary = ({ setStep,listData }) => {
                           Layout:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {(selectedData?.settings?.name ||
-                            selectedData?.name) ??
-                            "Custom"}
+                          Custom
                         </Typography>
                       </Box>
                       {doorWidth && doorWidth > 0 ? (
@@ -1100,8 +1131,8 @@ const Summary = ({ setStep,listData }) => {
                     actualCost - glassPrice + sqftArea * glass.price;
                   let singleItemCost =
                     itemCost *
-                      (showersLocationSettings?.miscPricing?.pricingFactorStatus
-                        ? showersLocationSettings?.miscPricing?.pricingFactor
+                      (pricingFactor?.pricingFactorStatus
+                        ? pricingFactor?.pricingFactor
                         : 1) +
                     laborPrice;
                   if (userProfitPercentage > 0 && userProfitPercentage < 100) {
