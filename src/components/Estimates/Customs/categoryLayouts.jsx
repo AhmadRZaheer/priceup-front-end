@@ -15,6 +15,7 @@ import WineCallerImg from '@/Assets/CustomerLandingImages/wineCellar.svg';
 import {
   addSelectedItem,
   getQuoteState,
+  resetCustomsEstimateState,
   resetNotifications,
   selectedItem,
   setDoorWidth,
@@ -75,6 +76,7 @@ export const CustomCategoryLayouts = () => {
   };
   const setStorePage = () => {
     dispatch(resetNotifications());
+    dispatch(resetCustomsEstimateState());
     dispatch(updateMeasurements([]));
     dispatch(setDoorWidth(0));
     navigate(

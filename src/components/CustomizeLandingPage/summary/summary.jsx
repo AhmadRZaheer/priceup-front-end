@@ -141,9 +141,9 @@ const ShowerSummary = ({
         item?.options?.find(
           (option) => option.thickness === data?.content?.glassType?.thickness
         )?.cost || 0;
-        // if(item?.cost > 0){
-        //   price = item?.cost
-        // }
+      // if(item?.cost > 0){
+      //   price = item?.cost
+      // }
       const costDifference =
         upgradeGlassList
           ?.filter((item) => item._id === data?.content?.glassType?.item?._id)
@@ -154,10 +154,10 @@ const ShowerSummary = ({
             )
           )
           ?.find((option) => option)?.cost || 0;
-        //   const costDifference1 =
-        // upgradeGlassList
-        //   ?.filter((item) => item._id === data?.content?.glassType?.item?._id)
-        //   console.log(costDifference1,'costDifference1',upgradeGlassList,hardwaresList?.glassType, UpgradeOPtions?.glassTypes,data?.selectedItem?.config?.glassType)
+      //   const costDifference1 =
+      // upgradeGlassList
+      //   ?.filter((item) => item._id === data?.content?.glassType?.item?._id)
+      //   console.log(costDifference1,'costDifference1',upgradeGlassList,hardwaresList?.glassType, UpgradeOPtions?.glassTypes,data?.selectedItem?.config?.glassType)
       const currentItemCost =
         (data?.cost ?? 0) -
           data?.sqftArea * costDifference +
@@ -255,7 +255,7 @@ const ShowerSummary = ({
         }
       }
     });
-    
+
     const glassAddonsData = upgradeGlassAddonsList?.map((item) => {
       const price = item?.options?.[0]?.cost;
       const costDifference =
@@ -552,7 +552,7 @@ const ShowerSummary = ({
       : data?.category === EstimateCategory.MIRRORS
       ? renderMirrorMeasurementSides(data?.measurements)
       : () => {};
-    console.log(data,'datadatadatadatadata')
+  console.log(data, "datadatadatadatadata");
   return (
     <>
       <Box
@@ -597,16 +597,16 @@ const ShowerSummary = ({
           <Box
             sx={{
               display: "flex",
-              gap: {sm:4,xs:1.5},
+              gap: { sm: 4, xs: 1.5 },
               width: "100%",
-              flexWrap:{sm:'nowrap',xs:'wrap'}
+              flexWrap: { sm: "nowrap", xs: "wrap" },
             }}
           >
             <Box
               sx={{
-                width: {sm:"50%",xs:'100%'},
+                width: { sm: "50%", xs: "100%" },
                 mt: 3,
-                order:{sm:1,xs:2}
+                order: { sm: 1, xs: 2 },
               }}
             >
               <Typography
@@ -614,7 +614,7 @@ const ShowerSummary = ({
                   fontSize: "18px",
                   fontWeight: "bold",
                   mb: 1.5,
-                  display:{sm:'block',xs:'none'}
+                  display: { sm: "block", xs: "none" },
                 }}
               >
                 Layout Dimensions:
@@ -634,10 +634,10 @@ const ShowerSummary = ({
                     Layout:
                   </Typography>
                   <Typography className="text-xs-ragular">
-                    {data?.selectedItem?.settings?.name ??
-                    data?.category === EstimateCategory.MIRRORS
-                      ? "Mirror"
-                      : "Custom"}
+                    {data?.selectedItem?.settings?.name ||
+                      (data?.category === EstimateCategory.MIRRORS
+                        ? "Mirror"
+                        : "Custom")}
                   </Typography>
                 </Box>
                 {data?.doorWidth ? (
@@ -722,8 +722,8 @@ const ShowerSummary = ({
             </Box>
             <Box
               sx={{
-                width: {sm:"47%",xs:'100%'},
-                order:{sm:2,xs:1}
+                width: { sm: "47%", xs: "100%" },
+                order: { sm: 2, xs: 1 },
               }}
             >
               <Typography
@@ -731,35 +731,52 @@ const ShowerSummary = ({
                   fontSize: "18px",
                   fontWeight: "bold",
                   mb: 1.5,
-                  display:{sm:'none',xs:'block'}
+                  display: { sm: "none", xs: "block" },
                 }}
               >
                 Layout Dimensions:
               </Typography>
               <Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: 'center',
-                  py: {sm:1,xs:0},
-                }}
-              >
-                <img
-                  src={imageData ?? CustomImage}
-                  alt="not"
-                className='layoutLogo'
-                />
-              </Box>
-              <Typography sx={{fontWeight:'bold',fontSize:'14px',color:primaryColor}}>This image is a sample image and may not match exactly to your project.</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    py: { sm: 1, xs: 0 },
+                  }}
+                >
+                  <img
+                    src={imageData ?? CustomImage}
+                    alt="not"
+                    className="layoutLogo"
+                  />
+                </Box>
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: primaryColor,
+                  }}
+                >
+                  This image is a sample image and may not match exactly to your
+                  project.
+                </Typography>
               </Box>
             </Box>
           </Box>
         </Box>
       </Box>
-      <Box sx={{ width: "100%", display: "flex", gap: 3, mt: 2 ,flexWrap:{sm:'nowrap',xs:'wrap'}}}>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          gap: 3,
+          mt: 2,
+          flexWrap: { sm: "nowrap", xs: "wrap" },
+        }}
+      >
         <Box
           sx={{
-            width: {sm:"50%",xs:'100%'},
+            width: { sm: "50%", xs: "100%" },
           }}
         >
           <Box
@@ -774,7 +791,7 @@ const ShowerSummary = ({
           >
             <Box
               sx={{
-                px: {sm:3,xs:1.5},
+                px: { sm: 3, xs: 1.5 },
                 py: 2,
                 display: "flex",
                 justifyContent: "space-between",
@@ -794,7 +811,9 @@ const ShowerSummary = ({
               </Typography>
             </Box>
             <Divider sx={{ borderColor: "#D4DBDF" }} />
-            <Box sx={{ backgroundColor: "#F3F5F6", px: {sm:3,xs:1.5}, py: 2 }}>
+            <Box
+              sx={{ backgroundColor: "#F3F5F6", px: { sm: 3, xs: 1.5 }, py: 2 }}
+            >
               <Grid container>
                 <Grid item xs={7} className="text-xs-samibold">
                   Dimensions
@@ -805,8 +824,8 @@ const ShowerSummary = ({
               </Grid>
             </Box>
             <Divider sx={{ borderColor: "#D4DBDF" }} />
-            <Box sx={{ px: {sm:3,xs:1.5}, py: "15px" }}>
-              <Grid container >
+            <Box sx={{ px: { sm: 3, xs: 1.5 }, py: "15px" }}>
+              <Grid container>
                 <Grid item xs={7}>
                   <Stack gap={2}>
                     <Typography
@@ -823,10 +842,10 @@ const ShowerSummary = ({
                         Layout:
                       </Typography>
                       <Typography className="text-xs-ragular">
-                        {data?.selectedItem?.settings?.name ??
-                        data?.category === EstimateCategory.MIRRORS
-                          ? "Mirror"
-                          : "Custom"}
+                        {data?.selectedItem?.settings?.name ||
+                          (data?.category === EstimateCategory.MIRRORS
+                            ? "Mirror"
+                            : "Custom")}
                       </Typography>
                     </Box>
                     {data?.doorWidth ? (
@@ -849,7 +868,7 @@ const ShowerSummary = ({
                         {data?.sqftArea}
                       </Typography>
                     </Box>
-                    <Box sx={{ width: {sm:"60%",xs:'87%'} }}>
+                    <Box sx={{ width: { sm: "60%", xs: "87%" } }}>
                       <Divider sx={{ borderColor: "#D4DBDF" }} />
                       <Box
                         sx={{
@@ -860,7 +879,10 @@ const ShowerSummary = ({
                           className="text-xs-ragular-bold"
                           sx={{
                             color: primaryColor,
-                            fontSize: {sm:"20px !important",xs:"16px !important"},
+                            fontSize: {
+                              sm: "20px !important",
+                              xs: "16px !important",
+                            },
                             fontWeight: "bold !important",
                           }}
                         >
@@ -873,7 +895,10 @@ const ShowerSummary = ({
                             fontSize:
                               discountValue > 0
                                 ? "17px !important"
-                                : {sm:"20px !important",xs:"16px !important"},
+                                : {
+                                    sm: "20px !important",
+                                    xs: "16px !important",
+                                  },
                             pt: 1,
                             fontWeight: "bold !important",
                             textDecoration:
@@ -887,7 +912,10 @@ const ShowerSummary = ({
                             className="text-xs-ragular"
                             sx={{
                               color: primaryColor,
-                              fontSize: {sm:"20px !important",xs:"16px !important"},
+                              fontSize: {
+                                sm: "20px !important",
+                                xs: "16px !important",
+                              },
                               pt: 1,
                               fontWeight: "bold !important",
                             }}
@@ -1226,7 +1254,7 @@ const ShowerSummary = ({
             </Box>
           )}
         </Box>
-        <Box sx={{ width:  {sm:"50%",xs:'100%'}, }}>
+        <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
           {(glassAddonsList?.length >
             (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) ||
             hardwareAddonsList?.length > 0 ||
@@ -1234,8 +1262,8 @@ const ShowerSummary = ({
             <Typography
               sx={{
                 fontFamily: '"Poppins" !important',
-                fontSize: {sm:"32px",xs:'18px'},
-                fontWeight: {sm:600,xs:400},
+                fontSize: { sm: "32px", xs: "18px" },
+                fontWeight: { sm: 600, xs: 400 },
                 lineHeight: "35px",
                 width: "98%",
                 color: secondaryColor,
@@ -1245,7 +1273,7 @@ const ShowerSummary = ({
             </Typography>
           )}
 
-          <Box sx={{ pt: {sm:1,xs:0} }}>
+          <Box sx={{ pt: { sm: 1, xs: 0 } }}>
             {glassAddonsList?.length >
               (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) && (
               <Box
@@ -1258,17 +1286,19 @@ const ShowerSummary = ({
               >
                 <Box
                   sx={{
-                    width: {sm:"80%",xs:'100%'},
+                    width: { sm: "80%", xs: "100%" },
                     background: "white",
                     borderRadius: "11px",
                     pointerEvents:
                       data?.selectedItem?.status ===
-                      statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
+                        statusTypes.CUSTOMER_APPROVED ||
+                      data?.content?.sufferCostDifference
                         ? "none"
                         : "auto",
                     opacity:
                       data?.selectedItem?.status ===
-                      statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
+                        statusTypes.CUSTOMER_APPROVED ||
+                      data?.content?.sufferCostDifference
                         ? 0.5
                         : 1,
                   }}
@@ -1298,17 +1328,19 @@ const ShowerSummary = ({
                 >
                   <Box
                     sx={{
-                      width:{sm:"80%",xs:'100%'},
+                      width: { sm: "80%", xs: "100%" },
                       background: "white",
                       borderRadius: "11px",
                       pointerEvents:
                         data?.selectedItem?.status ===
-                        statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
+                          statusTypes.CUSTOMER_APPROVED ||
+                        data?.content?.sufferCostDifference
                           ? "none"
                           : "auto",
                       opacity:
                         data?.selectedItem?.status ===
-                        statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
+                          statusTypes.CUSTOMER_APPROVED ||
+                        data?.content?.sufferCostDifference
                           ? 0.5
                           : 1,
                     }}
@@ -1335,17 +1367,19 @@ const ShowerSummary = ({
               >
                 <Box
                   sx={{
-                    width:{sm:"80%",xs:'100%'},
+                    width: { sm: "80%", xs: "100%" },
                     background: "white",
                     borderRadius: "11px",
                     pointerEvents:
                       data?.selectedItem?.status ===
-                      statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
+                        statusTypes.CUSTOMER_APPROVED ||
+                      data?.content?.sufferCostDifference
                         ? "none"
                         : "auto",
                     opacity:
                       data?.selectedItem?.status ===
-                      statusTypes.CUSTOMER_APPROVED || data?.content?.sufferCostDifference
+                        statusTypes.CUSTOMER_APPROVED ||
+                      data?.content?.sufferCostDifference
                         ? 0.5
                         : 1,
                   }}

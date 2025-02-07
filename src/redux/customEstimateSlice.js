@@ -241,8 +241,6 @@ const customsEstimateSlice = createSlice({
     resetCustomsEstimateState: (state) => {
       return {
         ...initialState,
-        listData: state.listData,
-        handlePageDesktopNavigation: state.handlePageDesktopNavigation,
       };
     },
     setDoorWidth: (state, action) => {
