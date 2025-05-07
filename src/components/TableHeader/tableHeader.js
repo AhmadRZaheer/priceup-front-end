@@ -7,6 +7,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 const TableHeader = ({ showMore, types }) => {
+  console.log(types,'hardwareCategoryData');
   const [selectedOption, setSelectedOption] = useState("handles");
   const renderSliderItems = (items) => {
     return items?.map((item, index) => (

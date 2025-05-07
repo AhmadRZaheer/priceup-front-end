@@ -4,41 +4,42 @@ import { Delete, Edit } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import {
   useDeleteGlassTypeFull,
+  useEditFullGlassType,
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
-import AddEditGlassType from "../Model/addEidtGlassType";
+import AddEditGlassType from "../Modal/addEidtGlassType";
 import GlassTypeItem from "./glassTypeItems";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import CustomIconButton from "../ui-components/CustomButton";
+import DefaultImage from "../ui-components/defaultImage";
+import DeleteModal from "../Modal/deleteModal";
 
-const GlassTypeDataItem = ({
-  entry,
-  mainIndex,
-  GlassTypeRefetch,
-  showSnackbar,
-  type,
-}) => {
+const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  }
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
   };
-  const { mutate: deleteGlassType, isSuccess: deleteSuccess } =
+  const { mutate: deleteGlassType, isSuccess: deleteSuccess, isLoading: loaderForDelete } =
     useDeleteGlassTypeFull();
-  const handleHardwareDelete = (id) => {
-    deleteGlassType(id);
+  const handleHardwareDelete = () => {
+    deleteGlassType(deleteRecord);
+    setDeleteModalOpen(false);
   };
   const { mutate: editGlassType, isSuccess: GlassTypeEditSuccess } =
-    useEditGlassType();
+    useEditFullGlassType();
   const handleOpenEdit = () => {
     setOpen(true);
   };
   useEffect(() => {
     if (GlassTypeEditSuccess || deleteSuccess) {
-      if (deleteSuccess) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (GlassTypeEditSuccess) {
-        showSnackbar("Updated Successfully", "success");
-      }
       GlassTypeRefetch();
+      console.log("2");
     }
   }, [GlassTypeEditSuccess, deleteSuccess]);
   const [UpdateValue, SetUpdateValue] = useState(entry.options);
@@ -75,47 +76,21 @@ const GlassTypeDataItem = ({
         >
           {" "}
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <img
-              className="cellImg"
-              src={`${backendURL}/${entry.image}`}
-              alt=""
-            />
+            <DefaultImage image={entry.image} type={2} name={entry.name} />
             {entry.name}
-            <IconButton
-              onClick={() => handleOpenEdit(entry)}
-              sx={{
-                backgroundColor: "#8477DA",
-                "&:hover": { backgroundColor: "#8477DA" },
-                color: "white",
-                textTransform: "capitalize",
-                borderRadius: 2,
-                fontSize: 17,
-                padding: 1,
-              }}
-            >
-              <Edit sx={{ fontSize: 18, mr: 0.4 }} />
-              Edit
-            </IconButton>
+            <CustomIconButton
+              icon={<Edit sx={{ fontSize: 18, mr: 0.4 }} />}
+              handleClick={() => handleOpenEdit(entry)}
+            />
           </Box>
           <Box>
-            <IconButton>
-              <Delete onClick={() => handleHardwareDelete(entry._id)} />
+            <IconButton onClick={() => handleOpenDeleteModal(entry._id)}>
+              <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
-            <IconButton
-            id={entry._id}
-              onClick={() => handleOpenUpdate(entry._id)}
-              sx={{
-                backgroundColor: "#8477DA",
-                "&:hover": { backgroundColor: "#8477DA" },
-                color: "white",
-                textTransform: "capitalize",
-                borderRadius: 2,
-                fontSize: 17,
-                padding: 1,
-              }}
-            >
-              Update
-            </IconButton>
+            <CustomIconButton
+              handleClick={() => handleOpenUpdate(entry._id)}
+              buttonText="Update"
+            />
           </Box>
         </Box>
         <Box sx={{ p: 2 }}>
@@ -126,20 +101,25 @@ const GlassTypeDataItem = ({
               index={index}
               refetch={GlassTypeRefetch}
               glassTypeId={entry._id}
-              showSnackbar={showSnackbar}
               SetUpdateValue={SetUpdateValue}
               UpdateValue={UpdateValue}
             />
           ))}
         </Box>
       </div>
+      <DeleteModal
+        open={deleteModalOpen}
+        text={"Glass Type"}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={loaderForDelete}
+        handleDelete={handleHardwareDelete}
+      />
       <AddEditGlassType
         open={open}
         close={handleClose}
         data={entry}
         isEdit={true}
         refetch={GlassTypeRefetch}
-        showSnackbar={showSnackbar}
         categorySlug={type}
       />
     </>

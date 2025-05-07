@@ -1,7 +1,54 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { layoutVariants } from "../utilities/constants";
+import {
+  generateNotificationsForCurrentEstimate,
+} from '@/utilities/estimatorHelper';
+import {
+  generateContentForShowerEdit,
+} from '@/utilities/generateEstimateCalculationContent';
+import { createSlice } from '@reduxjs/toolkit';
+
+import { calculateAreaAndPerimeter } from '../utilities/common';
+import {
+  hardwareTypes,
+  layoutVariants,
+  notificationsVariant,
+  notificationTypes,
+  quoteState,
+  thicknessTypes,
+} from '../utilities/constants';
+import {
+  getHardwareSpecificFabrication,
+} from '../utilities/hardwarefabrication';
+
 export const getContent = (state) => state.estimateCalculations.content;
+export const getAdditionalFields = (state) =>
+  state.estimateCalculations.content.additionalFields;
+export const getCost = (state) => state.estimateCalculations.actualCost;
+export const getProfit = (state) => state.estimateCalculations.grossProfit;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
+export const getDoorWidth = (state) => state.estimateCalculations.doorWidth;
+export const getHardwareTotal = (state) =>
+  state.estimateCalculations.hardwarePrice;
+export const getGlassTotal = (state) => state.estimateCalculations.glassPrice;
+export const getGlassAddonsTotal = (state) =>
+  state.estimateCalculations.glassAddonsPrice;
+export const getHardwareAddonsTotal = (state) =>
+  state.estimateCalculations.hardwareAddonsPrice;
+export const getFabricationTotal = (state) =>
+  state.estimateCalculations.fabricationPrice;
+export const getMiscTotal = (state) => state.estimateCalculations.miscPrice;
+export const getLaborTotal = (state) => state.estimateCalculations.laborPrice;
+export const getAdditionalFieldsTotal = (state) =>
+  state.estimateCalculations.additionalFieldsPrice;
+export const getisCustomizedDoorWidth = (state) =>
+  state.estimateCalculations.isCustomizedDoorWidth;
+export const getUserProfitPercentage = (state) =>
+  state.estimateCalculations.content.userProfitPercentage;
+export const getEstimateDiscount = (state) =>
+  state.estimateCalculations.content.discount.value;
+export const getEstimateDiscountUnit = (state) =>
+  state.estimateCalculations.content.discount.unit;
+export const getEstimateDiscountTotal = (state) =>
+  state.estimateCalculations.content.discount.total;
 export const getMeasurementSide = (state) =>
   state.estimateCalculations.measurements;
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
@@ -10,192 +57,915 @@ export const getPageNavigation = (state) =>
 export const getPageDesktopNavigation = (state) =>
   state.estimateCalculations.handlePageDesktopNavigation;
 export const getQuoteId = (state) => state.estimateCalculations.quoteId;
+export const getProjectId = (state) => state.estimateCalculations.projectId;
 export const getQuoteState = (state) => state.estimateCalculations.quoteState;
+export const getListData = (state) => state.estimateCalculations.listData;
 export const getLayoutPerimeter = (state) =>
   state.estimateCalculations.perimeter;
 export const getLayoutArea = (state) => state.estimateCalculations.sqftArea;
+export const getPanelWidth = (state) => state.estimateCalculations.panelWidth;
+export const getDoorWeight = (state) => state.estimateCalculations.doorWeight;
+export const getPanelWeight = (state) => state.estimateCalculations.panelWeight;
+export const getReturnWeight = (state) =>
+  state.estimateCalculations.returnWeight;
+export const getNotifications = (state) =>
+  state.estimateCalculations.notifications;
+
+const initialState = {
+  quoteId: null,
+  quoteState: "create",
+  handlePageNavigation: "existing",
+  handlePageDesktopNavigation: "existing",
+  projectId: null,
+  perimeter: 0,
+  sqftArea: 0,
+  doorWidth: 0,
+  panelWidth: 0,
+  doorWeight: 0,
+  isCustomizedDoorWidth: false,
+  panelWeight: 0,
+  returnWeight: 0,
+  measurements: [],
+  notifications: {
+    finishNotSelected: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    hingesSwitch: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    glassThicknessSwitch: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    panelOverweight: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    handleNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    hingeNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    glassTypeNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    slidingDoorSystemNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    headerNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    channelNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    calculateChannelWarning: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    glassAddonsNotAvailable: [],
+    hardwareAddonsNotAvailable: [],
+    wallClampNotAvailable: [],
+    sleeveOverNotAvailable: [],
+    glassToGlassNotAvailable: [],
+    cornerWallClampNotAvailable: [],
+    cornerSleeveOverNotAvailable: [],
+    cornerGlassToGlassNotAvailable: [],
+  },
+  selectedItem: null,
+  listData: null,
+  content: {
+    additionalFields: [],
+    hardwareFinishes: null,
+    handles: {
+      item: null,
+      count: 0,
+      cost:0
+    },
+    hinges: {
+      item: null,
+      count: 0,
+      cost:0
+    },
+    mountingClamps: {
+      wallClamp: [],
+      sleeveOver: [],
+      glassToGlass: [],
+    },
+    cornerClamps: {
+      cornerWallClamp: [],
+      cornerSleeveOver: [],
+      cornerGlassToGlass: [],
+    },
+    mountingChannel: {
+      item: null,
+      count: 0,
+    },
+    header: {
+      item: null,
+      count: 0,
+      cost:0
+    },
+    slidingDoorSystem: {
+      item: null,
+      count: 0,
+      cost:0
+    },
+    glassType: {
+      item: null,
+      thickness: thicknessTypes.THREEBYEIGHT,
+      cost: 0,
+    },
+    glassAddons: [],
+    oneInchHoles: 0,
+    hingeCut: 0,
+    clampCut: 0,
+    notch: 0,
+    outages: 0,
+    mitre: 0,
+    polish: 0,
+    people: 0,
+    hours: 0,
+    hardwareAddons: [],
+    mountingState: "channel",
+    userProfitPercentage: 0,
+    sufferCostDifference : false,
+    discount: {
+      value: 0,
+      unit: "%",
+      total:0,
+    },
+  },
+  actualCost: 0,
+  grossProfit: 0,
+  totalPrice: 0,
+  hardwarePrice: 0,
+  glassPrice: 0,
+  glassAddonsPrice: 0,
+  hardwareAddonsPrice: 0,
+  fabricationPrice: 0,
+  miscPrice: 0,
+  laborPrice: 0,
+  additionalFieldsPrice: 0,
+};
 const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
-  initialState: {
-    quoteId: null,
-    quoteState: "create",
-    handlePageNavigation: "existing",
-    handlePageDesktopNavigation: "Layout",
-    perimeter: 0,
-    sqftArea: 0,
-    measurements: [],
-    selectedItem: [],
-    content: {
-      hardwareFinishes: null,
-      handles: {
-        item: null,
-        count: 0,
-      },
-      hinges: {
-        item: null,
-        count: 0,
-      },
-
-      mounting: {
-        clamps: {
-          wallClamp: {
-            item: null,
-            count: 0,
-          },
-          sleeveOver: {
-            item: null,
-            count: 0,
-          },
-          glassToGlass: {
-            item: null,
-            count: 0,
-          },
-        },
-        channel: {
-          item: null,
-          count: 0,
-        },
-        activeType: "clamps",
-      },
-
-      header: {
-        item: null,
-        count: 0,
-      },
-      slidingDoorSystem: {
-        item: null,
-        count: 0,
-      },
-      glassType: {
-        item: null,
-        thickness: "1/2",
-      },
-      glassTreatment: null,
-      oneInchHoles: 0,
-      hingeCut: 0,
-      clampCut: 0,
-      notch: 0,
-      outages: 0,
-      mitre: 0,
-      polish: 0,
-      people: 0,
-      hours: 0,
-      sleeveOverCount: 0,
-      towelBarsCount: 0,
-      addOns: [],
-    },
-    totalPrice: 0,
-  },
+  initialState,
   reducers: {
+    resetState: (state) => {
+      return {
+        ...initialState,
+        listData: state.listData,
+        handlePageDesktopNavigation: state.handlePageDesktopNavigation,
+      };
+    },
+    setDoorWidth: (state, action) => {
+      state.doorWidth = action.payload;
+    },
+    setPanelWidth: (state, action) => {
+      state.panelWidth = action.payload;
+    },
+    setDoorWeight: (state, action) => {
+      state.doorWeight = action.payload;
+    },
+    setPanelWeight: (state, action) => {
+      state.panelWeight = action.payload;
+    },
+    setReturnWeight: (state, action) => {
+      state.returnWeight = action.payload;
+    },
+    setisCustomizedDoorWidth: (state, action) => {
+      state.isCustomizedDoorWidth = action.payload;
+    },
+    setSingleNotification: (state, action) => {
+      const { type, payload } = action.payload;
+      switch (type) {
+        case notificationTypes.HINGESSWITCH:
+          state.notifications = {
+            ...state.notifications,
+            hingesSwitch: payload,
+          };
+          break;
+        case notificationTypes.GLASSTHICKNESSSWITCH:
+          state.notifications = {
+            ...state.notifications,
+            glassThicknessSwitch: payload,
+          };
+          break;
+        case notificationTypes.PANLEOVERWEIGHT:
+          state.notifications = {
+            ...state.notifications,
+            panelOverweight: payload,
+          };
+          break;
+        default:
+          state.notifications = initialState.notifications;
+          break;
+      }
+    },
+    setMultipleNotifications: (state, action) => {
+      const { selectedContent, notifications } = action.payload;
+      state.notifications = notifications;
+      state.content = selectedContent;
+    },
+    resetNotifications: (state) => {
+      state.notifications = initialState.notifications;
+    },
     setContent: (state, action) => {
       const { type, item } = action.payload;
+      /** Calculate and modify fabrication values according to current hardware selected or unselected  */
+      const fabricationsCount = {
+        oneInchHoles: state.content.oneInchHoles,
+        hingeCut: state.content.hingeCut,
+        clampCut: state.content.clampCut,
+        notch: state.content.notch,
+        outages: state.content.outages,
+      };
 
+      if (
+        [
+          hardwareTypes.HANDLES,
+          hardwareTypes.HINGES,
+          hardwareTypes.SLIDINGDOORSYSTEM,
+          hardwareTypes.HEADER,
+          hardwareTypes.CHANNEL,
+        ].includes(type)
+      ) {
+        let currentHardware = null;
+        let newHardware = null;
+        if ([hardwareTypes.CHANNEL].includes(type)) {
+          const selectedSameItem =
+            item?._id === state.content.mountingChannel.item?._id;
+          currentHardware = {
+            item: state.content.mountingChannel.item,
+            count: state.content.mountingChannel.item ? 1 : 0,
+          };
+          newHardware = {
+            item: selectedSameItem ? null : item,
+            count: selectedSameItem ? 0 : 1,
+          };
+          // Generate / remove Channel calculate warning upon selecting or unselecting channel
+          state.notifications.calculateChannelWarning = {
+            status: selectedSameItem ? false : true,
+            variant: selectedSameItem
+              ? notificationsVariant.DEFAULT
+              : notificationsVariant.WARNING,
+            message: selectedSameItem
+              ? ""
+              : "Current channel price is being calculated according to 1 channel stick",
+          };
+        } else {
+          currentHardware = {
+            item: state.content?.[type]?.item,
+            count: state.content?.[type]?.count ?? 0,
+          };
+          newHardware = {
+            item: item,
+            count: state.content?.[type]?.count ?? 0,
+          };
+        }
+        const hardwareFabrication = getHardwareSpecificFabrication(
+          type,
+          fabricationsCount,
+          currentHardware,
+          newHardware
+        );
+
+        if (hardwareFabrication) {
+          state.content = {
+            ...state.content,
+            oneInchHoles: hardwareFabrication.oneInchHoles,
+            hingeCut: hardwareFabrication.hingeCut,
+            clampCut: hardwareFabrication.clampCut,
+            notch: hardwareFabrication.notch,
+            outages: hardwareFabrication.outages,
+          };
+        }
+      }
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
-        state.content = {
-          ...state.content,
-          mounting: {
-            ...state.content.mounting,
-            clamps: {
-              ...state.content.mounting.clamps,
-              [type]: {
-                ...state.content.mounting.clamps[type],
-                item: item,
-              },
-            },
-          },
-        };
+        console.log("Nice Try.");
       } else if (["channel"].includes(type)) {
+        let itemCost = 0;
+        itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
+        const found = item?._id === state.content.mountingChannel.item?._id;
         state.content = {
           ...state.content,
-          mounting: {
-            ...state.content.mounting,
-            channel: {
-              ...state.content.mounting.channel,
-              item: item,
-            },
+          mountingChannel: {
+            item: found ? null : item,
+            count: found ? 0 : 1,
+            cost : itemCost
           },
         };
-      } else if (["hardwareFinishes","glassTreatment"].includes(type)) {
+      } else if (["hardwareFinishes"].includes(type)) {
+        // recheck hardwares availability with current finish
+        // /** handles */
+        // const handleItem = state.content.handles.item;
+        // let handleStatus = false;
+        // if (handleItem) {
+        //   handleStatus = state.content.handles.item.finishes.find(
+        //     (finish) => finish.finish_id === item._id
+        //   )?.status;
+        // }
+        // /** hinges */
+        // const hingeItem = state.content.hinges.item;
+        // let hingeStatus = false;
+        // if (hingeItem) {
+        //   hingeStatus = state.content.hinges.item.finishes.find(
+        //     (finish) => finish.finish_id === item._id
+        //   )?.status;
+        // }
+        // /** sliding door system */
+        // const slidingDoorItem = state.content.slidingDoorSystem.item;
+        // let slidingDoorSystemStatus = false;
+        // if (slidingDoorItem) {
+        //   slidingDoorSystemStatus =
+        //     state.content.slidingDoorSystem.item.finishes.find(
+        //       (finish) => finish.finish_id === item._id
+        //     )?.status;
+        // }
+        // /** header */
+        // const headerItem = state.content.header.item;
+        // let headerStatus = false;
+        // if (headerItem) {
+        //   headerStatus = state.content.header.item.finishes.find(
+        //     (finish) => finish.finish_id === item._id
+        //   )?.status;
+        // }
+        const notificationsResult = generateNotificationsForCurrentEstimate(
+          {
+            ...state,
+            content: {
+              ...state.content,
+              hardwareFinishes: item,
+            },
+          },
+          state.content.glassType.thickness
+        );
+        state.notifications = notificationsResult.notifications;
         state.content = {
           ...state.content,
           [type]: item,
         };
-      } else if (["addOns"].includes(type)) {
-        const foundIndex = state.content.addOns?.findIndex(
-          (row) => row.slug === item.slug
-        );
-        if (foundIndex !== -1) {
-          state.content.addOns.splice(foundIndex, 1);
+      } else if (["hardwareAddons"].includes(type)) {
+        console.log("Nice Try.");
+      } else if (["glassAddons"].includes(type)) {
+        let glassAddonCost = 0 ;
+        glassAddonCost = item?.options?.[0]?.cost;
+        if (item.slug === "no-treatment") {
+          const noGlassAddon = state.listData.glassAddons?.find(
+            (item) => item.slug === "no-treatment"
+          );
+          state.content.glassAddons = [{item : noGlassAddon , cost : 0}];
         } else {
-          if (item.slug !== "sleeve-over" && item.slug !== "towel-bars") {
-            state.content.addOns.push(item);
+          const foundIndex = state.content.glassAddons?.findIndex(
+            (row) => row.item.slug === item.slug
+          );
+          if (foundIndex !== -1) {
+            state.content.glassAddons.splice(foundIndex, 1);
+          } else {
+            state.content.glassAddons.push({ item: item, cost : glassAddonCost });
+          }
+          const indexOfNoTreatment = state.content.glassAddons?.findIndex(
+            (row) => row.item.slug === "no-treatment"
+          );
+          if (indexOfNoTreatment !== -1) {
+            state.content.glassAddons.splice(indexOfNoTreatment, 1);
           }
         }
+      } else if (["additionalFields"].includes(type)) {
+        state.content = {
+          ...state.content,
+          [type]: item,
+        };
+      } else if(["glassType"].includes(type)){
+       let itemCost = item?.options?.find((item) => item?.thickness === state.content.glassType.thickness)?.cost;
+        state.content = {
+          ...state.content,
+          glassType: {
+            ...state.content.glassType,
+            item: item,
+            cost: itemCost ?? 0
+          },
+        };
       } else {
+        let itemCost = 0;
+        itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
         state.content = {
           ...state.content,
           [type]: {
             ...state.content[type],
             item: item,
+            cost: itemCost
           },
         };
       }
     },
     setCounters: (state, action) => {
-      const { type, value } = action.payload;
-      if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
+      const { type, value, item } = action.payload;
+      /** Calculate and modify fabrication values according to current hardware selected or unselected  */
+      const fabricationsCount = {
+        oneInchHoles: state.content.oneInchHoles,
+        hingeCut: state.content.hingeCut,
+        clampCut: state.content.clampCut,
+        notch: state.content.notch,
+        outages: state.content.outages,
+      };
+
+      if (
+        [
+          hardwareTypes.HANDLES,
+          hardwareTypes.HINGES,
+          hardwareTypes.SLIDINGDOORSYSTEM,
+          hardwareTypes.HEADER,
+          hardwareTypes.HARDWAREADDONS,
+          hardwareTypes.WALLCLAMP,
+          hardwareTypes.SLEEVEOVER,
+          hardwareTypes.GLASSTOGLASS,
+          hardwareTypes.CORNERWALLCLAMP,
+          hardwareTypes.CORNERSLEEVEOVER,
+          hardwareTypes.CORNERGLASSTOGLASS,
+        ].includes(type)
+      ) {
+        let currentHardware = null;
+        let newHardware = null;
+        let oldCounterValue = 0;
+        if (
+          [
+            hardwareTypes.WALLCLAMP,
+            hardwareTypes.SLEEVEOVER,
+            hardwareTypes.GLASSTOGLASS,
+          ].includes(type)
+        ) {
+          const oldItem = state.content.mountingClamps[type]?.find(
+            (row) => row?.item?._id === item._id
+          );
+          oldCounterValue = oldItem?.count ?? 0;
+        } else if (
+          [
+            hardwareTypes.CORNERWALLCLAMP,
+            hardwareTypes.CORNERSLEEVEOVER,
+            hardwareTypes.CORNERGLASSTOGLASS,
+          ].includes(type)
+        ) {
+          const oldItem = state.content.cornerClamps[type]?.find(
+            (row) => row?.item?._id === item._id
+          );
+          oldCounterValue = oldItem?.count ?? 0;
+        } else if ([hardwareTypes.HARDWAREADDONS].includes(type)) {
+          const oldItem = state.content.hardwareAddons?.find(
+            (row) => row?.item?._id === item._id
+          );
+          oldCounterValue = oldItem?.count ?? 0;
+        } else {
+          oldCounterValue = state.content?.[type]?.count ?? 0;
+        }
+        currentHardware = {
+          item,
+          count: oldCounterValue,
+        };
+        newHardware = {
+          item,
+          count: value ?? 0,
+        };
+
+        const hardwareFabrication = getHardwareSpecificFabrication(
+          type,
+          fabricationsCount,
+          currentHardware,
+          newHardware
+        );
+
+        if (hardwareFabrication) {
+          state.content = {
+            ...state.content,
+            oneInchHoles: hardwareFabrication.oneInchHoles,
+            hingeCut: hardwareFabrication.hingeCut,
+            clampCut: hardwareFabrication.clampCut,
+            notch: hardwareFabrication.notch,
+            outages: hardwareFabrication.outages,
+          };
+        }
+      }
+      let allClamps = ["wallClamp", "sleeveOver", "glassToGlass"];
+      let allCorners = [
+        "cornerWallClamp",
+        "cornerSleeveOver",
+        "cornerGlassToGlass",
+      ];
+
+      if (allClamps.includes(type) || allCorners.includes(type)) {
+        let existing;
+        let clampsCost = 0 ;
+        clampsCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
+        if (allClamps.includes(type)) {
+          existing = state.content.mountingClamps[type];
+        } else {
+          existing = state.content.cornerClamps[type];
+        }
+
+        const foundIndex = existing.findIndex(
+          (row) => row?.item?.slug === item.slug
+        );
+        if (foundIndex !== -1) {
+          if (value <= 0) {
+            existing.splice(foundIndex, 1);
+          } else {
+            existing[foundIndex].count = value;
+          }
+        } else {
+          existing.push({ item: item, count: value , cost : clampsCost });
+        }
+
+        if (allClamps.includes(type)) {
+          state.content.mountingClamps = {
+            ...state.content.mountingClamps,
+            [type]: existing,
+          };
+        } else {
+          state.content.cornerClamps = {
+            ...state.content.cornerClamps,
+            [type]: existing,
+          };
+        }
+      } else if (["hardwareAddons"].includes(type)) {
+        let existing = state.content.hardwareAddons;
+        let hardwareAddonCost = 0 ;
+        hardwareAddonCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost;
+        const foundIndex = existing.findIndex(
+          (row) => row?.item?.slug === item.slug
+        );
+        if (foundIndex !== -1) {
+          if (value <= 0) {
+            existing.splice(foundIndex, 1);
+          } else {
+            existing[foundIndex].count = value;
+          }
+        } else {
+          existing.push({ item: item, count: value ,cost : hardwareAddonCost });
+        }
         state.content = {
           ...state.content,
-          mounting: {
-            ...state.content.mounting,
-            clamps: {
-              ...state.content.mounting.clamps,
-              [type]: {
-                ...state.content.mounting.clamps[type],
-                count: value,
-              },
-            },
-          },
+          hardwareAddons: [...existing],
         };
       } else {
+        let itemCost = 0;
+        itemCost = item?.finishes?.find((item) => item?.finish_id === state.content.hardwareFinishes._id)?.cost; 
         state.content = {
           ...state.content,
           [type]: {
             ...state.content[type],
             count: value,
+            cost : itemCost
           },
         };
       }
+    },
+    setSufferCostDifference: (state, action) => {
+      const calculateNewCost = (type, identifierKey, identifierValue) => {
+        const cost = state.content[type]?.cost;
+        const currentCost = state.content[type]?.item?.[identifierKey]?.find(
+          (item) => item[identifierValue.key] === identifierValue?.value
+        )?.cost;
+    
+        return cost >= 0 && cost !== currentCost ? currentCost : cost;
+      };
+    
+      // Update glass cost
+      const newGlassCost = calculateNewCost("glassType", "options", {
+        key: "thickness",
+        value: state.content.glassType.thickness,
+      });
+    
+      // Update handle cost
+      const newHandleCost = calculateNewCost("handles", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+    
+      // Update hinge cost
+      const newHingCost = calculateNewCost("hinges", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+      // Update Header cost
+      const newHeaderCost = calculateNewCost("header", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+      const newSlidingDoorSystemCost = calculateNewCost("slidingDoorSystem", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+      const newMountingChannelCost = calculateNewCost("mountingChannel", "finishes", {
+        key: "finish_id",
+        value: state.content.hardwareFinishes._id,
+      });
+      const newCornerWallClampCost = state?.content?.cornerClamps?.cornerWallClamp?.map((item,index)=>{
+        const cost = calculateNewCost(`cornerClamps.cornerWallClamp[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newCornerSleeveOverCost = state?.content?.cornerClamps?.cornerSleeveOver?.map((item,index)=>{
+        const cost = calculateNewCost(`cornerClamps.cornerSleeveOver[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newCornerGlassToGlassCost = state?.content?.cornerClamps?.cornerGlassToGlass?.map((item,index)=>{
+        const cost = calculateNewCost(`cornerClamps.cornerGlassToGlass[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newWallClampCost = state?.content?.mountingClamps?.wallClamp?.map((item,index)=>{
+        const cost = calculateNewCost(`mountingClamps.wallClamp[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newSleeveOverCost = state?.content?.mountingClamps?.sleeveOver?.map((item,index)=>{
+        const cost = calculateNewCost(`mountingClamps.sleeveOver[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const newGlassToGlassCost = state?.content?.mountingClamps?.glassToGlass?.map((item,index)=>{
+        const cost = calculateNewCost(`mountingClamps.glassToGlass[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+      const glassAddonsCost = state?.content?.glassAddons?.map((item)=>{
+        const itemCost = item?.cost
+        const currentCost = item?.item?.options[0]?.cost;
+        let newCost = itemCost >= 0 && itemCost !== currentCost ? currentCost : itemCost;
+        return {
+          ...item,
+          cost : newCost ?? 0
+        }
+      })
+      const hardwareAddonsCost = state?.content?.hardwareAddons?.map((item,index)=>{
+        const cost = calculateNewCost(`hardwareAddons[${index}]`,'finishes', {
+          key: "finish_id",
+          value: state.content.hardwareFinishes._id,
+        })
+        return {
+          ...item,
+          cost : cost ?? 0
+        }
+      })
+        state.content = {
+          ...state.content,
+          handles: {
+            ...state.content.handles,
+            cost : newHandleCost ?? 0
+          },
+          hinges: {
+            ...state.content.hinges,
+            cost : newHingCost ?? 0
+          },
+          header: {
+            ...state.content.header,
+            cost :  newHeaderCost ?? 0
+          },
+          slidingDoorSystem: {
+             ...state.content.slidingDoorSystem,
+            cost : newSlidingDoorSystemCost ?? 0
+          },
+          glassType: {
+            ...state.content.glassType,
+            cost: newGlassCost ?? 0
+          },
+          mountingChannel: {
+            ...state.content.mountingChannel,
+            cost: newMountingChannelCost || 0
+          },
+          mountingClamps: {
+            ...state.content.mountingClamps,
+            wallClamp: newWallClampCost ?? [],
+            sleeveOver: newSleeveOverCost ?? [],
+            glassToGlass: newGlassToGlassCost ?? []
+          },
+          cornerClamps: {
+            ...state.content.cornerClamps,
+            cornerWallClamp: newCornerWallClampCost ?? [],
+            cornerSleeveOver:  newCornerSleeveOverCost ?? [],
+            cornerGlassToGlass: newCornerGlassToGlassCost ?? [],
+          },
+        glassAddons: glassAddonsCost ?? [],
+        hardwareAddons: hardwareAddonsCost ?? [],
+        sufferCostDifference : false
+        };
+    },
+    setUserProfitPercentage: (state, action) => {
+      const { payload } = action;
+      state.content.userProfitPercentage = payload;
+    },
+    setEstimateDiscount: (state, action) => {
+      const { payload } = action;
+      state.content.discount.value = payload;
+    },
+    setEstimateDiscountUnit: (state, action) => {
+      const { payload } = action;
+      state.content.discount.unit = payload;
+    },
+    setEstimateDiscountTotal: (state, action) => {
+      const { payload } = action;
+      state.content.discount.total = payload;
     },
     setTotal: (state, action) => {
       const { payload } = action;
       state.totalPrice = payload;
     },
+    setCost: (state, action) => {
+      const { payload } = action;
+      state.actualCost = payload;
+    },
+    setProfit: (state, action) => {
+      const { payload } = action;
+      state.grossProfit = payload;
+    },
+    setHardwarePrice: (state, action) => {
+      const { payload } = action;
+      state.hardwarePrice = payload;
+    },
+    setGlassPrice: (state, action) => {
+      const { payload } = action;
+      state.glassPrice = payload;
+    },
+    setGlassAddonsPrice: (state, action) => {
+      const { payload } = action;
+      state.glassAddonsPrice = payload;
+    },
+    setHardwareAddonsPrice: (state, action) => {
+      const { payload } = action;
+      state.hardwareAddonsPrice = payload;
+    },
+    setFabricationPrice: (state, action) => {
+      const { payload } = action;
+      state.fabricationPrice = payload;
+    },
+    setMiscPrice: (state, action) => {
+      const { payload } = action;
+      state.miscPrice = payload;
+    },
+    setLaborPrice: (state, action) => {
+      const { payload } = action;
+      state.laborPrice = payload;
+    },
+    setAdditionalFieldsPrice: (state, action) => {
+      const { payload } = action;
+      state.additionalFieldsPrice = payload;
+    },
+
     setInputContent: (state, action) => {
       const { type, value } = action.payload;
-      state.content = {
-        ...state.content,
-        [type]: value,
-      };
+      if (["mitre"].includes(type)) {
+        // const mitre = value;
+        const polish = state.perimeter - value;
+        state.content = {
+          ...state.content,
+          mitre: value,
+          polish: polish,
+        };
+      } else {
+        state.content = {
+          ...state.content,
+          [type]: value,
+        };
+      }
     },
     setThickness: (state, action) => {
       const { payload } = action;
+      /** on change glass thickness shift active channel of layout */
+      const currentChannel = state.content.mountingChannel.item;
+      let newChannel = null;
+      if (payload === thicknessTypes.ONEBYTWO) {
+        if (currentChannel) {
+          newChannel = state.listData?.mountingChannel?.find(
+            (item) => item.slug === "u-channel-1-2"
+          );
+        }
+      } else if (payload === thicknessTypes.THREEBYEIGHT) {
+        if (currentChannel) {
+          newChannel = state.listData?.mountingChannel?.find(
+            (item) => item.slug === "u-channel-3-8"
+          );
+        }
+      }
+      /** end */
+      /** Calculate fabrication of newly selected mounting after glass thickness shift */
+      const fabricationsCount = {
+        oneInchHoles: state.content.oneInchHoles,
+        hingeCut: state.content.hingeCut,
+        clampCut: state.content.clampCut,
+        notch: state.content.notch,
+        outages: state.content.outages,
+      };
+      const hardwareFabrication = getHardwareSpecificFabrication(
+        hardwareTypes.CHANNEL,
+        fabricationsCount,
+        { item: currentChannel, count: currentChannel ? 1 : 0 },
+        { item: newChannel, count: newChannel ? 1 : 0 }
+      );
+
+      /** Calculate all weights on shifting glass thickness */
+      const result = calculateAreaAndPerimeter(
+        state.measurements,
+        state.selectedItem?.settings?.variant ?? layoutVariants.CUSTOM,
+        payload
+      );
+      let channelCost = newChannel?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+      let glassCost = state.content.glassType?.item?.options?.find((option) => option.thickness === payload)?.cost;
+      /** end */
+      return {
+        ...state,
+        doorWeight: result?.doorWeight ?? state.doorWeight,
+        panelWeight: result?.panelWeight ?? state.panelWeight,
+        returnWeight: result?.returnWeight ?? state.returnWeight,
+        content: {
+          ...state.content,
+          glassType: {
+            ...state.content.glassType,
+            thickness: payload,
+            cost : glassCost ?? 0
+          },
+          mountingChannel: {
+            item: newChannel,
+            count: newChannel ? 1 : 0,
+            cost : channelCost ?? 0
+          },
+          oneInchHoles: hardwareFabrication.oneInchHoles,
+          hingeCut: hardwareFabrication.hingeCut,
+          clampCut: hardwareFabrication.clampCut,
+          notch: hardwareFabrication.notch,
+          outages: hardwareFabrication.outages,
+        },
+      };
+    },
+    setHardwareFabricationQuantity: (state, action) => {
+      const { oneInchHoles, hingeCut, clampCut, notch, outages } =
+        action.payload;
       state.content = {
         ...state.content,
-        glassType: {
-          ...state.content.glassType,
-          thickness: payload,
-        },
+        oneInchHoles,
+        hingeCut,
+        clampCut,
+        notch,
+        outages,
       };
     },
     updateMeasurements: (state, action) => {
       const newMeasurements = action.payload;
       state.measurements = newMeasurements;
     },
-
-    updateAddOnCount: (state, action) => {
-      const { type, count } = action.payload;
-      state.content[type] = count;
+    setListData: (state, action) => {
+      const list = action.payload;
+      state.listData = list;
     },
     addSelectedItem: (state, action) => {
       const itemData = action.payload;
@@ -210,6 +980,9 @@ const estimateCalcSlice = createSlice({
     setQuoteState: (state, action) => {
       state.quoteState = action.payload;
     },
+    setShowerProjectId: (state, action) => {
+      state.projectId = action.payload;
+    },
     setLayoutArea: (state, action) => {
       state.sqftArea = action.payload;
     },
@@ -222,265 +995,1117 @@ const estimateCalcSlice = createSlice({
     },
     setActiveMounting: (state, action) => {
       const { payload } = action;
-      state.content.mounting = {
-        ...state.content.mounting,
-        activeType: payload,
-      };
+      state.content.mountingState = payload;
+      /* switch to default selected data of a layout or existing estimate */
+
+      if (["create"].includes(state.quoteState)) {
+        let fabricationsCount = {
+          oneInchHoles: state.content.oneInchHoles,
+          hingeCut: state.content.hingeCut,
+          clampCut: state.content.clampCut,
+          notch: state.content.notch,
+          outages: state.content.outages,
+        };
+
+        // if state is create quote
+        if (["channel"].includes(payload?.toLowerCase())) {
+          // for channel
+          console.log("shifting to channel");
+
+          /** on shifting to default channel, remove fabrication of already selected clamps */
+          state.content.mountingClamps.wallClamp.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.WALLCLAMP,
+              fabricationsCount,
+              { item: record.item, count: record?.count ?? 0 },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+            console.log("current fabrication wall clamp", fabricationsCount);
+          });
+          state.content.mountingClamps.sleeveOver.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.SLEEVEOVER,
+              fabricationsCount,
+              { item: record.item, count: record?.count ?? 0 },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+            console.log("current fabrication sleeve over", fabricationsCount);
+          });
+          state.content.mountingClamps.glassToGlass.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.GLASSTOGLASS,
+              fabricationsCount,
+              { item: record.item, count: record?.count ?? 0 },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+            console.log(
+              "current fabrication glass to glass",
+              fabricationsCount
+            );
+          });
+          /** end */
+
+          let mountingAccordingToThickness = null;
+          if (state.content.glassType.thickness === thicknessTypes.ONEBYTWO) {
+            mountingAccordingToThickness =
+              state.listData?.mountingChannel?.find(
+                (item) => item.slug === "u-channel-1-2"
+              );
+          } else if (
+            state.content.glassType.thickness === thicknessTypes.THREEBYEIGHT
+          ) {
+            mountingAccordingToThickness =
+              state.listData?.mountingChannel?.find(
+                (item) => item.slug === "u-channel-3-8"
+              );
+          }
+
+          const defaultItem = state.listData?.mountingChannel?.find(
+            (item) => item._id === state.selectedItem?.settings?.mountingChannel
+          );
+
+          // perform fabrication and update only if layout default channel is according to current glass thickness
+          if (
+            defaultItem &&
+            defaultItem?.slug === mountingAccordingToThickness?.slug
+          ) {
+            /** on shifting to default channel add fabrication of default selected channel */
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.CHANNEL,
+              fabricationsCount,
+              { item: null, count: 0 },
+              { item: defaultItem, count: defaultItem ? 1 : 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+            //Generating channel calculate warning on shifting to layout default
+            state.notifications.calculateChannelWarning = {
+              status: true,
+              variant: notificationsVariant.WARNING,
+              message:
+                "Current channel price is being calculated according to 1 channel stick",
+            };
+
+            let channelCost = defaultItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+            // set mounting channel
+            state.content = {
+              ...state.content,
+              mountingChannel: {
+                item: defaultItem,
+                count: 1,
+                cost : channelCost ?? 0
+              },
+            };
+            /** end */
+            console.log(
+              "default channel selected fabrication",
+              fabricationsCount
+            );
+          }
+          // set new fabrication with remove selected mounting clamps
+          state.content = {
+            ...state.content,
+            mountingClamps: {
+              wallClamp: [],
+              sleeveOver: [],
+              glassToGlass: [],
+            },
+            oneInchHoles: fabricationsCount.oneInchHoles,
+            hingeCut: fabricationsCount.hingeCut,
+            clampCut: fabricationsCount.clampCut,
+            notch: fabricationsCount.notch,
+            outages: fabricationsCount.outages,
+          };
+        } else if (["clamps"].includes(payload?.toLowerCase())) {
+          // for clamps
+          console.log("shifting to clamps");
+          /** on shifting to default clamps remove fabrication of selected channel */
+          const hardwareFabrication = getHardwareSpecificFabrication(
+            hardwareTypes.CHANNEL,
+            fabricationsCount,
+            {
+              item: state.content.mountingChannel.item,
+              count: state.content.mountingChannel.item ? 1 : 0,
+            },
+            { item: null, count: 0 }
+          );
+          fabricationsCount = { ...hardwareFabrication };
+          console.log("current febrication", fabricationsCount);
+          /** end */
+
+          let wallClampItem = null;
+          wallClampItem = state.listData?.wallClamp?.find(
+            (item) =>
+              item._id ===
+              state.selectedItem?.settings?.wallClamp?.wallClampType
+          );
+          let sleeveOverItem = null;
+          sleeveOverItem = state.listData?.sleeveOver?.find(
+            (item) =>
+              item._id ===
+              state.selectedItem?.settings?.sleeveOver?.sleeveOverType
+          );
+          let glassToGlassItem = null;
+          glassToGlassItem = state.listData?.glassToGlass?.find(
+            (item) =>
+              item._id ===
+              state.selectedItem?.settings?.glassToGlass?.glassToGlassType
+          );
+          /** on shifting to default clamps, add fabrication of default selected clamps  */
+          if (wallClampItem) {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.WALLCLAMP,
+              fabricationsCount,
+              { item: null, count: 0 },
+              {
+                item: wallClampItem,
+                count: state.selectedItem?.settings?.wallClamp?.count,
+              }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+            console.log("wall clamp item fabrication", fabricationsCount);
+          }
+          if (sleeveOverItem) {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.SLEEVEOVER,
+              fabricationsCount,
+              { item: null, count: 0 },
+              {
+                item: sleeveOverItem,
+                count: state.selectedItem?.settings?.sleeveOver?.count,
+              }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+            console.log("sleeve over item fabrication", fabricationsCount);
+          }
+          if (glassToGlassItem) {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.GLASSTOGLASS,
+              fabricationsCount,
+              { item: null, count: 0 },
+              {
+                item: glassToGlassItem,
+                count: state.selectedItem?.settings?.glassToGlass?.count,
+              }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+            console.log("glass to glass item fabrication", fabricationsCount);
+          }
+
+          /** end */
+
+          //Remove Channel calculate warning upon shifting channel to clamps
+          state.notifications.calculateChannelWarning = {
+            status: false,
+            variant: notificationsVariant.DEFAULT,
+            message: "",
+          };
+
+          let wallClampCost = wallClampItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+          let sleeveOverCost = sleeveOverItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+          let glassToGlassCost = glassToGlassItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+          state.content = {
+            ...state.content,
+            mountingClamps: {
+              wallClamp: wallClampItem
+                ? [
+                    {
+                      item: wallClampItem,
+                      count: state.selectedItem?.settings?.wallClamp?.count,
+                      cost : wallClampCost ?? 0
+                    },
+                  ]
+                : [],
+              sleeveOver: sleeveOverItem
+                ? [
+                    {
+                      item: sleeveOverItem,
+                      count: state.selectedItem?.settings?.sleeveOver?.count,
+                      cost : sleeveOverCost ?? 0
+                    },
+                  ]
+                : [],
+              glassToGlass: glassToGlassItem
+                ? [
+                    {
+                      item: glassToGlassItem,
+                      count: state.selectedItem?.settings?.glassToGlass?.count,
+                      cost : glassToGlassCost ?? 0
+                    },
+                  ]
+                : [],
+            },
+            mountingChannel: {
+              item: null,
+              count: 0,
+              cost : 0
+            },
+            oneInchHoles: fabricationsCount.oneInchHoles,
+            hingeCut: fabricationsCount.hingeCut,
+            clampCut: fabricationsCount.clampCut,
+            notch: fabricationsCount.notch,
+            outages: fabricationsCount.outages,
+          };
+        }
+      }
+      // if state is edit quote
+      else if (["edit"].includes(state.quoteState)) {
+        let fabricationsCount = {
+          oneInchHoles: state.content.oneInchHoles,
+          hingeCut: state.content.hingeCut,
+          clampCut: state.content.clampCut,
+          notch: state.content.notch,
+          outages: state.content.outages,
+        };
+
+        if (["channel"].includes(payload?.toLowerCase())) {
+          // for channel
+          
+          /** on shifting to default channel, remove fabrication of already selected clamps */
+          state.content.mountingClamps.wallClamp.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.WALLCLAMP,
+              fabricationsCount,
+              { item: record.item, count: record.count },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          state.content.mountingClamps.sleeveOver.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.SLEEVEOVER,
+              fabricationsCount,
+              { item: record.item, count: record.count },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          state.content.mountingClamps.glassToGlass.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.GLASSTOGLASS,
+              fabricationsCount,
+              { item: record.item, count: record.count },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          /** end */
+
+          let mountingAccordingToThickness = null;
+          if (state.content.glassType.thickness === thicknessTypes.ONEBYTWO) {
+            mountingAccordingToThickness =
+              state.listData?.mountingChannel?.find(
+                (item) => item.slug === "u-channel-1-2"
+              );
+          } else if (
+            state.content.glassType.thickness === thicknessTypes.THREEBYEIGHT
+          ) {
+            mountingAccordingToThickness =
+              state.listData?.mountingChannel?.find(
+                (item) => item.slug === "u-channel-3-8"
+              );
+          }
+
+          const defaultItem = state.listData?.mountingChannel?.find(
+            (item) => item._id === state.selectedItem?.config?.mountingChannel
+          );
+
+          // perform fabrication and update only if layout default channel is according to current glass thickness
+          if (
+            defaultItem &&
+            defaultItem?.slug === mountingAccordingToThickness?.slug
+          ) {
+            /** on shifting to default channel add fabrication of default selected channel */
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.CHANNEL,
+              fabricationsCount,
+              { item: null, count: 0 },
+              { item: defaultItem, count: defaultItem ? 1 : 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+            //Generating channel calculate warning on shifting to layout default
+            state.notifications.calculateChannelWarning = {
+              status: true,
+              variant: notificationsVariant.WARNING,
+              message:
+                "Current channel price is being calculated according to 1 channel stick",
+            };
+            let channelCost = defaultItem?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+            // set moutning channel
+            state.content = {
+              ...state.content,
+              mountingChannel: {
+                item: defaultItem,
+                count: 1,
+                cost : channelCost ?? 0
+              },
+            };
+          }
+          // set new fabrication with remove selected mounting clamps
+          state.content = {
+            ...state.content,
+            mountingClamps: {
+              wallClamp: [],
+              sleeveOver: [],
+              glassToGlass: [],
+            },
+            oneInchHoles: fabricationsCount.oneInchHoles,
+            hingeCut: fabricationsCount.hingeCut,
+            clampCut: fabricationsCount.clampCut,
+            notch: fabricationsCount.notch,
+            outages: fabricationsCount.outages,
+          };
+        } else if (["clamps"].includes(payload?.toLowerCase())) {
+          // for clamps
+
+          /** on shifting to default clamps remove fabrication of selected channel */
+          const hardwareFabrication = getHardwareSpecificFabrication(
+            hardwareTypes.CHANNEL,
+            fabricationsCount,
+            {
+              item: state.content.mountingChannel.item,
+              count: state.content.mountingChannel.item ? 1 : 0,
+            },
+            { item: null, count: 0 }
+          );
+          fabricationsCount = { ...hardwareFabrication };
+          /** end */
+      
+          let wallClampArray = [];
+          wallClampArray =
+            state.selectedItem?.config?.mountingClamps?.wallClamp?.map(
+              (row) => {
+                const record = state.listData?.wallClamp?.find(
+                  (clamp) => clamp._id === row?.type
+                );
+                let cost = record?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+                return { item: record, count: row.count , cost : cost ?? 0 };
+              }
+            );
+          let sleeveOverArray = [];
+          sleeveOverArray =
+            state.selectedItem?.config?.mountingClamps?.sleeveOver?.map(
+              (row) => {
+                const record = state.listData?.sleeveOver?.find(
+                  (clamp) => clamp._id === row?.type
+                );
+                let cost = record?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;
+                return { item: record, count: row.count , cost : cost ?? 0 };
+              }
+            );
+          let glassToGlassArray = [];
+          glassToGlassArray =
+            state.selectedItem?.config?.mountingClamps?.glassToGlass?.map(
+              (row) => {
+                const record = state.listData?.glassToGlass?.find(
+                  (clamp) => clamp._id === row?.type
+                );
+                let cost = record?.finishes?.find((finish) => finish.finish_id === state.content.hardwareFinishes?._id)?.cost;          
+                return { item: record, count: row.count , cost : cost ?? 0 };
+              }
+            );
+
+          /** on shifting to default clamps, add fabrication of default shifted clamps  */
+          wallClampArray.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.WALLCLAMP,
+              fabricationsCount,
+              { item: null, count: 0 },
+              { item: record.item, count: record.count }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          sleeveOverArray.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.SLEEVEOVER,
+              fabricationsCount,
+              { item: null, count: 0 },
+              { item: record.item, count: record.count }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          glassToGlassArray.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.GLASSTOGLASS,
+              fabricationsCount,
+              { item: null, count: 0 },
+              { item: record.item, count: record.count }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          //Remove Channel calculate warning upon shifting channel to clamps
+          state.notifications.calculateChannelWarning = {
+            status: false,
+            variant: notificationsVariant.DEFAULT,
+            message: "",
+          };
+          /** end */
+          state.content = {
+            ...state.content,
+            mountingClamps: {
+              wallClamp: [...wallClampArray],
+              sleeveOver: [...sleeveOverArray],
+              glassToGlass: [...glassToGlassArray],
+            },
+            mountingChannel: {
+              item: null,
+              count: 0,
+              cost : 0
+            },
+            oneInchHoles: fabricationsCount.oneInchHoles,
+            hingeCut: fabricationsCount.hingeCut,
+            clampCut: fabricationsCount.clampCut,
+            notch: fabricationsCount.notch,
+            outages: fabricationsCount.outages,
+          };
+        }
+      } else if (["custom"].includes(state.quoteState)) {
+        let fabricationsCount = {
+          oneInchHoles: state.content.oneInchHoles,
+          hingeCut: state.content.hingeCut,
+          clampCut: state.content.clampCut,
+          notch: state.content.notch,
+          outages: state.content.outages,
+        };
+        if (["channel"].includes(payload?.toLowerCase())) {
+          // for  channel
+
+          /** on shifting to channel, remove fabrication of already selected clamps */
+          state.content.mountingClamps.wallClamp.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.WALLCLAMP,
+              fabricationsCount,
+              { item: record.item, count: record.count },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          state.content.mountingClamps.sleeveOver.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.SLEEVEOVER,
+              fabricationsCount,
+              { item: record.item, count: record.count },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          state.content.mountingClamps.glassToGlass.forEach((record) => {
+            const hardwareFabrication = getHardwareSpecificFabrication(
+              hardwareTypes.GLASSTOGLASS,
+              fabricationsCount,
+              { item: record.item, count: record.count },
+              { item: null, count: 0 }
+            );
+            fabricationsCount = { ...hardwareFabrication };
+          });
+          /** end */
+
+          state.content = {
+            ...state.content,
+            mountingClamps: {
+              wallClamp: [],
+              sleeveOver: [],
+              glassToGlass: [],
+            },
+            oneInchHoles: fabricationsCount.oneInchHoles,
+            hingeCut: fabricationsCount.hingeCut,
+            clampCut: fabricationsCount.clampCut,
+            notch: fabricationsCount.notch,
+            outages: fabricationsCount.outages,
+          };
+        } else if (["clamps"].includes(payload?.toLowerCase())) {
+          // for clamps
+
+          /** on shifting to clamps remove fabrication of selected channel */
+          const hardwareFabrication = getHardwareSpecificFabrication(
+            hardwareTypes.CHANNEL,
+            fabricationsCount,
+            {
+              item: state.content.mountingChannel.item,
+              count: state.content.mountingChannel.item ? 1 : 0,
+            },
+            { item: null, count: 0 }
+          );
+          //Remove Channel calculate warning upon shifting channel to clamps
+          state.notifications.calculateChannelWarning = {
+            status: false,
+            variant: notificationsVariant.DEFAULT,
+            message: "",
+          };
+          state.content = {
+            ...state.content,
+            mountingChannel: {
+              item: null,
+              count: 0,
+              cost: 0
+            },
+            oneInchHoles: hardwareFabrication.oneInchHoles,
+            hingeCut: hardwareFabrication.hingeCut,
+            clampCut: hardwareFabrication.clampCut,
+            notch: hardwareFabrication.notch,
+            outages: hardwareFabrication.outages,
+          };
+        }
+      }
     },
-    initializeStateForCreateQuote: (state, action) => {
-      const { layoutData, listData } = action.payload;
+    initializeStateForCustomQuote: (state, action) => {
+      let notifications = state.notifications;
       let hardwareFinishes = null;
-      hardwareFinishes = listData?.hardwareFinishes?.find(
-        (item) => item._id === layoutData?.settings?.hardwareFinishes
-      );
-      let handleType = null;
-      handleType = listData?.handles?.find(
-        (item) => item._id === layoutData?.settings?.handles?.handleType
-      );
-      let hingesType = null;
-      hingesType = listData?.hinges?.find(
-        (item) => item._id === layoutData?.settings?.hinges?.hingesType
-      );
-      let slidingDoorSystemType = null;
-      slidingDoorSystemType = listData?.slidingDoorSystem?.find(
-        (item) => item._id === layoutData?.settings?.slidingDoorSystem?.type
-      );
-      let headerType = null;
-      headerType = listData?.header?.find(
-        (item) => item._id === layoutData?.settings?.header
+      hardwareFinishes = state.listData?.hardwareFinishes?.find(
+        (item) => item.slug === "polished-chrome"
       );
 
       let glassType = null;
-      glassType = listData?.glassType?.find(
+      glassType = state.listData?.glassType?.find(
+        (item) => item.slug === "clear"
+      );
+      let glassTypeCost = null;
+      glassTypeCost = glassType?.options?.find((option) => option?.thickness === thicknessTypes.THREEBYEIGHT)?.cost;
+      
+      let glassAddons = null;
+      glassAddons = state.listData?.glassAddons?.find(
+        (item) => item.slug === "no-treatment"
+      );
+
+      state.notifications = notifications;
+      state.content = {
+        ...state.content,
+        hardwareFinishes: hardwareFinishes,
+        glassType: {
+          item: glassType,
+          thickness: thicknessTypes.THREEBYEIGHT,
+          cost:glassTypeCost
+        },
+        glassAddons: glassAddons ? [{item: glassAddons ,cost : 0}] : [],
+        people: 0,
+        hours: 0,
+      };
+    },
+    initializeStateForCreateQuote: (state, action) => {
+      const { layoutData } = action.payload;
+      let notifications = state.notifications;
+      let hardwareFinishes = null;
+      hardwareFinishes = state.listData?.hardwareFinishes?.find(
+        (item) => item._id === layoutData?.settings?.hardwareFinishes
+      );
+      let handleType = null;
+      handleType = state.listData?.handles?.find(
+        (item) => item._id === layoutData?.settings?.handles?.handleType
+      );
+      let handleTypeCost = null;
+      handleTypeCost = handleType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id )?.cost;
+
+      let hingesType = null;
+      hingesType = state.listData?.hinges?.find(
+        (item) => item._id === layoutData?.settings?.hinges?.hingesType
+      );
+      let hingesCost = null;
+      hingesCost = hingesType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+      let slidingDoorSystemType = null;
+      slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
+        (item) => item._id === layoutData?.settings?.slidingDoorSystem?.type
+      );
+      let slidingDoorSystemCost = null;
+      slidingDoorSystemCost = slidingDoorSystemType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id )?.cost;
+
+      let headerType = null;
+      headerType = state.listData?.header?.find(
+        (item) => item._id === layoutData?.settings?.header
+      );
+      let headerCost = null;
+      headerCost = headerType?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+      let glassType = null;
+      glassType = state.listData?.glassType?.find(
         (item) => item._id === layoutData?.settings?.glassType?.type
       );
 
-      let glassTreatment = null;
-      glassTreatment = listData?.glassTreatment?.find(
-        (item) => item._id === layoutData?.settings?.glassTreatment
+      let glassThickness =
+      layoutData?.settings?.glassType?.thickness ||
+      thicknessTypes.THREEBYEIGHT;
+
+      let glassCost = 0;
+      glassCost = glassType?.options?.find((option) => option?.thickness === glassThickness)?.cost;   
+      let glassAddon = null;
+      glassAddon = state.listData?.glassAddons?.find(
+        (item) => item._id === layoutData?.settings?.glassAddon
+      );
+      let glassAddonCost = null;
+      glassAddonCost = glassAddon?.options?.[0]?.cost;
+
+      let clampCutOut = 0;
+      let wallClampItem,
+        sleeveOverItem,
+        glassToGlassItem,
+        cornerWallClampItem,
+        cornerSleeveOverItem,
+        cornerGlassToGlassItem,
+        channelItem;
+      wallClampItem =
+        sleeveOverItem =
+        glassToGlassItem =
+        cornerWallClampItem =
+        cornerSleeveOverItem =
+        cornerGlassToGlassItem =
+        channelItem =
+          null;
+      let wallClampCost = 0;
+      let sleeveOverCost = 0;
+      let glassToGlassCost = 0;
+      let  cornerWallClampCost = 0;
+      let  cornerSleeveOverCost = 0;
+      let  cornerGlassToGlassCost = 0;
+      let  channelCost = 0;
+      // do not calculate if a layout does not have mounting channel or clamp
+      if (
+        ![
+          layoutVariants.DOOR,
+          layoutVariants.DOUBLEDOOR,
+          layoutVariants.DOUBLEBARN,
+        ].includes(layoutData?.settings?.variant)
+      ) {
+        wallClampItem = state.listData?.wallClamp?.find(
+          (item) => item._id === layoutData?.settings?.wallClamp?.wallClampType
+        );
+        wallClampCost = wallClampItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+        sleeveOverItem = state.listData?.sleeveOver?.find(
+          (item) =>
+            item._id === layoutData?.settings?.sleeveOver?.sleeveOverType
+        );
+        sleeveOverCost = sleeveOverItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+        glassToGlassItem = state.listData?.glassToGlass?.find(
+          (item) =>
+            item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
+        );
+        glassToGlassCost = glassToGlassItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+        cornerWallClampItem = state.listData?.cornerWallClamp?.find(
+          (item) =>
+            item._id === layoutData?.settings?.cornerWallClamp?.wallClampType
+        );
+        cornerWallClampCost = cornerWallClampItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+        cornerSleeveOverItem = state.listData?.cornerSleeveOver?.find(
+          (item) =>
+            item._id === layoutData?.settings?.cornerSleeveOver?.sleeveOverType
+        );
+        cornerSleeveOverCost = cornerSleeveOverItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+        cornerGlassToGlassItem = state.listData?.cornerGlassToGlass?.find(
+          (item) =>
+            item._id ===
+            layoutData?.settings?.cornerGlassToGlass?.glassToGlassType
+        );
+        cornerGlassToGlassCost = cornerGlassToGlassItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+        channelItem = state.listData?.mountingChannel?.find(
+          (item) => item._id === layoutData?.settings?.mountingChannel
+        );
+        channelCost = channelItem?.finishes?.find((item) => item?.finish_id === hardwareFinishes?._id)?.cost;
+
+        clampCutOut =
+          layoutData?.settings?.wallClamp?.count +
+          layoutData?.settings?.sleeveOver?.count +
+          layoutData?.settings?.glassToGlass?.count +
+          layoutData?.settings?.cornerWallClamp?.count +
+          layoutData?.settings?.cornerGlassToGlass?.count;
+        //   layoutData?.settings?.cornerSleeveOver?.count +
+      }
+
+      // if(channelItem){
+      //   if(layoutData?.settings?.glassType?.thickness === '3/8'){
+      //     channelItem = state.listData?.mountingChannel?.find((item)=>item.slug === 'u-channel-3-8');
+      //   }else if(layoutData?.settings?.glassType?.thickness === '1/2'){
+      //     channelItem = state.listData?.mountingChannel?.find((item)=>item.slug === 'u-channel-1-2');
+      //   }
+      // }
+      const noGlassAddon = state?.listData?.glassAddons?.find(
+        (item) => item.slug === "no-treatment"
       );
 
-      let wallClampItem = null;
-      wallClampItem = listData?.wallClamp?.find(
-        (item) => item._id === layoutData?.settings?.wallClamp?.wallClampType
-      );
-      let sleeveOverItem = null;
-      sleeveOverItem = listData?.sleeveOver?.find(
-        (item) => item._id === layoutData?.settings?.sleeveOver?.sleeveOverType
-      );
-      let glassToGlassItem = null;
-      glassToGlassItem = listData?.glassToGlass?.find(
-        (item) =>
-          item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
-      );
-      let channelItem = null;
-      channelItem = listData?.mountingChannel?.find(
-        (item) => item._id === layoutData?.settings?.mountingChannel
-      );
-
+      state.notifications = notifications;
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,
         handles: {
           item: handleType || null,
           count: layoutData?.settings?.handles?.count,
+          cost : handleTypeCost
         },
         hinges: {
           item: hingesType || null,
           count: layoutData?.settings?.hinges?.count,
+          cost : hingesCost
         },
         header: {
           item: headerType || null,
           count: headerType ? 1 : 0,
+          cost :  headerCost
         },
         slidingDoorSystem: {
           item: slidingDoorSystemType || null,
           count: layoutData?.settings?.slidingDoorSystem?.count,
+          cost : slidingDoorSystemCost
         },
         glassType: {
           item: glassType || null,
-          thickness: layoutData?.settings?.glassType?.thickness,
+          thickness: glassThickness,
+          cost : glassCost ?? 0
         },
-
-        mounting: {
-          clamps: {
-            wallClamp: {
-              item: wallClampItem || null,
-              count: layoutData?.settings?.wallClamp?.count,
-            },
-            sleeveOver: {
-              item: sleeveOverItem || null,
-              count: layoutData?.settings?.sleeveOver?.count,
-            },
-            glassToGlass: {
-              item: glassToGlassItem || null,
-              count: layoutData?.settings?.glassToGlass?.count,
-            },
-          },
-          channel: {
-            item: channelItem || null,
-            count: channelItem ? 1 : 0,
-          },
-          activeType: layoutData?.settings?.channelOrClamps
-            ? layoutData?.settings?.channelOrClamps?.toLowerCase()
-            : "clamps",
+        mountingChannel: {
+          item: channelItem || null,
+          count: channelItem ? 1 : 0,
+          cost: channelCost || 0
         },
-
+        mountingClamps: {
+          wallClamp: wallClampItem
+            ? [
+                {
+                  item: wallClampItem,
+                  count: layoutData?.settings?.wallClamp?.count,
+                  cost: wallClampCost,
+                },
+              ]
+            : [],
+          sleeveOver: sleeveOverItem
+            ? [
+                {
+                  item: sleeveOverItem,
+                  count: layoutData?.settings?.sleeveOver?.count,
+                  cost: sleeveOverCost,
+                },
+              ]
+            : [],
+          glassToGlass: glassToGlassItem
+            ? [
+                {
+                  item: glassToGlassItem,
+                  count: layoutData?.settings?.glassToGlass?.count,
+                  cost: glassToGlassCost,
+                },
+              ]
+            : [],
+        },
+        cornerClamps: {
+          cornerWallClamp: cornerWallClampItem
+            ? [
+                {
+                  item: cornerWallClampItem,
+                  count: layoutData?.settings?.cornerWallClamp?.count,
+                  cost:cornerWallClampCost
+                },
+              ]
+            : [],
+          cornerSleeveOver: cornerSleeveOverItem
+            ? [
+                {
+                  item: cornerSleeveOverItem,
+                  count: layoutData?.settings?.cornerSleeveOver?.count,
+                  cost: cornerSleeveOverCost,
+                },
+              ]
+            : [],
+          cornerGlassToGlass: cornerGlassToGlassItem
+            ? [
+                {
+                  item: cornerGlassToGlassItem,
+                  count: layoutData?.settings?.cornerGlassToGlass?.count,
+                  cost: cornerGlassToGlassCost,
+                },
+              ]
+            : [],
+        },
+        mountingState:
+          wallClampItem || sleeveOverItem || glassToGlassItem
+            ? "clamps"
+            : "channel",
         people: layoutData?.settings?.other?.people,
         hours: layoutData?.settings?.other?.hours,
-        glassTreatment: glassTreatment ? glassTreatment : listData.glassTreatment[0],
+        glassAddons: glassAddon ? [{item:glassAddon , cost: glassAddonCost }] : [{item: noGlassAddon ,cost:0}],
         outages: layoutData?.settings?.outages,
-        hingeCut:layoutData?.settings?.hinges?.count,
-        oneInchHoles: (layoutData?.settings?.handles?.count * 2) + (layoutData?.settings?.variant === layoutVariants.SINGLEBARN ? 6 : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN ? 8 : 0),
-        clampCut:layoutData?.settings?.wallClamp?.count + layoutData?.settings?.sleeveOver?.count + layoutData?.settings?.glassToGlass?.count
+        notch: layoutData?.settings?.notch,
+        hingeCut: layoutData?.settings?.hinges?.count,
+        oneInchHoles: layoutData?.settings?.handles?.count * 2,
+        //  + (layoutData?.settings?.variant === layoutVariants.SINGLEBARN
+        //   ? 6
+        //   : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN
+        //   ? 8
+        //   : 0),
+        clampCut: clampCutOut,
       };
     },
     initializeStateForEditQuote: (state, action) => {
-      const { estimateData, listData, quoteState, quotesId } = action.payload;
-
+      const { estimateData, quotesId } = action.payload;
       state.quoteId = quotesId;
+      state.quoteState = quoteState.EDIT
+      state.content.sufferCostDifference = estimateData?.sufferCostDifference;
+      const resp = generateContentForShowerEdit(state.listData,estimateData);
+      // let hardwareFinishes = null;
+      // hardwareFinishes = state.listData?.hardwareFinishes?.find(
+      //   (item) => item._id === estimateData?.config?.hardwareFinishes
+      // );
+      // let handleType = null;
+      // handleType = state.listData?.handles?.find(
+      //   (item) => item._id === estimateData?.config?.handles?.type
+      // );
+      // let hingesType = null;
+      // hingesType = state.listData?.hinges?.find(
+      //   (item) => item._id === estimateData?.config?.hinges?.type
+      // );
+      // let slidingDoorSystemType = null;
+      // slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
+      //   (item) => item._id === estimateData?.config?.slidingDoorSystem?.type
+      // );
 
-      let hardwareFinishes = null;
-      hardwareFinishes = listData?.hardwareFinishes?.find(
-        (item) => item._id === estimateData?.hardwareFinishes
-      );
-      let handleType = null;
-      handleType = listData?.handles?.find(
-        (item) => item._id === estimateData?.handles?.type
-      );
-      let hingesType = null;
-      hingesType = listData?.hinges?.find(
-        (item) => item._id === estimateData?.hinges?.type
-      );
-      let slidingDoorSystemType = null;
-      slidingDoorSystemType = listData?.slidingDoorSystem?.find(
-        (item) => item._id === estimateData?.slidingDoorSystem?.type
-      );
+      // let headerType = null;
+      // headerType = state.listData?.header?.find(
+      //   (item) => item._id === estimateData?.config?.header?.type
+      // );
 
-      let headerType = null;
-      headerType = listData?.header?.find(
-        (item) => item._id === estimateData?.header?.type
-      );
+      // let glassTypee = null;
+      // glassTypee = state.listData?.glassType?.find(
+      //   (item) => item._id === estimateData?.config?.glassType?.type
+      // );
 
-      let glassTypee = null;
-      glassTypee = listData?.glassType?.find(
-        (item) => item._id === estimateData?.glassType?.type
-      );
+      // let glassAddons = [];
+      // glassAddons = estimateData?.config?.glassAddons?.map((item) => {
+      //   const record = state.listData?.glassAddons.find(
+      //     (addon) => addon._id === item
+      //   );
+      //   return record;
+      // });
 
-      let glassTreatment = null;
-      glassTreatment = listData?.glassTreatment?.find(
-        (item) => item._id === estimateData?.glassTreatment
-      );
+      // let wallClampArray,
+      //   sleeveOverArray,
+      //   glassToGlassArray,
+      //   cornerWallClampArray,
+      //   cornerSleeveOverArray,
+      //   cornerGlassToGlassArray,
+      //   channelItem;
+      // wallClampArray =
+      //   sleeveOverArray =
+      //   glassToGlassArray =
+      //   cornerWallClampArray =
+      //   cornerSleeveOverArray =
+      //   cornerGlassToGlassArray =
+      //     [];
+      // channelItem = null;
+      // // do not calculate if a layout does not have mounting channel or clamp
+      // if (
+      //   ![
+      //     layoutVariants.DOOR,
+      //     layoutVariants.DOUBLEDOOR,
+      //     layoutVariants.DOUBLEBARN,
+      //   ].includes(estimateData?.settings?.variant)
+      // ) {
+      //   wallClampArray = estimateData?.config?.mountingClamps?.wallClamp?.map(
+      //     (row) => {
+      //       const record = state.listData?.wallClamp?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     }
+      //   );
+      //   sleeveOverArray = estimateData?.config?.mountingClamps?.sleeveOver?.map(
+      //     (row) => {
+      //       const record = state.listData?.sleeveOver?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     }
+      //   );
+      //   glassToGlassArray =
+      //     estimateData?.config?.mountingClamps?.glassToGlass?.map((row) => {
+      //       const record = state.listData?.glassToGlass?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     });
 
-      let wallClampItem = null;
-      wallClampItem = listData?.wallClamp?.find(
-        (item) => item._id === estimateData?.mounting?.clamps?.wallClamp?.type
-      );
-      let sleeveOverItem = null;
-      sleeveOverItem = listData?.sleeveOver?.find(
-        (item) => item._id === estimateData?.mounting?.clamps?.sleeveOver?.type
-      );
-      let glassToGlassItem = null;
-      glassToGlassItem = listData?.glassToGlass?.find(
-        (item) =>
-          item._id === estimateData?.mounting?.clamps?.glassToGlass?.type
-      );
-      let channelItem = null;
-      channelItem = listData?.mountingChannel?.find(
-        (item) => item._id === estimateData?.mounting?.channel
-      );
-      let addOns = estimateData?.addOns?.map((id) =>
-        listData?.addOns?.find((item) => item?._id === id)
-      );
-      const measurements = estimateData.measurements.map(
-        ({ _id, ...rest }) => rest
-      );
+      //   cornerWallClampArray =
+      //     estimateData?.config?.cornerClamps?.wallClamp?.map((row) => {
+      //       const record = state.listData?.cornerWallClamp?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     });
+
+      //   cornerSleeveOverArray =
+      //     estimateData?.config?.cornerClamps?.sleeveOver?.map((row) => {
+      //       const record = state.listData?.cornerSleeveOver?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     });
+
+      //   cornerGlassToGlassArray =
+      //     estimateData?.config?.cornerClamps?.glassToGlass?.map((row) => {
+      //       const record = state.listData?.cornerGlassToGlass?.find(
+      //         (clamp) => clamp._id === row?.type
+      //       );
+      //       return { item: record, count: row.count };
+      //     });
+
+      //   channelItem = state.listData?.mountingChannel?.find(
+      //     (item) => item._id === estimateData?.config?.mountingChannel
+      //   );
+      // }
+      // let hardwareAddons = [];
+      // hardwareAddons = estimateData?.config?.hardwareAddons?.map((row) => {
+      //   const found = state.listData?.hardwareAddons?.find(
+      //     (item) => item?._id === row.type
+      //   );
+      //   return { item: found, count: row.count };
+      // });
+      // const noGlassAddon = state.listData?.glassAddons?.find(
+      //   (item) => item.slug === "no-treatment"
+      // );
+      // // const measurements = estimateData.config.measurements.map(
+      // //   ({ _id, ...rest }) => rest
+      // // );
+
+      // // Generate Channel calculate warning if channel is selected
+      // if (channelItem) {
+      //   state.notifications.calculateChannelWarning = {
+      //     status: true,
+      //     variant: notificationsVariant.WARNING,
+      //     message:
+      //       "Current channel price is being calculated according to 1 channel stick",
+      //   };
+      // }
       state.content = {
         ...state.content,
-        hardwareFinishes: hardwareFinishes,
-        handles: {
-          ...state.handles,
-          item: handleType,
-          count: estimateData?.handles?.count,
-        },
-        hinges: {
-          ...state.hinges,
-          item: hingesType,
-          count: estimateData?.hinges?.count,
-        },
-        header: {
-          item: headerType,
-          count: estimateData?.header?.count,
-        },
-        slidingDoorSystem: {
-          item: slidingDoorSystemType,
-          count: estimateData?.slidingDoorSystem?.count,
-        },
-        glassType: {
-          item: glassTypee,
-          thickness: estimateData?.glassType?.thickness,
-        },
+        ...resp.content
+        // hardwareFinishes: hardwareFinishes,
+        // handles: {
+        //   ...state.handles,
+        //   item: handleType,
+        //   count: estimateData?.config?.handles?.count,
+        // },
+        // hinges: {
+        //   ...state.hinges,
+        //   item: hingesType,
+        //   count: estimateData?.config?.hinges?.count,
+        // },
+        // header: {
+        //   item: headerType,
+        //   count: estimateData?.config?.header?.count,
+        // },
+        // slidingDoorSystem: {
+        //   item: slidingDoorSystemType,
+        //   count: estimateData?.config?.slidingDoorSystem?.count,
+        // },
+        // glassType: {
+        //   item: glassTypee,
+        //   thickness: estimateData?.config?.glassType?.thickness,
+        // },
 
-        mounting: {
-          clamps: {
-            wallClamp: {
-              item: wallClampItem,
-              count: estimateData?.mounting?.clamps?.wallClamp?.count,
-            },
-            sleeveOver: {
-              item: sleeveOverItem,
-              count: estimateData?.mounting?.clamps?.sleeveOver?.count,
-            },
-            glassToGlass: {
-              item: glassToGlassItem,
-              count: estimateData?.mounting?.clamps?.glassToGlass?.count,
-            },
-          },
-          channel: {
-            item: channelItem,
-            count: channelItem ? 1 : 0,
-          },
-          activeType: estimateData?.mounting?.activeType,
-        },
-
-        hingeCut: estimateData?.hingeCut,
-        people: estimateData?.people,
-        hours: estimateData?.hours,
-        glassTreatment: glassTreatment ? glassTreatment : listData.glassTreatment[0],
-        oneInchHoles: estimateData?.oneInchHoles,
-        clampCut: estimateData?.clampCut,
-        notch: estimateData?.notch,
-        outages: estimateData?.outages,
-        mitre: estimateData?.mitre,
-        polish: estimateData?.polish,
-        sleeveOverCount: estimateData?.sleeveOverCount,
-        towelBarsCount: estimateData?.towelBarsCount,
-        addOns: addOns,
+        // mountingClamps: {
+        //   wallClamp: wallClampArray ? [...wallClampArray] : [],
+        //   sleeveOver: sleeveOverArray ? [...sleeveOverArray] : [],
+        //   glassToGlass: glassToGlassArray ? [...glassToGlassArray] : [],
+        // },
+        // cornerClamps: {
+        //   cornerWallClamp: cornerWallClampArray
+        //     ? [...cornerWallClampArray]
+        //     : [],
+        //   cornerSleeveOver: cornerSleeveOverArray
+        //     ? [...cornerSleeveOverArray]
+        //     : [],
+        //   cornerGlassToGlass: cornerGlassToGlassArray
+        //     ? [...cornerGlassToGlassArray]
+        //     : [],
+        // },
+        // mountingChannel: {
+        //   item: channelItem || null,
+        //   count: channelItem ? 1 : 0,
+        // },
+        // mountingState:
+        //   wallClampArray?.length ||
+        //   sleeveOverArray?.length ||
+        //   glassToGlassArray?.length
+        //     ? "clamps"
+        //     : "channel",
+        // hingeCut: estimateData?.config?.hingeCut,
+        // people: estimateData?.config?.people,
+        // hours: estimateData?.config?.hours,
+        // glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
+        // oneInchHoles: estimateData?.config?.oneInchHoles,
+        // clampCut: estimateData?.config?.clampCut,
+        // notch: estimateData?.config?.notch,
+        // outages: estimateData?.config?.outages,
+        // mitre: estimateData?.config?.mitre,
+        // polish: estimateData?.config?.polish,
+        // // sleeveOverCount: estimateData?.sleeveOverCount,
+        // // towelBarsCount: estimateData?.towelBarsCount,
+        // hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
+        // userProfitPercentage: estimateData?.config?.userProfitPercentage,
+        // discount : {
+        //   value:estimateData?.config?.discount?.value ?? 0,
+        //   unit:estimateData?.config?.discount?.unit ?? '%',
+        // },
+        // additionalFields: estimateData?.config?.additionalFields,
       };
-      state.quoteState = quoteState;
-      state.measurements = measurements;
-      state.perimeter = estimateData.perimeter;
-      state.sqftArea = estimateData.sqftArea;
-      state.selectedItem = estimateData.layoutData;
+      // state.quoteState = quoteState.EDIT;
+      // state.measurements = measurements;
+      state.perimeter = resp.perimeter;
+      state.sqftArea = resp.sqftArea;
+      // state.selectedItem = estimateData;
+      state.doorWidth = resp.doorWidth || 0;
+      state.notifications.calculateChannelWarning  = resp.calculateChannelWarning;
     },
   },
 });
 export const {
+  resetState,
+  setGlassPrice,
+  setHardwarePrice,
+  setGlassAddonsPrice,
+  setHardwareAddonsPrice,
+  setFabricationPrice,
+  setMiscPrice,
+  setLaborPrice,
+  setUserProfitPercentage,
+  setEstimateDiscount,
+  setEstimateDiscountUnit,
+  setEstimateDiscountTotal,
   setLayoutArea,
   setLayoutPerimeter,
   setContent,
   setTotal,
+  setSufferCostDifference,
+  setCost,
+  setProfit,
   setCounters,
   setInputContent,
   setThickness,
-  updateAddOnCount,
+  setListData,
+  setDoorWidth,
+  // updateAddOnCount,
   updateMeasurements,
   addSelectedItem,
   setNavigationDesktop,
   setNavigation,
   setQuoteState,
   setActiveMounting,
+  initializeStateForCustomQuote,
   initializeStateForCreateQuote,
   initializeStateForEditQuote,
+  setPanelWidth,
+  setDoorWeight,
+  setPanelWeight,
+  setReturnWeight,
+  setSingleNotification,
+  setMultipleNotifications,
+  resetNotifications,
+  setHardwareFabricationQuantity,
+  setisCustomizedDoorWidth,
+  setAdditionalFieldsPrice,
+  setShowerProjectId,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

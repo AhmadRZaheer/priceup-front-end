@@ -1,0 +1,42 @@
+.custom-textfield {
+  background: #fff;
+  border-radius: 5px;
+  font-family: "Manrope", sans-serif !important;
+  fieldset {
+    border-color: #d0d5dd !important;
+    
+  }
+  .MuiInputBase-root{
+    font-family: "Manrope", sans-serif !important;
+  }
+  .Mui-focused {
+
+
+    fieldset {
+      border-color: #8477da !important;
+    }
+  }
+
+  &:hover {
+    fieldset {
+      border-color: #8477da !important;
+    }
+  }
+
+  .MuiInputBase-input::placeholder {
+    // color: black;
+    // opacity: 1;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+}
+.custom-textfield-error {
+  fieldset {
+    border-color: red !important;
+  }
+}
+
+.input-label {
+  color: black  !important; /* Change color when focused */
+}

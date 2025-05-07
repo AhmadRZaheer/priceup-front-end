@@ -1,0 +1,121 @@
+.sidebar {
+  height: 100vh;
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .logo {
+      padding: 0px;
+      margin-top: 10px;
+    }
+  }
+  .line {
+    height: 0;
+    border: 1px solid #475467;
+    width: 85%;
+    padding: 0 !important;
+    margin: 0px auto;
+  }
+  .center {
+    height: 68vh !important;
+    overflow: auto;
+
+    ul {
+      list-style: none;
+      margin-top: 0px !important;
+
+      .estimates {
+        margin-top: 30px;
+      }
+      .setting {
+        margin-top: 0px !important;
+      }
+
+      li {
+        display: flex;
+        align-items: baseline;
+        padding: 7px;
+        cursor: pointer;
+        margin: 10px;
+        border-radius: 5px;
+
+        &:hover {
+          background-color: transparent;
+        }
+        &.active {
+          background-color: #8477da;
+        }
+
+        .icon {
+          font-size: 16px;
+          margin-right: 10px;
+        }
+
+        span {
+          font-size: 18px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  .bottom {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    cursor: pointer;
+
+    .UserIcon {
+      margin-right: 16px !important;
+    }
+    .userInSidebar {
+      font-size: 18px !important;
+    }
+    .emailUser {
+      font-size: 16px !important;
+      color: #f2f4f7;
+    }
+    .logOutIcon {
+      font-size: 16px;
+      margin-left: 20px !important;
+      width: 50px !important;
+      height: 30px !important;
+      text-align: center;
+    }
+  }
+  .link {
+    text-decoration: none;
+    color: inherit;
+  }
+  .active {
+    font-weight: 800;
+  }
+  .link-settings {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+.center {
+  height: 68vh;
+  overflow: auto; /* Keep the scrollbar visible */
+}
+
+.center::-webkit-scrollbar {
+  width: 5px; /* Set the width of the scrollbar */
+}
+
+.center::-webkit-scrollbar-thumb {
+  background-color: #475467; /* Set the color of the scrollbar thumb */
+}
+.main-container-sidebar{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.active {
+  background-color: #8477da;
+  border-radius: 6px;
+}

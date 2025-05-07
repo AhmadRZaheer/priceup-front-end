@@ -1,49 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
-import { Add, Delete, Edit } from "@mui/icons-material";
-import { backendURL } from "../../utilities/common";
-import {
-  useDeleteHardwares,
-  useEditHardware,
-  useFetchDatahardware,
-} from "../../utilities/ApiHooks/hardware";
-import AddEditHardware from "../Model/addEditHardware";
-import Snackbars from "../Model/snackBar";
+import { useFetchDatahardware } from "../../utilities/ApiHooks/hardware";
+import AddEditHardware from "../Modal/addEditHardware";
 import "./hardwareTable.scss";
-import FinishItem from "./finishItem";
 import HardwareItem from "./hardwreItem";
+import AddIcon from "../../Assets/plus.svg";
+import { useSelector } from "react-redux";
+import { getDataRefetch } from "../../redux/staff";
 
 const HardWareComponent = ({ type }) => {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
-  };
+  const refetchData = useSelector(getDataRefetch);
 
   const {
     data: hardwareData,
-    refetch: hardwareRefetch,
     isFetching: hardwareFetching,
+    refetch: hardwareRefetch,
   } = useFetchDatahardware(type);
- 
+
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
-
+  useEffect(() => {
+    hardwareRefetch();
+  }, [refetchData]);
   const handleOpen = (data) => {
     setOpen(true);
     setIsEdit(false);
@@ -52,105 +31,67 @@ const HardWareComponent = ({ type }) => {
     setOpen(false);
   };
 
-  
- 
   return (
     <>
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
           alignContent: "center",
-          paddingTop: 20,
-          paddingBottom: 15,
-          paddingLeft: "10px",
-          paddingRight: "10px",
-          alignItems: "start",
-        }}
-      >
-        {" "}
-        <div
-          style={{
-            width: "250px",
-            padding: 4,
-            alignItems: "center",
-            textTransform: "uppercase",
-          }}
-        >
-          <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
-            {type}
-          </p>
-        </div>
-        <div
-          style={{
-            padding: 4,
-          }}
-        >
-          <IconButton
-            onClick={handleOpen}
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 17,
-              padding: 1,
-            }}
-          >
-            <Add style={{ color: "white" }} />
-            Add
-          </IconButton>
-        </div>{" "}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          gap: 4,
-          alignContent: "center",
-          backgroundColor: "rgb(232, 232, 232)",
+          backgroundColor: "#EAECF0",
           paddingTop: 15,
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
+          marginTop: 15,
         }}
       >
         {" "}
         <div
           style={{
-            width: "250px",
-            padding: 4,
+            width: "27%",
+            padding: 8,
             alignItems: "center",
           }}
         >
           Name
         </div>{" "}
-        <div
+        {/* <div
           style={{
-            width: "250px",
-
-            padding: 4,
-          }}
+            width: "30%",
+            padding: 8,
+          }}s
         >
           Part Number{" "}
-        </div>{" "}
+        </div>{" "} */}
         <div
           style={{
-            width: "250px",
-
-            padding: 4,
+            width: "40%",
+            padding: 8,
           }}
         >
           Cost
         </div>
         <div
           style={{
-            width: "250px",
-
-            padding: 4,
+            width: "58%",
+            padding: 8,
           }}
         >
           Status
+        </div>{" "}
+        <div style={{ width: "22%", textAlign: "right" }}>
+          <IconButton
+            onClick={handleOpen}
+            sx={{
+              color: "#8477DA",
+              textTransform: "capitalize",
+              borderRadius: 2,
+              fontSize: 17,
+            }}
+          >
+            <img width={"25px"} height={"20px"} src={AddIcon} alt="add icon" />
+            Add 
+          </IconButton>
         </div>{" "}
       </div>
       {hardwareFetching ? (
@@ -163,23 +104,28 @@ const HardWareComponent = ({ type }) => {
             height: "60%",
           }}
         >
-          <CircularProgress size={24} color="warning" />
+          <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         </Box>
       ) : hardwareData?.length >= 1 ? (
-        <div
+        <Box
           className="HardwareTable"
-          style={{
+          sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 8,
-            marginTop: 4,
+            gap: 1,
             overflowY: "scroll",
           }}
         >
           {hardwareData?.map((entry, mainIndex) => (
-            <HardwareItem entry={entry} mainIndex={mainIndex} hardwareRefetch={hardwareRefetch} showSnackbar={showSnackbar} type={type}/>
+            <HardwareItem
+              key={mainIndex}
+              entry={entry}
+              mainIndex={mainIndex}
+              hardwareRefetch={hardwareRefetch}
+              type={type}
+            />
           ))}
-        </div>
+        </Box>
       ) : (
         <Typography
           sx={{ textAlign: "center", py: 2, fontSize: 20, color: "gray" }}
@@ -194,15 +140,7 @@ const HardWareComponent = ({ type }) => {
         data={edit}
         isEdit={isEdit}
         refetch={hardwareRefetch}
-        showSnackbar={showSnackbar}
         categorySlug={type}
-      />
-
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
       />
     </>
   );

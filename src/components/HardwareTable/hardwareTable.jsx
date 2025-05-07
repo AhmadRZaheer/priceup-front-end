@@ -7,7 +7,7 @@ import { Box, Typography } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import Header from "../TableHeader/tableHeader";
 import HardWareComponent from "./hardWareComponent";
-import AddEditModel from "../Model/addEditFinish";
+import AddEditModel from "../Modal/addEditFinish";
 import { useFetchDatahardwareCategory } from "../../utilities/ApiHooks/hardware";
 
 const HardwareTable = () => {
@@ -33,49 +33,46 @@ const HardwareTable = () => {
   };
 
   const { data: hardwareCategoryData } = useFetchDatahardwareCategory();
+
+  // console.log(hardwareCategoryData,'hardwareCategoryData');
+
   return (
     <>
       <Box
         sx={{
-          backgroundColor: "white",
-          height: "98.2vh",
-          paddingLeft: 1,
-          pt: 2,
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+          height: "89.2vh",
         }}
       >
-        <div className="page-title">
+        <div className="h-page-title">
           <Typography style={{ fontSize: 30, paddingLeft: 10 }}>
-            Hardware
+            Hardware ssss
           </Typography>
         </div>
         <div
           style={{
             border: "1px solid rgb(232, 232, 232)",
-            marginLeft: 18,
-            marginRight: 18,
+            width: "98%",
+            borderRadius: "8px",
+            margin: "auto",
+            background:'#FFFF'
           }}
-          className="HardWareComponent"
         >
-          <div className="hardwareTable">
-            <div className="hardwareTable">
-              <div
-                style={{
-                  marginLeft: "15px",
-                  marginRight: "15px",
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                  paddingTop: 10,
-                  width: "auto",
-                }}
-              >
-                <Header types={hardwareCategoryData} showMore={SetShowNext} />
-              </div>
-              <div>
-                <HardWareComponent type={showNext} />
-              </div>
-            </div>
+          <div
+            style={{
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 10,
+              width: "auto",
+            }}
+          >
+            <Header types={hardwareCategoryData} showMore={SetShowNext} />
+          </div>
+          <div>
+            <HardWareComponent type={showNext} />
           </div>
         </div>
+
         <AddEditModel
           open={open}
           close={handleClose}

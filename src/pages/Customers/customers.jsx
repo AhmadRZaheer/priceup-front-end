@@ -1,16 +1,31 @@
 import React from "react";
 import "./customers.scss";
-import Sidebar from "../../components/Sidebar/sidebar";
-import Customertable from "../../components/CustomerTable/customerTable";
+import Customertable from "@/components/CustomerTable/customerTable";
+import CustomerTableForStaffView from "@/components/Staff/Customers";
+import { getDecryptedToken } from "@/utilities/common";
+import { userRoles } from "@/utilities/constants";
+import CommonLayout from "@/components/CommonLayout";
+import { Box } from "@mui/material";
 
 const Customers = () => {
+  const decodedToken = getDecryptedToken();
   return (
-    <div className="Customers">
-      <Sidebar />
-      <div className="customersContainer">
-        <Customertable />
-      </div>
-    </div>
+    <>
+      {/* <TopBar/>
+    <div className="Customers"> */}
+      {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+      {/* <CommonSideBar /> */}
+      <CommonLayout>
+        <Box className="customersContainer">
+          {decodedToken?.role === userRoles.STAFF ? (
+            <CustomerTableForStaffView />
+          ) : (
+            <Customertable />
+          )}
+        </Box>
+      </CommonLayout>
+      {/* </div> */}
+    </>
   );
 };
 

@@ -1,4 +1,3 @@
-import { Delete } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -9,23 +8,31 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   useDeleteHardwareFinish,
   useEditHardware,
 } from "../../utilities/ApiHooks/hardware";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import CustomToggle from "../ui-components/Toggle";
+import CustomInputField from "../ui-components/CustomInput";
+import DeleteModal from "../Modal/deleteModal";
 
 const FinishItem = ({
   data,
   index,
   refetch,
   hardwareId,
-  showSnackbar,
   SetUpdateValue,
   UpdateValue,
 }) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const handleOpenDeleteModal = (event) => {
+    event.preventDefault();
+    setDeleteModalOpen(true);
+  }
   const {
     mutate: deleteFinish,
     isLoading: LoadingForDelete,
@@ -37,15 +44,16 @@ const FinishItem = ({
     isSuccess: SuccessForEdit,
   } = useEditHardware();
   const validationSchema = Yup.object().shape({
-    partNumber: Yup.string().required("Hardware Part Number is required"),
+    // partNumber: Yup.string().required("Hardware Part Number is required"),
     cost: Yup.number().required("Cost is required"),
     status: Yup.boolean().required("Status is required"),
   });
+
   const formik = useFormik({
     initialValues: {
-      partNumber: data?.partNumber,
-      cost: data?.cost,
-      status: data?.status,
+      partNumber: data?.partNumber, // Initialize with empty string
+      cost: data?.cost, // Initialize with a default value (0 in this case)
+      status: data?.status, // Initialize as false (assuming it's a boolean)
     },
     validationSchema,
     onSubmit: async (values, resetForm) => {
@@ -73,38 +81,30 @@ const FinishItem = ({
     }
   }, []);
 
-
-  const handleFinishDelete = (event) => {
-    event.preventDefault();
+  const handleFinishDelete = () => {
     deleteFinish({ hardwareId: hardwareId, finishId: data._id });
+    setDeleteModalOpen(false);
   };
 
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
-      if (SuccessForDelete) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (SuccessForEdit) {
-        showSnackbar("Updated Successfully", "success");
-      }
     }
   }, [SuccessForEdit, SuccessForDelete]);
 
   const handlePartChange = (event) => {
     formik.handleChange(event);
     const value = event.target.value;
-    if (value.length > 0) {
-      const originalArray = [...UpdateValue];
-      originalArray[index] = {
-        ...data,
-        partNumber: value,
-        cost: formik.values.cost,
-        status: formik.values.status,
-      };
-      SetUpdateValue(originalArray);
-    }
+    const originalArray = [...UpdateValue];
+    originalArray[index] = {
+      ...data,
+      partNumber: value,
+      cost: formik.values.cost,
+      status: formik.values.status,
+    };
+    SetUpdateValue(originalArray);
   };
+
   const handleStatusChange = (event) => {
     formik.handleChange(event);
     const value = event.target.checked;
@@ -117,38 +117,34 @@ const FinishItem = ({
     };
     SetUpdateValue(originalArray);
   };
+
   const handleCostChange = (event) => {
     formik.handleChange(event);
     const value = event.target.value;
-    if (value.length > 0) {
-      const originalArray = [...UpdateValue];
-      originalArray[index] = {
-        ...data,
-        cost: value,
-        partNumber: formik.values.partNumber,
-        status: formik.values.status,
-      };
-      SetUpdateValue(originalArray);
-    }
+    const originalArray = [...UpdateValue];
+    originalArray[index] = {
+      ...data,
+      cost: value,
+      partNumber: formik.values.partNumber,
+      status: formik.values.status,
+    };
+    SetUpdateValue(originalArray);
   };
   return (
-    <Box key={index} >
+    <Box key={index}>
       <form onSubmit={formik.handleSubmit}>
         <Box
-        
           style={{
             display: "flex",
-            gap: 4,
             alignContent: "center",
             paddingTop: 4,
             paddingBottom: 4,
           }}
-          
         >
           <Box
-            style={{
-              width: "250px",
-              padding: 4,
+            sx={{
+              minWidth: "200px",
+              padding: 1,
               alignItems: "center",
             }}
           >
@@ -156,19 +152,22 @@ const FinishItem = ({
             <Typography variant="h6">{data?.name}</Typography>
           </Box>
 
-          <Box
-            style={{
-              width: "250px",
-              padding: 4,
+          {/* <Box
+            id={hardwareId}
+            sx={{
+              minWidth: "230px",
+              padding: 1,
               alignItems: "center",
             }}
-            id={hardwareId}
           >
             <Typography>Hardware Part Number</Typography>
-            <TextField
+            <CustomInputField
               size="small"
               variant="outlined"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               name="partNumber"
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
@@ -180,20 +179,25 @@ const FinishItem = ({
               error={formik.touched.partNumber && formik.errors.partNumber}
               helperText={formik.touched.partNumber && formik.errors.partNumber}
             />
-          </Box>
+          </Box> */}
 
           <Box
-            style={{
-              width: "250px",
-              padding: 4,
-              alignItems: "center",
+            sx={{
+              minWidth: "230px",
+              padding: 1,
+              alignItems: "start",
+              pl: 10
             }}
           >
             <Typography>Cost</Typography>
-            <TextField
+
+            <CustomInputField
               size="small"
               variant="outlined"
               type="number"
+              inputProps={{
+                min: 0
+              }}
               name="cost"
               placeholder="Cost"
               style={{ width: "100%" }}
@@ -205,9 +209,9 @@ const FinishItem = ({
             />
           </Box>
           <Box
-            style={{
-              maxWidth: "400px",
-              padding: 4,
+            sx={{
+              minWidth: "260px",
+              padding: 1,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -215,7 +219,7 @@ const FinishItem = ({
           >
             <Box
               style={{
-                width: "150px",
+                width: "100%",
                 padding: 4,
                 alignItems: "center",
                 justifyContent: "center",
@@ -226,33 +230,28 @@ const FinishItem = ({
               </FormControl>
             </Box>
 
-            <Box style={{ marginTop: "18px" }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    color="primary"
-                    checked={formik.values.status}
-                    onChange={(event) => handleStatusChange(event)}
-                    onBlur={formik.handleBlur}
-                    name="status"
-                  />
-                }
-                label={"active"}
+            <Box style={{ marginTop: "8px" }}>
+              <CustomToggle
+                checked={formik.values.status}
+                onChange={(event) => handleStatusChange(event)}
+                onBlur={formik.handleBlur}
+                name="status"
               />
             </Box>
             <Box sx={{ display: "flex" }}>
-              {LoadingForDelete ? (
+              {/* {LoadingForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
                 <IconButton
                   type="button"
-                  onClick={(event) => handleFinishDelete(event)}
+                  onClick={(event) => handleOpenDeleteModal(event)}
+                  sx={{ mt: 2 }}
                 >
-                  <Delete />
+                  <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>
-              )}
-              {LoadingForEdit ? (
-                <CircularProgress size={24} color="warning" />
+              )} */}
+              {/* {LoadingForEdit ? (
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : (
                 <IconButton
                   type="submit"
@@ -268,11 +267,17 @@ const FinishItem = ({
                 >
                   Update
                 </IconButton>
-              )}
+              )} */}
             </Box>
           </Box>
         </Box>
       </form>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={LoadingForDelete}
+        handleDelete={handleFinishDelete}
+      />
     </Box>
   );
 };

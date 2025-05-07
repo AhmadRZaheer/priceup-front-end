@@ -6,7 +6,7 @@ import {
 } from "../../redux/hardwareSlice";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
-import AddEditModel from "../Model/addEditFinish";
+import AddEditModel from "../Modal/addEditFinish";
 import HardWareComponent from "../HardwareTable/hardWareComponent";
 
 const AddOnsTable = () => {
@@ -33,7 +33,7 @@ const AddOnsTable = () => {
   return (
     <>
     <Box sx={{
-       backgroundColor: "white",
+       backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
        height: "98.2vh",
        paddingTop: 2,
        paddingLeft: 1

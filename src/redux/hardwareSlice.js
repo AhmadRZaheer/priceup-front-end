@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { userRowsHardware } from "../customerTableSource";
+import { userRowsHardware } from "@/utilities/DataGridColumns";
 
 const hardwareSlice = createSlice({
   name: "hardware",

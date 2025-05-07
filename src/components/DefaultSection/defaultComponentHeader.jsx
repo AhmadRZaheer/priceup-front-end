@@ -1,17 +1,18 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import LayoutHeader from "./layoutHeader";
 
 const DefaultComponentHeader = ({ selected, handleEditClick }) => {
   return (
     <>
-      <LayoutHeader />
-
+      <Box sx={{ width: "96%", m: "auto" }}>
+        <LayoutHeader />
+      </Box>
       <div
         style={{
           display: "flex",
           gap: 4,
           alignContent: "center",
-          backgroundColor: "rgb(232, 232, 232)",
+          backgroundColor: "#EAECF0",
           paddingTop: 15,
           paddingBottom: 15,
           paddingLeft: "10px",
@@ -22,31 +23,34 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
         {" "}
         <div
           style={{
-            width: "380px",
+            width: "30%",
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 5,
             alignItems: "center",
+            color: "#667085",
           }}
         >
           Image
         </div>{" "}
         <div
           style={{
-            width: "250px",
+            width: "20%",
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 10,
+            color: "#667085",
           }}
         >
           Setting
         </div>{" "}
         <div
           style={{
-            width: "250px",
+            width: "20%",
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 10,
+            color: "#667085",
           }}
         >
           Default
@@ -54,7 +58,6 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
         <div
           style={{
             width: "40%",
-
             fontSize: 18,
             display: "flex",
             justifyContent: "space-between",
@@ -65,13 +68,20 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
               paddingTop: 6,
               fontSize: 18,
               paddingLeft: 5,
+              color: "#667085",
             }}
           >
             Default count
           </div>
           <Button
             onClick={handleEditClick}
-            sx={{ backgroundColor: "#8477DA", boxShadow: 0, "&:hover": {backgroundColor: "#8477DA"} }}
+            sx={{
+              backgroundColor: "#8477DA",
+              boxShadow: 0,
+              height: 40,
+              width: 90,
+              "&:hover": { backgroundColor: "#8477DA" },
+            }}
             variant="contained"
           >
             {" "}

@@ -78,7 +78,7 @@ const HardWareComponentHeader = ({ type }) => {
         >
           Name
         </div>{" "}
-        <div
+        {/* <div
           style={{
             width: "250px",
 
@@ -86,7 +86,7 @@ const HardWareComponentHeader = ({ type }) => {
           }}
         >
           PartNnumber{" "}
-        </div>{" "}
+        </div>{" "} */}
         <div
           style={{
             width: "250px",

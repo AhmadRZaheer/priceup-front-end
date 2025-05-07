@@ -1,0 +1,67 @@
+.layouttitle {
+    font-size: 24px !important;
+    font-weight: 600 !important;
+    line-height: 32px !important;
+    color: #5D6164;
+    display: flex;
+  }
+  .cardTitle{
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 27px;
+    display: flex;
+    align-items: center;
+    color:#000000;
+  }
+  .cardTitleContainer{
+    display:flex;
+    flex-direction:column !important;
+    gap:6px
+  }
+  .descTitle{
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    line-height: 14.41px !important;
+    color:#5D6164;
+    font-family: "Roboto",sans-serif !important;
+  }
+  .descBoldTitle{
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 21.86px !important;
+    color:#000000;
+  }
+  .cardBtn{
+    // height:40px !important;
+    // min-width: 203px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    line-height: 21.86px !important;
+  } 
+.drawerTitle{
+  font-size: 16px !important;
+    font-weight: 400 !important;
+    line-height: 18.75px !important;
+    color:#5D6164;
+    font-family: "Roboto",sans-serif !important;
+}
+.drawerBoldTitle{
+  font-size: 20px !important;
+    font-weight: 600 !important;
+    line-height: 27.32px !important;
+    color:#000000;
+}
+.drawerBtn{
+  // height:40px !important;
+  // min-width: 260px !important;
+  width: 100%;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 21.86px !important;
+}
+.modificationTitle{
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
+  color:#000000;
+}

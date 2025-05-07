@@ -1,106 +1,161 @@
-.sidebar{
-    background-color: #100D24 ;
-    color: #F2F4F7;
-    height: 100% !important;
+.sidebar {
+  height: 100vh;
+  .top {
     display: flex;
-    flex-direction: column;
-    .top{
+    align-items: center;
+    justify-content: center;
+
+    .logo {
+      padding: 0px;
+      margin-top: 10px;
+    }
+  }
+  .center {
+    height: 80% !important;
+    overflow: auto;
+
+    ul {
+      list-style: none;
+      margin-top: 0px !important;
+
+      .estimates {
+        margin-top: 30px;
+      }
+      .setting {
+        margin-top: 0px !important;
+      }
+
+      li {
         display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .logo{
-            padding: 0px;
-            margin-top: 10px; 
-        }
-    }
-    .line{
-        height: 0;
-        border: 1px solid #475467;
-        width: 85%;
-        padding: 0 !important;
-        margin:0px auto;
-    }
-    .center{
-
-        ul{
-            list-style: none;
-            margin-top: 0px  !important;
-
-            .estimates{
-                margin-top: 30px;
-            }
-            .setting{
-                margin-top: 0px !important;
-            }
-
-            li {
-                display: flex;
-                align-items: baseline;
-                padding: 7px;
-                cursor: pointer;
-                margin: 10px ;
-                border-radius: 5px;
-
-                &:hover{
-                    background-color: 
-                    #8477DA;
-
-                }
-                &.active {
-                    background-color: #8477DA;
-                  }
-
-                .icon{
-                    font-size: 16px;
-                    margin-right: 10px;
-                }
-
-                span {
-                    font-size: 18px;
-                    font-weight: 500;
-                }
-            }
-
-        }
-    }
-    .bottom{
-        display: flex;
-        align-items: center;
-        margin: 0px;
-        padding: 20px;
+        align-items: baseline;
+        padding: 7px;
         cursor: pointer;
+        margin: 10px;
+        border-radius: 5px;
 
-        .UserIcon{
-            margin-right: 16px !important;
+        &:hover {
+          background-color: transparent;
         }
-        .userInSidebar{
-            font-size: 18px !important;
-            
+        &.active {
+          background-color: #8477da;
         }
-        .emailUser{
-            font-size: 16px !important;
-            color: #F2F4F7;
+
+        .icon {
+          font-size: 16px;
+          margin-right: 10px;
         }
-        .logOutIcon{
-            font-size: 16px;
-            margin-left: 20px !important;
-            width: 50px !important;
-            height: 30px !important;
-            text-align: center;
+
+        span {
+          font-size: 18px;
+          font-weight: 500;
         }
+      }
     }
-    .link {
-        text-decoration: none;
-        color: inherit;
-      }
-      .active {
-        font-weight: 800;
-      }
-      .link-settings{
-        text-decoration: none;
-        color: inherit;
-      }
+  }
+  .bottom {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    cursor: pointer;
 
+    .UserIcon {
+      margin-right: 16px !important;
+    }
+    .userInSidebar {
+      font-size: 18px !important;
+    }
+    .emailUser {
+      font-size: 16px !important;
+      color: #f2f4f7;
+    }
+    .logOutIcon {
+      font-size: 16px;
+      margin-left: 20px !important;
+      width: 50px !important;
+      height: 30px !important;
+      text-align: center;
+    }
+  }
+
+  .active {
+    font-weight: 800;
+  }
+  .link-settings {
+    text-decoration: none;
+    color: inherit;
+  }
+}
+.center {
+  height: 50%;
+  overflow: auto;
+  margin-top: 10px;
+  margin-bottom: 10px; /* Keep the scrollbar visible */
 }
 
+.center::-webkit-scrollbar {
+  width: 5px; /* Set the width of the scrollbar */
+}
+
+.center::-webkit-scrollbar-thumb {
+  background-color: #475467; /* Set the color of the scrollbar thumb */
+}
+
+.line {
+  height: 0;
+  border: 1px solid #475467;
+  width: 85%;
+  padding: 0 !important;
+  margin: 0px auto;
+}
+.adminLine{
+  margin-top: 11px;
+  margin-bottom: 3px;
+  border:1px solid rgba(217, 217, 217, 0.34);
+}
+.main-container-sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 92%;
+}
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+.button-item {
+  height: 20px;
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  text-align: left;
+  display: flex;
+  gap: 10px;
+  padding: 12px;
+  cursor: pointer;
+  align-items: center;
+  //   background-color: #8477da;
+  .active {
+    background-color: #8477da;
+    border-radius: 6px;
+  }
+}
+.button-item:hover {
+  background-color: #8477da;
+}
+.active-item {
+  background-color: #8477da;
+  border-radius: 6px;
+}
+.subtitles {
+  color: white;
+  font-size: 20px !important;
+  font-weight: bold !important;
+}
+@media screen and (max-width: 1600px) {
+  .main-container-sidebar {
+    height: 90%;
+  }
+}

@@ -2,6 +2,8 @@ import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 export const useFetchDataSetting = () => {
   async function fetchData() {
@@ -27,72 +29,63 @@ export const useFetchDataSetting = () => {
   return useQuery({
     queryKey: ["settingData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: {},
   });
 };
 
 export const useEditSetting = () => {
+  const dispatch = useDispatch();
   const handleEditSetting = async (editedData) => {
-
     const token = localStorage.getItem("token");
+    console.log(editedData, "editedData");
+    const formData = new FormData();
+
+    if (editedData.data?.image) {
+      formData.append("image", editedData.data.image);
+      delete editedData.data?.image;
+    }
+    if (
+      editedData.data?.image === null ??
+      editedData.data?.image === undefined
+    ) {
+      delete editedData.data?.image;
+    }
+    formData.append("data", JSON.stringify(editedData.data));
 
     try {
       const response = await axios.put(
         `${backendURL}/companies/${editedData?.id}`,
+        formData,
         {
-          address: editedData.data.location,
-          image: editedData.data.image,
-
-          miscPricing: {
-            pricingFactor: editedData.data.miscPricing.pricingFactor,
-            hourlyRate: editedData.data.miscPricing.hourlyRate,
-            pricingFactorStatus:
-              editedData.data.miscPricing?.pricingFactorStatus,
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
-          fabricatingPricing: {
-            oneHoleOneByTwoInchGlass:
-              editedData?.data.fabricatingPricing?.oneHoleOneByTwoInchGlass,
-            oneHoleThreeByEightInchGlass:
-              editedData?.data.fabricatingPricing?.oneHoleThreeByEightInchGlass,
-            clampCutoutOneByTwoInch:
-              editedData?.data.fabricatingPricing?.clampCutoutOneByTwoInch,
-            clampCutoutThreeByEightInch:
-              editedData?.data.fabricatingPricing?.clampCutoutThreeByEightInch,
-            hingeCutoutOneByTwoInch:
-              editedData?.data.fabricatingPricing?.hingeCutoutOneByTwoInch,
-            hingeCutoutThreeByEightInch:
-              editedData?.data.fabricatingPricing?.hingeCutoutThreeByEightInch,
-            minterOneByTwoInch:
-              editedData?.data.fabricatingPricing?.minterOneByTwoInch,
-            minterThreeByEightInch:
-              editedData?.data.fabricatingPricing?.minterThreeByEightInch,
-            notchOneByTwoInch:
-              editedData?.data.fabricatingPricing?.notchOneByTwoInch,
-            notchThreeByEightInch:
-              editedData?.data.fabricatingPricing?.notchThreeByEightInch,
-            outageOneByTwoInch:
-              editedData?.data.fabricatingPricing?.outageOneByTwoInch,
-            outageThreeByEightInch:
-              editedData?.data.fabricatingPricing?.outageThreeByEightInch,
-            polishPricePerOneByTwoInch:
-              editedData?.data.fabricatingPricing?.polishPricePerOneByTwoInch,
-            polishPricePerThreeByEightInch:
-              editedData?.data.fabricatingPricing
-                ?.polishPricePerThreeByEightInch,
-          },
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };

@@ -1,15 +1,22 @@
 import React from "react";
 import "./glassType.scss";
-import Sidebar from "../../components/Sidebar/sidebar";
 import GlassTypeTable from "../../components/GlassType/glassType";
+import CommonLayout from "@/components/CommonLayout";
+import { Box } from "@mui/material";
 const GlassType = () => {
   return (
-    <div className="Customers">
-      <Sidebar />
-      <div className="customersContainer">
-        <GlassTypeTable />
-      </div>
-    </div>
+    <>
+      {/* <TopBar/>
+      <div className="Customers">
+      {/* <Sidebar /> */}
+      {/*  <CommonSideBar/> */}
+      <CommonLayout>
+        <Box className="customersContainer">
+          <GlassTypeTable />
+        </Box>
+      </CommonLayout>
+      {/* </div> */}
+    </>
   );
 };
 

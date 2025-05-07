@@ -24,7 +24,7 @@ export const useFetchDataAddOns = (type) => {
   return useQuery({
     queryKey: ["finishesData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };

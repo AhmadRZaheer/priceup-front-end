@@ -11,21 +11,29 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useDeleteGlassType,
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import CustomToggle from "../ui-components/Toggle";
+import CustomInputField from "../ui-components/CustomInput";
+import DeleteModal from "../Modal/deleteModal";
 
 const GlassTypeItem = ({
   data,
   index,
   refetch,
   glassTypeId,
-  showSnackbar,
   SetUpdateValue,
   UpdateValue,
 }) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const handleOpenDeleteModal = (event) => {
+    event.preventDefault();
+    setDeleteModalOpen(true);
+  }
   const {
     mutate: deleteGlassType,
     isLoading: LoadingForDelete,
@@ -37,7 +45,7 @@ const GlassTypeItem = ({
     isSuccess: SuccessForEdit,
   } = useEditGlassType();
   const validationSchema = Yup.object().shape({
-    partNumber: Yup.string().required("Hardware Part Number is required"),
+    // partNumber: Yup.string().required("Hardware Part Number is required"),
     cost: Yup.number().required("Cost is required"),
     status: Yup.boolean().required("Status is required"),
   });
@@ -72,20 +80,14 @@ const GlassTypeItem = ({
       }
     }
   }, []);
-  const handleFinishDelete = (event) => {
-    event.preventDefault();
+  const handleOptionDelete = () => {
     deleteGlassType({ glassTypeId: glassTypeId, optionId: data._id });
+    setDeleteModalOpen(false);
   };
 
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
-      if (SuccessForDelete) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (SuccessForEdit) {
-        showSnackbar("Edit Successfully", "success");
-      }
     }
   }, [SuccessForEdit, SuccessForDelete]);
 
@@ -149,7 +151,7 @@ const GlassTypeItem = ({
             }}
           ></Box>
 
-          <Box
+          {/* <Box
             style={{
               width: "250px",
               padding: 4,
@@ -157,11 +159,14 @@ const GlassTypeItem = ({
             }}
           >
             <Typography>Hardware Part Number</Typography>
-            <TextField
+            <CustomInputField
               size="small"
               variant="outlined"
               name="partNumber"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
               value={formik.values.partNumber}
@@ -170,7 +175,7 @@ const GlassTypeItem = ({
               error={formik.touched.partNumber && formik.errors.partNumber}
               helperText={formik.touched.partNumber && formik.errors.partNumber}
             />
-          </Box>
+          </Box> */}
 
           <Box
             style={{
@@ -180,11 +185,14 @@ const GlassTypeItem = ({
             }}
           >
             <Typography>Cost</Typography>
-            <TextField
+            <CustomInputField
               size="small"
               variant="outlined"
               name="cost"
               type="number"
+              inputProps={{
+                min: 0
+              }}
               placeholder="Cost"
               style={{ width: "100%" }}
               value={formik.values.cost}
@@ -218,32 +226,27 @@ const GlassTypeItem = ({
             </Box>
 
             <Box style={{ marginTop: "18px" }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    color="primary"
-                    checked={formik.values.status}
-                    onChange={(event) => handleStatusChange(event)}
-                    onBlur={formik.handleBlur}
-                    name="status"
-                  />
-                }
-                label={"active"}
+              <CustomToggle
+                checked={formik.values.status}
+                onChange={(event) => handleStatusChange(event)}
+                onBlur={formik.handleBlur}
+                name="status"
               />
             </Box>
             <Box sx={{ display: "flex" }}>
-              {LoadingForDelete ? (
+              {/* {LoadingForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
                 <IconButton
                   type="button"
-                  onClick={(event) => handleFinishDelete(event)}
+                  onClick={(event) => handleOpenDeleteModal(event)}
+                  sx={{ mt: 3.2 }}
                 >
-                  <Delete />
+                  <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>
-              )}
-              {LoadingForEdit ? (
-                <CircularProgress size={24} color="warning" />
+              )} */}
+              {/* {LoadingForEdit ? (
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : (
                 <IconButton
                   type="submit"
@@ -259,11 +262,17 @@ const GlassTypeItem = ({
                 >
                   Update
                 </IconButton>
-              )}
+              )} */}
             </Box>
           </Box>
         </Box>
       </form>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={LoadingForDelete}
+        handleDelete={handleOptionDelete}
+      />
     </Box>
   );
 };

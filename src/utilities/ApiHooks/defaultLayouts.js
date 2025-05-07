@@ -2,6 +2,8 @@ import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 export const useFetchDataDefault = () => {
   async function fetchData() {
     const token = localStorage.getItem("token");
@@ -21,8 +23,8 @@ export const useFetchDataDefault = () => {
   return useQuery({
     queryKey: ["defaultData"],
     queryFn: fetchData,
-    enabled: true,
-    placeholderData: [],
+    enabled: false,
+    // placeholderData: [],
   });
 };
 export const useFetchSingleDefault = (id) => {
@@ -78,6 +80,7 @@ export const useFetchSingleDefault = (id) => {
   return { data, isLoading, isFetching, refetch };
 };
 export const useEditDefault = () => {
+  const dispatch = useDispatch();
   const handleEdit = async (updatedDefault) => {
     const token = localStorage.getItem("token");
     try {
@@ -117,20 +120,54 @@ export const useEditDefault = () => {
               height: updatedDefault.settings.heavyPivotOption.height,
             },
             channelOrClamps: updatedDefault.settings?.channelOrClamps,
-            mountingChannel: updatedDefault.settings?.mountingChannel,
+            mountingChannel:
+              updatedDefault.settings?.channelOrClamps === "Channel"
+                ? updatedDefault.settings?.mountingChannel
+                : null,
             wallClamp: {
-              wallClampType: updatedDefault.settings?.wallClamp?.wallClampType,
-              count: updatedDefault.settings?.wallClamp?.count,
+              wallClampType:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.wallClamp?.wallClampType
+                  : null,
+              count:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.wallClamp?.count
+                  : 0,
             },
             sleeveOver: {
               sleeveOverType:
-                updatedDefault.settings?.sleeveOver?.sleeveOverType,
-              count: updatedDefault.settings?.sleeveOver?.count,
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.sleeveOver?.sleeveOverType
+                  : null,
+              count:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.sleeveOver?.count
+                  : 0,
             },
             glassToGlass: {
               glassToGlassType:
-                updatedDefault.settings?.glassToGlass?.glassToGlassType,
-              count: updatedDefault.settings?.glassToGlass?.count,
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.glassToGlass?.glassToGlassType
+                  : null,
+              count:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.glassToGlass?.count
+                  : 0,
+            },
+            cornerWallClamp: {
+              wallClampType:
+                updatedDefault.settings?.cornerWallClamp?.wallClampType,
+              count: updatedDefault.settings?.cornerWallClamp?.count,
+            },
+            cornerSleeveOver: {
+              sleeveOverType:
+                updatedDefault.settings?.cornerSleeveOver?.sleeveOverType,
+              count: updatedDefault.settings?.cornerSleeveOver?.count,
+            },
+            cornerGlassToGlass: {
+              glassToGlassType:
+                updatedDefault.settings?.cornerGlassToGlass?.glassToGlassType,
+              count: updatedDefault.settings?.cornerGlassToGlass?.count,
             },
             glassType: {
               type: updatedDefault.settings?.glassType?.type,
@@ -141,9 +178,10 @@ export const useEditDefault = () => {
               count: updatedDefault.settings?.slidingDoorSystem?.count,
             },
             outages: updatedDefault.settings?.outages,
+            notch: updatedDefault.settings?.notch,
             transom: updatedDefault.settings?.transom,
             header: updatedDefault.settings?.header,
-            glassTreatment: updatedDefault.settings?.glassTreatment,
+            glassAddon: updatedDefault.settings?.glassAddon,
             other: {
               people: updatedDefault.settings?.other?.people,
               hours: updatedDefault.settings?.other?.hours,
@@ -156,11 +194,21 @@ export const useEditDefault = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };

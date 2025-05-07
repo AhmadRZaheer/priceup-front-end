@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addHardware } from "../../redux/hardwareSlice";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
-import AddEditModel from "../Model/addEditFinish";
+import AddEditModel from "../Modal/addEditFinish";
 import GlassTypeComponent from "./glassTypeComponent";
 
 const GlassTypeTable = () => {
@@ -32,32 +32,13 @@ const GlassTypeTable = () => {
     <>
       <Box
         sx={{
-          backgroundColor: "white",
-          height: "98.2vh",
-          paddingTop: 2,
-          paddingLeft: 1,
+          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
+          height: "90vh",
+          // paddingTop: 2,
         }}
       >
-        <div
-          style={{
-            marginLeft: "15px",
-            marginRight: "15px",
-            background: "rgb(232, 232, 232)",
-          }}
-        ></div>
-        <Box
-          sx={{
-            border: "1px solid rgb(232, 232, 232)",
-            margin: 2,
-            height: "90vh",
-          }}
-        >
-          <div className="hardwareTable">
-            <div className="hardwareTable">
-              <GlassTypeComponent type={"Glass Type"} />
-            </div>
-          </div>
-        </Box>
+        <GlassTypeComponent type={"Glass Types"} />
+
         <AddEditModel
           open={open}
           close={handleClose}

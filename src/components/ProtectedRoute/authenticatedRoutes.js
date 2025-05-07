@@ -12,7 +12,7 @@ import Estimates from "../../pages/Estimates/Estimates";
 import Settings from "../../pages/Settings/Settings";
 import AddOns from "../../pages/AddOns/addOns";
 import GlassType from "../../pages/GlassType/glassType";
-import GlassTreatement from "../../pages/GlassTreatement/glassTreatement";
+import GlassAddon from "../../pages/GlassAddon/glassAddon";
 import Existing from "../../pages/Existing/Existing";
 
 const AuthenticatedRoutesAdmin = () => {
@@ -38,7 +38,7 @@ const AuthenticatedRoutesAdmin = () => {
         <Route path="settings" element={<Settings />} />
         <Route path="Addons" element={<AddOns />} />
         <Route path="GlassType" element={<GlassType />} />
-        <Route path="GlassTreatement" element={<GlassTreatement />} />
+        <Route path="GlassAddon" element={<GlassAddon />} />
       </Route>
       <Route path="*" element={<Overview />}></Route>
     </Routes>

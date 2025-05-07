@@ -2,15 +2,25 @@ import React from "react";
 import "./settings.scss";
 import Sidebar from "../../components/Sidebar/sidebar";
 import CampanySetting from "../../components/Setting/campanySetting";
+import TopBar from "@/components/TopBar";
+import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const Settings = () => {
   return (
-    <div className="settings">
-      <Sidebar />
-      <div className="settingsContainer">
+    <>
+    {/* <TopBar/>
+     <div className="settings"> */}
+      {/* <Sidebar /> */}
+      {/* <CommonSideBar/> */}
+      <CommonLayout>
+      <div>
         <CampanySetting />
       </div>
-    </div>
+      </CommonLayout>
+    {/* </div> */}
+    </>
+   
   );
 };
 

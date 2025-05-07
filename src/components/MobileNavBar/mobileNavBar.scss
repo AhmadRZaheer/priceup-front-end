@@ -20,30 +20,31 @@
     }
 }
 .bottom{
+    width: 100%;
     display: flex;
     align-items: center;
-    margin: 15px;
     cursor: pointer;
-
+    border-top: 2px solid gray;
+    padding: 10px;
     .UserIcon{
         margin-right: 16px !important;
     }
     .userInSidebar{
         font-size: 18px !important;
         color: white;
-        
+        word-wrap: break-word;
+
     }
     .emailUser{
         font-size: 16px !important;
-        color: #F2F4F7
-        ;
+        color: #F2F4F7;
     }
     .logOutIcon{
         font-size: 16px;
-        margin-left: 30px !important;
+        margin-left: 20px !important;
     }
 }
-
+ 
 .top2{
     display: flex;
     align-items: center;

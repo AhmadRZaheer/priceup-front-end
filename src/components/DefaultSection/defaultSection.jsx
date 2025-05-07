@@ -1,61 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import "./hardwareTable.scss";
 import { Box, Typography } from "@mui/material";
 import DefaultComponent from "./defaultComponent";
-import Snackbars from "../Model/snackBar";
 
 const DefaultSection = () => {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
-  };
   return (
     <>
-      <Box
+    <Box
         sx={{
-          backgroundColor: "white",
-          pt: 1,
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+          height: "84vh",        
         }}
       >
-        <div className="page-title">
-          <Typography sx={{ fontSize: 30, pl: 1 }}>Layouts</Typography>
-        </div>
-
-        <Box
-          sx={{
-            border: "1px solid rgb(232, 232, 232)",
-            margin: "auto",
-            paddingTop: 2,
-            width: "98%"
-          }}
-        >
-          <div className="hardwareTable">
-            <div className="hardwareTable">
-              <DefaultComponent showSnackbar={showSnackbar} />
-            </div>
-          </div>
-        </Box>
-        <Snackbars
-          open={snackbar.open}
-          message={snackbar.message}
-          severity={snackbar.severity}
-          closeSnackbar={closeSnackbar}
-        />
+      <div className="lpage-title">
+        <Typography sx={{ fontSize: 30, pl: 1 }}>Layouts</Typography>
+      </div>
+      <Box
+        sx={{
+          border: "1px solid rgb(232, 232, 232)",
+          margin: "auto",
+          paddingTop: 2,
+          width: "96%",
+          borderRadius: "8px",
+          overflow: "hidden",
+          background:'#FFFF',
+          mb: 2
+        }}
+      >
+        <DefaultComponent />
+      </Box>
       </Box>
     </>
   );
